@@ -1,0 +1,119 @@
+/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelListDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+
+@Stateless
+public class MappedPollServiceBean implements MappedPollService {
+    final static Logger LOG = LoggerFactory.getLogger(MappedPollServiceBean.class);
+
+    @EJB
+    PollService pollService;
+
+    @EJB
+    MobileTerminalService mobileTerminalService;
+
+    @Override
+    public CreatePollResultDto createPoll(PollRequestType pollRequest, String username) throws MobileTerminalServiceException {
+        LOG.debug("Create poll");
+
+        CreatePollResultDto pollResponse = pollService.createPoll(pollRequest, username);
+        return pollResponse;
+    }
+
+    @Override
+    public List<PollDto> getRunningProgramPolls() throws MobileTerminalServiceException {
+        LOG.debug("Get running program polls");
+
+        List<PollResponseType> pollResponse = pollService.getRunningProgramPolls();
+        return PollMapper.mapPolls(pollResponse);
+    }
+
+    @Override
+    public PollDto startProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+        PollResponseType pollResponse = pollService.startProgramPoll(pollId, username);
+        return PollMapper.mapPoll(pollResponse);
+    }
+
+    @Override
+    public PollDto stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+        PollResponseType pollResponse = pollService.stopProgramPoll(pollId, username);
+        return PollMapper.mapPoll(pollResponse);
+    }
+
+    @Override
+    public PollDto inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+        PollResponseType pollResponse = pollService.inactivateProgramPoll(pollId, username);
+        return PollMapper.mapPoll(pollResponse);
+    }
+
+    @Override
+    public PollChannelListDto getPollBySearchQuery(PollListQuery query) throws MobileTerminalServiceException {
+    	PollChannelListDto channelListDto = new PollChannelListDto();
+    	
+    	PollListResponse pollResponse = pollService.getPollBySearchCriteria(query);
+        channelListDto.setCurrentPage(pollResponse.getCurrentPage().intValue());
+        channelListDto.setTotalNumberOfPages(pollResponse.getTotalNumberOfPages().intValue());
+    	
+        List<PollChannelDto> pollChannelList = new ArrayList<>();
+        for(PollResponseType responseType : pollResponse.getPollList()) {
+        	PollChannelDto terminal = PollMapper.mapPollChannel(responseType.getMobileTerminal());
+        	terminal.setPoll(PollMapper.mapPoll(responseType));
+        	pollChannelList.add(terminal);
+        }
+        channelListDto.setPollableChannels(pollChannelList);
+        return channelListDto;
+    }
+
+    @Override
+    public PollChannelListDto getPollableChannels(PollableQuery query) throws MobileTerminalException {
+        PollChannelListDto channelListDto = new PollChannelListDto();
+
+        MobileTerminalListResponse response = mobileTerminalService.getPollableMobileTerminal(query);
+        channelListDto.setCurrentPage(response.getCurrentPage());
+        channelListDto.setTotalNumberOfPages(response.getTotalNumberOfPages());
+
+        List<PollChannelDto> pollChannelList = new ArrayList<>();
+        for(MobileTerminalType terminalType : response.getMobileTerminal()) {
+        	PollChannelDto terminal = PollMapper.mapPollChannel(terminalType);
+        	pollChannelList.add(terminal);
+        }
+        channelListDto.setPollableChannels(pollChannelList);
+        return channelListDto;
+    }
+}
