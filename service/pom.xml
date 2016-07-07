@@ -44,6 +44,11 @@
             <artifactId>mobileterminal-model</artifactId>
             <version>${mobileterminal.model.version}</version>
         </dependency>
+        <dependency>
+            <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
+            <artifactId>mobileterminal-dbaccess-api</artifactId>
+            <version>${mobileterminal.model.version}</version>
+        </dependency>
     </dependencies>
 
     <build>

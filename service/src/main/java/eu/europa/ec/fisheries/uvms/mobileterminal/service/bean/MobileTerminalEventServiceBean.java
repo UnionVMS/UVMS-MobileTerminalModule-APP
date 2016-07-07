@@ -61,9 +61,6 @@ public class MobileTerminalEventServiceBean implements EventService {
     @EJB
     MobileTerminalService service;
 
-    @EJB
-    MessageProducer producer;
-
     @Resource(lookup = MessageConstants.CONNECTION_FACTORY)
     private ConnectionFactory connectionFactory;
 
@@ -152,44 +149,6 @@ public class MobileTerminalEventServiceBean implements EventService {
             disconnectQueue();
         }
     }
-
-
-/*
-    @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void getData(@Observes @MessageReceivedEvent EventMessage message) {
-    	TextMessage requestMessage = message.getJmsMessage();
-        try {
-			MobileTerminalModuleBaseRequest baseRequest = JAXBMarshaller.unmarshallTextMessage(requestMessage, MobileTerminalModuleBaseRequest.class);
-			if (baseRequest.getMethod() == MobileTerminalModuleMethod.PING) {
-				connectToQueue();
-
-				String pingResponse = MobileTerminalModuleResponseMapper.createPingResponse("pong");
-				TextMessage pingResponseMessage = session.createTextMessage(pingResponse);
-				pingResponseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-                pingResponseMessage.setJMSDestination(message.getJmsMessage().getJMSReplyTo());
-                session.createProducer(pingResponseMessage.getJMSDestination()).send(pingResponseMessage);
-				return;
-			}
-			else {
-				// Only other possible request currently is to get mobile terminal.
-				// Implementation was extracted to private method for readability.
-				MobileTerminalType mobileTerminal = getMobileTerminal(message);
-
-				connectToQueue();
-
-				String response = MobileTerminalModuleRequestMapper.createMobileTerminalResponse(mobileTerminal);
-	            TextMessage responseMessage = session.createTextMessage(response);
-	            responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-	            session.createProducer(message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
-			}
-		} catch (MobileTerminalModelMapperException | MobileTerminalUnmarshallException | JMSException e) {
-            errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when sending response back to recipient : " + e.getMessage()));
-		} finally {
-            disconnectQueue();
-        }
-    }
-*/
 
     private MobileTerminalType getMobileTerminal(EventMessage message) {
         GetMobileTerminalRequest request = null;

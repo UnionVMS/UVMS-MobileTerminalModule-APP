@@ -18,6 +18,7 @@ import javax.ejb.Stateless;
 import javax.jms.TextMessage;
 
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -61,6 +62,9 @@ public class PluginServiceBean implements PluginService {
     @EJB
     MessageConsumer reciever;
 
+    @EJB(lookup = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/ConfigModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel")
+    ConfigModel configModel;
+
     @Override
     public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException {
         try {
@@ -81,12 +85,7 @@ public class PluginServiceBean implements PluginService {
     @Override
     public void processUpdatedDNIDList(String pluginName) {
         try {
-            String updatedDNIDListRequest = MobileTerminalDataSourceRequestMapper.mapUpdatedDNIDListRequest(pluginName, "UVMS");
-            String updatedDNIDMessageId = messageProducer.sendDataSourceMessage(updatedDNIDListRequest, DataSourceQueue.INTERNAL);
-            TextMessage updatedDNIDResponse = reciever.getMessage(updatedDNIDMessageId, TextMessage.class);
-            UpdatedDNIDListResponse dnidListResponse = MobileTerminalDataSourceResponseMapper.mapToUpdatedDNIDList(updatedDNIDResponse, updatedDNIDMessageId);
-
-            List<String> dnidList = dnidListResponse.getDnid();
+            List<String> dnidList = configModel.updatedDNIDList(pluginName);
 
             String settingKey = pluginName + DELIMETER + SETTING_KEY_DNID_LIST;
             StringBuffer buffer = new StringBuffer();
@@ -101,7 +100,7 @@ public class PluginServiceBean implements PluginService {
                 LOG.debug("Couldn't send to config module. Sending to exchange module.");
                 sendUpdatedDNIDListToExchange(pluginName, SETTING_KEY_DNID_LIST, settingValue);
             }
-        } catch (MobileTerminalMessageException | MobileTerminalModelException ex) {
+        } catch (MobileTerminalModelException ex) {
             LOG.error("Couldn't get updated DNID List");
         }
     }

@@ -33,9 +33,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProduc
 @Stateless
 public class MessageProducerBean implements MessageProducer, ConfigMessageProducer {
 
-    @Resource(mappedName = MessageConstants.QUEUE_DATASOURCE_INTERNAL)
-    private Queue localDbQueue;
-
     @Resource(mappedName = MessageConstants.QUEUE_DATASOURCE_INTEGRATION)
     private Queue integrationQueue;
 
@@ -78,9 +75,6 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
             switch (queue) {
             case INTEGRATION:
                 getProducer(session, integrationQueue).send(message);
-                break;
-            case INTERNAL:
-                getProducer(session, localDbQueue).send(message);
                 break;
             }
 
