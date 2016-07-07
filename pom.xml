@@ -18,11 +18,11 @@
         <sl4j.version>1.7.7</sl4j.version>
         <logback.version>1.1.2</logback.version>
         <logback.core.version>1.1.2</logback.core.version>
-        <audit.model.version>2.0.7-SNAPSHOT</audit.model.version>
+        <audit.model.version>2.0.8-SNAPSHOT</audit.model.version>
         <exchange.model.version>2.0.6-SNAPSHOT</exchange.model.version>
         <usm4uvms.version>2.0.15</usm4uvms.version>
-        <mobileterminal.model.version>2.0.7-SNAPSHOT</mobileterminal.model.version>
-        <uvms.config.version>2.0.7-SNAPSHOT</uvms.config.version>
+        <mobileterminal.model.version>2.0.8-SNAPSHOT</mobileterminal.model.version>
+        <uvms.config.version>2.0.8-SNAPSHOT</uvms.config.version>
         <project.scm.id>github</project.scm.id>
     </properties>
     
