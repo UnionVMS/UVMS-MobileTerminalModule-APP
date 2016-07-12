@@ -20,6 +20,7 @@ import javax.jms.TextMessage;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ComchannelNameResponse;
 import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
 import org.slf4j.Logger;
@@ -53,7 +54,7 @@ public class ConfigServiceBean implements ConfigService {
     @EJB
     MessageProducer messageProducer;
 
-	@EJB(lookup = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/ConfigModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel")
+	@EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
 	ConfigModel configModel;
 
     @EJB

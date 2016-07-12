@@ -19,10 +19,10 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.jms.TextMessage;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalDomainModel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +45,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProduc
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.PollDataSourceRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.InputArgumentException;
@@ -64,11 +63,11 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
 
     @EJB
     PluginService pluginService;
-    @EJB(lookup = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/MobileTerminalDomainModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalDomainModel")
+    @EJB(lookup = ServiceConstants.DB_ACCESS_MOBILE_TERMINAL_DOMAIN_MODEL)
     MobileTerminalDomainModel mobileTerminalModel;
-    @EJB(lookup = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/ConfigModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel")
+    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
     ConfigModel configModel;
-    @EJB(lookup = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/PollDomainModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel")
+    @EJB(lookup = ServiceConstants.DB_ACCESS_POLL_DOMAIN_MODEL)
     PollDomainModel pollModel;
     
     /**

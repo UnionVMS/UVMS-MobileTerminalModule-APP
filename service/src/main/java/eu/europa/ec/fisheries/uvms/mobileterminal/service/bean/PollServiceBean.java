@@ -16,10 +16,10 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.jms.TextMessage;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,15 +27,12 @@ import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.PollDataSourceRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.PollDataSourceResponseMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollTimerService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
@@ -58,7 +55,7 @@ public class PollServiceBean implements PollService {
     @EJB
     PollTimerService timerService;
 
-    @EJB(lookup = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/PollDomainModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel")
+    @EJB(lookup = ServiceConstants.DB_ACCESS_POLL_DOMAIN_MODEL)
     PollDomainModel pollModel;
 
     @Override
