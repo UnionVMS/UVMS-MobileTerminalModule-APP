@@ -79,7 +79,7 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     @Override
     public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, MobileTerminalSource source, String username) throws MobileTerminalException {
         LOG.debug("CREATE MOBILE TERMINAL INVOKED IN SERVICE LAYER");
-
+        mobileTerminal.setSource(source);
         MobileTerminalType createdMobileTerminal = mobileTerminalModel.createMobileTerminal(mobileTerminal, username);
         boolean dnidUpdated = configModel.checkDNIDListChange(createdMobileTerminal.getPlugin().getServiceName());
         
