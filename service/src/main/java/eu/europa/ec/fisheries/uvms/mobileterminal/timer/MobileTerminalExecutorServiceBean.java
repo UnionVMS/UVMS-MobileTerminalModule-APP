@@ -21,20 +21,22 @@ import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.enterprise.concurrent.ManagedScheduledExecutorService;
+//import javax.enterprise.concurrent.ManagedScheduledExecutorService;
 import javax.inject.Inject;
 import java.util.concurrent.TimeUnit;
 
-@Startup
+//@Startup
 @Singleton
 public class MobileTerminalExecutorServiceBean {
 
+      /*
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalExecutorServiceBean.class);
 
     @EJB
     ConfigService configService;
 
-    @Inject
+    @EJB
+    //@Inject
     PollService pollService;
 
     @Resource(lookup="java:/UvmsMobileTerminalExecutorService")
@@ -49,4 +51,5 @@ public class MobileTerminalExecutorServiceBean {
         PollTimerTask pollTimerTask = new PollTimerTask(pollService);
         executorService.scheduleWithFixedDelay(pollTimerTask, 5, 300, TimeUnit.SECONDS);
     }
+    */
 }

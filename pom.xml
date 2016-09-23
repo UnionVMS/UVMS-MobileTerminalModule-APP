@@ -34,6 +34,9 @@
                 <uvms.config.artifactId>uvms-config_WebLogic-2.1.3_</uvms.config.artifactId>
                 <!--2.0.10-SNAPSHOT is the latest version. Using 2.0.9 causes maven to fail. -->
                 <uvms.config.version>2.0.10-SNAPSHOT</uvms.config.version>
+                <jta.data-source>jdbc.uvms_mobterm</jta.data-source>
+                <jta.platform>org.hibernate.service.jta.platform.internal.WeblogicJtaPlatform</jta.platform>
+
             </properties>
         </profile>
     </profiles>

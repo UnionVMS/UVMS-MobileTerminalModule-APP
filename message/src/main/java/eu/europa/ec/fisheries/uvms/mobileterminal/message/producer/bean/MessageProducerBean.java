@@ -12,10 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean;
 
 import javax.annotation.Resource;
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.*;
 import javax.inject.Inject;
 import javax.jms.*;
 
@@ -32,6 +29,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTermin
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 
 @Stateless
+//@Singleton
 public class MessageProducerBean implements MessageProducer, ConfigMessageProducer {
 
     @Resource(mappedName = MessageConstants.QUEUE_DATASOURCE_INTEGRATION)
