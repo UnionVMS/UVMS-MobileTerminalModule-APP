@@ -23,9 +23,21 @@
         <usm4uvms.version>2.0.16-SNAPSHOT</usm4uvms.version>
         <mobileterminal.model.version>2.0.8-SNAPSHOT</mobileterminal.model.version>
         <uvms.config.version>2.0.8-SNAPSHOT</uvms.config.version>
+        <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
         <project.scm.id>github</project.scm.id>
     </properties>
-    
+
+    <profiles>
+        <profile>
+            <id>weblogic</id>
+            <properties>
+                <uvms.config.artifactId>uvms-config_WebLogic-2.1.3_</uvms.config.artifactId>
+                <!--2.0.10-SNAPSHOT is the latest version. Using 2.0.9 causes maven to fail. -->
+                <uvms.config.version>2.0.10-SNAPSHOT</uvms.config.version>
+            </properties>
+        </profile>
+    </profiles>
+
     <dependencies>
         <dependency>
             <groupId>javax</groupId>
