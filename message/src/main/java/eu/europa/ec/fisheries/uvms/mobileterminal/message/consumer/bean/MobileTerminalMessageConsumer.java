@@ -40,7 +40,7 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     @Resource(lookup = MessageConstants.CONNECTION_FACTORY)
     private ConnectionFactory connectionFactory;
 
-    @Resource(mappedName = MessageConstants.COMPONENT_RESPONSE_QUEUE)
+    @Resource(lookup = MessageConstants.COMPONENT_RESPONSE_QUEUE)
     private Queue responseMobileTerminalQueue;
 
     private Connection connection = null;
@@ -93,7 +93,7 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     private void disconnectQueue() {
         try {
             if (connection != null) {
-                connection.stop();
+                //connection.stop();
                 connection.close();
             }
         } catch (JMSException e) {

@@ -25,6 +25,7 @@
         <uvms.config.version>2.0.8-SNAPSHOT</uvms.config.version>
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
         <project.scm.id>github</project.scm.id>
+
     </properties>
 
     <profiles>
@@ -36,6 +37,7 @@
                 <uvms.config.version>2.0.10-SNAPSHOT</uvms.config.version>
                 <jta.data-source>jdbc.uvms_mobterm</jta.data-source>
                 <jta.platform>org.hibernate.service.jta.platform.internal.WeblogicJtaPlatform</jta.platform>
+                <hibernate.dialect>org.hibernate.dialect.PostgreSQLDialect</hibernate.dialect>
 
             </properties>
         </profile>

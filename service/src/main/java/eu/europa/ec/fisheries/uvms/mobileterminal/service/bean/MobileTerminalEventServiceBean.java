@@ -24,7 +24,6 @@ import javax.jms.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +39,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
@@ -242,7 +240,6 @@ public class MobileTerminalEventServiceBean implements EventService {
     private void disconnectQueue() {
         try {
             if (connection != null) {
-                connection.stop();
                 connection.close();
             }
         } catch (JMSException e) {

@@ -26,7 +26,7 @@ import javax.inject.Inject;
 import java.util.concurrent.TimeUnit;
 
 //@Startup
-@Singleton
+//@Singleton
 public class MobileTerminalExecutorServiceBean {
 
       /*

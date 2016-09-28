@@ -14,17 +14,11 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.PreDestroy;
 import javax.annotation.Resource;
-import javax.ejb.DependsOn;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
+import javax.ejb.Stateless;
 import javax.jms.*;
 
-@Startup
-@Singleton
-//@DependsOn("MessageProducerBean")
+@Stateless
 public class JMSConnectorBean {
     final static org.slf4j.Logger LOG = LoggerFactory.getLogger(JMSConnectorBean.class);
 
@@ -33,7 +27,6 @@ public class JMSConnectorBean {
 
     private Connection connection;
 
-    @PostConstruct
     private void connectToQueue() {
         LOG.debug("Open connection to JMS broker");
         try {
@@ -55,18 +48,4 @@ public class JMSConnectorBean {
     public TextMessage createTextMessage(Session session, String message) throws JMSException {
         return session.createTextMessage(message);
     }
-
-    @PreDestroy
-    private void closeConnection() {
-        LOG.debug("Close connection to JMS broker");
-        try {
-            if (connection != null) {
-                connection.stop();
-                connection.close();
-            }
-        } catch (JMSException e) {
-            LOG.warn("[ Error when stopping or closing JMS connection. ] {}", e.getMessage());
-        }
-    }
-
 }

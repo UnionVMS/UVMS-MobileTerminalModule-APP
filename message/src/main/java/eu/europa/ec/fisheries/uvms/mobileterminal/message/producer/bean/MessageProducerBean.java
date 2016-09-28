@@ -13,7 +13,6 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean;
 
 import javax.annotation.Resource;
 import javax.ejb.*;
-import javax.inject.Inject;
 import javax.jms.*;
 
 import org.slf4j.Logger;
@@ -29,43 +28,34 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTermin
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 
 @Stateless
-//@Singleton
 public class MessageProducerBean implements MessageProducer, ConfigMessageProducer {
 
-    @Resource(mappedName = MessageConstants.QUEUE_DATASOURCE_INTEGRATION)
+    @Resource(lookup = MessageConstants.QUEUE_DATASOURCE_INTEGRATION)
     private Queue integrationQueue;
 
-    @Resource(mappedName = MessageConstants.COMPONENT_RESPONSE_QUEUE)
+    @Resource(lookup = MessageConstants.COMPONENT_RESPONSE_QUEUE)
     private Queue responseQueue;
 
-    @Resource(mappedName = MessageConstants.AUDIT_MODULE_QUEUE)
+    @Resource(lookup = MessageConstants.AUDIT_MODULE_QUEUE)
     private Queue auditQueue;
 
-    @Resource(mappedName = MessageConstants.EXCHANGE_MODULE_QUEUE)
+    @Resource(lookup = MessageConstants.EXCHANGE_MODULE_QUEUE)
     private Queue exchangeQueue;
 
-    @Resource(mappedName = ConfigConstants.CONFIG_MESSAGE_IN_QUEUE)
+    @Resource(lookup = ConfigConstants.CONFIG_MESSAGE_IN_QUEUE)
     private Queue configQueue;
-
-//    @Resource(lookup = MessageConstants.CONNECTION_FACTORY)
-//    private ConnectionFactory connectionFactory;
-//
-//    private Connection connection = null;
-//    private Session session = null;
 
     final static Logger LOG = LoggerFactory.getLogger(MessageProducerBean.class);
 
     private static final int CONFIG_TTL = 30000;
 
     @EJB
-    //@Inject
     JMSConnectorBean connector;
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
         try {
-//            connectQueue();
             Session session = connector.getNewSession();
 
             TextMessage message = session.createTextMessage();
@@ -82,8 +72,6 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
         } catch (Exception e) {
             LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
             throw new MobileTerminalMessageException(e.getMessage());
-//        } finally {
-//            disconnectQueue();
         }
     }
 
@@ -91,7 +79,6 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
         try {
-//            connectQueue();
             Session session = connector.getNewSession();
 
             TextMessage message = session.createTextMessage();
@@ -116,27 +103,8 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
         } catch (Exception e) {
             LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
             throw new MobileTerminalMessageException(e.getMessage());
-//        } finally {
-//            disconnectQueue();
         }
     }
-
-//    private void connectQueue() throws JMSException {
-//        connection = connectionFactory.createConnection();
-//        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-//        connection.start();
-//    }
-//
-//    private void disconnectQueue() {
-//        try {
-//            if (connection != null) {
-//                connection.stop();
-//                connection.close();
-//            }
-//        } catch (JMSException e) {
-//            LOG.error("[ Error when stopping or closing JMS queue. ] {}", e.getMessage(), e.getStackTrace());
-//        }
-//    }
 
 	@Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
