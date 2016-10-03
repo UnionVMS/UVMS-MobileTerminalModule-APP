@@ -93,7 +93,6 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     private void disconnectQueue() {
         try {
             if (connection != null) {
-                //connection.stop();
                 connection.close();
             }
         } catch (JMSException e) {

@@ -131,6 +131,7 @@
                                             <groupId>${project.groupId}</groupId>
                                             <artifactId>${project.artifactId}</artifactId>
                                             <version>${project.version}</version>
+                                            <classifier>${envClassifier}</classifier>
                                             <type>${project.packaging}</type>
                                         </artifactItem>
                                     </artifactItems>
