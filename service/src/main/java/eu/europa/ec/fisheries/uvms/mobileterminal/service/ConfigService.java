@@ -38,12 +38,6 @@ public interface ConfigService {
     public List<TerminalSystemType> getTerminalSystems() throws MobileTerminalException;
 	
 	/**
-	 * Get channel names
-	 * @return
-	 */
-	public List<String> getChannelNames() throws MobileTerminalException;
-	
-	/**
 	 * Get configuration
 	 * 
 	 * @return
