@@ -3,7 +3,7 @@
 
     <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
     <artifactId>mobileterminal</artifactId>
-    <version>2.1.1-SNAPSHOT</version>
+    <version>2.1.1</version>
     <packaging>pom</packaging>
     <description>Maven projekt-archetype for UnionVms modules</description>
     
@@ -103,7 +103,7 @@
 
     <scm>
         <connection>scm:git:https://github.com/UnionVMS/UVMS-MobileTerminalModule-APP.git</connection>
-      <tag>HEAD</tag>
+      <tag>mobileterminal-2.1.1</tag>
   </scm>
     
     <build>
