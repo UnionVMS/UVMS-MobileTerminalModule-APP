@@ -24,6 +24,7 @@
         <audit.model.version>2.1.0</audit.model.version>
         <exchange.model.version>2.1.0</exchange.model.version>
         <mobileterminal.model.version>2.1.2-SNAPSHOT</mobileterminal.model.version>
+        <mobileterminal.model.classifier>date</mobileterminal.model.classifier>
 
         <project.scm.id>github</project.scm.id>
     </properties>

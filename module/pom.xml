@@ -33,6 +33,7 @@
                         <ejbModule>
                             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
                             <artifactId>mobileterminal-model</artifactId>
+                            <classifier>${mobileterminal.model.classifier}</classifier>
                         </ejbModule>
                         <webModule>
                             <groupId>${project.groupId}</groupId>
@@ -63,6 +64,7 @@
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-model</artifactId>
             <version>${mobileterminal.model.version}</version>
+            <classifier>${mobileterminal.model.classifier}</classifier>
             <type>ejb</type>
         </dependency> 
         <dependency>

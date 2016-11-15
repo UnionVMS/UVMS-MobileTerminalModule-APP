@@ -44,6 +44,7 @@
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-model</artifactId>
             <version>${mobileterminal.model.version}</version>
+            <classifier>${mobileterminal.model.classifier}</classifier>
         </dependency>
     </dependencies>
 
