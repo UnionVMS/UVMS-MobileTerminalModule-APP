@@ -44,7 +44,7 @@ public class MobileTerminalExecutorServiceBean {
     public void postConstruct() {
         LOG.info("PluginTimerBean init");
         PluginTimerTask pluginTimerTask = new PluginTimerTask(configService);
-        executorService.scheduleWithFixedDelay(pluginTimerTask, 15, 15, TimeUnit.MINUTES);
+        executorService.scheduleWithFixedDelay(pluginTimerTask, 1, 5, TimeUnit.MINUTES);
 
         PollTimerTask pollTimerTask = new PollTimerTask(pollService);
         executorService.scheduleWithFixedDelay(pollTimerTask, 5, 300, TimeUnit.SECONDS);
