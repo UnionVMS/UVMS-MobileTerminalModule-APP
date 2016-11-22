@@ -8,7 +8,7 @@ A mobile terminal is a telematics which can be installed on e.g. a watercraft or
 
 In UVMS-project, two plugins are completed implemented. One is support a mobile terminal type of Imarsat C and the other is for type of Iridium. All position data that comes from the plugin goes first via the Exchange module then sends it forward to the Rules module to verify the position data, and if the position data is valid, it will be sent to Movement module.  Otherwise an alarm will be created by the Rule module to notify an error has occurred. See figure 1 below for information about the communication and data flow. 
 
-![Alt text](/DOC/arch.png.jpg?raw=true "Architecture")
+![Architecture](/DOC/arch.png?raw=true "Architecture")
 
 A mobile terminal of type INMARSAT C must have at least one channel configured to be able to communicate with LES. And the channel must have a unique combination of DNID (Data Network ID) and Member number, which defines exactly where the information should be sent to or retrieve from LES. 
 
