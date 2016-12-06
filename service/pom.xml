@@ -25,7 +25,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>mobileterminal-message</artifactId>
             <version>${project.parent.version}</version>
-            <classifier>${envClassifier}</classifier>
             <scope>provided</scope>
         </dependency>
         <dependency>

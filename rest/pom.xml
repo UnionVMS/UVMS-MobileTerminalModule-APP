@@ -25,14 +25,12 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>mobileterminal-service</artifactId>
             <version>${project.version}</version>
-            <classifier>${envClassifier}</classifier>
             <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mobileterminal-message</artifactId>
             <version>${project.version}</version>
-            <classifier>${envClassifier}</classifier>
             <scope>test</scope>
         </dependency>
         <dependency>
