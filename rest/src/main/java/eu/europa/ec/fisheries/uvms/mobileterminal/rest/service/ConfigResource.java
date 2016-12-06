@@ -95,27 +95,6 @@ public class ConfigResource {
        }
    }
     
-    /**
-     * @responseMessage 200 Channel names successfully retrieved
-     * @responseMessage 500 Error when retrieving channel names
-     *
-     * @summary Get all channel names
-     */
-    @GET
-    @Consumes(value = {MediaType.APPLICATION_JSON})
-    @Produces(value = {MediaType.APPLICATION_JSON})
-    @Path("/channelnames")
-    public ResponseDto<List<String>> getChannelNames() {
-        LOG.info("Get channel names invoked in rest layer");
-        try {
-        	//TODO terminaltype needed?
-            List<String> channelNames = configService.getChannelNames();
-            return new ResponseDto(channelNames, ResponseCode.OK);
-        } catch (Exception ex) {
-            return ErrorHandler.getFault(ex);
-        }
-    }
-    
     @GET
     @Consumes(value = {MediaType.APPLICATION_JSON})
     @Produces(value = {MediaType.APPLICATION_JSON})

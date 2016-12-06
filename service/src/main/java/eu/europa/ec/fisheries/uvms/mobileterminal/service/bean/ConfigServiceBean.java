@@ -67,13 +67,6 @@ public class ConfigServiceBean implements ConfigService {
         return systemList;
     }
 
-    @Override
-    public List<String> getChannelNames() throws MobileTerminalException {
-        LOG.debug("Get channel names invoked");
-		List<String> channelNames = configModel.getComchannelNameList();
-        return channelNames;
-    }
-
 	@Override
 	public List<ConfigList> getConfig() throws MobileTerminalException {
 		LOG.debug("Get configuration in service layer");
