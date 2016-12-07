@@ -15,7 +15,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConst
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.jms.*;
 import javax.naming.InitialContext;
