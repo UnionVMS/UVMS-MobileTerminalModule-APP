@@ -50,8 +50,9 @@ public class PluginServiceBean implements PluginService {
     final static Logger LOG = LoggerFactory.getLogger(PluginServiceBean.class);
 
     public static final String EXCHANGE_MODULE_NAME = "exchange";
-    public static final String DELIMETER = "/";
-    public static final String SETTING_KEY_DNID_LIST = "dnid";
+    public static final String DELIMETER = ".";
+    public static final String INTERNAL_DELIMETER = ",";
+    public static final String SETTING_KEY_DNID_LIST = "DNIDS";
 
     @EJB
     MessageProducer messageProducer;
@@ -87,7 +88,7 @@ public class PluginServiceBean implements PluginService {
             String settingKey = pluginName + DELIMETER + SETTING_KEY_DNID_LIST;
             StringBuffer buffer = new StringBuffer();
             for (String dnid : dnidList) {
-                buffer.append(dnid + DELIMETER);
+                buffer.append(dnid + INTERNAL_DELIMETER);
             }
             String settingValue = buffer.toString();
 

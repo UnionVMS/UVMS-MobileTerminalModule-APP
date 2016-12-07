@@ -32,13 +32,11 @@ public class MobileTerminalExecutorServiceBean {
     PluginTimerTask pluginTimerTask;
     PollTimerTask pollTimerTask;
 
-    @Schedule(minute = "*/15", hour = "*", persistent = false)
+    @Schedule(minute = "*/5", hour = "*", persistent = false)
     public void initPluginTimer() {
-
         try {
             if(pluginTimerTask == null) {
                 pluginTimerTask = new PluginTimerTask(configService);
-                //executorService.scheduleWithFixedDelay(pluginTimerTask, 15, 15, TimeUnit.MINUTES);
             }
             LOG.info("PluginTimerTask initialized.");
             pluginTimerTask.run();
@@ -50,11 +48,9 @@ public class MobileTerminalExecutorServiceBean {
 
     @Schedule(minute = "*/5", hour = "*", persistent = false)
     public void initPollTimer() {
-
         try {
             if(pollTimerTask == null) {
                 pollTimerTask = new PollTimerTask(pollService);
-                //executorService.scheduleWithFixedDelay(pollTimerTask, 5, 300, TimeUnit.SECONDS);
             }
             LOG.info("PollTimerTask initialized.");
             pollTimerTask.run();

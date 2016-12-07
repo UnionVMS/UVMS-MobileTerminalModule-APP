@@ -274,11 +274,11 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     }
 
     @Override
-    public List<MobileTerminalHistory> getMobileTerminalHistoryList(String guid) throws MobileTerminalException {
+    public MobileTerminalHistory getMobileTerminalHistoryList(String guid) throws MobileTerminalException {
         LOG.debug("GET HISTORY OF MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         MobileTerminalId terminalId = new MobileTerminalId();
         terminalId.setGuid(guid);
-        List<MobileTerminalHistory> historyList = mobileTerminalModel.getMobileTerminalHistoryList(terminalId);
+        MobileTerminalHistory historyList = mobileTerminalModel.getMobileTerminalHistoryList(terminalId);
         return historyList;
     }
 

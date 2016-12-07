@@ -11,10 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.*;
 import javax.jms.*;
+import javax.naming.InitialContext;
 
+import eu.europa.ec.fisheries.uvms.message.JMSUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,27 +33,30 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProduc
 @Stateless
 public class MessageProducerBean implements MessageProducer, ConfigMessageProducer {
 
-    @Resource(lookup = MessageConstants.QUEUE_DATASOURCE_INTEGRATION)
-    private Queue integrationQueue;
-
-    @Resource(lookup = MessageConstants.COMPONENT_RESPONSE_QUEUE)
     private Queue responseQueue;
-
-    @Resource(lookup = MessageConstants.AUDIT_MODULE_QUEUE)
     private Queue auditQueue;
-
-    @Resource(lookup = MessageConstants.EXCHANGE_MODULE_QUEUE)
     private Queue exchangeQueue;
-
-    @Resource(lookup = ConfigConstants.CONFIG_MESSAGE_IN_QUEUE)
     private Queue configQueue;
 
     final static Logger LOG = LoggerFactory.getLogger(MessageProducerBean.class);
 
-    private static final int CONFIG_TTL = 30000;
-
     @EJB
     JMSConnectorBean connector;
+
+    @PostConstruct
+    public void init() {
+        InitialContext ctx;
+        try {
+            ctx = new InitialContext();
+        } catch (Exception e) {
+            LOG.error("Failed to get InitialContext",e);
+            throw new RuntimeException(e);
+        }
+        responseQueue = JMSUtils.lookupQueue(ctx, MessageConstants.COMPONENT_RESPONSE_QUEUE);
+        auditQueue = JMSUtils.lookupQueue(ctx, MessageConstants.AUDIT_MODULE_QUEUE);
+        exchangeQueue = JMSUtils.lookupQueue(ctx, MessageConstants.EXCHANGE_MODULE_QUEUE);
+        configQueue = JMSUtils.lookupQueue(ctx, ConfigConstants.CONFIG_MESSAGE_IN_QUEUE);
+    }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
@@ -64,7 +70,6 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 
             switch (queue) {
             case INTEGRATION:
-                getProducer(session, integrationQueue).send(message);
                 break;
             }
 

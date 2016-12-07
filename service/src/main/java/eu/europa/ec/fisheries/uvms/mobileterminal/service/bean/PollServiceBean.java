@@ -101,6 +101,7 @@ public class PollServiceBean implements PollService {
             result.setUnsentPoll(!unsentPolls.isEmpty());
             return result;
         } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
+            e.printStackTrace();
             throw new MobileTerminalServiceException(e.getMessage());
         }
     }
