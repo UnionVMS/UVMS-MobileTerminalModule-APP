@@ -14,8 +14,8 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 import java.util.Date;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,7 +34,7 @@ public class MobileTerminalPollTimerServiceBean implements PollTimerService {
 
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPollTimerServiceBean.class);
 
-    @Inject
+    @EJB
     PollService pollService;
 
     @Override

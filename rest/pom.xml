@@ -58,6 +58,7 @@
                 <version>2.4</version>
                 <configuration>
                     <failOnMissingWebXml>false</failOnMissingWebXml>
+                    <classifier>${envClassifier}</classifier>
                 </configuration>
             </plugin>
         </plugins>
