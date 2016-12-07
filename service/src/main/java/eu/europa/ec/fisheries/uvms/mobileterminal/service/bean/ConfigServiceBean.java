@@ -18,6 +18,11 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jms.TextMessage;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ComchannelNameResponse;
+import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,42 +54,30 @@ public class ConfigServiceBean implements ConfigService {
     @EJB
     MessageProducer messageProducer;
 
+	@EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
+	ConfigModel configModel;
+
     @EJB
     MessageConsumer reciever;
 
     @Override
     public List<TerminalSystemType> getTerminalSystems() throws MobileTerminalException {
         LOG.debug("GET TERMINAL SYSTEM TRANSPONDERS INVOKED IN SERVICE LAYER");
-        String data = MobileTerminalDataSourceRequestMapper.mapGetTerminalSystemList();
-        String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-        TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-        return MobileTerminalDataSourceResponseMapper.mapToTerminalSystemList(response, messageId);
-    }
-
-    @Override
-    public List<String> getChannelNames() throws MobileTerminalException {
-        LOG.debug("Get channel names invoked");
-        String data = MobileTerminalDataSourceRequestMapper.mapGetChannelNames();
-        String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-        TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-        return MobileTerminalDataSourceResponseMapper.mapToChannelNames(response, messageId);
+		List<TerminalSystemType> systemList = configModel.getAllTerminalSystems();
+        return systemList;
     }
 
 	@Override
 	public List<ConfigList> getConfig() throws MobileTerminalException {
 		LOG.debug("Get configuration in service layer");
-		String data = MobileTerminalDataSourceRequestMapper.mapGetConfig();
-		String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-		TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-		return MobileTerminalDataSourceResponseMapper.mapToConfigList(response, messageId);
+		List<ConfigList> values = configModel.getConfigValues();
+		return values;
 	}
 
 	@Override
 	public List<Plugin> upsertPlugins(List<PluginService> plugins, String username) throws MobileTerminalException {
-		String data = MobileTerminalDataSourceRequestMapper.mapUpsertPluginListRequest(plugins, username);
-		String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-		TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-		return MobileTerminalDataSourceResponseMapper.mapToPluginList(response, messageId);
+		List<Plugin> plugin = configModel.upsertPlugins(plugins);
+		return plugin;
 	}
 
 	@Override

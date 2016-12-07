@@ -13,19 +13,19 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.message.constants;
 
 public class MessageConstants {
 
-    public static final String CONNECTION_FACTORY = "java:/ConnectionFactory";
+    public static final String CONNECTION_FACTORY = "ConnectionFactory";
     
     public static final String CONNECTION_TYPE = "javax.jms.MessageListener";
     public static final String DESTINATION_TYPE_QUEUE = "javax.jms.Queue";
 
-    public static final String COMPONENT_EVENT_QUEUE = "java:/jms/queue/UVMSMobileTerminalEvent"; //request to mobile terminal component
+    public static final String COMPONENT_EVENT_QUEUE = "jms/queue/UVMSMobileTerminalEvent"; //request to mobile terminal component
     public static final String COMPONENT_EVENT_QUEUE_NAME = "UVMSMobileTerminalEvent";
-    public static final String COMPONENT_RESPONSE_QUEUE = "java:/jms/queue/UVMSMobileTerminal"; //response queue
+    public static final String COMPONENT_RESPONSE_QUEUE = "jms/queue/UVMSMobileTerminal"; //response queue
     
-    public static final String QUEUE_DATASOURCE_INTERNAL = "java:/jms/queue/UVMSMobileTerminalModel"; //Internal db source 
-    public static final String QUEUE_DATASOURCE_INTEGRATION = "java:/jms/queue/UVMSMobileTerminalNational"; //Integration source
+    public static final String QUEUE_DATASOURCE_INTERNAL = "jms/queue/UVMSMobileTerminalModel"; //Internal db source
+    public static final String QUEUE_DATASOURCE_INTEGRATION = "jms/queue/UVMSMobileTerminalNational"; //Integration source
     
-    public static final String AUDIT_MODULE_QUEUE = "java:/jms/queue/UVMSAuditEvent";
-    public static final String EXCHANGE_MODULE_QUEUE = "java:/jms/queue/UVMSExchangeEvent";
+    public static final String AUDIT_MODULE_QUEUE = "jms/queue/UVMSAuditEvent";
+    public static final String EXCHANGE_MODULE_QUEUE = "jms/queue/UVMSExchangeEvent";
 
 }

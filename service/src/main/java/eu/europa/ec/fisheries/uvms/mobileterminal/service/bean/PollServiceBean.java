@@ -16,30 +16,23 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.jms.TextMessage;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollStatus;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
 import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.PollDataSourceRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.PollDataSourceResponseMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollTimerService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
@@ -62,15 +55,14 @@ public class PollServiceBean implements PollService {
     @EJB
     PollTimerService timerService;
 
+    @EJB(lookup = ServiceConstants.DB_ACCESS_POLL_DOMAIN_MODEL)
+    PollDomainModel pollModel;
+
     @Override
     public CreatePollResultDto createPoll(PollRequestType poll, String username) throws MobileTerminalServiceException {
         LOG.debug("CREATE POLL INVOKED IN SERVICE LAYER");
         try {
-            String data = PollDataSourceRequestMapper.mapCreatePollRequest(poll, username);
-            String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-
-            List<PollResponseType> createdPolls = PollDataSourceResponseMapper.mapCreatePollResponse(response, messageId);
+            List<PollResponseType> createdPolls = pollModel.createPolls(poll, username);
 
             boolean triggerTimer = false;
             List<String> unsentPolls = new ArrayList<>();
@@ -109,6 +101,7 @@ public class PollServiceBean implements PollService {
             result.setUnsentPoll(!unsentPolls.isEmpty());
             return result;
         } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
+            e.printStackTrace();
             throw new MobileTerminalServiceException(e.getMessage());
         }
     }
@@ -117,11 +110,9 @@ public class PollServiceBean implements PollService {
     public List<PollResponseType> getRunningProgramPolls() throws MobileTerminalServiceException {
         LOG.debug("GET RUNNING PROGRAM POLLS INVOKED IN SERVICE LAYER");
         try {
-            String data = PollDataSourceRequestMapper.mapGetRunningProgramPolls();
-            String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-            return PollDataSourceResponseMapper.mapToPollList(response, messageId);
-        } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
+            List<PollResponseType> pollProgramList = pollModel.getPollProgramList(true);
+            return pollProgramList;
+        } catch (MobileTerminalModelException e) {
             throw new MobileTerminalServiceException(e.getMessage());
         }
     }
@@ -130,11 +121,9 @@ public class PollServiceBean implements PollService {
     public PollResponseType startProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
         LOG.debug("START POLLING INVOKED IN SERVICE LAYER");
         try {
-            String data = PollDataSourceRequestMapper.mapProgramPollStatus(pollId, PollStatus.STARTED);
-            String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-
-            PollResponseType startedPoll = PollDataSourceResponseMapper.mapPollResponse(response, messageId);
+            PollId pollIdType = new PollId();
+            pollIdType.setGuid(pollId);
+            PollResponseType startedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.STARTED);
             try {
                 String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStarted(startedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
@@ -152,11 +141,9 @@ public class PollServiceBean implements PollService {
     public PollResponseType stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
         LOG.debug("STOP POLLING INVOKED IN SERVICE LAYER");
         try {
-            String data = PollDataSourceRequestMapper.mapProgramPollStatus(pollId, PollStatus.STOPPED);
-            String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-
-            PollResponseType stoppedPoll = PollDataSourceResponseMapper.mapPollResponse(response, messageId);
+            PollId pollIdType = new PollId();
+            pollIdType.setGuid(pollId);
+            PollResponseType stoppedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.STOPPED);
             try {
                 String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStopped(stoppedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
@@ -174,11 +161,9 @@ public class PollServiceBean implements PollService {
     public PollResponseType inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
         LOG.debug("INACTIVATE PROGRAM POLL INVOKED IN SERVICE LAYER");
         try {
-            String data = PollDataSourceRequestMapper.mapProgramPollStatus(pollId, PollStatus.ARCHIVED);
-            String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-
-            PollResponseType inactivatedPoll = PollDataSourceResponseMapper.mapPollResponse(response, messageId);
+            PollId pollIdType = new PollId();
+            pollIdType.setGuid(pollId);
+            PollResponseType inactivatedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.ARCHIVED);
             try {
                 String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollInactivated(inactivatedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
@@ -196,11 +181,9 @@ public class PollServiceBean implements PollService {
     public PollListResponse getPollBySearchCriteria(PollListQuery query) throws MobileTerminalServiceException {
         LOG.debug("GET POLL BY SEARCHCRITERIA INVOKED IN SERVICE LAYER");
         try {
-            String data = PollDataSourceRequestMapper.mapPollListByQuery(query);
-            String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-            return PollDataSourceResponseMapper.mapPollListResponse(response, messageId);
-        } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
+            PollListResponse pollResponse = pollModel.getPollList(query);
+            return pollResponse;
+        } catch (MobileTerminalModelException e) {
             throw new MobileTerminalServiceException(e.getMessage());
         }
     }
@@ -209,11 +192,9 @@ public class PollServiceBean implements PollService {
     public List<PollResponseType> timer() throws MobileTerminalException {
         LOG.debug("TIMER TRIGGERED IN SERVICE LAYER");
 
-        String data = PollDataSourceRequestMapper.mapPollTimer();
-        String messageId = messageProducer.sendDataSourceMessage(data, DataSourceQueue.INTERNAL);
-        TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+        List<PollResponseType> pollTimerProgramList = pollModel.getPollProgramRunningAndStarted();
 
-        return PollDataSourceResponseMapper.mapToPollList(response, messageId);
+        return pollTimerProgramList;
     }
 
 }

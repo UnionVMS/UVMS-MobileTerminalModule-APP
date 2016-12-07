@@ -16,17 +16,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
-import javax.ejb.EJB;
-import javax.ejb.Singleton;
-import javax.ejb.Startup;
-import javax.enterprise.concurrent.ManagedScheduledExecutorService;
-import javax.inject.Inject;
-import java.util.concurrent.TimeUnit;
+import javax.ejb.*;
 
-@Startup
-@Singleton
+@Stateless
 public class MobileTerminalExecutorServiceBean {
 
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalExecutorServiceBean.class);
@@ -34,19 +26,36 @@ public class MobileTerminalExecutorServiceBean {
     @EJB
     ConfigService configService;
 
-    @Inject
+    @EJB
     PollService pollService;
 
-    @Resource(lookup="java:/UvmsMobileTerminalExecutorService")
-    private ManagedScheduledExecutorService executorService;
+    PluginTimerTask pluginTimerTask;
+    PollTimerTask pollTimerTask;
 
-    @PostConstruct
-    public void postConstruct() {
-        LOG.info("PluginTimerBean init");
-        PluginTimerTask pluginTimerTask = new PluginTimerTask(configService);
-        executorService.scheduleWithFixedDelay(pluginTimerTask, 15, 15, TimeUnit.MINUTES);
+    @Schedule(minute = "*/5", hour = "*", persistent = false)
+    public void initPluginTimer() {
+        try {
+            if(pluginTimerTask == null) {
+                pluginTimerTask = new PluginTimerTask(configService);
+            }
+            LOG.info("PluginTimerTask initialized.");
+            pluginTimerTask.run();
+        } catch (Exception e) {
+            LOG.error("[ Error when initializing PluginTimerTask. ] {}", e.getMessage());
+        }
 
-        PollTimerTask pollTimerTask = new PollTimerTask(pollService);
-        executorService.scheduleWithFixedDelay(pollTimerTask, 5, 300, TimeUnit.SECONDS);
+    }
+
+    @Schedule(minute = "*/5", hour = "*", persistent = false)
+    public void initPollTimer() {
+        try {
+            if(pollTimerTask == null) {
+                pollTimerTask = new PollTimerTask(pollService);
+            }
+            LOG.info("PollTimerTask initialized.");
+            pollTimerTask.run();
+        } catch (Exception e) {
+            LOG.error("[ Error when initializing PollTimerTask. ] {}", e.getMessage());
+        }
     }
 }

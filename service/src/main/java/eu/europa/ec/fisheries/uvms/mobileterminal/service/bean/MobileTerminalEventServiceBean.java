@@ -11,6 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -20,11 +21,12 @@ import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
 import javax.jms.*;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,7 +42,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
@@ -61,10 +62,6 @@ public class MobileTerminalEventServiceBean implements EventService {
     @EJB
     MobileTerminalService service;
 
-    @EJB
-    MessageProducer producer;
-
-    @Resource(lookup = MessageConstants.CONNECTION_FACTORY)
     private ConnectionFactory connectionFactory;
 
     private Connection connection = null;
@@ -153,44 +150,6 @@ public class MobileTerminalEventServiceBean implements EventService {
         }
     }
 
-
-/*
-    @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void getData(@Observes @MessageReceivedEvent EventMessage message) {
-    	TextMessage requestMessage = message.getJmsMessage();
-        try {
-			MobileTerminalModuleBaseRequest baseRequest = JAXBMarshaller.unmarshallTextMessage(requestMessage, MobileTerminalModuleBaseRequest.class);
-			if (baseRequest.getMethod() == MobileTerminalModuleMethod.PING) {
-				connectToQueue();
-
-				String pingResponse = MobileTerminalModuleResponseMapper.createPingResponse("pong");
-				TextMessage pingResponseMessage = session.createTextMessage(pingResponse);
-				pingResponseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-                pingResponseMessage.setJMSDestination(message.getJmsMessage().getJMSReplyTo());
-                session.createProducer(pingResponseMessage.getJMSDestination()).send(pingResponseMessage);
-				return;
-			}
-			else {
-				// Only other possible request currently is to get mobile terminal.
-				// Implementation was extracted to private method for readability.
-				MobileTerminalType mobileTerminal = getMobileTerminal(message);
-
-				connectToQueue();
-
-				String response = MobileTerminalModuleRequestMapper.createMobileTerminalResponse(mobileTerminal);
-	            TextMessage responseMessage = session.createTextMessage(response);
-	            responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-	            session.createProducer(message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
-			}
-		} catch (MobileTerminalModelMapperException | MobileTerminalUnmarshallException | JMSException e) {
-            errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when sending response back to recipient : " + e.getMessage()));
-		} finally {
-            disconnectQueue();
-        }
-    }
-*/
-
     private MobileTerminalType getMobileTerminal(EventMessage message) {
         GetMobileTerminalRequest request = null;
         MobileTerminalType mobTerm = null;
@@ -274,16 +233,40 @@ public class MobileTerminalEventServiceBean implements EventService {
 
     }
 
-    private void connectToQueue() throws JMSException {
-        connection = connectionFactory.createConnection();
-        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        connection.start();
+    private void connectToQueue() {
+        LOG.debug("Open connection to JMS broker");
+        InitialContext ctx;
+        try {
+            ctx = new InitialContext();
+        } catch (Exception e) {
+            LOG.error("Failed to get InitialContext",e);
+            throw new RuntimeException(e);
+        }
+        try {
+            connectionFactory = (QueueConnectionFactory) ctx.lookup(MessageConstants.CONNECTION_FACTORY);
+        } catch (NamingException ne) {
+            //if we did not find the connection factory we might need to add java:/ at the start
+            LOG.debug("Connection Factory lookup failed for " + MessageConstants.CONNECTION_FACTORY);
+            String wfName = "java:/" + MessageConstants.CONNECTION_FACTORY;
+            try {
+                LOG.debug("trying " + wfName);
+                connectionFactory = (QueueConnectionFactory) ctx.lookup(wfName);
+            } catch (Exception e) {
+                LOG.error("Connection Factory lookup failed for both " + MessageConstants.CONNECTION_FACTORY  + " and " + wfName);
+                throw new RuntimeException(e);
+            }
+        }
+        try {
+            connection = connectionFactory.createConnection();
+            connection.start();
+        } catch (JMSException ex) {
+            LOG.error("Error when open connection to JMS broker");
+        }
     }
 
     private void disconnectQueue() {
         try {
             if (connection != null) {
-                connection.stop();
                 connection.close();
             }
         } catch (JMSException e) {

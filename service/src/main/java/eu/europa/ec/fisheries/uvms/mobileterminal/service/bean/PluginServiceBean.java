@@ -18,6 +18,8 @@ import javax.ejb.Stateless;
 import javax.jms.TextMessage;
 
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +27,6 @@ import eu.europa.ec.fisheries.schema.config.types.v1.SettingType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PollType;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.UpdatedDNIDListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
 import eu.europa.ec.fisheries.uvms.config.model.exception.ModelMarshallException;
 import eu.europa.ec.fisheries.uvms.config.model.mapper.ModuleRequestMapper;
@@ -34,15 +35,12 @@ import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshal
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleResponseMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollToCommandRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
@@ -52,14 +50,18 @@ public class PluginServiceBean implements PluginService {
     final static Logger LOG = LoggerFactory.getLogger(PluginServiceBean.class);
 
     public static final String EXCHANGE_MODULE_NAME = "exchange";
-    public static final String DELIMETER = "/";
-    public static final String SETTING_KEY_DNID_LIST = "dnid";
+    public static final String DELIMETER = ".";
+    public static final String INTERNAL_DELIMETER = ",";
+    public static final String SETTING_KEY_DNID_LIST = "DNIDS";
 
     @EJB
     MessageProducer messageProducer;
 
     @EJB
     MessageConsumer reciever;
+
+    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
+    ConfigModel configModel;
 
     @Override
     public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException {
@@ -81,17 +83,12 @@ public class PluginServiceBean implements PluginService {
     @Override
     public void processUpdatedDNIDList(String pluginName) {
         try {
-            String updatedDNIDListRequest = MobileTerminalDataSourceRequestMapper.mapUpdatedDNIDListRequest(pluginName, "UVMS");
-            String updatedDNIDMessageId = messageProducer.sendDataSourceMessage(updatedDNIDListRequest, DataSourceQueue.INTERNAL);
-            TextMessage updatedDNIDResponse = reciever.getMessage(updatedDNIDMessageId, TextMessage.class);
-            UpdatedDNIDListResponse dnidListResponse = MobileTerminalDataSourceResponseMapper.mapToUpdatedDNIDList(updatedDNIDResponse, updatedDNIDMessageId);
-
-            List<String> dnidList = dnidListResponse.getDnid();
+            List<String> dnidList = configModel.updatedDNIDList(pluginName);
 
             String settingKey = pluginName + DELIMETER + SETTING_KEY_DNID_LIST;
             StringBuffer buffer = new StringBuffer();
             for (String dnid : dnidList) {
-                buffer.append(dnid + DELIMETER);
+                buffer.append(dnid + INTERNAL_DELIMETER);
             }
             String settingValue = buffer.toString();
 
@@ -101,7 +98,7 @@ public class PluginServiceBean implements PluginService {
                 LOG.debug("Couldn't send to config module. Sending to exchange module.");
                 sendUpdatedDNIDListToExchange(pluginName, SETTING_KEY_DNID_LIST, settingValue);
             }
-        } catch (MobileTerminalMessageException | MobileTerminalModelException ex) {
+        } catch (MobileTerminalModelException ex) {
             LOG.error("Couldn't get updated DNID List");
         }
     }

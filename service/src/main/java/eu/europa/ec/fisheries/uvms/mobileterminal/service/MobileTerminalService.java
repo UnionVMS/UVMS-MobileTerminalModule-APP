@@ -132,7 +132,7 @@ public interface MobileTerminalService {
      * @param guid
      * @return
      */
-    public List<MobileTerminalHistory> getMobileTerminalHistoryList(String guid) throws MobileTerminalException;
+    public MobileTerminalHistory getMobileTerminalHistoryList(String guid) throws MobileTerminalException;
 
     /**
      * Get pollable mobile terminals matching query
