@@ -62,7 +62,6 @@ public class MobileTerminalEventServiceBean implements EventService {
     @EJB
     MobileTerminalService service;
 
-    @Resource(lookup = MessageConstants.CONNECTION_FACTORY)
     private ConnectionFactory connectionFactory;
 
     private Connection connection = null;
