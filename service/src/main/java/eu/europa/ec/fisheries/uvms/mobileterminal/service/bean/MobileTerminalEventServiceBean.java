@@ -258,6 +258,7 @@ public class MobileTerminalEventServiceBean implements EventService {
         }
         try {
             connection = connectionFactory.createConnection();
+            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
             connection.start();
         } catch (JMSException ex) {
             LOG.error("Error when open connection to JMS broker");
