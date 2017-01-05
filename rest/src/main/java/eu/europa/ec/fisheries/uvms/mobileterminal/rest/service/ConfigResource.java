@@ -11,6 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -21,6 +22,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
+import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.ServiceToPluginMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -103,6 +108,29 @@ public class ConfigResource {
         try {
         	List<ConfigList> config = configService.getConfig();
             return new ResponseDto(MobileTerminalConfig.mapConfigList(config), ResponseCode.OK);
+        } catch (Exception ex) {
+            return ErrorHandler.getFault(ex);
+        }
+    }
+
+    @GET
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path("/updatePlugins")
+    public ResponseDto updatePlugins() {
+        try {
+            try {
+                List<ServiceResponseType> serviceTypes = configService.getRegisteredMobileTerminalPlugins();
+                LOG.debug("get services from exchange registry");
+                List<Plugin> plugins = new ArrayList<>();
+                if(serviceTypes != null) {
+                    plugins = configService.upsertPlugins(ServiceToPluginMapper.mapToPluginList(serviceTypes), "PluginTimerBean");
+                    LOG.debug("upserted plugins");
+                }
+                return new ResponseDto(plugins, ResponseCode.OK);
+            } catch (MobileTerminalException e) {
+                return ErrorHandler.getFault(e);
+            }
         } catch (Exception ex) {
             return ErrorHandler.getFault(ex);
         }
