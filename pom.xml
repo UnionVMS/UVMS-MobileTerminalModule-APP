@@ -19,12 +19,12 @@
         <logback.version>1.1.2</logback.version>
         <logback.core.version>1.1.2</logback.core.version>
 
-        <usm4uvms.version>3.0.0</usm4uvms.version>
-        <uvms.common.version>2.0.14</uvms.common.version>
-        <uvms.config.version>3.0.0</uvms.config.version>
-        <audit.model.version>3.0.0</audit.model.version>
-        <exchange.model.version>3.0.0</exchange.model.version>
-        <mobileterminal.model.version>3.0.0</mobileterminal.model.version>
+        <usm4uvms.version>3.0.4</usm4uvms.version>
+        <uvms.common.version>2.0.17</uvms.common.version>
+        <uvms.config.version>3.0.4</uvms.config.version>
+        <audit.model.version>3.0.4</audit.model.version>
+        <exchange.model.version>3.0.4</exchange.model.version>
+        <mobileterminal.model.version>3.0.4</mobileterminal.model.version>
         <mobileterminal.model.classifier>date</mobileterminal.model.classifier>
 
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
