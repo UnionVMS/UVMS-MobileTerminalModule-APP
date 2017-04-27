@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+    <!--<include file="changelog\v0.1\db-changelog-createTables_0.1.xml" />-->
+    
+    <include file="changelog\properties.xml"/>
+    <include file="changelog\v0.4\hibernatesequence.xml"/>
+    <include file="changelog\v0.4\db-changelog-createTables-postgres_0.4.xml"/>
+    <include file="changelog\v0.4\db-changelog-insertStaticValues_0.4.xml"/>
+    <include file="changelog\v0.4\db-changelog-insertTestdata-postgres_0.4.xml"/>
+    
+    <!--
+	 <changeSet author="andtho" id="tag-0.1">
+    	<tagDatabase tag="version_0.1"/>
+	</changeSet>  
+	-->
+
+</databaseChangeLog>
