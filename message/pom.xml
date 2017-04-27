@@ -6,11 +6,13 @@
     <name>${project.parent.artifactId}-message</name>
     <packaging>ejb</packaging>
 
+
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-        <artifactId>mobileterminal</artifactId>
+        <artifactId>mobileterminal-dbaccess</artifactId>
         <version>3.0.6-SNAPSHOT</version>
     </parent>
+
 
     <dependencies>
         <dependency>
@@ -28,7 +30,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms</groupId>
             <artifactId>uvms-commons</artifactId>
-            <version>${uvms.common.version}</version>
+            <version>${uvms.commons.version}</version>
         </dependency>
     </dependencies>
 

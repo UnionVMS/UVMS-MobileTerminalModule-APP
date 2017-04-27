@@ -8,10 +8,10 @@
 
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-        <artifactId>mobileterminal</artifactId>
+        <artifactId>mobileterminal-dbaccess</artifactId>
         <version>3.0.6-SNAPSHOT</version>
     </parent>
-    
+
     <!-- PROPERTIES USED FOR LOGBACK -->
     <properties>
         <application.name>${project.parent.artifactId}</application.name> 
