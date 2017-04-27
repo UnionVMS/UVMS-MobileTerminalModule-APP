@@ -26,15 +26,15 @@ public abstract class BuildMovementTestDeployment {
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.constant");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.entity");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.dao");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.mapper");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.exception");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.model.exception");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.util");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.dto");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.dto");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.constant");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.entity");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dao");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.mapper");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.exception");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.model.exception");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.util");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dto");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dto");
         testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
         
         // No no, starts threaded job...
@@ -42,10 +42,10 @@ public abstract class BuildMovementTestDeployment {
         //testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement");
         //testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.bean");
 
-        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.movement.model");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.model");
         
-        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.movement.arquillian");
-        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.movement.arquillian.bean");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.arquillian");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.arquillian.bean");
         
         testWar.addPackages(true, "eu.europa.ec.fisheries.schema");
         testWar.addClass(TransactionalTests.class);
