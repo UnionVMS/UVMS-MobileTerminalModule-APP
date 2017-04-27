@@ -2,13 +2,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-    <artifactId>mobileterminal</artifactId>
+    <artifactId>mobileterminal-dbaccess-domain</artifactId>
     <version>3.0.6-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Maven projekt-archetype for UnionVms modules</description>
-    
+
+    <parent>
+        <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
+        <artifactId>mobileterminal</artifactId>
+        <version>3.0.6-SNAPSHOT</version>
+    </parent>
+
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <hibernate.dialect>org.hibernate.spatial.dialect.postgis.PostgisDialect</hibernate.dialect>
         <release.branch.name>uvms-3.0.5-C3PO</release.branch.name>
         <mockito.version>1.10.19</mockito.version>
         <junit.version>4.10</junit.version>
