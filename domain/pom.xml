@@ -30,8 +30,8 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-model</artifactId>
-            <version>${mobterm.model.version}</version>
-            <classifier>${mobterm.model.classifier}</classifier>
+            <version>${mobileterminal.model.version}</version>
+            <classifier>${mobileterminal.model.classifier}</classifier>
             <type>jar</type>
         </dependency>
         <dependency>
