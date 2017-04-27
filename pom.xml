@@ -8,9 +8,9 @@
     <description>Maven projekt-archetype for UnionVms modules</description>
 
     <parent>
-        <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-        <artifactId>mobileterminal</artifactId>
-        <version>3.0.6-SNAPSHOT</version>
+        <groupId>eu.europa.ec.fisheries.uvms</groupId>
+        <artifactId>uvms-app-parent</artifactId>
+        <version>1.0.2</version>
     </parent>
 
 
