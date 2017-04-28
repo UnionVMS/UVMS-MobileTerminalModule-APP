@@ -3,4 +3,4 @@ logging.properties
 *.iml
 /rest/src/main/webapp
 **/.idea
-*.logfile_IS_UNDEFINED
+domain/application.*
