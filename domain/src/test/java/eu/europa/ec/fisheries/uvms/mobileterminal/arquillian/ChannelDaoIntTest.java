@@ -2,6 +2,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,7 +14,6 @@ import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 
 /**
@@ -26,6 +26,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
     ChannelDao channelDao;
 
     @Test
+    @OperateOnDeployment("normal")
     public void testGetPollableListSearch() {
 
         //Given - need a string list of id's.
@@ -42,6 +43,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
     }
 
     @Test
+    @OperateOnDeployment("normal")
     public void testGetPollableListSearch_emptyList() {
 
         //Given - empty id list
@@ -55,6 +57,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
     }
 
     @Test
+    @OperateOnDeployment("normal")
     public void testGetActiveDNID() {
 
         //Given
@@ -68,6 +71,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
     }
 
     @Test
+    @OperateOnDeployment("normal")
     public void testGetActiveDNID_emptyList() {
 
         //Given
