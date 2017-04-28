@@ -17,6 +17,7 @@
         <hibernate.dialect>org.hibernate.spatial.dialect.postgis.PostgisDialect</hibernate.dialect>
         <version.org.jboss.arquillian>1.1.12.Final</version.org.jboss.arquillian>
         <version.arquillian.suite.extension>1.1.2</version.arquillian.suite.extension>
+        <mockito.version>1.10.19</mockito.version>
     </properties>
 
     <dependencyManagement>
@@ -127,7 +128,24 @@
             <scope>test</scope>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-module-junit4</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.powermock</groupId>
+            <artifactId>powermock-api-mockito</artifactId>
+            <version>${powermock.version}</version>
+            <scope>test</scope>
+        </dependency>
 
 
 
