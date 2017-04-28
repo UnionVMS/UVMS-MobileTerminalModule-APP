@@ -1,5 +1,8 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -45,7 +48,9 @@ public abstract class BuildMobileTerminalDeployment {
         testWar.addPackages(true, "eu.europa.ec.fisheries.schema");
         testWar.addClass(TransactionalTests.class);
 
-
+        testWar.addClass(PollDaoBean.class);
+        testWar.addClass(PollSearchKeyValue.class);
+        testWar.addClass(PollSearchMapper.class);
 
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
         // Empty beans for EE6 CDI
