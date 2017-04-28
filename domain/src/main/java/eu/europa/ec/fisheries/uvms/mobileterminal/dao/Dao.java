@@ -24,28 +24,11 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 
 public class Dao {
 
+    @PersistenceContext(unitName = "mobileTerminalPU")
     protected EntityManager em;
-
-    @PersistenceContext(unitName = "mobtermPostgresPU")
-    private EntityManager postgres;
-
-    @PersistenceContext(unitName = "mobtermOraclePU")
-    private EntityManager oracle;
-
-    @PostConstruct
-    public void initEntityManager() {
-        String dbDialect = System.getProperty("db.dialect");
-        if ("oracle".equalsIgnoreCase(dbDialect)) {
-            em = oracle;
-        } else {
-            em = postgres;
-        }
-    }
 }

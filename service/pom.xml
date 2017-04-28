@@ -11,7 +11,7 @@
         <artifactId>mobileterminal</artifactId>
         <version>3.0.6-SNAPSHOT</version>
     </parent>
-    
+
     <!-- PROPERTIES USED FOR LOGBACK -->
     <properties>
         <application.name>${project.parent.artifactId}</application.name> 
