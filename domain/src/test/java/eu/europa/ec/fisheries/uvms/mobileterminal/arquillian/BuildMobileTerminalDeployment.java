@@ -1,5 +1,9 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -44,6 +48,10 @@ public abstract class BuildMobileTerminalDeployment {
         
         testWar.addPackages(true, "eu.europa.ec.fisheries.schema");
         testWar.addClass(TransactionalTests.class);
+        testWar.addClass(TerminalDao.class);
+        testWar.addClass(TerminalDaoBean.class);
+        testWar.addClass(MobileTerminal.class);
+        testWar.addClass(MobileTerminalTypeEnum.class);
 
 
 
