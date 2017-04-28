@@ -7,10 +7,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
 
 /**
  * Created by roblar on 2017-04-28.
@@ -31,22 +35,48 @@ public class ChannelDaoIntTest extends TransactionalTests {
         List<String> idList = Arrays.asList(id1, id2);
 
         //When
-        //List<Channel> channels = channelDaoBean.getPollableListSearch(idList);
         List<Channel> channels = channelDao.getPollableListSearch(idList);
-
 
         //Then
         assertNotNull(channels);
     }
 
     @Test
-    public void testGetActiveDNID() {
+    public void testGetPollableListSearch_emptyList() {
 
+        //Given - empty id list
+        List<String> emptyList = new ArrayList<>();
+
+        //When
+        List<Channel> channels = channelDao.getPollableListSearch(emptyList);
+
+        //Then
+        assertThat(channels.size(), is(0));
     }
 
     @Test
-    public void getSQLActiveDNID() {
+    public void testGetActiveDNID() {
 
+        //Given
+        String pluginName = "test_getActiveDNID";
+
+        //When
+        List<String> dnidList = channelDao.getActiveDNID(pluginName);
+
+        //Then
+        assertNotNull(dnidList);
     }
 
+    @Test
+    public void testGetActiveDNID_emptyList() {
+
+        //Given
+        String pluginName = null;
+
+        //When
+        List<String> dnidList = channelDao.getActiveDNID(pluginName);
+
+        //Then
+        assertThat(dnidList.size(), is(0));
+    }
 }
