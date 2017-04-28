@@ -5,7 +5,7 @@
     <artifactId>mobileterminal-module</artifactId>
     <name>${project.parent.artifactId}-module</name>
     <packaging>ear</packaging>
-    
+
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
         <artifactId>mobileterminal</artifactId>
