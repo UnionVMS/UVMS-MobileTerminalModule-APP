@@ -12,21 +12,9 @@
         <version>3.0.6-SNAPSHOT</version>
     </parent>
 
-    <!-- PROPERTIES USED FOR LOGBACK -->
     <properties>
-        <application.name>${project.parent.artifactId}</application.name>
-        <hibernate.dialect>org.hibernate.spatial.dialect.postgis.PostgisDialect</hibernate.dialect>
-        <application.version>${project.parent.version}</application.version>
-        <application.logfile>/app/logs/${project.parent.artifactId}/${project.parent.artifactId}.log</application.logfile>
-        <application.error.logfile>/app/logs/${project.parent.artifactId}/${project.parent.artifactId}-error.log</application.error.logfile>
-
-        <hibernate.version>4.3.11.Final</hibernate.version>
         <version.org.jboss.arquillian>1.1.12.Final</version.org.jboss.arquillian>
         <version.arquillian.suite.extension>1.1.2</version.arquillian.suite.extension>
-        <version.jacoco>0.7.9</version.jacoco>
-        <version.arquillian_jacoco>1.0.0.Alpha9</version.arquillian_jacoco>
-        <joda-time.version>2.8.2</joda-time.version>
-
     </properties>
 
     <dependencyManagement>
