@@ -8,7 +8,7 @@
 
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-        <artifactId>mobileterminal-dbaccess</artifactId>
+        <artifactId>mobileterminal</artifactId>
         <version>3.0.6-SNAPSHOT</version>
     </parent>
     
