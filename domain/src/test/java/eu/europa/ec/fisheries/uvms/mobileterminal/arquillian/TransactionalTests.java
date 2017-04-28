@@ -14,7 +14,7 @@ import javax.transaction.RollbackException;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
 
-public class TransactionalTests extends BuildMovementTestDeployment {
+public class TransactionalTests extends BuildMobileTerminalDeployment {
 
     @Inject
     protected UserTransaction userTransaction;

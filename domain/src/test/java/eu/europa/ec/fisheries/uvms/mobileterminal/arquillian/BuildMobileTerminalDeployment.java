@@ -14,7 +14,7 @@ import java.io.File;
  * Created by andreasw on 2017-02-13.
  */
 @ArquillianSuiteDeployment
-public abstract class BuildMovementTestDeployment {
+public abstract class BuildMobileTerminalDeployment {
 
     @Deployment(name = "normal", order = 1)
     public static Archive<?> createDeployment() {
@@ -34,14 +34,9 @@ public abstract class BuildMovementTestDeployment {
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.model.exception");
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.util");
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dto");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dto");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.search");
         testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
         
-        // No no, starts threaded job...
-        // Need to exclude job first...
-        //testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement");
-        //testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.movement.bean");
-
         testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.model");
         
         testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.arquillian");
