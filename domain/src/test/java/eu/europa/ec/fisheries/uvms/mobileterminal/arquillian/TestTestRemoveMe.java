@@ -15,15 +15,4 @@ public class TestTestRemoveMe  extends BuildMobileTerminalDeployment {
 
 
 
-    @Test
-    @OperateOnDeployment("normal")
-    public void test() {
-
-        double longitude = 9.140626D;
-        double latitude = 57.683805D;
-
-    }
-
-
-
 }

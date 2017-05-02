@@ -2,6 +2,15 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -46,9 +55,16 @@ public abstract class BuildMobileTerminalDeployment {
         
         testWar.addPackages(true, "eu.europa.ec.fisheries.schema");
         testWar.addClass(TransactionalTests.class);
-
-        //testWar.addClass(MobileTerminalPlugin.class);
-        //testWar.addClass(MobileTerminalConstants.class);
+        testWar.addClass(TerminalDao.class);
+        testWar.addClass(TerminalDaoBean.class);
+        testWar.addClass(MobileTerminal.class);
+        testWar.addClass(MobileTerminalTypeEnum.class);
+        testWar.addClass(MobileTerminalPluginDao.class);
+        testWar.addClass(MobileTerminalPluginDaoBean.class);
+     
+        testWar.addClass(PollDaoBean.class);
+        testWar.addClass(PollSearchKeyValue.class);
+        testWar.addClass(PollSearchMapper.class);
 
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
         // Empty beans for EE6 CDI
