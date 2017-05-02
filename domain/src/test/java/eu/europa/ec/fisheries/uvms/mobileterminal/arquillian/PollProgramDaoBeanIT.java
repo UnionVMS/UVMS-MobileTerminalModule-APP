@@ -13,6 +13,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
@@ -50,18 +51,18 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber);
         try {
             pollProgramDao.createPollProgram(pollProgram);
+            String guid = pollProgram.getGuid();
+            PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
 
-            System.out.println("HEPP");
-
-
+// @formatter:off
+            boolean ok = ((fetchedPollProgram != null) &&
+                    (fetchedPollProgram.getGuid() != null) &&
+                    (fetchedPollProgram.getGuid().equals(guid)));
+// @formatter:on
+            Assert.assertTrue(ok);
         } catch (PollDaoException e) {
-
             Assert.fail();
-
-
         }
-
-
     }
 
     //@Test
@@ -71,22 +72,68 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
 
     }
 
-    //@Test
+    @Test
     @OperateOnDeployment("normal")
     public void getProgramPollsAlive() {
 
+        String mobileTerminalSerialNumber = createSerialNumber();
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber);
+
+        try {
+            pollProgramDao.createPollProgram(pollProgram);
+            em.flush();
+            List<PollProgram> rs = pollProgramDao.getProgramPollsAlive();
+            boolean found = false;
+            for(PollProgram pp : rs){
+                String tmpGuid = pp.getGuid();
+                if(tmpGuid.equals(pollProgram.getGuid())){
+                    found = true;
+                    break;
+                }
+            }
+            Assert.assertTrue(found);
+        } catch (PollDaoException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
     }
 
-    //@Test
+    @Test
     @OperateOnDeployment("normal")
     public void getPollProgramRunningAndStarted() {
 
+        String mobileTerminalSerialNumber = createSerialNumber();
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber);
+
+        try {
+            pollProgramDao.createPollProgram(pollProgram);
+            em.flush();
+
+
+            List<PollProgram> rs = pollProgramDao.getPollProgramRunningAndStarted();
+            boolean found = false;
+            for(PollProgram pp : rs){
+                String tmpGuid = pp.getGuid();
+                if(tmpGuid.equals(pollProgram.getGuid())){
+                    found = true;
+                    break;
+                }
+            }
+            Assert.assertTrue(found);
+        } catch (PollDaoException e) {
+            e.printStackTrace();
+            Assert.fail();
+        }
+
+
+
     }
 
-    //@Test
+    @Test
     @OperateOnDeployment("normal")
     public void getPollProgramByGuid() {
-
+        // same as create since it uses the same methods to validate itself
+        createPollProgram();
     }
 
 
@@ -94,10 +141,23 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
 
         Date aDate = new Date();
 
-        Date latestRun = aDate;
-        Date startDate = aDate;
-        Date stopDate = aDate;
-        Date updateTime = aDate;
+        Calendar cal = Calendar.getInstance();
+
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.YEAR, 2001);
+        Date startDate = cal.getTime();
+
+
+        cal.set(Calendar.DAY_OF_MONTH, 20);
+        cal.set(Calendar.YEAR, 2050);
+        Date latestRun = cal.getTime();
+
+
+        cal.set(Calendar.DAY_OF_MONTH, 28);
+        cal.set(Calendar.YEAR, 2099);
+        Date stopDate = cal.getTime();
+
+
 
 
         PollProgram pp = new PollProgram();
@@ -105,23 +165,19 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         MobileTerminal mobileTerminal = createMobileTerminalHelper(mobileTerminalSerialNo);
 
         PollBase pb = new PollBase();
-        pb.setChannelGuid(UUID.randomUUID().toString());
-
-
-
-
+        String channelGuid = UUID.randomUUID().toString();
+        String terminalConnect = UUID.randomUUID().toString();
+        pb.setChannelGuid(channelGuid);
         pb.setMobileTerminal(mobileTerminal);
-
-
+        pb.setTerminalConnect(terminalConnect);
         pp.setFrequency(1);
         pp.setLatestRun(latestRun);
         pp.setPollBase(pb);
         pp.setPollState(PollStateEnum.STARTED);
         pp.setStartDate(startDate);
         pp.setStopDate(stopDate);
-        pp.setUpdateTime(updateTime);
+        pp.setUpdateTime(latestRun);
         pp.setUpdatedBy("TEST");
-
 
         return pp;
     }
@@ -167,8 +223,6 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         return "SNU" + rnd.nextInt();
 
     }
-
-
 
 
 }
