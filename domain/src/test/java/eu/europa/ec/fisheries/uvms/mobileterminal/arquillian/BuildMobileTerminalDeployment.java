@@ -1,5 +1,7 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -45,12 +47,15 @@ public abstract class BuildMobileTerminalDeployment {
         testWar.addPackages(true, "eu.europa.ec.fisheries.schema");
         testWar.addClass(TransactionalTests.class);
 
-
+        //testWar.addClass(MobileTerminalPlugin.class);
+        //testWar.addClass(MobileTerminalConstants.class);
 
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         testWar.addAsLibraries(files);
+
+
 
         return testWar;
     }
