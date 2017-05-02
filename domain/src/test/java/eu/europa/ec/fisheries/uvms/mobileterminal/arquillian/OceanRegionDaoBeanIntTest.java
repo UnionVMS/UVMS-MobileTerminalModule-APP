@@ -23,9 +23,10 @@ public class OceanRegionDaoBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testGetOceanRegionList() throws ConfigDaoException {
+        // Since we have at least 4 regions inserted by LIQUIBASE this should always work
         List<OceanRegion> oceanRegions = oceanRegionDao.getOceanRegionList();
         Assert.assertNotNull(oceanRegions);
-        Assert.assertTrue(oceanRegions.size() > 0);
+        Assert.assertTrue(oceanRegions.size() > 3);
     }
 
 }
