@@ -2,8 +2,10 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Rule;
 import org.junit.Test;
@@ -13,7 +15,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import javax.inject.Inject;
 import java.util.Date;
 import java.util.List;
 
@@ -35,17 +36,17 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPluginDaoBeanIntTest.class);
 
-
     @Test
+    @OperateOnDeployment("normal")
     public void testGetPluginList() throws ConfigDaoException {
 
         List<MobileTerminalPlugin> mobileTerminalPluginList = mobileTerminalPluginDao.getPluginList();
 
         assertNotNull(mobileTerminalPluginList);
-
     }
 
     @Test
+    @OperateOnDeployment("normal")
     public void testCreateMobileTerminalPlugin() throws TerminalDaoException {
 
         try {
@@ -68,18 +69,19 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     }
 
     @Test(expected = TerminalDaoException.class)
-    public void testCreateMobileTerminalPlugin_persistEmptyEntityFailsWithTerminalDaoException() throws TerminalDaoException {
+    @OperateOnDeployment("normal")
+    public void testCreateMobileTerminalPlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
 
-            MobileTerminalPlugin failingMobileTerminalPlugin = null;
+        MobileTerminalPlugin failingMobileTerminalPlugin = null;
 
-            mobileTerminalPluginDao.createMobileTerminalPlugin(failingMobileTerminalPlugin);
+        mobileTerminalPluginDao.createMobileTerminalPlugin(failingMobileTerminalPlugin);
 
-            thrown.expect(TerminalDaoException.class);
-            thrown.expectMessage("create mobile terminal plugin");
+        thrown.expect(TerminalDaoException.class);
+        thrown.expectMessage("create mobile terminal plugin");
     }
 
-
     @Test
+    @OperateOnDeployment("normal")
     public void testGetPluginByServiceName() throws TerminalDaoException {
 
         // Given
@@ -94,7 +96,18 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
         assertThat(mobileTerminalPluginAfterGetter.getPluginServiceName(), is("test_serviceName"));
     }
 
+    @Test(expected = NoEntityFoundException.class)
+    @OperateOnDeployment("normal")
+    public void testGetPluginByServiceName_wrongServiceNameThrowsNoEntityFoundException() throws TerminalDaoException {
+
+        MobileTerminalPlugin mobileTerminalPluginAfterGetter = mobileTerminalPluginDao.getPluginByServiceName("thisServiceNameDoesNotExist");
+
+        thrown.expect(NoEntityFoundException.class);
+        thrown.expectMessage("No entities found when retrieving mobile terminal plugin by service name");
+    }
+
     @Test
+    @OperateOnDeployment("normal")
     public void testUpdatePlugin() throws TerminalDaoException {
 
         MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
@@ -112,6 +125,17 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
         assertThat(mobileTerminalPlugin.getPluginServiceName(), is("change_name"));
     }
 
+    @Test(expected = TerminalDaoException.class)
+    @OperateOnDeployment("normal")
+    public void testUpdatePlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
+
+        MobileTerminalPlugin mobileTerminalPlugin = null;
+
+        MobileTerminalPlugin mobileTerminalPluginAfterFirstUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
+
+        thrown.expect(TerminalDaoException.class);
+        thrown.expectMessage("update mobile terminal plugin");
+    }
 
     private MobileTerminalPlugin createMobileTerminalPluginHelper() {
 
