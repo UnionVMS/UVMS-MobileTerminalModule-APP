@@ -1,5 +1,20 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
+import javax.ejb.EJB;
+import javax.persistence.Query;
+
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
@@ -14,15 +29,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSou
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import javax.ejb.EJB;
-import javax.persistence.Query;
-import java.util.*;
 
 /**
  * Created by thofan on 2017-05-02.

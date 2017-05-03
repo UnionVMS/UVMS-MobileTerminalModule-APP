@@ -12,10 +12,11 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import java.util.List;
 
 import javax.ejb.Local;
-import java.util.List;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 
 /**
  * Created by osdjup on 2016-11-16.
