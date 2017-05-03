@@ -30,6 +30,7 @@
         <version.arquillian_jacoco>1.0.0.Alpha9</version.arquillian_jacoco>
         <version.arquillian.suite.extension>1.1.2</version.arquillian.suite.extension>
 
+		<version.jacoco>0.7.9</version.jacoco>
         <docker.dev.version>3.1.0-SNAPSHOT</docker.dev.version>
         <docker.dev.start.phase>none</docker.dev.start.phase>
         <docker.dev.stop.phase>none</docker.dev.stop.phase>
