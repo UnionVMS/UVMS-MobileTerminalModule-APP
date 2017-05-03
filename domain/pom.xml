@@ -18,6 +18,9 @@
         <version.org.jboss.arquillian>1.1.12.Final</version.org.jboss.arquillian>
         <version.arquillian.suite.extension>1.1.2</version.arquillian.suite.extension>
         <mockito.version>1.10.19</mockito.version>
+        
+        <docker.dev.start.phase>test-compile</docker.dev.start.phase>
+        <docker.dev.prestop.phase>validate</docker.dev.prestop.phase>                        
     </properties>
 
     <dependencyManagement>
