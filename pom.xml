@@ -413,8 +413,8 @@
 													<port>8161</port>
 												</ports>
 											</tcp>
-											<kill>15000</kill>
-											<shutdown>15000</shutdown>
+											<kill>5000</kill>
+											<shutdown>5000</shutdown>
 											<time>15000</time>
 										</wait>
 										<log>
@@ -436,8 +436,8 @@
 										<wait>
 											<log>All uvms databases created</log>
 											<time>240000</time>
-											<kill>10000</kill>
-											<shutdown>10000</shutdown>
+											<kill>5000</kill>
+											<shutdown>5000</shutdown>
 										</wait>
 										<dependsOn>
 											<container>activemq</container>
@@ -470,8 +470,8 @@
 										<wait>
 											<log>WildFly 8.2.0.Final "Tweek" started in</log>
 											<time>300000</time>
-											<kill>10000</kill>
-											<shutdown>10000</shutdown>
+											<kill>5000</kill>
+											<shutdown>5000</shutdown>
 										</wait>
 										<cmd>
 											<shell>/opt/jboss/wildfly/bin/standalone.sh -c
