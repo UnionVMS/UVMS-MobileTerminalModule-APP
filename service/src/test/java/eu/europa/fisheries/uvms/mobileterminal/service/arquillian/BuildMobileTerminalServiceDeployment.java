@@ -30,6 +30,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         // So that Arquillian can invoke test class through its servlet test runner
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
         testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
+        testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service");
 
         testWar.addPackages(true, "eu.europa.ec.fisheries.schema");
         testWar.addClass(TransactionalTests.class);
