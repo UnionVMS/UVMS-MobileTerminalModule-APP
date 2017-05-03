@@ -277,7 +277,7 @@
 		                     <goal>prepare-agent</goal>
 		                  </goals>
 				            <configuration>
-				            	<includes><include>eu/europa/ec/fisheries/uvms/movement/**/*.class</include></includes>
+				            	<includes><include>eu/europa/ec/fisheries/uvms/mobileterminal/**/*.class</include></includes>
 				            	<excludes>
 				            		<exclude>eu/europa/ec/fisheries/schema/**/*.class</exclude>
 				            		<exclude>eu.europa.ec.fisheries.schema.*</exclude>
