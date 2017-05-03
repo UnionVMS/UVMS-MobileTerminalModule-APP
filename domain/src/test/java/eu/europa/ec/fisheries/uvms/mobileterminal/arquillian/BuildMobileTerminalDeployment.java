@@ -1,6 +1,9 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
+
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
@@ -61,10 +64,7 @@ public abstract class BuildMobileTerminalDeployment {
         testWar.addClass(MobileTerminalTypeEnum.class);
         testWar.addClass(MobileTerminalPluginDao.class);
         testWar.addClass(MobileTerminalPluginDaoBean.class);
-
-
-
-
+     
         testWar.addClass(PollDaoBean.class);
         testWar.addClass(PollSearchKeyValue.class);
         testWar.addClass(PollSearchMapper.class);
@@ -79,6 +79,8 @@ public abstract class BuildMobileTerminalDeployment {
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         testWar.addAsLibraries(files);
+
+
 
         return testWar;
     }

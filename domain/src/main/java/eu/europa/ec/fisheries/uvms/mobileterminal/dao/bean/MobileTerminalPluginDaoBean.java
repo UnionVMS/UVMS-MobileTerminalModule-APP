@@ -67,6 +67,7 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
         }
 	}
 
+	//ToDo: Look at if a null check is needed on an incoming MobileTerminalPlugin entity before allowing a merge.
 	@Override
 	public MobileTerminalPlugin updatePlugin(MobileTerminalPlugin entity) throws TerminalDaoException {
 		try {
