@@ -1,18 +1,20 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
+import java.util.Calendar;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.validation.ConstraintViolationException;
+
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.ejb.EJB;
-import javax.validation.ConstraintViolationException;
-import java.util.Calendar;
-import java.util.List;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
 
 @RunWith(Arquillian.class)
 public class DNIDListDaoBeanTestIntTest extends TransactionalTests {

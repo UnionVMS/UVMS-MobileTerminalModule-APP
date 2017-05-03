@@ -12,17 +12,18 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.ejb.Stateless;
+import javax.persistence.TypedQuery;
+
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AttributeMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
-
-import javax.ejb.Stateless;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Created by osdjup on 2016-11-16.

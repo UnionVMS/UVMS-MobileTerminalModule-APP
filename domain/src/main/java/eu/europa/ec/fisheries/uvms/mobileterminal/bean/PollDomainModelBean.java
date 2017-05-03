@@ -11,11 +11,35 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollId;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollMobileTerminal;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapabilityType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
@@ -35,12 +59,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import java.util.*;
 
 /**
  **/

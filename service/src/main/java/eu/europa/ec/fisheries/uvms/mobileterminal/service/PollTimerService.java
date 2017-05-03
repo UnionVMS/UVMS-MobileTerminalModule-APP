@@ -12,10 +12,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
 import javax.ejb.Local;
-import javax.enterprise.event.Observes;
-
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PollTimerMessageRecievedEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.PollTimerMessage;
 
 @Local
 public interface PollTimerService {

@@ -12,6 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PollChannelListDto implements Serializable {
@@ -19,7 +20,7 @@ public class PollChannelListDto implements Serializable {
 	
 	private Integer currentPage;
 	private Integer totalNumberOfPages;
-	private List<PollChannelDto> pollableChannels;
+	private ArrayList<PollChannelDto> pollableChannels;
 	
 	public Integer getCurrentPage() {
 		return currentPage;
@@ -36,7 +37,7 @@ public class PollChannelListDto implements Serializable {
 	public List<PollChannelDto> getPollableChannels() {
 		return pollableChannels;
 	}
-	public void setPollableChannels(List<PollChannelDto> pollableChannels) {
+	public void setPollableChannels(ArrayList<PollChannelDto> pollableChannels) {
 		this.pollableChannels = pollableChannels;
 	}
 }

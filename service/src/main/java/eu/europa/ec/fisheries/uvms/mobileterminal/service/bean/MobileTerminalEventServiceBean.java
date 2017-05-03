@@ -11,8 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -20,19 +20,25 @@ import javax.ejb.TransactionAttributeType;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.jms.*;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.Session;
+import javax.jms.TextMessage;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.GetMobileTerminalRequest;
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleBaseRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleMethod;
+import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
@@ -41,6 +47,10 @@ import eu.europa.ec.fisheries.uvms.config.service.ParameterService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.GetReceivedEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ListReceivedEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
@@ -51,8 +61,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalMod
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.EventService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
-
-import java.util.List;
 
 @Stateless
 public class MobileTerminalEventServiceBean implements EventService {

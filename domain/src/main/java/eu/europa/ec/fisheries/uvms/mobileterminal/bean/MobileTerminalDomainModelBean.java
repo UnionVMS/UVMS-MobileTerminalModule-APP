@@ -11,39 +11,45 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalExistsException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalTypeComparator;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.HistoryMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToModelMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchKeyValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchTable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ListCriteria;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAssignQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalHistory;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.common.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalExistsException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalTypeComparator;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.HistoryMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToModelMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalModelToEntityMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.common.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
 
 @Stateless
 public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel {
