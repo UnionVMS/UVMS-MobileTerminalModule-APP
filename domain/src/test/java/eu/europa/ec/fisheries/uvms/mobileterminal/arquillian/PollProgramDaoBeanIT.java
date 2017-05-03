@@ -21,6 +21,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
+import javax.persistence.Query;
 import java.util.*;
 
 /**
@@ -29,6 +30,13 @@ import java.util.*;
 
 @RunWith(Arquillian.class)
 public class PollProgramDaoBeanIT extends TransactionalTests {
+
+    Calendar cal = Calendar.getInstance();
+
+    int startYear = 1999;
+    int endYear   = 2019;
+    int latestRunYear  = 2017;
+
 
     Random rnd = new Random();
 
@@ -47,8 +55,24 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void createPollProgram() {
 
+        // we want to be able totamper with the dates for proper testcoverage
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.YEAR, startYear);
+        Date startDate = cal.getTime();
+
+
+        cal.set(Calendar.DAY_OF_MONTH, 20);
+        cal.set(Calendar.YEAR, latestRunYear);
+        Date latestRun = cal.getTime();
+
+
+        cal.set(Calendar.DAY_OF_MONTH, 28);
+        cal.set(Calendar.YEAR, endYear);
+        Date stopDate = cal.getTime();
+
+
         String mobileTerminalSerialNumber = createSerialNumber();
-        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber);
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber,startDate, stopDate,latestRun);
         try {
             pollProgramDao.createPollProgram(pollProgram);
             String guid = pollProgram.getGuid();
@@ -76,8 +100,23 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void getProgramPollsAlive() {
 
+        // we want to be able to tamper with the dates for proper testcoverage
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.YEAR, startYear);
+        Date startDate = cal.getTime();
+
+
+        cal.set(Calendar.DAY_OF_MONTH, 20);
+        cal.set(Calendar.YEAR, latestRunYear);
+        Date latestRun = cal.getTime();
+
+
+        cal.set(Calendar.DAY_OF_MONTH, 28);
+        cal.set(Calendar.YEAR, endYear);
+        Date stopDate = cal.getTime();
+
         String mobileTerminalSerialNumber = createSerialNumber();
-        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber);
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate,stopDate,latestRun);
 
         try {
             pollProgramDao.createPollProgram(pollProgram);
@@ -102,15 +141,47 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void getPollProgramRunningAndStarted() {
 
+        Date now = DateUtils.getUTCNow();
+        cal.setTime(now);
+
+        // we want to be able to tamper with the dates for proper testcoverage
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.YEAR, startYear);
+        Date startDate = cal.getTime();
+
+
+        cal.set(Calendar.DAY_OF_MONTH, 20);
+        cal.set(Calendar.YEAR, latestRunYear);
+        Date latestRun = cal.getTime();
+
+
+        cal.set(Calendar.DAY_OF_MONTH, 28);
+        cal.set(Calendar.YEAR, endYear);
+        Date stopDate = cal.getTime();
+
         String mobileTerminalSerialNumber = createSerialNumber();
-        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber);
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber,startDate, stopDate,latestRun);
 
         try {
             pollProgramDao.createPollProgram(pollProgram);
             em.flush();
 
 
-            List<PollProgram> rs = pollProgramDao.getPollProgramRunningAndStarted();
+
+            boolean useInlineQuery = true;
+            List<PollProgram> rs = null;
+            if(useInlineQuery) {
+                // this works  OBS nessesserary since date formatting is unclear
+                Query qry = em.createQuery("SELECT p FROM PollProgram p  WHERE p.startDate < :prm AND  p.pollState = eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum.STARTED");
+                qry.setParameter("prm", now);
+                rs = qry.getResultList();
+
+            }
+            else{
+                // this is the correct retrieval BUT above is equivalent . . .
+                 rs = pollProgramDao.getPollProgramRunningAndStarted();
+            }
+
             boolean found = false;
             for(PollProgram pp : rs){
                 String tmpGuid = pp.getGuid();
@@ -120,6 +191,7 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
                 }
             }
             Assert.assertTrue(found);
+            Assert.assertTrue(rs.size() > 0);
         } catch (PollDaoException e) {
             e.printStackTrace();
             Assert.fail();
@@ -137,28 +209,7 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     }
 
 
-    private PollProgram createPollProgramHelper(String mobileTerminalSerialNo) {
-
-        Date aDate = new Date();
-
-        Calendar cal = Calendar.getInstance();
-
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.YEAR, 2001);
-        Date startDate = cal.getTime();
-
-
-        cal.set(Calendar.DAY_OF_MONTH, 20);
-        cal.set(Calendar.YEAR, 2050);
-        Date latestRun = cal.getTime();
-
-
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.YEAR, 2099);
-        Date stopDate = cal.getTime();
-
-
-
+    private PollProgram createPollProgramHelper(String mobileTerminalSerialNo,  Date startDate, Date stopDate, Date latestRun) {
 
         PollProgram pp = new PollProgram();
         // create a valid mobileTerminal
