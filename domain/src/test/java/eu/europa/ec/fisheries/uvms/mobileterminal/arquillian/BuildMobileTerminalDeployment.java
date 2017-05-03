@@ -1,7 +1,5 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
@@ -37,6 +35,7 @@ public abstract class BuildMobileTerminalDeployment {
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
+
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.constant");
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.entity");
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dao");

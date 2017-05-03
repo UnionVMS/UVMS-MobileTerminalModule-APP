@@ -71,10 +71,6 @@
                 </exclusions>
                 <scope>test</scope>
             </dependency>
-
-
-
-
         </dependencies>
     </dependencyManagement>
 
