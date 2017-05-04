@@ -35,10 +35,8 @@ public abstract class BuildMobileTerminalServiceDeployment {
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
         testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
         testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service");
- //       testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.service");
- //       testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.service.exception");
- //       testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dto");
-        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.service");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dto");
 
 
         testWar.addClass(TransactionalTests.class);
