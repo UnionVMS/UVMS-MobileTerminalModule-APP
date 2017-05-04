@@ -291,7 +291,7 @@
 		                     <goal>report</goal>
 		                  </goals>
 				            <configuration>
-				            	<includes><include>eu/europa/ec/fisheries/uvms/movement/**/*.class</include></includes>
+				            	<includes><include>eu/europa/ec/fisheries/uvms/mobileterminal/**/*.class</include></includes>
 				            </configuration>
 		               </execution>
 		            </executions>
