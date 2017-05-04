@@ -59,8 +59,8 @@
                 </exclusions>
             </dependency>
 
-            <!--dependency>
-                <groupId>eu.europa.ec.fisheries.uvms.movement</groupId>
+            <dependency>
+                <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
                 <artifactId>mobileterminal-dbaccess-domain</artifactId>
                 <version>3.0.8-SNAPSHOT</version>
                 <exclusions>
@@ -69,7 +69,7 @@
                         <artifactId>joda-time</artifactId>
                     </exclusion>
                 </exclusions>
-            </dependency-->
+            </dependency>
 
 
 
