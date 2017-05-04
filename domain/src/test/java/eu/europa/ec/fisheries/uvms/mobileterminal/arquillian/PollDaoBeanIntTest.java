@@ -1,13 +1,10 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchTable;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Rule;
@@ -19,18 +16,12 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.EJBTransactionRolledbackException;
-import javax.persistence.TypedQuery;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -110,22 +101,76 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchCount() {
+    //ToDo: Need to understand SQL phrases from PollSearchMapper to test this one. Work in progress.
+    public void testGetPollListSearchCount() throws PollDaoException {
+
+        Poll poll = createPollHelper();
+
+        pollDao.createPoll(poll);
+        String pollId = poll.getId().toString();
+        em.persist(poll);
+        em.flush();
 
         String sql = "SELECT COUNT (DISTINCT p) FROM Poll p ";
+        //String sql = "SELECT COUNT (p) FROM Poll p ";
+        String keyValue1 = "testKeyValue1";
+        String keyValue2 = "testKeyValue2";
+        List<String> listOfKeyValues = Arrays.asList(keyValue1, keyValue2);
 
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
-        pollSearchKeyValue1.setSearchField(PollSearchField.POLL_ID);
+        //pollSearchKeyValue1.setSearchField(PollSearchField.POLL_ID);
+        //pollSearchKeyValue1.setSearchField(PollSearchField.CONNECT_ID);
+        pollSearchKeyValue1.setValues(listOfKeyValues);
 
         PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
-        pollSearchKeyValue2.setSearchField(PollSearchField.POLL_ID);
+        //pollSearchKeyValue2.setSearchField(PollSearchField.POLL_ID);
+        pollSearchKeyValue2.setValues(listOfKeyValues);
 
         List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
-        boolean isDynamic = false;
+        //boolean isDynamic = false;
+        boolean isDynamic = true;
 
+        //Long number = pollDao.getPollListSearchCount(sql, listOfPollSearchKeyValue, isDynamic);
+
+        //assertNotNull(number);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchCount_failOnSqlReplaceToken() {
+
+        String sql = "SELECT COUNT (DISTINCT p) FROM Poll p ";
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = new ArrayList<>();
+        boolean isDynamic = true;
         Long number = pollDao.getPollListSearchCount(sql, listOfPollSearchKeyValue, isDynamic);
 
-        assertNotNull(number);
+    }
+    //sqlReplaceToken
+
+    @Test(expected = EJBTransactionRolledbackException.class)
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchCount_noSqlPhraseCausesException() {
+
+        String sql = "";
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = new ArrayList<>();
+        boolean isDynamic = true;
+        Long number = pollDao.getPollListSearchCount(sql, listOfPollSearchKeyValue, isDynamic);
+
+        thrown.expect(EJBTransactionRolledbackException.class);
+        thrown.expectMessage("unexpected end of subtree []");
+    }
+
+    @Test(expected = EJBTransactionRolledbackException.class)
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchCount_malformedSqlPhraseCausesException() {
+
+        String sql = "SELECT * FROM Poll p";
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = new ArrayList<>();
+        boolean isDynamic = true;
+        Long number = pollDao.getPollListSearchCount(sql, listOfPollSearchKeyValue, isDynamic);
+
+        thrown.expect(EJBTransactionRolledbackException.class);
+        thrown.expectMessage("unexpected token: * near line");
     }
 
     @Test
