@@ -11,13 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.constant;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalExistsException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.MobileTerminalDaoMappingException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoMappingException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalExistsException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception.ConnectMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception.SearchMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;

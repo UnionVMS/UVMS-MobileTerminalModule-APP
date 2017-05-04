@@ -12,13 +12,13 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
 
 /**
  * Created by osdjup on 2016-11-16.

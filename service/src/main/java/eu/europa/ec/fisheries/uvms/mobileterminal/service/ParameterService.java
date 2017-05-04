@@ -11,9 +11,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
 import javax.ejb.Local;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 
 @Local
 public interface ParameterService {

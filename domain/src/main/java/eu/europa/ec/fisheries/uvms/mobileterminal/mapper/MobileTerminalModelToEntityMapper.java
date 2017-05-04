@@ -11,22 +11,32 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
-import eu.europa.ec.fisheries.uvms.common.DateUtils;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelCapability;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.common.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.ChannelHistory;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 
 
 public class MobileTerminalModelToEntityMapper {

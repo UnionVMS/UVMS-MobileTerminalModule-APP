@@ -1,10 +1,14 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+
+import java.util.Date;
+import java.util.List;
+
+import javax.ejb.EJB;
+
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Rule;
@@ -14,13 +18,11 @@ import org.junit.runner.RunWith;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.EJB;
-import java.util.Date;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 
 /**
  * Created by roblar on 2017-04-28.

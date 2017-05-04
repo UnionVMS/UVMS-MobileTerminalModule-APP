@@ -21,19 +21,20 @@ import java.util.Set;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.*;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
-import eu.europa.ec.fisheries.uvms.common.DateUtils;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityConfiguration;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemConfiguration;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
+import eu.europa.ec.fisheries.uvms.common.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConfigType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.OceanRegionDao;
@@ -44,6 +45,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoExcep
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PluginMapper;

@@ -16,19 +16,30 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.TerminalCapability;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.Capability;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityConfiguration;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityOption;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.LandEarthStationType;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.OceanRegionType;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemConfiguration;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapability;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.AttributeInmarsatC;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.AttributeIridium;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.CapabilitiesInmarsatC;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.CapabilitiesIridium;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ChannelFieldInmarsatC;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ChannelFieldIridium;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.TerminalCapability;
 
 public class PluginMapper {
 	final static Logger LOG = LoggerFactory.getLogger(PluginMapper.class);

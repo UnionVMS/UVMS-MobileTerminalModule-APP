@@ -12,6 +12,11 @@
         <version>3.0.6-SNAPSHOT</version>
     </parent>
     
+    <properties>
+        <docker.dev.stop.phase>verify</docker.dev.stop.phase>
+        <docker.dev.prestop.phase>install</docker.dev.prestop.phase>        		
+	</properties>
+    
     <build>
         <finalName>${project.name}</finalName>
         <plugins>

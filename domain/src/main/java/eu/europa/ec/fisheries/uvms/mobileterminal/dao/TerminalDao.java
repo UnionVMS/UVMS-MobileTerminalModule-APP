@@ -11,14 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-
-import java.util.List;
 
 @Local
 public interface TerminalDao {

@@ -1,9 +1,22 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.UUID;
+
+import javax.ejb.EJB;
+
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
@@ -11,21 +24,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.ejb.EJB;
-import javax.validation.constraints.AssertTrue;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
 
 /**
  * Created by thofan on 2017-04-28.
