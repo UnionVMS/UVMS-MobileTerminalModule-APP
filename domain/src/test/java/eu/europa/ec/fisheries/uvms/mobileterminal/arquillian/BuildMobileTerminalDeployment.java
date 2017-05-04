@@ -1,8 +1,6 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-
 import java.io.File;
-
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -39,6 +37,7 @@ public abstract class BuildMobileTerminalDeployment {
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
+
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.constant");
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.entity");
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dao");
