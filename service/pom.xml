@@ -59,6 +59,20 @@
                 </exclusions>
             </dependency>
 
+            <!--dependency>
+                <groupId>eu.europa.ec.fisheries.uvms.movement</groupId>
+                <artifactId>mobileterminal-dbaccess-domain</artifactId>
+                <version>3.0.8-SNAPSHOT</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>joda-time</groupId>
+                        <artifactId>joda-time</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency-->
+
+
+
             <dependency>
                 <groupId>com.tocea.easycoverage</groupId>
                 <artifactId>easyCoverage4J-junit</artifactId>
