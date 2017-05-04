@@ -1,14 +1,13 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalConfigHelper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -42,8 +41,6 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(TransactionalTests.class);
         testWar.addClass(ConfigService.class);
         testWar.addClass(ConfigServiceBean.class);
-        testWar.addClass(ConfigModel.class);
-        testWar.addClass(TransactionalTests.class);
         testWar.addClass(MobileTerminalMessageException.class);
         testWar.addClass(MobileTerminalConfigHelper.class);
 
@@ -55,6 +52,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(PollRequestType.class);
         testWar.addClass(CreatePollResultDto.class);
         testWar.addClass(MobileTerminalServiceException.class);
+        testWar.addClass(MappedPollServiceBeanIntTest.class);
 
 /*
         testWar.addClass(MobileTerminalService.class);
