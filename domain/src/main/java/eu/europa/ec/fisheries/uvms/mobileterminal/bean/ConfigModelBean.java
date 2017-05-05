@@ -11,19 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityConfiguration;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemConfiguration;
@@ -31,7 +18,6 @@ import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.common.DateUtils;
-import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConfigType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
@@ -50,9 +36,17 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTyp
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import java.util.*;
 
 @Stateless
-public class ConfigModelBean implements ConfigModel {
+@LocalBean
+public class ConfigModelBean  {
 
     final static Logger LOG = LoggerFactory.getLogger(ConfigModelBean.class);
     
@@ -68,7 +62,6 @@ public class ConfigModelBean implements ConfigModel {
     @EJB
 	ChannelDao channelDao;
     
-    @Override
     public List<TerminalSystemType> getAllTerminalSystems() throws MobileTerminalModelException {
         LOG.info("Get all terminal systems");
 
@@ -95,7 +88,6 @@ public class ConfigModelBean implements ConfigModel {
         return terminalSystemList;
     }
 
-	@Override
 	public List<ConfigList> getConfigValues() throws MobileTerminalModelException {
 		LOG.info("Get config list values");
 		List<ConfigList> configValues = new ArrayList<>();
@@ -159,7 +151,6 @@ public class ConfigModelBean implements ConfigModel {
 		}
 	}
 	
-	@Override
 	public List<Plugin> upsertPlugins(List<PluginService> pluginList) throws MobileTerminalModelException {
 		LOG.debug("Start upsert plugin list");
 		if(pluginList == null) {
@@ -208,7 +199,6 @@ public class ConfigModelBean implements ConfigModel {
 		return responseList;
 	}
 
-	@Override
 	public List<String> updatedDNIDList(String pluginName) throws MobileTerminalModelException {
 		List<String> dnids = new ArrayList<>();
 		List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
@@ -273,7 +263,6 @@ public class ConfigModelBean implements ConfigModel {
         return plugins;
 	}
 
-	@Override
 	public boolean checkDNIDListChange(String pluginName) {
 		//TODO fix sql query:
 
