@@ -40,7 +40,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
 @Stateless
-@LocalBean
 public class MappedPollServiceBean implements MappedPollService {
     final static Logger LOG = LoggerFactory.getLogger(MappedPollServiceBean.class);
 

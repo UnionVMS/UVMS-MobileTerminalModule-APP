@@ -1,13 +1,19 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalConfigHelper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -27,7 +33,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
 
         // Import Maven runtime dependencies
         File[] files = Maven.resolver().loadPomFromFile("pom.xml")
-                .importRuntimeDependencies().resolve().withTransitivity().asFile();
+                .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
 
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
@@ -36,6 +42,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service");
         testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.service");
         testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dto");
+        //testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception");
 
 
         testWar.addClass(TransactionalTests.class);
@@ -53,15 +60,24 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(CreatePollResultDto.class);
         testWar.addClass(MobileTerminalServiceException.class);
         testWar.addClass(MappedPollServiceBeanIntTest.class);
-
+        testWar.addClass(PollService.class);
+        testWar.addClass(PollServiceBean.class);
+        testWar.addClass(MobileTerminalService.class);
+        testWar.addClass(MobileTerminalServiceBean.class);
+        testWar.addClass(PollService.class);
+        testWar.addClass(PollServiceBean.class);
+    //    testWar.addClass(ConfigModelBean.class);
+        //testWar.addClass(NoEntityFoundException.class);
+        //testWar.addClass(TerminalDaoException.class);
+        //testWar.addClass(MobileTerminalModelException.class);
+        //testWar.addClass(PollDaoException.class);
 /*
         testWar.addClass(MobileTerminalService.class);
         testWar.addClass(MobileTerminalServiceBean.class);
         testWar.addClass(PluginService.class);
         testWar.addClass(PluginServiceBean.class);
         testWar.addClass(PollDto.class);
-        testWar.addClass(PollService.class);
-        testWar.addClass(PollServiceBean.class);
+
         testWar.addClass(PollType.class);
 */
 
