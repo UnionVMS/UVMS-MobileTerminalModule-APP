@@ -33,8 +33,6 @@ public class PollSearchMapperIntTest extends TransactionalTests {
         List<PollSearchKeyValue> pollSearchKeyValueList = PollSearchMapper.createSearchFields(listOfListCriteria);
 
         assertNotNull(pollSearchKeyValueList);
-
-
     }
 
     @Test
