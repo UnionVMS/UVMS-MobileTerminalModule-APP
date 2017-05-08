@@ -61,20 +61,6 @@
             </dependency>
 
             <dependency>
-                <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-                <artifactId>mobileterminal-dbaccess-domain</artifactId>
-                <version>3.0.8-SNAPSHOT</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>joda-time</groupId>
-                        <artifactId>joda-time</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-
-
-            <dependency>
                 <groupId>com.tocea.easycoverage</groupId>
                 <artifactId>easyCoverage4J-junit</artifactId>
                 <version>2.3.1</version>
@@ -141,7 +127,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-dbaccess-domain</artifactId>
-            <version>3.0.6-SNAPSHOT</version>
+            <version>${project.parent.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>joda-time</groupId>
