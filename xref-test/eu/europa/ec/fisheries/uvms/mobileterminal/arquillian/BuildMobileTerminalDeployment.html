@@ -1,0 +1,99 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head><meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<title>BuildMobileTerminalDeployment xref</title>
+<link type="text/css" rel="stylesheet" href="../../../../../../../stylesheet.css" />
+</head>
+<body>
+<div id="overview"><a href="../../../../../../../../testapidocs/eu/europa/ec/fisheries/uvms/mobileterminal/arquillian/BuildMobileTerminalDeployment.html">View Javadoc</a></div><pre>
+<a class="jxr_linenumber" name="L1" href="#L1">1</a>   <strong class="jxr_keyword">package</strong> eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
+<a class="jxr_linenumber" name="L2" href="#L2">2</a>   
+<a class="jxr_linenumber" name="L3" href="#L3">3</a>   <strong class="jxr_keyword">import</strong> java.io.File;
+<a class="jxr_linenumber" name="L4" href="#L4">4</a>   <strong class="jxr_keyword">import</strong> org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
+<a class="jxr_linenumber" name="L5" href="#L5">5</a>   <strong class="jxr_keyword">import</strong> org.jboss.arquillian.container.test.api.Deployment;
+<a class="jxr_linenumber" name="L6" href="#L6">6</a>   <strong class="jxr_keyword">import</strong> org.jboss.shrinkwrap.api.Archive;
+<a class="jxr_linenumber" name="L7" href="#L7">7</a>   <strong class="jxr_keyword">import</strong> org.jboss.shrinkwrap.api.ShrinkWrap;
+<a class="jxr_linenumber" name="L8" href="#L8">8</a>   <strong class="jxr_keyword">import</strong> org.jboss.shrinkwrap.api.asset.EmptyAsset;
+<a class="jxr_linenumber" name="L9" href="#L9">9</a>   <strong class="jxr_keyword">import</strong> org.jboss.shrinkwrap.api.spec.WebArchive;
+<a class="jxr_linenumber" name="L10" href="#L10">10</a>  <strong class="jxr_keyword">import</strong> org.jboss.shrinkwrap.resolver.api.maven.Maven;
+<a class="jxr_linenumber" name="L11" href="#L11">11</a>  
+<a class="jxr_linenumber" name="L12" href="#L12">12</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+<a class="jxr_linenumber" name="L13" href="#L13">13</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
+<a class="jxr_linenumber" name="L14" href="#L14">14</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+<a class="jxr_linenumber" name="L15" href="#L15">15</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+<a class="jxr_linenumber" name="L16" href="#L16">16</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
+<a class="jxr_linenumber" name="L17" href="#L17">17</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
+<a class="jxr_linenumber" name="L18" href="#L18">18</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+<a class="jxr_linenumber" name="L19" href="#L19">19</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+<a class="jxr_linenumber" name="L20" href="#L20">20</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+<a class="jxr_linenumber" name="L21" href="#L21">21</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+<a class="jxr_linenumber" name="L22" href="#L22">22</a>  <strong class="jxr_keyword">import</strong> eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
+<a class="jxr_linenumber" name="L23" href="#L23">23</a>  
+<a class="jxr_linenumber" name="L24" href="#L24">24</a>  <em class="jxr_javadoccomment">/**</em>
+<a class="jxr_linenumber" name="L25" href="#L25">25</a>  <em class="jxr_javadoccomment"> * Created by andreasw on 2017-02-13.</em>
+<a class="jxr_linenumber" name="L26" href="#L26">26</a>  <em class="jxr_javadoccomment"> */</em>
+<a class="jxr_linenumber" name="L27" href="#L27">27</a>  @ArquillianSuiteDeployment
+<a class="jxr_linenumber" name="L28" href="#L28">28</a>  <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">abstract</strong> <strong class="jxr_keyword">class</strong> <a href="../../../../../../../eu/europa/ec/fisheries/uvms/mobileterminal/arquillian/BuildMobileTerminalDeployment.html">BuildMobileTerminalDeployment</a> {
+<a class="jxr_linenumber" name="L29" href="#L29">29</a>  
+<a class="jxr_linenumber" name="L30" href="#L30">30</a>      @Deployment(name = <span class="jxr_string">"normal"</span>, order = 1)
+<a class="jxr_linenumber" name="L31" href="#L31">31</a>      <strong class="jxr_keyword">public</strong> <strong class="jxr_keyword">static</strong> Archive&lt;?&gt; createDeployment() {
+<a class="jxr_linenumber" name="L32" href="#L32">32</a>  
+<a class="jxr_linenumber" name="L33" href="#L33">33</a>          <em class="jxr_comment">// Import Maven runtime dependencies</em>
+<a class="jxr_linenumber" name="L34" href="#L34">34</a>          File[] files = Maven.resolver().loadPomFromFile(<span class="jxr_string">"pom.xml"</span>)
+<a class="jxr_linenumber" name="L35" href="#L35">35</a>                  .importRuntimeDependencies().resolve().withTransitivity().asFile();
+<a class="jxr_linenumber" name="L36" href="#L36">36</a>  
+<a class="jxr_linenumber" name="L37" href="#L37">37</a>          <em class="jxr_comment">// Embedding war package which contains the test class is needed</em>
+<a class="jxr_linenumber" name="L38" href="#L38">38</a>          <em class="jxr_comment">// So that Arquillian can invoke test class through its servlet test runner</em>
+<a class="jxr_linenumber" name="L39" href="#L39">39</a>          WebArchive testWar = ShrinkWrap.create(WebArchive.<strong class="jxr_keyword">class</strong>, <span class="jxr_string">"test.war"</span>);
+<a class="jxr_linenumber" name="L40" href="#L40">40</a>  
+<a class="jxr_linenumber" name="L41" href="#L41">41</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.constant"</span>);
+<a class="jxr_linenumber" name="L42" href="#L42">42</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.entity"</span>);
+<a class="jxr_linenumber" name="L43" href="#L43">43</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.dao"</span>);
+<a class="jxr_linenumber" name="L44" href="#L44">44</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.mapper"</span>);
+<a class="jxr_linenumber" name="L45" href="#L45">45</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.exception"</span>);
+<a class="jxr_linenumber" name="L46" href="#L46">46</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.model.exception"</span>);
+<a class="jxr_linenumber" name="L47" href="#L47">47</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.util"</span>);
+<a class="jxr_linenumber" name="L48" href="#L48">48</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.dto"</span>);
+<a class="jxr_linenumber" name="L49" href="#L49">49</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.search"</span>);
+<a class="jxr_linenumber" name="L50" href="#L50">50</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"com.tocea.easycoverage.framework.api"</span>);
+<a class="jxr_linenumber" name="L51" href="#L51">51</a>          
+<a class="jxr_linenumber" name="L52" href="#L52">52</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>,<span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.model"</span>);
+<a class="jxr_linenumber" name="L53" href="#L53">53</a>          
+<a class="jxr_linenumber" name="L54" href="#L54">54</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>,<span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.arquillian"</span>);
+<a class="jxr_linenumber" name="L55" href="#L55">55</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>,<span class="jxr_string">"eu.europa.ec.fisheries.uvms.mobileterminal.arquillian.bean"</span>);
+<a class="jxr_linenumber" name="L56" href="#L56">56</a>          
+<a class="jxr_linenumber" name="L57" href="#L57">57</a>          testWar.addPackages(<strong class="jxr_keyword">true</strong>, <span class="jxr_string">"eu.europa.ec.fisheries.schema"</span>);
+<a class="jxr_linenumber" name="L58" href="#L58">58</a>          testWar.addClass(TransactionalTests.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L59" href="#L59">59</a>          testWar.addClass(TerminalDao.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L60" href="#L60">60</a>          testWar.addClass(TerminalDaoBean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L61" href="#L61">61</a>          testWar.addClass(MobileTerminal.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L62" href="#L62">62</a>          testWar.addClass(MobileTerminalTypeEnum.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L63" href="#L63">63</a>          testWar.addClass(MobileTerminalPluginDao.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L64" href="#L64">64</a>          testWar.addClass(MobileTerminalPluginDaoBean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L65" href="#L65">65</a>       
+<a class="jxr_linenumber" name="L66" href="#L66">66</a>          testWar.addClass(PollDaoBean.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L67" href="#L67">67</a>          testWar.addClass(PollSearchKeyValue.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L68" href="#L68">68</a>          testWar.addClass(PollSearchMapper.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L69" href="#L69">69</a>  
+<a class="jxr_linenumber" name="L70" href="#L70">70</a>          testWar.addClass(PollProgramDao.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L71" href="#L71">71</a>          testWar.addClass(PollProgram.<strong class="jxr_keyword">class</strong>);
+<a class="jxr_linenumber" name="L72" href="#L72">72</a>  
+<a class="jxr_linenumber" name="L73" href="#L73">73</a>  
+<a class="jxr_linenumber" name="L74" href="#L74">74</a>  
+<a class="jxr_linenumber" name="L75" href="#L75">75</a>  
+<a class="jxr_linenumber" name="L76" href="#L76">76</a>          testWar.addAsResource(<span class="jxr_string">"persistence-integration.xml"</span>, <span class="jxr_string">"META-INF/persistence.xml"</span>);
+<a class="jxr_linenumber" name="L77" href="#L77">77</a>          <em class="jxr_comment">// Empty beans for EE6 CDI</em>
+<a class="jxr_linenumber" name="L78" href="#L78">78</a>          testWar.addAsWebInfResource(EmptyAsset.INSTANCE, <span class="jxr_string">"beans.xml"</span>);
+<a class="jxr_linenumber" name="L79" href="#L79">79</a>          testWar.addAsLibraries(files);
+<a class="jxr_linenumber" name="L80" href="#L80">80</a>  
+<a class="jxr_linenumber" name="L81" href="#L81">81</a>  
+<a class="jxr_linenumber" name="L82" href="#L82">82</a>  
+<a class="jxr_linenumber" name="L83" href="#L83">83</a>          <strong class="jxr_keyword">return</strong> testWar;
+<a class="jxr_linenumber" name="L84" href="#L84">84</a>      }
+<a class="jxr_linenumber" name="L85" href="#L85">85</a>  
+<a class="jxr_linenumber" name="L86" href="#L86">86</a>  }
+</pre>
+<hr/>
+<div id="footer">Copyright &#169; 2017. All rights reserved.</div>
+</body>
+</html>
