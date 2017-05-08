@@ -17,6 +17,9 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.jms.TextMessage;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.MobileTerminalDomainModelBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,10 +33,6 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSourc
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalStatus;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalDomainModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
@@ -61,12 +60,12 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
 
     @EJB
     PluginService pluginService;
-    @EJB(lookup = ServiceConstants.DB_ACCESS_MOBILE_TERMINAL_DOMAIN_MODEL)
-    MobileTerminalDomainModel mobileTerminalModel;
-    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
-    ConfigModel configModel;
-    @EJB(lookup = ServiceConstants.DB_ACCESS_POLL_DOMAIN_MODEL)
-    PollDomainModel pollModel;
+    @EJB
+    MobileTerminalDomainModelBean mobileTerminalModel;
+    @EJB
+    ConfigModelBean configModel;
+    @EJB
+    PollDomainModelBean pollModel;
     
     /**
      * {@inheritDoc}
