@@ -1,0 +1,16 @@
+digraph uvms_commons_2_0_17_dependencies {
+  node [shape = box, fontsize=10.0];
+  uvms_commons_2_0_17 -> gt_api_14_M1;
+  uvms_commons_2_0_17 -> gt_geojson_14_M1;
+  uvms_commons_2_0_17 -> gt_opengis_14_M1;
+  uvms_commons_2_0_17 -> jackson_annotations_2_4_0;
+  uvms_commons_2_0_17 -> jackson_core_2_4_2;
+  uvms_commons_2_0_17 -> jackson_databind_2_4_2;
+  uvms_commons_2_0_17 -> jaxb_api_2_2_7;
+  uvms_commons_2_0_17 -> jaxrs_api_3_0_11_Final;
+  uvms_commons_2_0_17 -> jboss_annotations_api_1_1_spec_1_0_1_Final;
+  uvms_commons_2_0_17 -> joda_time_2_7;
+  uvms_commons_2_0_17 -> jts_1_13;
+  uvms_commons_2_0_17 -> mapstruct_1_0_0_Final;
+  uvms_commons_2_0_17 -> resteasy_multipart_provider_3_0_11_Final;
+}

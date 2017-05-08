@@ -1,0 +1,64 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_67
+Built-By: William
+Created-By: Apache Maven 3.1.1
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.jboss.resteasy.client.jaxrs.internal.proxy.ex
+ tractors
+Bundle-Description: resteasy-client-3.0.11.Final
+Bundle-Name: resteasy-client-3.0.11.Final
+Bundle-Version: 0.0.0
+Export-Package: org.jboss.resteasy.client.jaxrs;uses:="javax.ws.rs.cli
+ ent,javax.ws.rs.core,org.apache.http.impl.conn,org.jboss.resteasy.cli
+ ent.jaxrs.engines,org.jboss.resteasy.client.jaxrs.internal,org.jboss.
+ resteasy.client.jaxrs.internal.proxy,org.jboss.resteasy.util",org.jbo
+ ss.resteasy.client.jaxrs.cache;uses:="javax.ws.rs.client,javax.ws.rs.
+ core",org.jboss.resteasy.client.jaxrs.engines;uses:="javax.ws.rs,org.
+ jboss.resteasy.client.jaxrs,org.jboss.resteasy.client.jaxrs.internal,
+ org.jboss.resteasy.util",org.jboss.resteasy.client.jaxrs.internal;use
+ s:="javax.ws.rs,javax.ws.rs.client,javax.ws.rs.core,javax.ws.rs.ext,o
+ rg.jboss.resteasy.client.jaxrs,org.jboss.resteasy.core.interception,o
+ rg.jboss.resteasy.specimpl,org.jboss.resteasy.spi,org.jboss.resteasy.
+ util",org.jboss.resteasy.client.jaxrs.internal.proxy;uses:="javax.ws.
+ rs.client,javax.ws.rs.container,javax.ws.rs.core,org.jboss.resteasy.c
+ lient.jaxrs,org.jboss.resteasy.client.jaxrs.internal,org.jboss.restea
+ sy.client.jaxrs.internal.proxy.extractors,org.jboss.resteasy.client.j
+ axrs.internal.proxy.processors,org.jboss.resteasy.util",org.jboss.res
+ teasy.client.jaxrs.internal.proxy.extractors;uses:="javax.ws.rs.clien
+ t,javax.ws.rs.core,org.jboss.resteasy.client.jaxrs,org.jboss.resteasy
+ .client.jaxrs.internal,org.jboss.resteasy.client.jaxrs.internal.proxy
+ ",org.jboss.resteasy.client.jaxrs.internal.proxy.processors;uses:="ja
+ vax.ws.rs,javax.ws.rs.client,org.jboss.resteasy.client.jaxrs.internal
+ ,org.jboss.resteasy.client.jaxrs.internal.proxy.processors.invocation
+ ,org.jboss.resteasy.client.jaxrs.internal.proxy.processors.webtarget"
+ ,org.jboss.resteasy.client.jaxrs.internal.proxy.processors.invocation
+ ;uses:="javax.ws.rs.client,javax.ws.rs.core,org.jboss.resteasy.client
+ .jaxrs.internal,org.jboss.resteasy.client.jaxrs.internal.proxy.proces
+ sors",org.jboss.resteasy.client.jaxrs.internal.proxy.processors.webta
+ rget;uses:="javax.ws.rs.client,org.jboss.resteasy.client.jaxrs,org.jb
+ oss.resteasy.client.jaxrs.internal.proxy.processors"
+Import-Package: java.io,java.lang,java.lang.annotation,java.lang.manag
+ ement,java.lang.reflect,java.net,java.security,java.security.cert,jav
+ a.util,java.util.concurrent,java.util.concurrent.atomic,javax.net.ssl
+ ,javax.ws.rs;version="0.0.0",javax.ws.rs.client;version="0.0.0",javax
+ .ws.rs.container;version="0.0.0",javax.ws.rs.core;version="0.0.0",jav
+ ax.ws.rs.ext;version="0.0.0",org.apache.commons.io.output;version="2.
+ 4",org.apache.http;version="4.2.5",org.apache.http.client;version="4.
+ 2.6",org.apache.http.client.methods;version="4.2.6",org.apache.http.c
+ lient.params;version="4.2.6",org.apache.http.conn;version="4.2.6",org
+ .apache.http.conn.scheme;version="4.2.6",org.apache.http.conn.ssl;ver
+ sion="4.2.6",org.apache.http.entity;version="4.2.5",org.apache.http.i
+ mpl.client;version="4.2.6",org.apache.http.impl.conn;version="4.2.6",
+ org.apache.http.message;version="4.2.5",org.apache.http.params;versio
+ n="4.2.5",org.apache.http.protocol;version="4.2.5",org.jboss.resteasy
+ .annotations;version="0.0.0",org.jboss.resteasy.client;version="0.0.0
+ ",org.jboss.resteasy.client.core;version="0.0.0",org.jboss.resteasy.c
+ ore;version="0.0.0",org.jboss.resteasy.core.interception;version="0.0
+ .0",org.jboss.resteasy.logging;version="0.0.0",org.jboss.resteasy.plu
+ gins.providers;version="0.0.0",org.jboss.resteasy.specimpl;version="0
+ .0.0",org.jboss.resteasy.spi;version="0.0.0",org.jboss.resteasy.util;
+ version="0.0.0"

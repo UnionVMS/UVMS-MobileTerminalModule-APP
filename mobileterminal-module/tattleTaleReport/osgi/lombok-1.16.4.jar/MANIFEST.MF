@@ -1,0 +1,34 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.7.1
+Agent-Class: lombok.launch.Agent
+Premain-Class: lombok.launch.Agent
+Created-By: 14.3-b01-101 (Apple Inc.)
+Main-Class: lombok.launch.Main
+Can-Redefine-Classes: true
+Lombok-Version: 1.16.4
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: lombok
+Bundle-Description: lombok-1.16.4
+Bundle-Name: lombok-1.16.4
+Bundle-Version: 0.0.0
+Export-Package: lombok;uses:="lombok.core.configuration",lombok.delomb
+ ok.ant;uses:="lombok,org.apache.tools.ant,org.apache.tools.ant.types"
+ ,lombok.experimental;uses:="lombok",lombok.extern.apachecommons,lombo
+ k.extern.java,lombok.extern.log4j,lombok.extern.slf4j,lombok.launch;u
+ ses:="lombok.core,lombok.eclipse,org.eclipse.core.runtime,org.eclipse
+ .jdt.core,org.eclipse.jdt.core.dom,org.eclipse.jdt.core.dom.rewrite,o
+ rg.eclipse.jdt.internal.core.dom.rewrite,org.eclipse.jdt.internal.cor
+ ext.refactoring.structure"
+Import-Package: java.io,java.lang,java.lang.annotation,java.lang.instr
+ ument,java.lang.reflect,java.net,java.util,java.util.concurrent,java.
+ util.jar,javax.annotation.processing,javax.lang.model,javax.lang.mode
+ l.element,lombok.core,lombok.core.configuration,lombok.eclipse,org.ap
+ ache.tools.ant,org.apache.tools.ant.types,org.eclipse.core.runtime,or
+ g.eclipse.jdt.core,org.eclipse.jdt.core.dom,org.eclipse.jdt.core.dom.
+ rewrite,org.eclipse.jdt.internal.compiler.ast,org.eclipse.jdt.interna
+ l.compiler.lookup,org.eclipse.jdt.internal.compiler.parser,org.eclips
+ e.jdt.internal.compiler.problem,org.eclipse.jdt.internal.core.dom.rew
+ rite,org.eclipse.jdt.internal.corext.refactoring.structure

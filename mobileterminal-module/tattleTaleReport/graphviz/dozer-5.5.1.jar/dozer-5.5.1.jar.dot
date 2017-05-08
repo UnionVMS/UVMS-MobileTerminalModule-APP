@@ -1,0 +1,7 @@
+digraph dozer_5_5_1_dependencies {
+  node [shape = box, fontsize=10.0];
+  dozer_5_5_1 -> commons_beanutils_1_9_1;
+  dozer_5_5_1 -> commons_lang3_3_4;
+  dozer_5_5_1 -> javassist_3_19_0_GA;
+  dozer_5_5_1 -> xml_apis_1_0_b2;
+}

@@ -1,0 +1,7 @@
+digraph jaxb_core_2_2_7_dependencies {
+  node [shape = box, fontsize=10.0];
+  jaxb_core_2_2_7 -> activation_1_1;
+  jaxb_core_2_2_7 -> jaxb_api_2_2_7;
+  jaxb_core_2_2_7 -> jsr173_api_1_0;
+  jaxb_core_2_2_7 -> xml_apis_1_0_b2;
+}

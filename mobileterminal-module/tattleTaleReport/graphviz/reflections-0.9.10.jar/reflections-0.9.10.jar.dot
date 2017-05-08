@@ -1,0 +1,6 @@
+digraph reflections_0_9_10_dependencies {
+  node [shape = box, fontsize=10.0];
+  reflections_0_9_10 -> annotations_2_0_1;
+  reflections_0_9_10 -> dom4j_1_6_1;
+  reflections_0_9_10 -> javassist_3_19_0_GA;
+}

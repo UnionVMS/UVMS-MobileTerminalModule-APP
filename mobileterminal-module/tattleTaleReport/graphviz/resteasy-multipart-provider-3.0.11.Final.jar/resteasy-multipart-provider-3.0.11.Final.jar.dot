@@ -1,0 +1,11 @@
+digraph resteasy_multipart_provider_3_0_11_Final_dependencies {
+  node [shape = box, fontsize=10.0];
+  resteasy_multipart_provider_3_0_11_Final -> activation_1_1;
+  resteasy_multipart_provider_3_0_11_Final -> apache_mime4j_0_6;
+  resteasy_multipart_provider_3_0_11_Final -> jaxb_api_2_2_7;
+  resteasy_multipart_provider_3_0_11_Final -> jaxrs_api_3_0_11_Final;
+  resteasy_multipart_provider_3_0_11_Final -> mail_1_5_0_b01;
+  resteasy_multipart_provider_3_0_11_Final -> resteasy_jaxb_provider_3_0_11_Final;
+  resteasy_multipart_provider_3_0_11_Final -> resteasy_jaxrs_3_0_11_Final;
+  resteasy_multipart_provider_3_0_11_Final -> xml_apis_1_0_b2;
+}

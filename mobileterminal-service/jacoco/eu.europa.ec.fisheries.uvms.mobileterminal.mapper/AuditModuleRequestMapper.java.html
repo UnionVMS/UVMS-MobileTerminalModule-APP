@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuditModuleRequestMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.mapper</a> &gt; <span class="el_source">AuditModuleRequestMapper.java</span></div><h1>AuditModuleRequestMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
+import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
+import eu.europa.ec.fisheries.uvms.audit.model.mapper.AuditLogMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.constants.AuditObjectTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.constants.AuditOperationEnum;
+
+<span class="nc" id="L23">public class AuditModuleRequestMapper {</span>
+
+<span class="nc" id="L25">    final static Logger LOG = LoggerFactory.getLogger(AuditModuleRequestMapper.class);</span>
+
+    public static String mapAuditLogMobileTerminalCreated(String guid, String username) throws AuditModelMarshallException {
+<span class="nc" id="L28">        return mapToAuditLog(AuditObjectTypeEnum.MOBILE_TERMINAL.getValue(), AuditOperationEnum.CREATE.getValue(), guid, AuditOperationEnum.CREATE.getValue(), username);</span>
+    }
+
+    public static String mapAuditLogMobileTerminalUpdated(String guid, String comment, String username) throws AuditModelMarshallException {
+<span class="nc" id="L32">        return mapToAuditLog(AuditObjectTypeEnum.MOBILE_TERMINAL.getValue(), AuditOperationEnum.UPDATE.getValue(), guid, comment, username);</span>
+    }
+
+    public static String mapAuditLogMobileTerminalAssigned(String guid, String comment, String username) throws AuditModelMarshallException {
+<span class="nc" id="L36">        return mapToAuditLog(AuditObjectTypeEnum.MOBILE_TERMINAL.getValue(), AuditOperationEnum.LINKED.getValue(), guid, comment, username);</span>
+    }
+
+    public static String mapAuditLogMobileTerminalUnassigned(String guid, String comment, String username) throws AuditModelMarshallException {
+<span class="nc" id="L40">        return mapToAuditLog(AuditObjectTypeEnum.MOBILE_TERMINAL.getValue(), AuditOperationEnum.UNLINKED.getValue(), guid, comment, username);</span>
+    }
+
+    public static String mapAuditLogMobileTerminalActivated(String guid, String comment, String username) throws AuditModelMarshallException {
+<span class="nc" id="L44">        return mapToAuditLog(AuditObjectTypeEnum.MOBILE_TERMINAL.getValue(), AuditOperationEnum.ACTIVATE.getValue(), guid, comment, username);</span>
+    }
+
+    public static String mapAuditLogMobileTerminalInactivated(String guid, String comment, String username) throws AuditModelMarshallException {
+<span class="nc" id="L48">        return mapToAuditLog(AuditObjectTypeEnum.MOBILE_TERMINAL.getValue(), AuditOperationEnum.INACTIVATE.getValue(), guid, comment, username);</span>
+    }
+
+    public static String mapAuditLogMobileTerminalArchived(String guid, String comment, String username) throws AuditModelMarshallException {
+<span class="nc" id="L52">        return mapToAuditLog(AuditObjectTypeEnum.MOBILE_TERMINAL.getValue(), AuditOperationEnum.ARCHIVE.getValue(), guid, comment, username);</span>
+    }
+
+    public static String mapAuditLogPollCreated(PollType pollType, String guid, String comment, String username) throws AuditModelMarshallException {
+        AuditObjectTypeEnum pollTypeEnum;
+<span class="nc bnc" id="L57" title="All 2 branches missed.">        switch (pollType){</span>
+            case PROGRAM_POLL:
+<span class="nc" id="L59">                pollTypeEnum = AuditObjectTypeEnum.PROGRAM_POLL;</span>
+<span class="nc" id="L60">                break;</span>
+            default:
+<span class="nc" id="L62">                pollTypeEnum = AuditObjectTypeEnum.POLL;</span>
+<span class="nc" id="L63">                break;</span>
+        }
+<span class="nc" id="L65">        return mapToAuditLog(pollTypeEnum.getValue(), AuditOperationEnum.CREATE.getValue(), guid, comment, username);</span>
+    }
+
+    public static String mapAuditLogPollInactivated(String guid, String username) throws AuditModelMarshallException {
+<span class="nc" id="L69">        return mapToAuditLog(AuditObjectTypeEnum.POLL.getValue(), AuditOperationEnum.INACTIVATE.getValue(), guid, AuditOperationEnum.INACTIVATE.getValue(), username);</span>
+    }
+
+    public static String mapAuditLogPollStarted(String guid, String username) throws AuditModelMarshallException {
+<span class="nc" id="L73">        return mapToAuditLog(AuditObjectTypeEnum.POLL.getValue(), AuditOperationEnum.START.getValue(), guid, AuditOperationEnum.START.getValue(), username);</span>
+    }
+
+    public static String mapAuditLogPollStopped(String guid, String username) throws AuditModelMarshallException {
+<span class="nc" id="L77">        return mapToAuditLog(AuditObjectTypeEnum.POLL.getValue(), AuditOperationEnum.STOP.getValue(), guid, AuditOperationEnum.STOP.getValue(), username);</span>
+    }
+
+    private static String mapToAuditLog(String objectType, String operation, String affectedObject, String comment, String username) throws AuditModelMarshallException {
+<span class="nc" id="L81">        return AuditLogMapper.mapToAuditLog(objectType, operation, affectedObject, comment, username);</span>
+    }
+
+    public static String mapAuditLogProgramPollStarted(String guid, String username) throws AuditModelMarshallException {
+<span class="nc" id="L85">        return mapToAuditLog(AuditObjectTypeEnum.PROGRAM_POLL.getValue(), AuditOperationEnum.START.getValue(), guid, AuditOperationEnum.START.getValue(), username);</span>
+    }
+
+    public static String mapAuditLogProgramPollStopped(String guid, String username) throws AuditModelMarshallException {
+<span class="nc" id="L89">        return mapToAuditLog(AuditObjectTypeEnum.PROGRAM_POLL.getValue(), AuditOperationEnum.STOP.getValue(), guid, AuditOperationEnum.STOP.getValue(), username);</span>
+    }
+
+
+    public static String mapAuditLogProgramPollInactivated(String guid, String username) throws AuditModelMarshallException {
+<span class="nc" id="L94">        return mapToAuditLog(AuditObjectTypeEnum.PROGRAM_POLL.getValue(), AuditOperationEnum.INACTIVATE.getValue(), guid, AuditOperationEnum.INACTIVATE.getValue(), username);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

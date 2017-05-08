@@ -1,0 +1,8 @@
+digraph jibx_extras_1_2_6_dependencies {
+  node [shape = box, fontsize=10.0];
+  jibx_extras_1_2_6 -> dom4j_1_6_1;
+  jibx_extras_1_2_6 -> jdom_1_1_3;
+  jibx_extras_1_2_6 -> jibx_run_1_2_6;
+  jibx_extras_1_2_6 -> xml_apis_1_0_b2;
+  jibx_extras_1_2_6 -> xpp3_1_1_3_4_O;
+}

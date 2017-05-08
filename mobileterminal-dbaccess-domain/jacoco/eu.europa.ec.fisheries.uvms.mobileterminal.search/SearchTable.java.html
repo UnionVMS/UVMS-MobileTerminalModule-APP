@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SearchTable.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.search</a> &gt; <span class="el_source">SearchTable.java</span></div><h1>SearchTable.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.search;
+
+<span class="pc" id="L14">public enum SearchTable {</span>
+    
+<span class="fc" id="L16">	TERMINALCONNECT(&quot;MobileTerminalConnect&quot;, &quot;tc&quot;),</span>
+<span class="fc" id="L17">	TERMINAL(&quot;MobileTerminal&quot;, &quot;mt&quot;),</span>
+	
+<span class="fc" id="L19">	INMARSATC(&quot;MobileTerminalInmarsatC&quot;, &quot;t&quot;),</span>
+<span class="fc" id="L20">	INMARSATC_HISTORY(&quot;MobileTerminalInmarsatCHistory&quot;, &quot;mh&quot;),</span>
+<span class="fc" id="L21">	CHANNEL_INMARSATC(&quot;ChannelInmarsatC&quot;, &quot;c&quot;),</span>
+<span class="fc" id="L22">	CHANNEL_INMARSATC_HISTORY(&quot;ChannelInmarsatCHistory&quot;, &quot;ch&quot;),</span>
+	
+<span class="fc" id="L24">	IRIDIUM(&quot;MobileTerminalIridium&quot;, &quot;t&quot;),</span>
+<span class="fc" id="L25">	IRIDIUM_HISTORY(&quot;MobileTerminalIridiumHistory&quot;, &quot;mh&quot;),</span>
+<span class="fc" id="L26">	CHANNEL_IRIDIUM(&quot;ChannelIridium&quot;, &quot;c&quot;),</span>
+<span class="fc" id="L27">	CHANNEL_IRIDIUM_HISTORY(&quot;ChannelIridiumHistory&quot;, &quot;ch&quot;),</span>
+	
+<span class="fc" id="L29">	POLL(&quot;Poll&quot;, &quot;p&quot;),</span>
+<span class="fc" id="L30">	POLLBASE(&quot;PollBase&quot;, &quot;pb&quot;);</span>
+	
+	private String tableName;
+	private String tableAlias;
+	
+<span class="fc" id="L35">	private SearchTable(String tableName, String tableAlias) {</span>
+<span class="fc" id="L36">		this.tableName=tableName;</span>
+<span class="fc" id="L37">		this.tableAlias = tableAlias;</span>
+<span class="fc" id="L38">	}</span>
+
+	public String getTableAlias() {
+<span class="nc" id="L41">		return tableAlias;</span>
+	}
+
+	public String getTableName() {
+<span class="nc" id="L45">		return tableName;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

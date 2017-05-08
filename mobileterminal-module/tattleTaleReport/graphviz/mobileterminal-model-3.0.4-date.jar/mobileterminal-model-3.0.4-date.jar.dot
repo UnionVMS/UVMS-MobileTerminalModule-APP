@@ -1,0 +1,8 @@
+digraph mobileterminal_model_3_0_4_date_dependencies {
+  node [shape = box, fontsize=10.0];
+  mobileterminal_model_3_0_4_date -> jaxb_api_2_2_7;
+  mobileterminal_model_3_0_4_date -> jaxb2_basics_runtime_0_9_3;
+  mobileterminal_model_3_0_4_date -> joda_time_2_7;
+  mobileterminal_model_3_0_4_date -> jsr173_api_1_0;
+  mobileterminal_model_3_0_4_date -> xml_apis_1_0_b2;
+}

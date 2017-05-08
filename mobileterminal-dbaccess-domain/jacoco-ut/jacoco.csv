@@ -1,0 +1,86 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean,PollDaoBean,311,0,20,0,65,0,18,0,8,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean,ChannelDaoBean,27,95,6,4,5,21,4,5,0,4
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean,OceanRegionDaoBean,11,16,0,0,3,4,0,3,0,3
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean,PollProgramDaoBean,216,0,8,0,44,0,11,0,7,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean,TerminalDaoBean,149,0,0,0,37,0,7,0,7,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean,DNIDListDaoBean,41,56,0,2,9,14,0,7,0,6
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean,MobileTerminalPluginDaoBean,0,87,0,0,0,22,0,6,0,6
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean,MobileTerminalBaseDao,3,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity,OceanRegion,42,3,0,0,18,2,12,1,12,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity,MobileTerminalPluginCapability,42,3,0,0,18,2,12,1,12,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity,Channel,103,3,10,0,36,2,23,1,18,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity,MobileTerminalPlugin,39,34,0,0,15,17,12,9,12,9
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity,DNIDList,19,19,0,0,7,10,6,5,6,5
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity,MobileTerminal,146,11,12,0,53,4,34,1,28,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity,ChannelHistory,191,3,32,0,60,1,42,1,26,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity,MobileTerminalEvent,132,3,8,0,44,2,30,1,26,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao,Dao,0,3,0,0,0,1,0,1,0,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception,NoEntityFoundException,0,4,0,0,0,2,0,1,0,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception,ConfigDaoException,0,4,0,0,0,2,0,1,0,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception,PollDaoException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception,PollDaoMappingException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception,MobileTerminalDaoMappingException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception,EnumException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception,InputArgumentException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception,TerminalDaoException,0,4,0,0,0,2,0,1,0,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search.poll,PollSearchMapper,212,68,25,3,49,17,23,2,8,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search.poll,PollSearchMapper.new Object() {...},40,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,MobileTerminalEntityToModelMapper.new Object() {...},19,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollEntityToModelMapper,141,0,3,0,35,0,9,0,7,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollEntityToModelMapper.new Object() {...},26,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,EnumMapper.new Object() {...},257,0,0,0,8,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PluginMapper,503,0,64,0,112,0,47,0,14,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollModelToEntityMapper,406,0,35,0,94,0,30,0,8,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,ChannelCapability,83,0,4,0,8,0,7,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,MobileTerminalModelToEntityMapper.new Object() {...},19,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,MobileTerminalModelToEntityMapper,588,0,67,0,143,0,43,0,9,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollModelToEntityMapper.new Object() {...},86,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,AttributeMapper,128,12,7,1,27,3,8,1,4,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PluginMapper.new Object() {...},44,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,HistoryMapper,192,0,14,0,43,0,11,0,4,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,EnumMapper,354,25,76,4,73,4,63,2,12,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,MobileTerminalEntityToModelMapper,300,0,31,0,76,0,24,0,8,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.bean,ConfigModelBean,595,0,64,0,139,0,47,0,14,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.bean,ConfigModelBean.new Object() {...},26,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.bean,MobileTerminalDomainModelBean.new Object() {...},26,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.bean,MobileTerminalDomainModelBean,933,0,108,0,214,0,70,0,15,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.bean,PollDomainModelBean,1111,0,92,0,223,0,64,0,17,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.bean,PollDomainModelBean.new Object() {...},58,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.types,PollTypeEnum,69,0,0,0,9,0,5,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.types,PollStateEnum,12,46,0,0,1,7,3,2,3,2
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.types,TerminalSourceEnum,47,0,0,0,7,0,5,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.types,EventCodeEnum,5,97,0,0,0,12,1,4,1,4
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.types,TerminalCapability,88,0,0,0,8,0,4,0,4,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.types,MobileTerminalSourceEnum,38,0,0,0,3,0,4,0,4,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.types,MobileTerminalTypeEnum,63,0,4,0,6,0,7,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception,ConnectMapperException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception,SearchMapperException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll,Poll,54,3,0,0,23,2,15,1,15,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll,PollPayload,63,3,0,0,27,2,18,1,18,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll,PollProgram,75,3,0,0,32,2,21,1,21,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll,PollBase,56,3,0,0,24,2,16,1,16,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,PollSearchKeyValue,30,0,2,0,9,0,6,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,MobileTerminalSearchAttributes,56,0,0,0,8,0,5,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,SearchMapper,194,0,16,0,26,0,11,0,3,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,SearchField,18,105,0,0,3,17,5,3,5,3
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,SearchKeyValue,14,16,2,0,3,6,3,3,2,3
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,ChannelSearchAttributes,46,0,0,0,7,0,5,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,SearchFieldHolder,6,9,0,0,2,4,2,1,2,1
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,PollSearchField,126,0,0,0,22,0,9,0,9,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.search,SearchTable,15,159,0,0,2,17,4,2,4,2
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,CapabilitiesIridium.new Object() {...},54,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,MobileTerminalConfigType,48,0,0,0,4,0,4,0,4,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,CapabilitiesInmarsatC.new Object() {...},54,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,CapabilitiesInmarsatC,28,0,10,0,12,0,10,0,2,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,MobileTerminalTypeComparator,9,0,0,0,2,0,2,0,2,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,ChannelFieldIridium,133,0,4,0,13,0,7,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,ChannelFieldInmarsatC,163,0,4,0,16,0,7,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,CapabilitiesIridium,28,0,10,0,12,0,10,0,2,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,AttributeIridium,63,0,4,0,6,0,7,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,AttributeInmarsatC,133,0,4,0,13,0,7,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,MobileTerminalFaultCode,90,0,0,0,11,0,5,0,5,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,ErrorHandler,50,0,18,0,20,0,11,0,2,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,MobileTerminalConstants,3,0,0,0,1,0,1,0,1,0
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.constant,EqualsUtil,51,35,19,11,11,9,15,7,5,2
+mobileterminal-domain,eu.europa.ec.fisheries.uvms.mobileterminal.entity.inmarsatc,InmarsatCHistoryOceanRegion,60,19,6,0,20,7,14,4,11,4

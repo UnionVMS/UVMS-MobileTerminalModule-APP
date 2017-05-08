@@ -1,0 +1,4 @@
+digraph jts_1_13_dependencies {
+  node [shape = box, fontsize=10.0];
+  jts_1_13 -> xml_apis_1_0_b2;
+}

@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MobileTerminalEventServiceBean.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.service.bean</a> &gt; <span class="el_source">MobileTerminalEventServiceBean.java</span></div><h1>MobileTerminalEventServiceBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
+
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.Session;
+import javax.jms.TextMessage;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.GetMobileTerminalRequest;
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListRequest;
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleBaseRequest;
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleMethod;
+import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException;
+import eu.europa.ec.fisheries.uvms.config.service.ParameterService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.GetReceivedEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ListReceivedEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalModuleResponseMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.EventService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+
+@Stateless
+<span class="nc" id="L66">public class MobileTerminalEventServiceBean implements EventService {</span>
+
+<span class="nc" id="L68">    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalEventServiceBean.class);</span>
+
+    @EJB
+    MobileTerminalService service;
+
+    private ConnectionFactory connectionFactory;
+
+<span class="nc" id="L75">    private Connection connection = null;</span>
+<span class="nc" id="L76">    private Session session = null;</span>
+
+    @EJB
+    ParameterService parameters;
+
+    @Inject
+    @ErrorEvent
+    Event&lt;EventMessage&gt; errorEvent;
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void get(@Observes @GetReceivedEvent EventMessage message) {
+<span class="nc" id="L88">        TextMessage requestMessage = message.getJmsMessage();</span>
+        try {
+<span class="nc" id="L90">            MobileTerminalType mobileTerminal = getMobileTerminal(message);</span>
+
+<span class="nc" id="L92">            connectToQueue();</span>
+
+<span class="nc" id="L94">            String response = MobileTerminalModuleRequestMapper.createMobileTerminalResponse(mobileTerminal);</span>
+<span class="nc" id="L95">            TextMessage responseMessage = session.createTextMessage(response);</span>
+<span class="nc" id="L96">            responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());</span>
+<span class="nc" id="L97">            getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);</span>
+<span class="nc" id="L98">        } catch (MobileTerminalModelMapperException | JMSException e) {</span>
+<span class="nc" id="L99">            errorEvent.fire(new EventMessage(message.getJmsMessage(), &quot;Exception when trying to get a MobileTerminal: &quot; + e.getMessage()));</span>
+        } finally {
+<span class="nc" id="L101">            disconnectQueue();</span>
+<span class="nc" id="L102">        }</span>
+<span class="nc" id="L103">    }</span>
+
+    @EJB
+    MobileTerminalService mobileTerminalService;
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void list(@Observes @ListReceivedEvent EventMessage message) {
+<span class="nc" id="L111">        LOG.info(&quot;List Mobile terminals&quot;);</span>
+<span class="nc" id="L112">        TextMessage requestMessage = message.getJmsMessage();</span>
+
+        try {
+<span class="nc" id="L115">            MobileTerminalModuleBaseRequest baseRequest = JAXBMarshaller.unmarshallTextMessage(requestMessage, MobileTerminalModuleBaseRequest.class);</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            if (baseRequest.getMethod() == MobileTerminalModuleMethod.LIST_MOBILE_TERMINALS) {</span>
+<span class="nc" id="L117">                MobileTerminalListRequest request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), MobileTerminalListRequest.class);</span>
+
+<span class="nc" id="L119">                MobileTerminalListResponse mobileTerminalListResponse = mobileTerminalService.getMobileTerminalList(request.getQuery());</span>
+<span class="nc" id="L120">                List&lt;MobileTerminalType&gt; mobileTerminalTypes = mobileTerminalListResponse.getMobileTerminal();</span>
+
+<span class="nc" id="L122">                connectToQueue();</span>
+
+<span class="nc" id="L124">                String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);</span>
+<span class="nc" id="L125">                TextMessage responseMessage = session.createTextMessage(response);</span>
+<span class="nc" id="L126">                responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());</span>
+<span class="nc" id="L127">                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);</span>
+            }
+<span class="nc" id="L129">        } catch (MobileTerminalException | JMSException e) {</span>
+<span class="nc" id="L130">            errorEvent.fire(new EventMessage(message.getJmsMessage(), &quot;Exception when trying to get list in MobileTerminal: &quot; + e.getMessage()));</span>
+        } finally {
+<span class="nc" id="L132">            disconnectQueue();</span>
+<span class="nc" id="L133">        }</span>
+
+<span class="nc" id="L135">    }</span>
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void ping(@Observes @PingReceivedEvent EventMessage message) {
+<span class="nc" id="L140">        TextMessage requestMessage = message.getJmsMessage();</span>
+
+        try {
+<span class="nc" id="L143">            MobileTerminalModuleBaseRequest baseRequest = JAXBMarshaller.unmarshallTextMessage(requestMessage, MobileTerminalModuleBaseRequest.class);</span>
+<span class="nc bnc" id="L144" title="All 2 branches missed.">            if (baseRequest.getMethod() == MobileTerminalModuleMethod.PING) {</span>
+<span class="nc" id="L145">                connectToQueue();</span>
+
+<span class="nc" id="L147">                String pingResponse = MobileTerminalModuleResponseMapper.createPingResponse(&quot;pong&quot;);</span>
+<span class="nc" id="L148">                TextMessage pingResponseMessage = session.createTextMessage(pingResponse);</span>
+<span class="nc" id="L149">                pingResponseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());</span>
+<span class="nc" id="L150">                pingResponseMessage.setJMSDestination(message.getJmsMessage().getJMSReplyTo());</span>
+<span class="nc" id="L151">                getProducer(session, pingResponseMessage.getJMSDestination()).send(pingResponseMessage);</span>
+                return;
+            }
+<span class="nc" id="L154">        } catch (MobileTerminalModelMapperException | MobileTerminalUnmarshallException | JMSException e) {</span>
+<span class="nc" id="L155">            errorEvent.fire(new EventMessage(message.getJmsMessage(), &quot;Exception when trying to ping MobileTerminal: &quot; + e.getMessage()));</span>
+        } finally {
+<span class="nc" id="L157">            disconnectQueue();</span>
+<span class="nc" id="L158">        }</span>
+<span class="nc" id="L159">    }</span>
+
+    private MobileTerminalType getMobileTerminal(EventMessage message) {
+<span class="nc" id="L162">        GetMobileTerminalRequest request = null;</span>
+<span class="nc" id="L163">        MobileTerminalType mobTerm = null;</span>
+<span class="nc" id="L164">        DataSourceQueue dataSource = null;</span>
+
+        try {
+<span class="nc" id="L167">            request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), GetMobileTerminalRequest.class);</span>
+<span class="nc" id="L168">        } catch (MobileTerminalUnmarshallException ex) {</span>
+<span class="nc" id="L169">            errorEvent.fire(new EventMessage(message.getJmsMessage(), &quot;Error when mapping message: &quot; + ex.getMessage()));</span>
+<span class="nc" id="L170">        }</span>
+
+        try {
+<span class="nc" id="L173">            dataSource = decideDataflow();</span>
+<span class="nc" id="L174">        } catch (Exception ex) {</span>
+<span class="nc" id="L175">            errorEvent.fire(new EventMessage(message.getJmsMessage(), &quot;Exception when deciding Dataflow for : &quot; + dataSource.name() + &quot; Error message: &quot; + ex.getMessage()));</span>
+<span class="nc" id="L176">        }</span>
+
+        try {
+<span class="nc" id="L179">            LOG.debug(&quot;Got message to MobileTerminalModule, Executing Get MobileTerminal from datasource {}&quot;, dataSource.name());</span>
+<span class="nc" id="L180">            mobTerm = service.getMobileTerminalById(request.getId(), dataSource);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">            if (!dataSource.equals(DataSourceQueue.INTERNAL)) {</span>
+<span class="nc" id="L182">                service.upsertMobileTerminal(mobTerm, MobileTerminalSource.NATIONAL, dataSource.name());</span>
+            }
+<span class="nc" id="L184">        } catch (MobileTerminalException ex) {</span>
+<span class="nc" id="L185">            mobTerm = null;</span>
+<span class="nc" id="L186">        }</span>
+
+<span class="nc bnc" id="L188" title="All 2 branches missed.">        if (mobTerm == null) {</span>
+<span class="nc" id="L189">            LOG.debug(&quot;Trying to retrieve MobileTerminal from datasource: {0} as second option&quot;, DataSourceQueue.INTERNAL.name());</span>
+            try {
+<span class="nc" id="L191">                request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), GetMobileTerminalRequest.class);</span>
+<span class="nc" id="L192">                mobTerm = service.getMobileTerminalById(request.getId(), DataSourceQueue.INTERNAL);</span>
+<span class="nc" id="L193">            } catch (MobileTerminalException ex) {</span>
+<span class="nc" id="L194">                errorEvent.fire(new EventMessage(message.getJmsMessage(), &quot;Exception when getting vessel from source : &quot; + dataSource.name() + &quot; Error message: &quot; + ex.getMessage()));</span>
+<span class="nc" id="L195">            }</span>
+        }
+
+<span class="nc" id="L198">        return mobTerm;</span>
+    }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public void returnError(@Observes @ErrorEvent EventMessage message) {
+        try {
+<span class="nc" id="L205">        	connectToQueue();</span>
+<span class="nc" id="L206">            LOG.debug(&quot;Sending error message back from Mobile Terminal module to recipient om JMS Queue with correlationID: {} &quot;, message.getJmsMessage().getJMSMessageID());</span>
+
+<span class="nc" id="L208">            MobileTerminalFault request = new MobileTerminalFault();</span>
+<span class="nc" id="L209">            request.setMessage(message.getErrorMessage());</span>
+
+<span class="nc" id="L211">            String data = JAXBMarshaller.marshallJaxBObjectToString(request);</span>
+
+<span class="nc" id="L213">            TextMessage response = session.createTextMessage(data);</span>
+<span class="nc" id="L214">            response.setJMSCorrelationID(message.getJmsMessage().getJMSCorrelationID());</span>
+<span class="nc" id="L215">            getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(response);</span>
+
+<span class="nc" id="L217">        } catch (MobileTerminalModelMapperException | JMSException ex) {</span>
+<span class="nc" id="L218">            LOG.error(&quot;Error when returning Error message to recipient&quot;, ex.getMessage());</span>
+        } finally {
+<span class="nc" id="L220">            disconnectQueue();</span>
+<span class="nc" id="L221">        }</span>
+<span class="nc" id="L222">    }</span>
+
+    private DataSourceQueue decideDataflow() throws MobileTerminalServiceException {
+        try {
+
+<span class="nc" id="L227">            Boolean national = parameters.getBooleanValue(ParameterKey.USE_NATIONAL.getKey());</span>
+
+<span class="nc" id="L229">            LOG.debug(&quot;Settings for dataflow are: NATIONAL: {}&quot;, national.toString());</span>
+
+<span class="nc bnc" id="L231" title="All 2 branches missed.">            if (national) {</span>
+<span class="nc" id="L232">                return DataSourceQueue.INTEGRATION;</span>
+            }
+
+<span class="nc" id="L235">            return DataSourceQueue.INTERNAL;</span>
+
+<span class="nc" id="L237">        } catch (ConfigServiceException ex) {</span>
+<span class="nc" id="L238">        	LOG.error(&quot;[ Error when deciding data flow. ] {}&quot;, ex.getMessage());</span>
+<span class="nc" id="L239">            throw new MobileTerminalServiceException(ex.getMessage());</span>
+        }
+
+    }
+
+    private void connectToQueue() {
+<span class="nc" id="L245">        LOG.debug(&quot;Open connection to JMS broker&quot;);</span>
+        InitialContext ctx;
+        try {
+<span class="nc" id="L248">            ctx = new InitialContext();</span>
+<span class="nc" id="L249">        } catch (Exception e) {</span>
+<span class="nc" id="L250">            LOG.error(&quot;Failed to get InitialContext&quot;,e);</span>
+<span class="nc" id="L251">            throw new RuntimeException(e);</span>
+<span class="nc" id="L252">        }</span>
+        try {
+<span class="nc" id="L254">            connectionFactory = (QueueConnectionFactory) ctx.lookup(MessageConstants.CONNECTION_FACTORY);</span>
+<span class="nc" id="L255">        } catch (NamingException ne) {</span>
+            //if we did not find the connection factory we might need to add java:/ at the start
+<span class="nc" id="L257">            LOG.debug(&quot;Connection Factory lookup failed for &quot; + MessageConstants.CONNECTION_FACTORY);</span>
+<span class="nc" id="L258">            String wfName = &quot;java:/&quot; + MessageConstants.CONNECTION_FACTORY;</span>
+            try {
+<span class="nc" id="L260">                LOG.debug(&quot;trying &quot; + wfName);</span>
+<span class="nc" id="L261">                connectionFactory = (QueueConnectionFactory) ctx.lookup(wfName);</span>
+<span class="nc" id="L262">            } catch (Exception e) {</span>
+<span class="nc" id="L263">                LOG.error(&quot;Connection Factory lookup failed for both &quot; + MessageConstants.CONNECTION_FACTORY  + &quot; and &quot; + wfName);</span>
+<span class="nc" id="L264">                throw new RuntimeException(e);</span>
+<span class="nc" id="L265">            }</span>
+<span class="nc" id="L266">        }</span>
+        try {
+<span class="nc" id="L268">            connection = connectionFactory.createConnection();</span>
+<span class="nc" id="L269">            session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);</span>
+<span class="nc" id="L270">            connection.start();</span>
+<span class="nc" id="L271">        } catch (JMSException ex) {</span>
+<span class="nc" id="L272">            LOG.error(&quot;Error when open connection to JMS broker&quot;);</span>
+<span class="nc" id="L273">        }</span>
+<span class="nc" id="L274">    }</span>
+
+    private void disconnectQueue() {
+        try {
+<span class="nc bnc" id="L278" title="All 2 branches missed.">            if (connection != null) {</span>
+<span class="nc" id="L279">                connection.close();</span>
+            }
+<span class="nc" id="L281">        } catch (JMSException e) {</span>
+            // do nothing
+<span class="nc" id="L283">        }</span>
+<span class="nc" id="L284">    }</span>
+
+    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
+<span class="nc" id="L287">        javax.jms.MessageProducer producer = session.createProducer(destination);</span>
+<span class="nc" id="L288">        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);</span>
+<span class="nc" id="L289">        producer.setTimeToLive(60000L);</span>
+<span class="nc" id="L290">        return producer;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Specification-Vendor: Oracle Corporation
+Build-Jdk: 1.6.0_31
+Built-By: snajper
+Specification-Title: Java Architecture for XML Binding
+Created-By: Apache Maven
+Specification-Version: 2.2.7
+Extension-Name: javax.xml.bind
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: javax.xml.bind
+Bundle-Description: jaxb-api-2.2.7
+Bundle-Name: jaxb-api-2.2.7
+Bundle-Version: 2.2.7
+Export-Package: javax.xml.bind,javax.xml.bind.annotation,javax.xml.bin
+ d.annotation.adapters,javax.xml.bind.attachment,javax.xml.bind.helper
+ s,javax.xml.bind.util
+Import-Package: java.beans,java.io,java.lang,java.lang.annotation,java
+ .lang.ref,java.lang.reflect,java.math,java.net,java.security,java.tex
+ t,java.util,java.util.logging,javax.activation;version="1.1",javax.xm
+ l.datatype,javax.xml.namespace;version="0.0.0",javax.xml.parsers;vers
+ ion="1.1",javax.xml.stream;version="0.0.0",javax.xml.transform;versio
+ n="1.1",javax.xml.transform.dom;version="1.1",javax.xml.transform.sax
+ ;version="1.1",javax.xml.transform.stream;version="1.1",javax.xml.val
+ idation,org.w3c.dom;version="1.1",org.xml.sax;version="1.1",org.xml.s
+ ax.ext;version="1.1",org.xml.sax.helpers;version="1.1"

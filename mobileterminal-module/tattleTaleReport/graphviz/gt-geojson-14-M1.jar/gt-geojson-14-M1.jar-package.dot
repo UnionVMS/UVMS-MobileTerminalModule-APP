@@ -1,0 +1,34 @@
+digraph gt_geojson_14_M1_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  org_geotools_geojson -> com_vividsolutions_jts_geom;
+  org_geotools_geojson -> org_geotools_feature;
+  org_geotools_geojson -> org_geotools_geojson_feature;
+  org_geotools_geojson -> org_geotools_geojson_geom;
+  org_geotools_geojson -> org_geotools_util;
+  org_geotools_geojson -> org_json_simple;
+  org_geotools_geojson -> org_json_simple_parser;
+  org_geotools_geojson -> org_opengis_feature;
+  org_geotools_geojson -> org_opengis_feature_simple;
+  org_geotools_geojson -> org_opengis_referencing_crs;
+  org_geotools_geojson_feature -> com_vividsolutions_jts_geom;
+  org_geotools_geojson_feature -> org_geotools_data_crs;
+  org_geotools_geojson_feature -> org_geotools_feature;
+  org_geotools_geojson_feature -> org_geotools_feature_simple;
+  org_geotools_geojson_feature -> org_geotools_geojson;
+  org_geotools_geojson_feature -> org_geotools_geojson_geom;
+  org_geotools_geojson_feature -> org_geotools_geometry_jts;
+  org_geotools_geojson_feature -> org_geotools_referencing;
+  org_geotools_geojson_feature -> org_json_simple;
+  org_geotools_geojson_feature -> org_json_simple_parser;
+  org_geotools_geojson_feature -> org_opengis_feature;
+  org_geotools_geojson_feature -> org_opengis_feature_simple;
+  org_geotools_geojson_feature -> org_opengis_feature_type;
+  org_geotools_geojson_feature -> org_opengis_geometry;
+  org_geotools_geojson_feature -> org_opengis_referencing;
+  org_geotools_geojson_feature -> org_opengis_referencing_crs;
+  org_geotools_geojson_geom -> com_vividsolutions_jts_geom;
+  org_geotools_geojson_geom -> org_geotools_geojson;
+  org_geotools_geojson_geom -> org_json_simple;
+  org_geotools_geojson_geom -> org_json_simple_parser;
+  org_geotools_geojson_geom -> org_opengis_geometry;
+}

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConfigServiceBean.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.service.bean</a> &gt; <span class="el_source">ConfigServiceBean.java</span></div><h1>ConfigServiceBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.jms.TextMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PluginType;
+import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
+import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMapperException;
+import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleResponseMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+
+@Stateless
+<span class="fc" id="L43">public class ConfigServiceBean implements ConfigService {</span>
+
+<span class="fc" id="L45">    final static Logger LOG = LoggerFactory.getLogger(ConfigServiceBean.class);</span>
+
+    @EJB
+    MessageProducer messageProducer;
+
+	//@EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
+	@EJB
+	ConfigModel configModel;
+
+    @EJB
+    MessageConsumer reciever;
+
+    @Override
+    public List&lt;TerminalSystemType&gt; getTerminalSystems() throws MobileTerminalException {
+<span class="nc" id="L59">        LOG.debug(&quot;GET TERMINAL SYSTEM TRANSPONDERS INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc" id="L60">		List&lt;TerminalSystemType&gt; systemList = configModel.getAllTerminalSystems();</span>
+<span class="nc" id="L61">        return systemList;</span>
+    }
+
+	@Override
+	public List&lt;ConfigList&gt; getConfig() throws MobileTerminalException {
+<span class="fc" id="L66">		LOG.debug(&quot;Get configuration in service layer&quot;);</span>
+<span class="fc" id="L67">		List&lt;ConfigList&gt; values = configModel.getConfigValues();</span>
+<span class="fc" id="L68">		return values;</span>
+	}
+
+	@Override
+	public List&lt;Plugin&gt; upsertPlugins(List&lt;PluginService&gt; plugins, String username) throws MobileTerminalException {
+<span class="nc" id="L73">		List&lt;Plugin&gt; plugin = configModel.upsertPlugins(plugins);</span>
+<span class="nc" id="L74">		return plugin;</span>
+	}
+
+	@Override
+	public List&lt;ServiceResponseType&gt; getRegisteredMobileTerminalPlugins() {
+<span class="nc" id="L79">		LOG.debug(&quot;Get registered service types&quot;);</span>
+		try {
+<span class="nc" id="L81">			List&lt;PluginType&gt; pluginTypes = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L82">			pluginTypes.add(PluginType.SATELLITE_RECEIVER);</span>
+<span class="nc" id="L83">			String data = ExchangeModuleRequestMapper.createGetServiceListRequest(pluginTypes);</span>
+<span class="nc" id="L84">			String messageId = messageProducer.sendModuleMessage(data, ModuleQueue.EXCHANGE);</span>
+<span class="nc" id="L85">			TextMessage response = reciever.getMessage(messageId, TextMessage.class);</span>
+<span class="nc" id="L86">			return ExchangeModuleResponseMapper.mapServiceListResponse(response, messageId);</span>
+<span class="nc" id="L87">		} catch (ExchangeModelMapperException | MobileTerminalMessageException e) {</span>
+<span class="nc" id="L88">			LOG.error(&quot;Failed to map to exchange get service list request&quot;);</span>
+<span class="nc" id="L89">			return null;</span>
+		}
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

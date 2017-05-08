@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PollPayload.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll</a> &gt; <span class="el_source">PollPayload.java</span></div><h1>PollPayload.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll;
+
+import java.io.Serializable;
+import java.util.Date;
+
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.Size;
+
+@Table(name = &quot;pollpayload&quot;)
+@Entity
+public class PollPayload implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Basic(optional = false)
+    @Column(name = &quot;id&quot;)
+    private Long id;
+
+    @Column(name = &quot;reporting_freq&quot;)
+    private Integer reportingFrequency;
+
+    @Column(name = &quot;grace_period&quot;)
+    private Integer gracePeriod;
+
+    @Column(name = &quot;in_port_grace&quot;)
+    private Integer inPortGrace;
+
+    @Size(max = 60)
+    @Column(name = &quot;newdnid&quot;)
+    private String newDnid;
+
+    @Size(max = 60)
+    @Column(name = &quot;newmemberno&quot;)
+    private String newMemberNumber;
+
+    @Column(name = &quot;startdate&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startDate;
+
+    @Column(name = &quot;stopdate&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date stopDate;
+
+    @JoinColumn(name = &quot;poll_id&quot;, referencedColumnName = &quot;id&quot;)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private Poll poll;
+
+<span class="fc" id="L72">    public PollPayload() {</span>
+<span class="fc" id="L73">    }</span>
+
+    public Long getId() {
+<span class="nc" id="L76">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L80">        this.id = id;</span>
+<span class="nc" id="L81">    }</span>
+
+    public Integer getReportingFrequency() {
+<span class="nc" id="L84">        return reportingFrequency;</span>
+    }
+
+    public void setReportingFrequency(Integer reportingFrequency) {
+<span class="nc" id="L88">        this.reportingFrequency = reportingFrequency;</span>
+<span class="nc" id="L89">    }</span>
+
+    public Integer getGracePeriod() {
+<span class="nc" id="L92">        return gracePeriod;</span>
+    }
+
+    public void setGracePeriod(Integer gracePeriod) {
+<span class="nc" id="L96">        this.gracePeriod = gracePeriod;</span>
+<span class="nc" id="L97">    }</span>
+
+    public Integer getInPortGrace() {
+<span class="nc" id="L100">        return inPortGrace;</span>
+    }
+
+    public void setInPortGrace(Integer inPortGrace) {
+<span class="nc" id="L104">        this.inPortGrace = inPortGrace;</span>
+<span class="nc" id="L105">    }</span>
+
+    public String getNewDnid() {
+<span class="nc" id="L108">        return newDnid;</span>
+    }
+
+    public void setNewDnid(String newDnid) {
+<span class="nc" id="L112">        this.newDnid = newDnid;</span>
+<span class="nc" id="L113">    }</span>
+
+    public String getNewMemberNumber() {
+<span class="nc" id="L116">        return newMemberNumber;</span>
+    }
+
+    public void setNewMemberNumber(String newMemberNumber) {
+<span class="nc" id="L120">        this.newMemberNumber = newMemberNumber;</span>
+<span class="nc" id="L121">    }</span>
+
+    public Date getStartDate() {
+<span class="nc" id="L124">        return startDate;</span>
+    }
+
+    public void setStartDate(Date startDate) {
+<span class="nc" id="L128">        this.startDate = startDate;</span>
+<span class="nc" id="L129">    }</span>
+
+    public Date getStopDate() {
+<span class="nc" id="L132">        return stopDate;</span>
+    }
+
+    public void setStopDate(Date stopDate) {
+<span class="nc" id="L136">        this.stopDate = stopDate;</span>
+<span class="nc" id="L137">    }</span>
+
+    public Poll getPoll() {
+<span class="nc" id="L140">        return poll;</span>
+    }
+
+    public void setPoll(Poll poll) {
+<span class="nc" id="L144">        this.poll = poll;</span>
+<span class="nc" id="L145">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

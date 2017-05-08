@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PollResource.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-rest</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.rest.service</a> &gt; <span class="el_source">PollResource.java</span></div><h1>PollResource.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
+
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelListDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ErrorHandler;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
+import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
+import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
+
+/**
+ * @apiDescription Handles poll operations*/
+@Path(&quot;/poll&quot;)
+@Stateless
+<span class="nc" id="L49">public class PollResource {</span>
+
+<span class="nc" id="L51">    final static Logger LOG = LoggerFactory.getLogger(PollResource.class);</span>
+
+    @EJB
+    MappedPollService pollService;
+
+    @Context
+    private HttpServletRequest request;
+
+    /**
+     * @responseMessage 200 Poll successfully created
+     * @responseMessage 500 Error when creating poll
+     * @summary Creates polls of different types
+     */
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/&quot;)
+    @RequiresFeature(UnionVMSFeature.managePolls)
+    public ResponseDto&lt;List&lt;PollDto&gt;&gt; createPoll(PollRequestType createPoll) {
+<span class="nc" id="L70">        LOG.info(&quot;Create poll invoked in rest layer&quot;);</span>
+        try {
+<span class="nc" id="L72">            CreatePollResultDto createPollResultDto = pollService.createPoll(createPoll, request.getRemoteUser());</span>
+<span class="nc" id="L73">            return new ResponseDto(createPollResultDto, ResponseCode.OK);</span>
+<span class="nc" id="L74">        } catch (Exception ex) {</span>
+<span class="nc" id="L75">            LOG.error(&quot;[ Error when creating poll ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L76">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     * @responseMessage 200 Running polls successfully retreived
+     * @responseMessage 500 Error when retrieveing running polls
+     *
+     * @summary Gets all program polls that are currently active
+     */
+    @GET
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/running&quot;)
+    @RequiresFeature(UnionVMSFeature.viewMobileTerminalPolls)
+    public ResponseDto&lt;List&lt;PollDto&gt;&gt; getRunningProgramPolls() {
+<span class="nc" id="L92">        LOG.info(&quot;Get running program polls invoked in rest layer&quot;);</span>
+        try {
+<span class="nc" id="L94">            List&lt;PollDto&gt; polls = pollService.getRunningProgramPolls();</span>
+<span class="nc" id="L95">            return new ResponseDto(polls, ResponseCode.OK);</span>
+<span class="nc" id="L96">        } catch (Exception ex) {</span>
+<span class="nc" id="L97">            LOG.error(&quot;[ Error when getting running program polls ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L98">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     * @responseMessage 200 Poll program successfully started
+     * @responseMessage 500 Error when starting the program poll
+     *
+     * @summary Starts a polling program
+     */
+    @PUT
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/start/{id}&quot;)
+    @RequiresFeature(UnionVMSFeature.managePolls)
+    public ResponseDto&lt;PollDto&gt; startProgramPoll(@PathParam(&quot;id&quot;) String pollId) {
+<span class="nc" id="L114">        LOG.info(&quot;Start poll invoked in rest layer&quot;);</span>
+        try {
+<span class="nc" id="L116">            PollDto poll = pollService.startProgramPoll(pollId, request.getRemoteUser());</span>
+<span class="nc" id="L117">            return new ResponseDto(poll, ResponseCode.OK);</span>
+<span class="nc" id="L118">        } catch (Exception ex) {</span>
+<span class="nc" id="L119">            LOG.error(&quot;[ Error when starting program poll ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L120">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Poll program successfully stopped
+     * @responseMessage 500 Error when stopping the program poll
+     *
+     * @summary Stops a polling program
+     */
+    @PUT
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/stop/{id}&quot;)
+    @RequiresFeature(UnionVMSFeature.managePolls)
+    public ResponseDto&lt;PollDto&gt; stopProgramPoll(@PathParam(&quot;id&quot;) String pollId) {
+<span class="nc" id="L137">        LOG.info(&quot;Stop poll invoked in rest layer&quot;);</span>
+        try {
+<span class="nc" id="L139">            PollDto poll = pollService.stopProgramPoll(pollId, request.getRemoteUser());</span>
+<span class="nc" id="L140">            return new ResponseDto(poll, ResponseCode.OK);</span>
+<span class="nc" id="L141">        } catch (Exception ex) {</span>
+<span class="nc" id="L142">            LOG.error(&quot;[ Error when stopping program poll ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L143">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     * @responseMessage 200 Poll program successfully inactivated
+     * @responseMessage 500 Error when inactivating the program poll
+     *
+     * @summary Inactivates and Archives a polling program
+     */
+    @PUT
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/inactivate/{id}&quot;)
+    @RequiresFeature(UnionVMSFeature.managePolls)
+    public ResponseDto&lt;PollDto&gt; inactivateProgramPoll(@PathParam(&quot;id&quot;) String pollId) {
+<span class="nc" id="L159">        LOG.info(&quot;Stop poll invoked in rest layer&quot;);</span>
+        try {
+<span class="nc" id="L161">            PollDto poll = pollService.inactivateProgramPoll(pollId, request.getRemoteUser());</span>
+<span class="nc" id="L162">            return new ResponseDto(poll, ResponseCode.OK);</span>
+<span class="nc" id="L163">        } catch (Exception ex) {</span>
+<span class="nc" id="L164">            LOG.error(&quot;[ Error when inactivating program poll ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L165">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Polls successfully retreived
+     * @responseMessage 500 Error when getting polls by6 search criteria
+     *
+     * @summary Search for a polling program by query
+     */
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/list&quot;)
+    @RequiresFeature(UnionVMSFeature.viewMobileTerminalPolls)
+    public ResponseDto&lt;PollChannelListDto&gt; getPollBySearchCriteria(PollListQuery query) {
+<span class="nc" id="L182">        LOG.info(&quot;Get poll by search criteria invoked in rest layer&quot;);</span>
+        try {
+<span class="nc" id="L184">        	PollChannelListDto pollChannelList = pollService.getPollBySearchQuery(query);</span>
+<span class="nc" id="L185">            return new ResponseDto(pollChannelList, ResponseCode.OK);</span>
+<span class="nc" id="L186">        } catch (Exception ex) {</span>
+<span class="nc" id="L187">            LOG.error(&quot;[ Error when getting poll by search criteria ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L188">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     * @responseMessage 200 Pollable channels successfully retrieved
+     * @responseMessage 500 Error when retrieving pollable channels
+     *
+     * @summary Search for pollable InmarsatC channels
+     */
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/pollable&quot;)
+    @RequiresFeature(UnionVMSFeature.viewMobileTerminalPolls)
+    public ResponseDto&lt;PollChannelListDto&gt; getPollableChannels(PollableQuery query) {
+<span class="nc" id="L204">        LOG.info(&quot;Get pollables invoked in rest layer&quot;);</span>
+        try {
+<span class="nc" id="L206">            PollChannelListDto pollChannelList = pollService.getPollableChannels(query);</span>
+<span class="nc" id="L207">            return new ResponseDto(pollChannelList, ResponseCode.OK);</span>
+<span class="nc" id="L208">        } catch (Exception ex) {</span>
+<span class="nc" id="L209">            LOG.error(&quot;[ Error when getting poll by search criteria ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L210">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

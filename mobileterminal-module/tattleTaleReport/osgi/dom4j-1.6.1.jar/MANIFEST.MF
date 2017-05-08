@@ -1,0 +1,36 @@
+Manifest-Version: 1.0
+Implementation-Vendor: MetaStuff Ltd.
+Ant-Version: Apache Ant 1.5.3 
+Implementation-Title: org.dom4j
+Implementation-Version: 1.6.1
+Specification-Vendor: MetaStuff Ltd.
+Build-Jdk: 1.4.2_02
+Built-By: Maarten
+Package: org.dom4j
+Specification-Title: dom4j : XML framework for Java
+Created-By: Apache Maven
+Extension-Name: dom4j
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.dom4j.tree
+Bundle-Description: dom4j-1.6.1
+Bundle-Name: dom4j-1.6.1
+Bundle-Version: 1.6.1
+Export-Package: org.dom4j,org.dom4j.bean,org.dom4j.datatype;uses:="com
+ .sun.msv.datatype,com.sun.msv.datatype.xsd",org.dom4j.dom,org.dom4j.d
+ td,org.dom4j.io;uses:="org.gjt.xpp,org.xmlpull.v1",org.dom4j.jaxb,org
+ .dom4j.rule,org.dom4j.rule.pattern,org.dom4j.swing,org.dom4j.tree,org
+ .dom4j.util,org.dom4j.xpath,org.dom4j.xpp;uses:="org.gjt.xpp"
+Import-Package: com.sun.msv.datatype,com.sun.msv.datatype.xsd,java.bea
+ ns,java.io,java.lang,java.lang.ref,java.lang.reflect,java.net,java.ni
+ o.charset,java.util,javax.swing.table,javax.swing.tree,javax.xml.bind
+ ;version="2.2.7",javax.xml.namespace;version="0.0.0",javax.xml.parser
+ s;version="1.1",javax.xml.stream;version="0.0.0",javax.xml.stream.eve
+ nts;version="0.0.0",javax.xml.stream.util;version="0.0.0",javax.xml.t
+ ransform;version="1.1",javax.xml.transform.sax;version="1.1",javax.xm
+ l.transform.stream;version="1.1",org.gjt.xpp,org.jaxen,org.jaxen.dom4
+ j,org.jaxen.pattern,org.jaxen.saxpath,org.relaxng.datatype,org.w3c.do
+ m;version="1.1",org.xml.sax;version="1.1",org.xml.sax.ext;version="1.
+ 1",org.xml.sax.helpers;version="1.1",org.xmlpull.v1;version="0.0.0"

@@ -1,0 +1,5 @@
+digraph gt_opengis_14_M1_dependencies {
+  node [shape = box, fontsize=10.0];
+  gt_opengis_14_M1 -> jsr_275_1_0_beta_2;
+  gt_opengis_14_M1 -> xml_apis_1_0_b2;
+}

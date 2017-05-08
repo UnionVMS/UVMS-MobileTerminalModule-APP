@@ -1,0 +1,7 @@
+digraph mobileterminal_message_3_0_6_SNAPSHOT_dependencies {
+  node [shape = box, fontsize=10.0];
+  mobileterminal_message_3_0_6_SNAPSHOT -> jboss_annotations_api_1_1_spec_1_0_1_Final;
+  mobileterminal_message_3_0_6_SNAPSHOT -> mobileterminal_model_3_0_4_date;
+  mobileterminal_message_3_0_6_SNAPSHOT -> uvms_commons_2_0_17;
+  mobileterminal_message_3_0_6_SNAPSHOT -> uvms_config_3_0_4;
+}

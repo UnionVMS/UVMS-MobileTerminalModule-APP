@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ChannelHistory.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.entity</a> &gt; <span class="el_source">ChannelHistory.java</span></div><h1>ChannelHistory.java</h1><pre class="source lang-java linenums">/*
+ Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+ © European Union, 2015-2016.
+
+ This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+ redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+ copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+
+package eu.europa.ec.fisheries.uvms.mobileterminal.entity;
+
+import java.util.Date;
+import java.util.Map;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AttributeMapper;
+
+/**
+ * Created by osdjup on 2016-11-16.
+ */
+@Entity
+@Table(name=&quot;channel_history&quot;)
+<span class="fc" id="L41">public class ChannelHistory {</span>
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy= GenerationType.AUTO)
+    @Column(name=&quot;id&quot;)
+    private Long id;
+
+    @Column(name=&quot;comchanname&quot;)
+    private String name;
+
+    @Column(name=&quot;active&quot;)
+    private boolean active;
+
+    @Column(name=&quot;attributes&quot;)
+    private String attributes;
+
+    @Column(name=&quot;updattime&quot;)
+    private Date updateTime;
+
+    @Column(name=&quot;updateuser&quot;)
+    private String updatedBy;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name=&quot;eventtype&quot;)
+    private EventCodeEnum eventCodeType;
+
+    @Fetch(FetchMode.JOIN)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;mobterm_event_id&quot;)
+    private MobileTerminalEvent mobileTerminalEvent;
+
+    @Fetch(FetchMode.JOIN)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = &quot;channel_id&quot;)
+    private Channel channel;
+
+    @Column(name=&quot;chan_def&quot;)
+    private boolean defaultChannel;
+
+    @Column(name=&quot;chan_conf&quot;)
+    private boolean configChannel;
+
+    @Column(name=&quot;chan_poll&quot;)
+    private boolean pollChannel;
+
+    public Long getId() {
+<span class="nc" id="L88">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L92">        this.id = id;</span>
+<span class="nc" id="L93">    }</span>
+
+    public String getName() {
+<span class="nc" id="L96">        return name;</span>
+    }
+
+    public void setName(String name) {
+<span class="nc" id="L100">        this.name = name;</span>
+<span class="nc" id="L101">    }</span>
+
+    public String getAttributes() {
+<span class="nc" id="L104">        return attributes;</span>
+    }
+
+    public void setAttributes(String attributes) {
+<span class="nc" id="L108">        this.attributes = attributes;</span>
+<span class="nc" id="L109">    }</span>
+
+    public Date getUpdateTime() {
+<span class="nc" id="L112">        return updateTime;</span>
+    }
+
+    public void setUpdateTime(Date updateTime) {
+<span class="nc" id="L116">        this.updateTime = updateTime;</span>
+<span class="nc" id="L117">    }</span>
+
+    public String getUpdatedBy() {
+<span class="nc" id="L120">        return updatedBy;</span>
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+<span class="nc" id="L124">        this.updatedBy = updatedBy;</span>
+<span class="nc" id="L125">    }</span>
+
+    public boolean isActive() {
+<span class="nc" id="L128">        return active;</span>
+    }
+
+    public void setActive(boolean active) {
+<span class="nc" id="L132">        this.active = active;</span>
+<span class="nc" id="L133">    }</span>
+
+    public Channel getChannel() {
+<span class="nc" id="L136">        return channel;</span>
+    }
+
+    public void setChannel(Channel channel) {
+<span class="nc" id="L140">        this.channel = channel;</span>
+<span class="nc" id="L141">    }</span>
+
+    public EventCodeEnum getEventCodeType() {
+<span class="nc" id="L144">        return eventCodeType;</span>
+    }
+
+    public void setEventCodeType(EventCodeEnum eventCodeType) {
+<span class="nc" id="L148">        this.eventCodeType = eventCodeType;</span>
+<span class="nc" id="L149">    }</span>
+
+    public void setMobileTerminalEvent(MobileTerminalEvent mobileTerminalEvent) {
+<span class="nc" id="L152">        this.mobileTerminalEvent = mobileTerminalEvent;</span>
+<span class="nc" id="L153">    }</span>
+
+    public MobileTerminalEvent getMobileTerminalEvent() {
+<span class="nc" id="L156">        return mobileTerminalEvent;</span>
+    }
+
+    public boolean isConfigChannel() {
+<span class="nc" id="L160">        return configChannel;</span>
+    }
+
+    public boolean isDefaultChannel() {
+<span class="nc" id="L164">        return defaultChannel;</span>
+    }
+
+    public boolean isPollChannel() {
+<span class="nc" id="L168">        return pollChannel;</span>
+    }
+
+    public void setConfigChannel(boolean configChannel) {
+<span class="nc" id="L172">        this.configChannel = configChannel;</span>
+<span class="nc" id="L173">    }</span>
+
+    public void setDefaultChannel(boolean defaultChannel) {
+<span class="nc" id="L176">        this.defaultChannel = defaultChannel;</span>
+<span class="nc" id="L177">    }</span>
+
+    public void setPollChannel(boolean pollChannel) {
+<span class="nc" id="L180">        this.pollChannel = pollChannel;</span>
+<span class="nc" id="L181">    }</span>
+
+    @Override
+    public boolean equals(Object obj) {
+<span class="nc bnc" id="L185" title="All 2 branches missed.">        if (obj instanceof ChannelHistory) {</span>
+<span class="nc" id="L186">            ChannelHistory other = (ChannelHistory) obj;</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            if (!name.equalsIgnoreCase(other.getName())) {</span>
+<span class="nc" id="L188">                return false;</span>
+            }
+           // if (!id.equals(other.getId())) {
+           //     return false;
+           // }
+<span class="nc" id="L193">            Map&lt;String, String&gt; attr = AttributeMapper.mapAttributeString(attributes);</span>
+<span class="nc" id="L194">            Map&lt;String, String&gt; otherAttr = AttributeMapper.mapAttributeString(other.getAttributes());</span>
+
+<span class="nc bnc" id="L196" title="All 4 branches missed.">            if((attr == null) &amp;&amp; (otherAttr == null)) return true;</span>
+<span class="nc bnc" id="L197" title="All 4 branches missed.">            if((attr == null) &amp;&amp; (otherAttr != null)) return false;</span>
+<span class="nc bnc" id="L198" title="All 4 branches missed.">            if((attr != null) &amp;&amp; (otherAttr == null)) return false;</span>
+
+<span class="nc bnc" id="L200" title="All 2 branches missed.">            if(attr.size() != otherAttr.size()) return false;</span>
+
+<span class="nc bnc" id="L202" title="All 2 branches missed.">            for (String key : attr.keySet()) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                if (!otherAttr.containsKey(key)) {</span>
+<span class="nc" id="L204">                    return false;</span>
+<span class="nc bnc" id="L205" title="All 4 branches missed.">                } else if (attr.get(key) != null &amp;&amp; !attr.get(key).equalsIgnoreCase(otherAttr.get(key))) {</span>
+<span class="nc" id="L206">                    return false;</span>
+                }
+<span class="nc" id="L208">            }</span>
+
+<span class="nc bnc" id="L210" title="All 2 branches missed.">            if (configChannel != other.isConfigChannel()) {</span>
+<span class="nc" id="L211">                return false;</span>
+            }
+<span class="nc bnc" id="L213" title="All 2 branches missed.">            if (defaultChannel != other.isDefaultChannel()) {</span>
+<span class="nc" id="L214">                return false;</span>
+            }
+<span class="nc bnc" id="L216" title="All 2 branches missed.">            if (pollChannel != other.isPollChannel()) {</span>
+<span class="nc" id="L217">                return false;</span>
+            }
+        }
+
+<span class="nc" id="L221">        return true;</span>
+    }
+
+    @Override
+    public int hashCode() {
+<span class="nc" id="L226">        return super.hashCode();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

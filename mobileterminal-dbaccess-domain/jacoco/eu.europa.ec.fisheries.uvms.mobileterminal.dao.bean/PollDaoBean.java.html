@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PollDaoBean.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean</a> &gt; <span class="el_source">PollDaoBean.java</span></div><h1>PollDaoBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+
+@Stateless
+<span class="nc" id="L36">public class PollDaoBean extends Dao implements PollDao {</span>
+
+<span class="nc" id="L38">    final static Logger LOG = LoggerFactory.getLogger(PollDaoBean.class);</span>
+
+    @Override
+    public void createPoll(Poll poll) throws PollDaoException {
+        try {
+<span class="nc" id="L43">            em.persist(poll);</span>
+<span class="nc" id="L44">        } catch (EntityExistsException | IllegalArgumentException e) {</span>
+<span class="nc" id="L45">            LOG.error(&quot;[ Error when creating poll. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L46">            throw new PollDaoException(&quot;[ create poll ] &quot; + e.getMessage());</span>
+<span class="nc" id="L47">        }</span>
+<span class="nc" id="L48">    }</span>
+
+    @Override
+    public Poll getPoll(String pollId) throws PollDaoException {
+        try {
+<span class="nc" id="L53">            TypedQuery&lt;Poll&gt; query = em.createNamedQuery(MobileTerminalConstants.POLL_FIND_BY_ID, Poll.class);</span>
+<span class="nc" id="L54">            query.setParameter(&quot;polltrackId&quot;, pollId);</span>
+<span class="nc" id="L55">            return query.getSingleResult();</span>
+<span class="nc" id="L56">        } catch (NoResultException e) {</span>
+<span class="nc" id="L57">            LOG.error(&quot;[ Error when getting poll. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L58">            throw new PollDaoException(&quot;No Poll entity found with TrackId &quot; + pollId);</span>
+        }
+    }
+
+    @Override
+    public List&lt;Poll&gt; getPollListByProgramPoll(Integer pollProgramId) throws PollDaoException {
+<span class="nc" id="L64">        throw new PollDaoException(&quot;Not yet implemented&quot;);</span>
+    }
+
+    @Override
+    public void createPollProgram(PollProgram pollProgram) throws PollDaoException {
+        try {
+<span class="nc" id="L70">            em.persist(pollProgram);</span>
+<span class="nc" id="L71">        } catch (EntityExistsException | IllegalArgumentException e) {</span>
+<span class="nc" id="L72">            LOG.error(&quot;[ Error when creating poll program. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L73">            throw new PollDaoException(&quot;[ create poll ] &quot; + e.getMessage());</span>
+<span class="nc" id="L74">        }</span>
+<span class="nc" id="L75">    }</span>
+
+	@Override
+	public Long getPollListSearchCount(String sql, List&lt;PollSearchKeyValue&gt; searchKeyValues, boolean isDynamic) {
+<span class="nc" id="L79">		TypedQuery&lt;Long&gt; query = em.createQuery(sql, Long.class);</span>
+		
+<span class="nc bnc" id="L81" title="All 2 branches missed.">		for(PollSearchKeyValue keyValue : searchKeyValues) {</span>
+<span class="nc" id="L82">			String sqlReplaceToken = keyValue.getSearchField().getSqlReplaceToken();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">			if(keyValue.getSearchField().getClazz().isAssignableFrom(MobileTerminalTypeEnum.class)){</span>
+<span class="nc" id="L84">				List&lt;MobileTerminalTypeEnum&gt; types = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">				for (String value : keyValue.getValues()) {</span>
+<span class="nc" id="L86">					MobileTerminalTypeEnum type = MobileTerminalTypeEnum.valueOf(value);</span>
+<span class="nc" id="L87">					types.add(type);</span>
+<span class="nc" id="L88">				}</span>
+<span class="nc" id="L89">				query.setParameter(sqlReplaceToken, types);</span>
+<span class="nc bnc" id="L90" title="All 2 branches missed.">			} else if(keyValue.getSearchField().getClazz().isAssignableFrom(PollTypeEnum.class)){</span>
+<span class="nc" id="L91">				List&lt;PollTypeEnum&gt; types = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">				for (String value : keyValue.getValues()) {</span>
+<span class="nc" id="L93">					PollTypeEnum type = PollTypeEnum.valueOf(value);</span>
+<span class="nc" id="L94">					types.add(type);</span>
+<span class="nc" id="L95">				}</span>
+<span class="nc" id="L96">				query.setParameter(sqlReplaceToken, types);</span>
+<span class="nc" id="L97">			} else {</span>
+<span class="nc" id="L98">				query.setParameter(sqlReplaceToken, keyValue.getValues());</span>
+			}
+<span class="nc" id="L100">		}</span>
+		
+<span class="nc" id="L102">		return query.getSingleResult();</span>
+	}
+
+	@Override
+	public List&lt;Poll&gt; getPollListSearchPaginated(Integer page, Integer listSize, String sql, List&lt;PollSearchKeyValue&gt; searchKeyValues, boolean isDynamic) throws PollDaoException {
+<span class="nc" id="L107">		TypedQuery&lt;Poll&gt; query = em.createQuery(sql, Poll.class);</span>
+		
+<span class="nc bnc" id="L109" title="All 2 branches missed.">		for(PollSearchKeyValue keyValue : searchKeyValues) {</span>
+<span class="nc" id="L110">			String sqlReplaceToken = keyValue.getSearchField().getSqlReplaceToken();</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">			if(keyValue.getSearchField().getClazz().isAssignableFrom(MobileTerminalTypeEnum.class)){</span>
+<span class="nc" id="L112">				List&lt;MobileTerminalTypeEnum&gt; types = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L113" title="All 2 branches missed.">				for (String value : keyValue.getValues()) {</span>
+<span class="nc" id="L114">					MobileTerminalTypeEnum type = MobileTerminalTypeEnum.valueOf(value);</span>
+<span class="nc" id="L115">					types.add(type);</span>
+<span class="nc" id="L116">				}</span>
+<span class="nc" id="L117">				query.setParameter(sqlReplaceToken, types);</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">			} else if(keyValue.getSearchField().getClazz().isAssignableFrom(PollTypeEnum.class)){</span>
+<span class="nc" id="L119">				List&lt;PollTypeEnum&gt; types = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">				for (String value : keyValue.getValues()) {</span>
+<span class="nc" id="L121">					PollTypeEnum type = PollTypeEnum.valueOf(value);</span>
+<span class="nc" id="L122">					types.add(type);</span>
+<span class="nc" id="L123">				}</span>
+<span class="nc" id="L124">				query.setParameter(sqlReplaceToken, types);</span>
+<span class="nc" id="L125">			} else {</span>
+<span class="nc" id="L126">				query.setParameter(sqlReplaceToken, keyValue.getValues());</span>
+			}
+<span class="nc" id="L128">		}</span>
+		
+<span class="nc" id="L130">		query.setFirstResult(listSize * (page -1));</span>
+<span class="nc" id="L131">		query.setMaxResults(listSize);</span>
+<span class="nc" id="L132">		return query.getResultList();</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

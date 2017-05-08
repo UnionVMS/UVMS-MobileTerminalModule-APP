@@ -1,0 +1,4 @@
+digraph jdom_1_1_3_dependencies {
+  node [shape = box, fontsize=10.0];
+  jdom_1_1_3 -> xml_apis_1_0_b2;
+}

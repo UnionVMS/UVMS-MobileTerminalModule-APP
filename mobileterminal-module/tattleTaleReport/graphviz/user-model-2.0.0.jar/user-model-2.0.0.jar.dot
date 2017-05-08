@@ -1,0 +1,5 @@
+digraph user_model_2_0_0_dependencies {
+  node [shape = box, fontsize=10.0];
+  user_model_2_0_0 -> jaxb_api_2_2_7;
+  user_model_2_0_0 -> jsr173_api_1_0;
+}

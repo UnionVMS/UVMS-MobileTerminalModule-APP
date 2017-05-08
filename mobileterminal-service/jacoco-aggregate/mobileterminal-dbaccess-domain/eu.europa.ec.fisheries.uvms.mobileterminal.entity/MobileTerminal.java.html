@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MobileTerminal.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.entity</a> &gt; <span class="el_source">MobileTerminal.java</span></div><h1>MobileTerminal.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.entity;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.PrePersist;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.EqualsUtil;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+
+
+/**
+ * The persistent class for the mobileterminal database table.
+ * 
+ */
+@Entity
+@NamedQueries({
+	@NamedQuery(name=MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_GUID, query=&quot;SELECT m FROM MobileTerminal m WHERE m.guid = :guid&quot;),
+	@NamedQuery(name=MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_SERIAL_NO, query=&quot;SELECT m FROM MobileTerminal m WHERE m.serialNo = :serialNo&quot;)
+})
+public class MobileTerminal implements Serializable {
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(name=&quot;id&quot;)
+	private Long id;
+
+	@Size(max=36)
+	@NotNull
+	@Column(name=&quot;guid&quot;)
+	private String guid;
+	
+	@NotNull
+	@ManyToOne(fetch=FetchType.EAGER, cascade=CascadeType.ALL)
+	@JoinColumn(name=&quot;plugin_id&quot;)
+	private MobileTerminalPlugin plugin;
+	
+<span class="fc" id="L76">	@Column(name=&quot;archived&quot;)</span>
+	private Boolean archived = false;
+
+<span class="fc" id="L79">	@Column(name=&quot;inactivated&quot;)</span>
+	private Boolean inactivated = false;
+
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@Column(name=&quot;source&quot;)
+	private MobileTerminalSourceEnum source;
+
+	@Enumerated(EnumType.STRING)
+	@NotNull
+	@Column(name=&quot;type&quot;)
+	private MobileTerminalTypeEnum mobileTerminalType;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(name=&quot;updatetime&quot;)
+	private Date updatetime;
+
+	@Column(name=&quot;updateuser&quot;)
+	private String updateuser;
+
+	@Column(name=&quot;serial_no&quot;)
+	private String serialNo;
+
+	//bi-directional many-to-one association to Mobileterminalevent
+	@OneToMany(mappedBy=&quot;mobileterminal&quot;, cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SELECT)
+	private Set&lt;MobileTerminalEvent&gt; mobileTerminalEvents;
+
+	//bi-directional many-to-one association to Mobileterminalevent
+	@OneToMany(mappedBy=&quot;mobileTerminal&quot;, cascade = CascadeType.ALL)
+	@Fetch(FetchMode.SELECT)
+	private Set&lt;Channel&gt; channels;
+
+<span class="fc" id="L112">	public MobileTerminal() {</span>
+<span class="fc" id="L113">	}</span>
+
+	// TODO  is this really OK ??????
+	// TODO if GUID set at creation time it will be ovrwritten !!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	@PrePersist
+	private void atPrePersist() {
+<span class="nc" id="L119">		setGuid(UUID.randomUUID().toString());</span>
+<span class="nc" id="L120">	}</span>
+	
+	public Long getId() {
+<span class="nc" id="L123">		return this.id;</span>
+	}
+
+	public void setId(Long id) {
+<span class="nc" id="L127">		this.id = id;</span>
+<span class="nc" id="L128">	}</span>
+
+	public Boolean getArchived() {
+<span class="nc" id="L131">		return this.archived;</span>
+	}
+
+	public void setArchived(Boolean archived) {
+<span class="nc" id="L135">		this.archived = archived;</span>
+<span class="nc" id="L136">	}</span>
+
+	public Boolean getInactivated() {
+<span class="nc" id="L139">		return this.inactivated;</span>
+	}
+
+	public void setInactivated(Boolean inactivated) {
+<span class="nc" id="L143">		this.inactivated = inactivated;</span>
+<span class="nc" id="L144">	}</span>
+
+	public MobileTerminalSourceEnum getSource() {
+<span class="nc" id="L147">		return this.source;</span>
+	}
+
+	public void setSource(MobileTerminalSourceEnum source) {
+<span class="nc" id="L151">		this.source = source;</span>
+<span class="nc" id="L152">	}</span>
+
+	public MobileTerminalTypeEnum getMobileTerminalType() {
+<span class="nc" id="L155">		return this.mobileTerminalType;</span>
+	}
+
+	public void setMobileTerminalType(MobileTerminalTypeEnum mobileTerminalType) {
+<span class="nc" id="L159">		this.mobileTerminalType = mobileTerminalType;</span>
+<span class="nc" id="L160">	}</span>
+
+	public Date getUpdateTime() {
+<span class="nc" id="L163">		return this.updatetime;</span>
+	}
+
+	public void setUpdateTime(Date updatetime) {
+<span class="nc" id="L167">		this.updatetime = updatetime;</span>
+<span class="nc" id="L168">	}</span>
+
+	public String getUpdatedBy() {
+<span class="nc" id="L171">		return this.updateuser;</span>
+	}
+
+	public void setUpdatedBy(String updateuser) {
+<span class="nc" id="L175">		this.updateuser = updateuser;</span>
+<span class="nc" id="L176">	}</span>
+
+	public Set&lt;MobileTerminalEvent&gt; getMobileTerminalEvents() {
+<span class="nc bnc" id="L179" title="All 2 branches missed.">		if (mobileTerminalEvents == null) {</span>
+<span class="nc" id="L180">			mobileTerminalEvents = new HashSet&lt;&gt;();</span>
+		}
+<span class="nc" id="L182">		return this.mobileTerminalEvents;</span>
+	}
+
+	public void setMobileTerminalEvents(Set&lt;MobileTerminalEvent&gt; mobileTerminalEvents) {
+<span class="nc" id="L186">		this.mobileTerminalEvents = mobileTerminalEvents;</span>
+<span class="nc" id="L187">	}</span>
+
+	public String getGuid() {
+<span class="nc" id="L190">		return guid;</span>
+	}
+
+	public void setGuid(String guid) {
+<span class="nc" id="L194">		this.guid = guid;</span>
+<span class="nc" id="L195">	}</span>
+
+	public Set&lt;Channel&gt; getChannels() {
+<span class="nc bnc" id="L198" title="All 2 branches missed.">		if (channels == null) {</span>
+<span class="nc" id="L199">			channels = new HashSet&lt;&gt;();</span>
+		}
+<span class="nc" id="L201">		return channels;</span>
+	}
+
+	public void setChannels(Set&lt;Channel&gt; channels) {
+<span class="nc" id="L205">		this.channels = channels;</span>
+<span class="nc" id="L206">	}</span>
+
+	public String getSerialNo() {
+<span class="nc" id="L209">		return serialNo;</span>
+	}
+
+	public void setSerialNo(String serialNo) {
+<span class="nc" id="L213">		this.serialNo = serialNo;</span>
+<span class="nc" id="L214">	}</span>
+
+	@Override
+	public boolean equals(Object obj) {
+<span class="nc bnc" id="L218" title="All 2 branches missed.">		if(obj instanceof MobileTerminal) {</span>
+<span class="nc" id="L219">			MobileTerminal other = (MobileTerminal)obj;</span>
+<span class="nc bnc" id="L220" title="All 2 branches missed.">			if(!EqualsUtil.compare(guid, other.guid)) return false;</span>
+<span class="nc" id="L221">			return true;</span>
+		}
+<span class="nc" id="L223">		return false;</span>
+	}
+
+	@Override
+	public int hashCode() {
+<span class="nc" id="L228">		return EqualsUtil.getHashCode(guid);</span>
+	}
+
+	public MobileTerminalPlugin getPlugin() {
+<span class="nc" id="L232">		return plugin;</span>
+	}
+
+	public void setPlugin(MobileTerminalPlugin plugin) {
+<span class="nc" id="L236">		this.plugin = plugin;</span>
+<span class="nc" id="L237">	}</span>
+
+	public MobileTerminalEvent getCurrentEvent() {
+<span class="nc bnc" id="L240" title="All 2 branches missed.">		for (MobileTerminalEvent event : getMobileTerminalEvents()) {</span>
+<span class="nc bnc" id="L241" title="All 2 branches missed.">			if (event.isActive()) {</span>
+<span class="nc" id="L242">				return event;</span>
+			}
+<span class="nc" id="L244">		}</span>
+<span class="nc" id="L245">		return null;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Implementation-Title: JSON Web Token support for the JVM
+Implementation-Version: 0.4
+Implementation-Vendor-Id: io.jsonwebtoken
+Build-Jdk: 1.8.0_05
+Built-By: lhazlewood
+Created-By: Apache Maven 3.2.1
+Specification-Title: JSON Web Token support for the JVM
+Specification-Version: 0.4
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: io.jsonwebtoken
+Bundle-Description: jjwt-0.4
+Bundle-Name: jjwt-0.4
+Bundle-Version: 0.4
+Export-Package: io.jsonwebtoken;uses:="io.jsonwebtoken.impl,io.jsonweb
+ token.lang",io.jsonwebtoken.impl;uses:="com.fasterxml.jackson.core,co
+ m.fasterxml.jackson.databind,io.jsonwebtoken,io.jsonwebtoken.impl.cry
+ pto,io.jsonwebtoken.lang",io.jsonwebtoken.impl.crypto;uses:="io.jsonw
+ ebtoken,io.jsonwebtoken.impl,io.jsonwebtoken.lang",io.jsonwebtoken.la
+ ng
+Import-Package: com.fasterxml.jackson.core;version="2.4.2",com.fasterx
+ ml.jackson.databind;version="2.4.2",java.io,java.lang,java.lang.refle
+ ct,java.nio.charset,java.security,java.security.spec,java.text,java.u
+ til,java.util.concurrent.atomic,javax.crypto,javax.crypto.spec,javax.
+ xml.bind;version="2.2.7",org.slf4j

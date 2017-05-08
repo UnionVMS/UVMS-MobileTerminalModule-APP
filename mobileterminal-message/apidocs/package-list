@@ -1,0 +1,8 @@
+eu.europa.ec.fisheries.uvms.mobileterminal.message.constants
+eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer
+eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean
+eu.europa.ec.fisheries.uvms.mobileterminal.message.event
+eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier
+eu.europa.ec.fisheries.uvms.mobileterminal.message.exception
+eu.europa.ec.fisheries.uvms.mobileterminal.message.producer
+eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean

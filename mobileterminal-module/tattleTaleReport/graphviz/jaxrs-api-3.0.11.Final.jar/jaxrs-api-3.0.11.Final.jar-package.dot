@@ -1,0 +1,8 @@
+digraph jaxrs_api_3_0_11_Final_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  javax_ws_rs_client -> javax_ws_rs;
+  javax_ws_rs_client -> javax_ws_rs_core;
+  javax_ws_rs_container -> javax_ws_rs_core;
+  javax_ws_rs_core -> javax_ws_rs;
+  javax_ws_rs_ext -> javax_ws_rs_core;
+}

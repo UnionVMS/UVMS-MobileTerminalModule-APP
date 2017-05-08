@@ -1,0 +1,61 @@
+Manifest-Version: 1.0
+Implementation-Vendor: Oracle
+Implementation-Title: Fast Infoset Implementation
+Implementation-Version: 1.2.12
+Implementation-Vendor-Id: com.oracle
+Build-Jdk: 1.6.0_25
+Built-By: oleksiys
+Specification-Title: ITU-T Rec. X.891 | ISO/IEC 24824-1 (Fast Infoset)
+Created-By: Apache Maven
+Specification-Version: 1.0
+Extension-Name: com.sun.xml.fastinfoset
+URL: http://fi.java.net
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.sun.xml.fastinfoset.util
+Bundle-Description: FastInfoset-1.2.12
+Bundle-Name: FastInfoset-1.2.12
+Bundle-Version: 1.0
+Export-Package: com.sun.xml.fastinfoset;uses:="com.sun.xml.fastinfoset
+ .algorithm,com.sun.xml.fastinfoset.alphabet,com.sun.xml.fastinfoset.o
+ rg.apache.xerces.util,com.sun.xml.fastinfoset.util,com.sun.xml.fastin
+ foset.vocab,org.jvnet.fastinfoset",com.sun.xml.fastinfoset.algorithm;
+ uses:="com.sun.xml.fastinfoset,org.jvnet.fastinfoset",com.sun.xml.fas
+ tinfoset.alphabet,com.sun.xml.fastinfoset.dom;uses:="com.sun.xml.fast
+ infoset,com.sun.xml.fastinfoset.algorithm,com.sun.xml.fastinfoset.uti
+ l,com.sun.xml.fastinfoset.vocab,org.jvnet.fastinfoset",com.sun.xml.fa
+ stinfoset.org.apache.xerces.util,com.sun.xml.fastinfoset.sax;uses:="c
+ om.sun.xml.fastinfoset,com.sun.xml.fastinfoset.algorithm,com.sun.xml.
+ fastinfoset.util,com.sun.xml.fastinfoset.vocab,org.jvnet.fastinfoset,
+ org.jvnet.fastinfoset.sax",com.sun.xml.fastinfoset.stax;uses:="com.su
+ n.xml.fastinfoset,com.sun.xml.fastinfoset.algorithm,com.sun.xml.fasti
+ nfoset.org.apache.xerces.util,com.sun.xml.fastinfoset.sax,com.sun.xml
+ .fastinfoset.util,com.sun.xml.fastinfoset.vocab,org.jvnet.fastinfoset
+ ,org.jvnet.fastinfoset.stax",com.sun.xml.fastinfoset.stax.events;uses
+ :="com.sun.xml.fastinfoset,com.sun.xml.fastinfoset.org.apache.xerces.
+ util,com.sun.xml.fastinfoset.stax",com.sun.xml.fastinfoset.stax.facto
+ ry;uses:="com.sun.xml.fastinfoset,com.sun.xml.fastinfoset.stax,com.su
+ n.xml.fastinfoset.stax.events,com.sun.xml.fastinfoset.stax.util,com.s
+ un.xml.fastinfoset.tools",com.sun.xml.fastinfoset.stax.util;uses:="co
+ m.sun.xml.fastinfoset",com.sun.xml.fastinfoset.tools;uses:="com.sun.x
+ ml.fastinfoset,com.sun.xml.fastinfoset.dom,com.sun.xml.fastinfoset.sa
+ x,com.sun.xml.fastinfoset.stax,com.sun.xml.fastinfoset.util,com.sun.x
+ ml.fastinfoset.vocab,org.jvnet.fastinfoset",com.sun.xml.fastinfoset.u
+ til;uses:="com.sun.xml.fastinfoset,org.jvnet.fastinfoset",com.sun.xml
+ .fastinfoset.vocab;uses:="com.sun.xml.fastinfoset,com.sun.xml.fastinf
+ oset.util,org.jvnet.fastinfoset",org.jvnet.fastinfoset;uses:="com.sun
+ .xml.fastinfoset.sax",org.jvnet.fastinfoset.sax;uses:="org.jvnet.fast
+ infoset",org.jvnet.fastinfoset.sax.helpers;uses:="com.sun.xml.fastinf
+ oset,com.sun.xml.fastinfoset.algorithm,org.jvnet.fastinfoset,org.jvne
+ t.fastinfoset.sax",org.jvnet.fastinfoset.stax
+Import-Package: java.io,java.lang,java.net,java.nio,java.text,java.uti
+ l,java.util.logging,java.util.regex,javax.xml.namespace;version="0.0.
+ 0",javax.xml.parsers;version="1.1",javax.xml.stream;version="0.0.0",j
+ avax.xml.stream.events;version="0.0.0",javax.xml.stream.util;version=
+ "0.0.0",javax.xml.transform;version="1.1",javax.xml.transform.dom;ver
+ sion="1.1",javax.xml.transform.sax;version="1.1",javax.xml.transform.
+ stream;version="1.1",org.w3c.dom;version="1.1",org.xml.sax;version="1
+ .1",org.xml.sax.ext;version="1.1",org.xml.sax.helpers;version="1.1"

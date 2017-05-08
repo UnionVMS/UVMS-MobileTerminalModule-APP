@@ -1,0 +1,6 @@
+digraph jibx_extras_1_2_6_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  org_jibx_extras -> org_jibx_runtime;
+  org_jibx_extras -> org_jibx_runtime_impl;
+  org_jibx_extras -> org_xmlpull_v1;
+}

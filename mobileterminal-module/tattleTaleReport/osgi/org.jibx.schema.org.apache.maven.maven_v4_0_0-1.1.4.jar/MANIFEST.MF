@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Export-Package: org.jibx.schema.org.apache.maven.maven_v4_0_0;version=
+ "1.1.4";uses:="org.jibx.runtime,org.jibx.runtime.impl,org.w3c.dom"
+Built-By: dcorley
+Tool: Bnd-2.3.0.201405100607
+Bundle-Name: Schema Library - maven.apache.org - v4_0_0
+Created-By: Apache Maven Bundle Plugin
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.5))"
+Bundle-Vendor: jibx.org
+Build-Jdk: 1.7.0_67
+Bundle-Version: 1.1.4
+Bnd-LastModified: 1420016626845
+Bundle-ManifestVersion: 2
+Bundle-Description: maven.apache.org/maven-v4_0_0.xsd
+Bundle-License: http://jibx.sourceforge.net/jibx-license.html
+Import-Package: org.jibx.runtime;resolution:=optional;version="[1.2,2)
+ ",org.jibx.runtime.impl;resolution:=optional;version="[1.2,2)",org.w3
+ c.dom;resolution:=optional
+Bundle-DocURL: http://www.jibx.org
+Bundle-SymbolicName: org.jibx.schema.org.apache.maven.maven_v4_0_0
+

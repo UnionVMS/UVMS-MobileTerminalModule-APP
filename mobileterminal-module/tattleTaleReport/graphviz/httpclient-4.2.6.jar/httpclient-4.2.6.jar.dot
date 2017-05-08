@@ -1,0 +1,6 @@
+digraph httpclient_4_2_6_dependencies {
+  node [shape = box, fontsize=10.0];
+  httpclient_4_2_6 -> commons_codec_1_6;
+  httpclient_4_2_6 -> commons_logging_1_1_1;
+  httpclient_4_2_6 -> httpcore_4_2_5;
+}

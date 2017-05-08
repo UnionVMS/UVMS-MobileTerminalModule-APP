@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.6.5
+Created-By: 1.6.0_01-b06 (Sun Microsystems Inc.)
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: net.jcip.annotations
+Bundle-Description: jcip-annotations-1.0
+Bundle-Name: jcip-annotations-1.0
+Bundle-Version: 0.0.0
+Export-Package: net.jcip.annotations
+Import-Package: java.lang,java.lang.annotation

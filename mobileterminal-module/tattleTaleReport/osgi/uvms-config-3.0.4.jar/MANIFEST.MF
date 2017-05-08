@@ -1,0 +1,36 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_80
+Built-By: roblar
+Created-By: Apache Maven 3.3.9
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: eu.europa.ec.fisheries.uvms.config.service
+Bundle-Description: uvms-config-3.0.4
+Bundle-Name: uvms-config-3.0.4
+Bundle-Version: 0.0.0
+Export-Package: eu.europa.ec.fisheries.uvms.config.constants,eu.europa
+ .ec.fisheries.uvms.config.event,eu.europa.ec.fisheries.uvms.config.ex
+ ception,eu.europa.ec.fisheries.uvms.config.message;uses:="eu.europa.e
+ c.fisheries.schema.config.module.v1,eu.europa.ec.fisheries.schema.con
+ fig.types.v1,eu.europa.ec.fisheries.uvms.config.constants,eu.europa.e
+ c.fisheries.uvms.config.exception,eu.europa.ec.fisheries.uvms.config.
+ model.exception,eu.europa.ec.fisheries.uvms.config.model.mapper,eu.eu
+ ropa.ec.fisheries.uvms.config.service",eu.europa.ec.fisheries.uvms.co
+ nfig.service;uses:="eu.europa.ec.fisheries.schema.config.module.v1,eu
+ .europa.ec.fisheries.schema.config.types.v1,eu.europa.ec.fisheries.uv
+ ms.config.constants,eu.europa.ec.fisheries.uvms.config.event,eu.europ
+ a.ec.fisheries.uvms.config.exception,eu.europa.ec.fisheries.uvms.conf
+ ig.message,eu.europa.ec.fisheries.uvms.config.model.exception,eu.euro
+ pa.ec.fisheries.uvms.config.model.mapper,eu.europa.ec.fisheries.uvms.
+ config.service.entity",eu.europa.ec.fisheries.uvms.config.service.ent
+ ity
+Import-Package: eu.europa.ec.fisheries.schema.config.module.v1;version
+ ="0.0.0",eu.europa.ec.fisheries.schema.config.types.v1;version="0.0.0
+ ",eu.europa.ec.fisheries.uvms.config.model.exception;version="0.0.0",
+ eu.europa.ec.fisheries.uvms.config.model.mapper;version="0.0.0",java.
+ io,java.lang,java.lang.annotation,java.util,java.util.concurrent,java
+ x.annotation;version="1.1",javax.ejb,javax.enterprise.event,javax.inj
+ ect,javax.jms,javax.persistence,org.slf4j

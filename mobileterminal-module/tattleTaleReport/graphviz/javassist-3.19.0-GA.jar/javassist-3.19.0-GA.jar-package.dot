@@ -1,0 +1,8 @@
+digraph javassist_3_19_0_GA_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  javassist_bytecode -> javassist_bytecode_annotation;
+  javassist_util -> com_sun_jdi;
+  javassist_util -> com_sun_jdi_connect;
+  javassist_util -> com_sun_jdi_event;
+  javassist_util -> com_sun_jdi_request;
+}

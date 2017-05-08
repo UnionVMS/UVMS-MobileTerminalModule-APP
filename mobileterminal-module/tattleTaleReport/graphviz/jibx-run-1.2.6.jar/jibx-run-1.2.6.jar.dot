@@ -1,0 +1,6 @@
+digraph jibx_run_1_2_6_dependencies {
+  node [shape = box, fontsize=10.0];
+  jibx_run_1_2_6 -> joda_time_2_7;
+  jibx_run_1_2_6 -> jsr173_api_1_0;
+  jibx_run_1_2_6 -> xpp3_1_1_3_4_O;
+}

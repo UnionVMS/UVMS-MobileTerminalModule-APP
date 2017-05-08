@@ -1,0 +1,5 @@
+digraph uvms_config_3_0_4_dependencies {
+  node [shape = box, fontsize=10.0];
+  uvms_config_3_0_4 -> config_model_2_1_1;
+  uvms_config_3_0_4 -> jboss_annotations_api_1_1_spec_1_0_1_Final;
+}

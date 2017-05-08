@@ -1,0 +1,5 @@
+digraph mail_1_5_0_b01_dependencies {
+  node [shape = box, fontsize=10.0];
+  mail_1_5_0_b01 -> activation_1_1;
+  mail_1_5_0_b01 -> xml_apis_1_0_b2;
+}

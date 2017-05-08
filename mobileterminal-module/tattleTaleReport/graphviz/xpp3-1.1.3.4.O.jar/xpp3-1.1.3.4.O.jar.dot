@@ -1,0 +1,4 @@
+digraph xpp3_1_1_3_4_O_dependencies {
+  node [shape = box, fontsize=10.0];
+  xpp3_1_1_3_4_O -> xml_apis_1_0_b2;
+}

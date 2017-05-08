@@ -1,0 +1,33 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.8.0_40
+Built-By: ron
+Created-By: Apache Maven 3.3.1
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.reflections.vfs
+Bundle-Description: reflections-0.9.10
+Bundle-Name: reflections-0.9.10
+Bundle-Version: 0.0.0
+Export-Package: org.reflections;uses:="javax.annotation,org.reflection
+ s.adapters,org.reflections.scanners,org.reflections.serializers,org.r
+ eflections.util,org.reflections.vfs",org.reflections.adapters;uses:="
+ javax.annotation,org.reflections,org.reflections.util,org.reflections
+ .vfs",org.reflections.scanners;uses:="javax.annotation,org.reflection
+ s,org.reflections.adapters,org.reflections.util,org.reflections.vfs",
+ org.reflections.serializers;uses:="com.google.gson,org.reflections,or
+ g.reflections.scanners,org.reflections.util",org.reflections.util;use
+ s:="javax.annotation,org.reflections,org.reflections.adapters,org.ref
+ lections.scanners,org.reflections.serializers",org.reflections.vfs;us
+ es:="javax.annotation,org.apache.commons.vfs2,org.reflections,org.ref
+ lections.util"
+Import-Package: com.google.common.base,com.google.common.collect,com.g
+ oogle.common.io,com.google.gson,java.io,java.lang,java.lang.annotatio
+ n,java.lang.reflect,java.net,java.nio.charset,java.util,java.util.con
+ current,java.util.jar,java.util.regex,java.util.zip,javassist;version
+ ="0.0.0",javassist.bytecode;version="0.0.0",javassist.bytecode.annota
+ tion;version="0.0.0",javassist.expr;version="0.0.0",javax.annotation;
+ version="0.0.0",javax.servlet,org.apache.commons.vfs2,org.dom4j;versi
+ on="1.6.1",org.dom4j.io;version="1.6.1",org.slf4j

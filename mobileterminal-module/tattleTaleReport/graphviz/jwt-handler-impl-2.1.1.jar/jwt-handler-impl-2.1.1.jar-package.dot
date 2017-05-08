@@ -1,0 +1,4 @@
+digraph jwt_handler_impl_2_1_1_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  eu_europa_ec_mare_usm_jwt -> io_jsonwebtoken;
+}

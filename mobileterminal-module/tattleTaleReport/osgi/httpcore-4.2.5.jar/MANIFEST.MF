@@ -1,0 +1,38 @@
+Manifest-Version: 1.0
+Implementation-Title: HttpComponents Apache HttpCore
+Implementation-Version: 4.2.5
+Built-By: oleg
+Specification-Vendor: The Apache Software Foundation
+Created-By: Apache Maven 3.0.5
+url: http://hc.apache.org/httpcomponents-core-ga
+X-Compile-Source-JDK: 1.5
+Implementation-Vendor: The Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Build-Jdk: 1.7.0_21
+Specification-Title: HttpComponents Apache HttpCore
+Implementation-Build: tags/4.2.5-RC2/httpcore@r1506585; 2013-07-29 17:
+ 13:49+0200
+Specification-Version: 4.2.5
+Archiver-Version: Plexus Archiver
+X-Compile-Target-JDK: 1.5
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.apache.http
+Bundle-Description: httpcore-4.2.5
+Bundle-Name: httpcore-4.2.5
+Bundle-Version: 4.2.5
+Export-Package: org.apache.http,org.apache.http.annotation,org.apache.
+ http.concurrent,org.apache.http.entity;uses:="org.apache.http",org.ap
+ ache.http.impl;uses:="org.apache.http.impl.entity,org.apache.http.imp
+ l.io",org.apache.http.impl.entity,org.apache.http.impl.io,org.apache.
+ http.impl.pool;uses:="org.apache.http.pool",org.apache.http.io,org.ap
+ ache.http.message,org.apache.http.params,org.apache.http.pool;uses:="
+ org.apache.http.concurrent",org.apache.http.protocol;uses:="org.apach
+ e.http",org.apache.http.util;uses:="org.apache.http,org.apache.http.e
+ ntity"
+Import-Package: java.io,java.lang,java.lang.annotation,java.lang.refle
+ ct,java.net,java.nio,java.nio.charset,java.text,java.util,java.util.c
+ oncurrent,java.util.concurrent.atomic,java.util.concurrent.locks,java
+ x.net.ssl

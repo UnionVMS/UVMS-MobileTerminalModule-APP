@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>HistoryMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.mapper</a> &gt; <span class="el_source">HistoryMapper.java</span></div><h1>HistoryMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelHistory;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelHistoryAttributes;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.EventCode;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalEvents;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalHistory;
+import eu.europa.ec.fisheries.uvms.common.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.ChannelHistory;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+
+<span class="nc" id="L36">public class HistoryMapper {</span>
+
+<span class="nc" id="L38">    private static Logger LOG = LoggerFactory.getLogger(HistoryMapper.class);</span>
+    
+	public static MobileTerminalEvent UPDATED_createMobileterminalevent(MobileTerminal entity, EventCodeEnum eventcode, String comment, String username) {
+<span class="nc" id="L41">		MobileTerminalEvent event = new MobileTerminalEvent();</span>
+<span class="nc" id="L42">		event.setMobileTerminal(entity);</span>
+<span class="nc" id="L43">		event.setComment(comment);</span>
+<span class="nc" id="L44">        event.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L45">		event.setUpdatedBy(username);</span>
+<span class="nc" id="L46">		event.setEventCodeType(eventcode);</span>
+<span class="nc" id="L47">		return event;</span>
+	}
+
+	public static MobileTerminalHistory getHistory(MobileTerminal terminal) throws MobileTerminalModelMapperException {
+<span class="nc bnc" id="L51" title="All 4 branches missed.">		if (terminal == null || terminal.getMobileTerminalEvents() == null) {</span>
+<span class="nc" id="L52">            throw new MobileTerminalModelMapperException(&quot;No terminal history available&quot;);</span>
+        }
+
+<span class="nc" id="L55">		MobileTerminalHistory terminalHistory = new MobileTerminalHistory();</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">		for (MobileTerminalEvent event : terminal.getMobileTerminalEvents()) {</span>
+<span class="nc" id="L57">			MobileTerminalEvents eventModel = new MobileTerminalEvents();</span>
+<span class="nc" id="L58">			eventModel.setChangeDate(event.getUpdateTime());</span>
+<span class="nc" id="L59">			eventModel.setComments(event.getComment());</span>
+<span class="nc" id="L60">			eventModel.setEventCode(EventCode.valueOf(event.getEventCodeType().toString()));</span>
+<span class="nc" id="L61">			eventModel.setConnectId(event.getConnectId());</span>
+<span class="nc" id="L62">			Map&lt;String, String&gt; attributes = AttributeMapper.mapAttributeString(event.getAttributes());</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">			for (String key : attributes.keySet()) {</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">				if (MobileTerminalConstants.SERIAL_NUMBER.equalsIgnoreCase(key)) {</span>
+<span class="nc" id="L65">					eventModel.setSerialNumber(attributes.get(key));</span>
+				}
+<span class="nc" id="L67">				MobileTerminalAttribute attribute = new MobileTerminalAttribute();</span>
+<span class="nc" id="L68">				attribute.setType(key);</span>
+<span class="nc" id="L69">				attribute.setValue(attributes.get(key));</span>
+<span class="nc" id="L70">				eventModel.getAttributes().add(attribute);</span>
+<span class="nc" id="L71">			}</span>
+
+<span class="nc" id="L73">			terminalHistory.getEvents().add(eventModel);</span>
+<span class="nc" id="L74">		}</span>
+
+<span class="nc bnc" id="L76" title="All 2 branches missed.">		for (Channel channel : terminal.getChannels()) {</span>
+<span class="nc" id="L77">			ComChannelHistory channelModel = new ComChannelHistory();</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">			for (ChannelHistory history : channel.getHistories()) {</span>
+<span class="nc" id="L79">				ComChannelHistoryAttributes historyModel = new ComChannelHistoryAttributes();</span>
+<span class="nc" id="L80">				historyModel.setName(history.getName());</span>
+<span class="nc" id="L81">				List&lt;ComChannelAttribute&gt; attributeList = AttributeMapper.mapAttributeStringToComChannelAttribute(history.getAttributes());</span>
+<span class="nc" id="L82">				historyModel.getAttributes().addAll(attributeList);</span>
+<span class="nc" id="L83">				historyModel.setChangeDate(history.getUpdateTime());</span>
+<span class="nc" id="L84">				historyModel.setEventCode(EventCode.valueOf(history.getEventCodeType().toString()));</span>
+<span class="nc" id="L85">				channelModel.getChannel().add(historyModel);</span>
+<span class="nc" id="L86">			}</span>
+<span class="nc" id="L87">			terminalHistory.getComChannels().add(channelModel);</span>
+<span class="nc" id="L88">		}</span>
+
+<span class="nc" id="L90">        return terminalHistory;</span>
+	}
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

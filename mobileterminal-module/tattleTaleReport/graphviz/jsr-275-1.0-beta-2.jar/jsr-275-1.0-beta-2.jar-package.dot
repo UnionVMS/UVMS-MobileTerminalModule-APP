@@ -1,0 +1,8 @@
+digraph jsr_275_1_0_beta_2_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  javax_measure -> javax_measure_converter;
+  javax_measure -> javax_measure_unit;
+  javax_measure_quantity -> javax_measure_unit;
+  javax_measure_unit -> javax_measure_converter;
+  javax_measure_unit -> javax_measure_quantity;
+}

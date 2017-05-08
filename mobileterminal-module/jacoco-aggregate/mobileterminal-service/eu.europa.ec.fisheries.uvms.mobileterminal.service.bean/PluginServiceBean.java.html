@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PluginServiceBean.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.service.bean</a> &gt; <span class="el_source">PluginServiceBean.java</span></div><h1>PluginServiceBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
+
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.jms.TextMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.config.types.v1.SettingType;
+import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeType;
+import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
+import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PollType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
+import eu.europa.ec.fisheries.uvms.config.model.exception.ModelMarshallException;
+import eu.europa.ec.fisheries.uvms.config.model.mapper.ModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMapperException;
+import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
+import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleResponseMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollToCommandRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+
+@Stateless
+<span class="nc" id="L47">public class PluginServiceBean implements PluginService {</span>
+
+<span class="nc" id="L49">    final static Logger LOG = LoggerFactory.getLogger(PluginServiceBean.class);</span>
+
+    public static final String EXCHANGE_MODULE_NAME = &quot;exchange&quot;;
+    public static final String DELIMETER = &quot;.&quot;;
+    public static final String INTERNAL_DELIMETER = &quot;,&quot;;
+    public static final String SETTING_KEY_DNID_LIST = &quot;DNIDS&quot;;
+
+    @EJB
+    MessageProducer messageProducer;
+
+    @EJB
+    MessageConsumer reciever;
+
+    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
+    ConfigModel configModel;
+
+    @Override
+    public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException {
+        try {
+<span class="nc" id="L68">            PollType pollType = PollToCommandRequestMapper.mapToPollType(poll);</span>
+<span class="nc" id="L69">            String pluginServiceName = poll.getMobileTerminal().getPlugin().getServiceName();</span>
+<span class="nc" id="L70">            String exchangeData = ExchangeModuleRequestMapper.createSetCommandSendPollRequest(pluginServiceName, pollType, username, null);</span>
+<span class="nc" id="L71">            String messageId = messageProducer.sendModuleMessage(exchangeData, ModuleQueue.EXCHANGE);</span>
+<span class="nc" id="L72">            TextMessage response = reciever.getMessage(messageId, TextMessage.class);</span>
+<span class="nc" id="L73">            AcknowledgeType ack = ExchangeModuleResponseMapper.mapSetCommandResponse(response, messageId);</span>
+<span class="nc" id="L74">            LOG.debug(&quot;Poll: &quot; + poll.getPollId().getGuid() + &quot; sent to exchange. Response: &quot; + ack.getType());</span>
+<span class="nc" id="L75">            return ack.getType();</span>
+<span class="nc" id="L76">        } catch (ExchangeModelMapperException | MobileTerminalMessageException | MobileTerminalModelMapperException e) {</span>
+<span class="nc" id="L77">            LOG.error(&quot;Failed to send poll command! Poll with guid {} was created&quot;, poll.getPollId().getGuid());</span>
+<span class="nc" id="L78">            throw new MobileTerminalServiceException(&quot;Failed to send poll command. Poll with guid &quot; + poll.getPollId().getGuid() + &quot; was not sent&quot;);</span>
+        }
+    }
+
+    @Override
+    public void processUpdatedDNIDList(String pluginName) {
+        try {
+<span class="nc" id="L85">            List&lt;String&gt; dnidList = configModel.updatedDNIDList(pluginName);</span>
+
+<span class="nc" id="L87">            String settingKey = pluginName + DELIMETER + SETTING_KEY_DNID_LIST;</span>
+<span class="nc" id="L88">            StringBuffer buffer = new StringBuffer();</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            for (String dnid : dnidList) {</span>
+<span class="nc" id="L90">                buffer.append(dnid + INTERNAL_DELIMETER);</span>
+<span class="nc" id="L91">            }</span>
+<span class="nc" id="L92">            String settingValue = buffer.toString();</span>
+
+            try {
+<span class="nc" id="L95">                sendUpdatedDNIDListToConfig(pluginName, settingKey, settingValue);</span>
+<span class="nc" id="L96">            } catch (ModelMarshallException | MobileTerminalMessageException e) {</span>
+<span class="nc" id="L97">                LOG.debug(&quot;Couldn't send to config module. Sending to exchange module.&quot;);</span>
+<span class="nc" id="L98">                sendUpdatedDNIDListToExchange(pluginName, SETTING_KEY_DNID_LIST, settingValue);</span>
+<span class="nc" id="L99">            }</span>
+<span class="nc" id="L100">        } catch (MobileTerminalModelException ex) {</span>
+<span class="nc" id="L101">            LOG.error(&quot;Couldn't get updated DNID List&quot;);</span>
+<span class="nc" id="L102">        }</span>
+<span class="nc" id="L103">    }</span>
+
+    private void sendUpdatedDNIDListToConfig(String pluginName, String settingKey, String settingValue) throws ModelMarshallException, MobileTerminalMessageException {
+<span class="nc" id="L106">        SettingType setting = new SettingType();</span>
+<span class="nc" id="L107">        setting.setKey(settingKey);</span>
+<span class="nc" id="L108">        setting.setModule(EXCHANGE_MODULE_NAME);</span>
+<span class="nc" id="L109">        setting.setDescription(&quot;DNID list for all active mobile terminals. Plugin use it to know which channels it should be listening to&quot;);</span>
+<span class="nc" id="L110">        setting.setGlobal(false);</span>
+<span class="nc" id="L111">        setting.setValue(settingValue);</span>
+
+<span class="nc" id="L113">        String setSettingRequest = ModuleRequestMapper.toSetSettingRequest(EXCHANGE_MODULE_NAME, setting, &quot;UVMS&quot;);</span>
+<span class="nc" id="L114">        String messageId = messageProducer.sendModuleMessage(setSettingRequest, ModuleQueue.CONFIG);</span>
+<span class="nc" id="L115">        TextMessage response = reciever.getMessage(messageId, TextMessage.class);</span>
+<span class="nc" id="L116">        LOG.info(&quot;UpdatedDNIDList sent to config module&quot;);</span>
+<span class="nc" id="L117">    }</span>
+
+    private void sendUpdatedDNIDListToExchange(String pluginName, String settingKey, String settingValue) {
+        try {
+<span class="nc" id="L121">            String request = ExchangeModuleRequestMapper.createUpdatePluginSettingRequest(pluginName, settingKey, settingValue);</span>
+<span class="nc" id="L122">            String messageId = messageProducer.sendModuleMessage(request, ModuleQueue.EXCHANGE);</span>
+<span class="nc" id="L123">            TextMessage response = reciever.getMessage(messageId, TextMessage.class);</span>
+<span class="nc" id="L124">            LOG.info(&quot;UpdatedDNIDList sent to exchange module&quot;);</span>
+<span class="nc" id="L125">        } catch (ExchangeModelMarshallException | MobileTerminalMessageException e) {</span>
+<span class="nc" id="L126">            LOG.error(&quot;Failed to send updated DNID list&quot;);</span>
+<span class="nc" id="L127">        }</span>
+<span class="nc" id="L128">    }</span>
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

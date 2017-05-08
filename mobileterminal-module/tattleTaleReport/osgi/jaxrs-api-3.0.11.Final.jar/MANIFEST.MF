@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_67
+Built-By: William
+Created-By: Apache Maven 3.1.1
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: javax.ws.rs.core
+Bundle-Description: jaxrs-api-3.0.11.Final
+Bundle-Name: jaxrs-api-3.0.11.Final
+Bundle-Version: 0.0.0
+Export-Package: javax.annotation,javax.ws.rs,javax.ws.rs.client;uses:=
+ "javax.ws.rs,javax.ws.rs.core",javax.ws.rs.container;uses:="javax.ws.
+ rs.core",javax.ws.rs.core;uses:="javax.ws.rs",javax.ws.rs.ext;uses:="
+ javax.ws.rs.core"
+Import-Package: java.io,java.lang,java.lang.annotation,java.lang.refle
+ ct,java.net,java.security,java.util,java.util.concurrent,java.util.lo
+ gging,javax.net.ssl,javax.xml.bind.annotation;version="2.2.7",javax.x
+ ml.bind.annotation.adapters;version="2.2.7",javax.xml.namespace;versi
+ on="0.0.0"

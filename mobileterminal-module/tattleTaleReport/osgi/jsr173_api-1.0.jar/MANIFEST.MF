@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Created-By: 1.4.2_01 (Sun Microsystems Inc.)
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: javax.xml.stream
+Bundle-Description: jsr173_api-1.0
+Bundle-Name: jsr173_api-1.0
+Bundle-Version: 0.0.0
+Export-Package: javax.xml,javax.xml.namespace,javax.xml.stream,javax.x
+ ml.stream.events,javax.xml.stream.util
+Import-Package: java.io,java.lang,java.util,javax.xml.transform;versio
+ n="1.1"

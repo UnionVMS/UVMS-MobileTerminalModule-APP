@@ -1,0 +1,29 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_79
+Built-By: osdjup
+Created-By: Apache Maven
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: eu.europa.ec.fisheries.schema.config.module.v1
+Bundle-Description: config-model-2.1.1
+Bundle-Name: config-model-2.1.1
+Bundle-Version: 0.0.0
+Export-Package: eu.europa.ec.fisheries.schema.config.module.v1;uses:="
+ eu.europa.ec.fisheries.schema.config.types.v1",eu.europa.ec.fisheries
+ .schema.config.source.v1;uses:="eu.europa.ec.fisheries.schema.config.
+ types.v1",eu.europa.ec.fisheries.schema.config.types.v1,eu.europa.ec.
+ fisheries.uvms.config;uses:="eu.europa.ec.fisheries.schema.config.typ
+ es.v1,eu.europa.ec.fisheries.uvms.config.model.exception",eu.europa.e
+ c.fisheries.uvms.config.model.constants,eu.europa.ec.fisheries.uvms.c
+ onfig.model.exception,eu.europa.ec.fisheries.uvms.config.model.mapper
+ ;uses:="eu.europa.ec.fisheries.schema.config.module.v1,eu.europa.ec.f
+ isheries.schema.config.types.v1,eu.europa.ec.fisheries.uvms.config.mo
+ del.exception",eu.europa.ec.fisheries.uvms.config.util
+Import-Package: java.io,java.lang,java.net,java.util,java.util.logging
+ ,javax.ejb,javax.jms,javax.jws,javax.jws.soap,javax.xml.bind;version=
+ "2.2.7",javax.xml.bind.annotation;version="2.2.7",javax.xml.datatype,
+ javax.xml.namespace;version="0.0.0",javax.xml.transform;version="1.1"
+ ,javax.xml.transform.stream;version="1.1",javax.xml.ws,org.slf4j

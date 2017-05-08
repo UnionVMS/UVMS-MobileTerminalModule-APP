@@ -1,0 +1,26 @@
+Manifest-Version: 1.0
+Export-Package: org.jibx.extras;version="1.2.6";uses:="org.dom4j,org.j
+ dom,org.jibx.runtime,org.jibx.runtime.impl,org.w3c.dom,org.xmlpull.v1
+ "
+Class-Path: jibx-run.jar xpp3.jar stax-api.jar wstx-asl.jar
+Built-By: dcorley
+Tool: Bnd-2.3.0.201405100607
+Bundle-Name: jibx-extras - JiBX extras
+Created-By: Apache Maven Bundle Plugin
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.5))"
+Bundle-Vendor: jibx.org
+Build-Jdk: 1.7.0_67
+Bundle-Version: 1.2.6
+Bnd-LastModified: 1420005799227
+Bundle-ManifestVersion: 2
+Bundle-Description: JiBX extras code
+Bundle-License: http://jibx.sourceforge.net/jibx-license.html
+Import-Package: javax.xml.parsers;resolution:=optional,org.dom4j;resol
+ ution:=optional,org.jdom;resolution:=optional,org.jibx.runtime;resolu
+ tion:=optional;version="[1.2,2)",org.jibx.runtime.impl;resolution:=op
+ tional;version="[1.2,2)",org.w3c.dom;resolution:=optional,org.xmlpull
+ .v1;resolution:=optional
+Bundle-DocURL: http://www.jibx.org
+Bundle-SymbolicName: jibx-extras
+Main-Class: org.jibx.extras.TestRoundtrip
+

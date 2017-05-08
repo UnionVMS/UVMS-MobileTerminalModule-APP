@@ -1,0 +1,6 @@
+eu.europa.ec.fisheries.uvms.mobileterminal.arquillian
+eu.europa.ec.fisheries.uvms.mobileterminal.bean
+eu.europa.ec.fisheries.uvms.mobileterminal.constant
+eu.europa.ec.fisheries.uvms.mobileterminal.dao
+eu.europa.ec.fisheries.uvms.mobileterminal.mapper
+eu.europa.ec.fisheries.uvms.mobileterminal.search

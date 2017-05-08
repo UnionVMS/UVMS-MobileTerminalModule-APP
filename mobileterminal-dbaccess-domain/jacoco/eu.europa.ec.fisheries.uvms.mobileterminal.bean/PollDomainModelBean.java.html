@@ -1,0 +1,446 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PollDomainModelBean.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.bean</a> &gt; <span class="el_source">PollDomainModelBean.java</span></div><h1>PollDomainModelBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollId;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollMobileTerminal;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapabilityType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.EnumMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToModelMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollEntityToModelMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollModelToEntityMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
+
+/**
+ **/
+@Stateless
+<span class="nc" id="L66">public class PollDomainModelBean implements PollDomainModel {</span>
+<span class="nc" id="L67">    final static Logger LOG = LoggerFactory.getLogger(PollDomainModelBean.class);</span>
+
+    @EJB
+    PollDao pollDao;
+
+    @EJB
+    PollProgramDao pollProgramDao;
+
+    @EJB
+    TerminalDao terminalDao;
+
+    @EJB
+    ChannelDao channelDao;
+    
+    private MobileTerminalType mapPollableTerminalType(MobileTerminalTypeEnum type, String guid) throws MobileTerminalModelException {
+<span class="nc" id="L82">        MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);</span>
+<span class="nc" id="L83">        return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);</span>
+	}
+
+    private MobileTerminalType getPollableTerminalType(String guid, String channelGuid) throws MobileTerminalModelException {
+<span class="nc" id="L87">        MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);</span>
+<span class="nc" id="L88">        checkPollable(terminal);</span>
+
+<span class="nc bnc" id="L90" title="All 4 branches missed.">        if(channelGuid != null &amp;&amp; !channelGuid.isEmpty()) {</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            for (Channel channel : terminal.getChannels()) {</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                if (channel.getGuid().equalsIgnoreCase(channelGuid)) {</span>
+<span class="nc bnc" id="L93" title="All 2 branches missed.">                    if (!channel.getMobileTerminal().getGuid().equalsIgnoreCase(guid)) {</span>
+<span class="nc" id="L94">                        throw new MobileTerminalModelException(&quot;Channel &quot; + channel.getGuid() + &quot; can not be polled, because it is not part of terminal &quot; + terminal.getGuid());</span>
+                    }
+<span class="nc" id="L96">                    return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal, channel);</span>
+                }
+<span class="nc" id="L98">            }</span>
+
+        }
+<span class="nc" id="L101">		throw new MobileTerminalModelException(&quot;Could not find channel &quot; + channelGuid + &quot; based on&quot;);</span>
+    }
+    
+    private void checkPollable(MobileTerminal terminal) throws MobileTerminalModelException {
+<span class="nc bnc" id="L105" title="All 2 branches missed.">    	if(terminal.getArchived()) {</span>
+<span class="nc" id="L106">    		throw new MobileTerminalModelException(&quot;Terminal is archived&quot;);</span>
+    	}
+<span class="nc bnc" id="L108" title="All 2 branches missed.">    	if(terminal.getInactivated()) {</span>
+<span class="nc" id="L109">    		throw new MobileTerminalModelException(&quot;Terminal is inactive&quot;);</span>
+    	}
+<span class="nc bnc" id="L111" title="All 4 branches missed.">    	if(terminal.getPlugin() != null &amp;&amp; terminal.getPlugin().getPluginInactive()) {</span>
+<span class="nc" id="L112">    		throw new MobileTerminalModelException(&quot;Terminal connected to no longer active Plugin (LES)&quot;);</span>
+    	}
+<span class="nc" id="L114">    }</span>
+    
+    @Override
+    public List&lt;PollResponseType&gt; createPolls(PollRequestType pollRequest, String username) throws MobileTerminalModelException {
+<span class="nc" id="L118">        LOG.info(&quot;Create polls.&quot;);</span>
+
+<span class="nc bnc" id="L120" title="All 4 branches missed.">        if (pollRequest == null || pollRequest.getPollType() == null) {</span>
+<span class="nc" id="L121">            throw new InputArgumentException(&quot;No polls to create&quot;);</span>
+        }
+
+<span class="nc bnc" id="L124" title="All 4 branches missed.">        if (pollRequest.getComment() == null || pollRequest.getUserName() == null) {</span>
+<span class="nc" id="L125">            throw new InputArgumentException(&quot;Cannot create without comment and user&quot;);</span>
+        }
+        
+<span class="nc bnc" id="L128" title="All 2 branches missed.">        if(pollRequest.getMobileTerminals() == null) {</span>
+<span class="nc" id="L129">        	throw new MobileTerminalModelException(&quot;No mobile terminals for &quot; + pollRequest.getPollType());</span>
+        }
+
+        List&lt;PollResponseType&gt; responseList;
+        Map&lt;Poll, MobileTerminalType&gt; pollMobileTerminalTypeMap;
+<span class="nc bnc" id="L134" title="All 3 branches missed.">        switch (pollRequest.getPollType()) {</span>
+            case PROGRAM_POLL:
+<span class="nc" id="L136">                Map&lt;PollProgram, MobileTerminalType&gt; pollProgramMobileTerminalTypeMap = validateAndMapToProgramPolls(pollRequest, username);</span>
+<span class="nc" id="L137">                responseList = createPollPrograms(pollProgramMobileTerminalTypeMap, username);</span>
+<span class="nc" id="L138">                break;</span>
+            case CONFIGURATION_POLL:
+            case MANUAL_POLL:
+            case SAMPLING_POLL:
+<span class="nc" id="L142">                pollMobileTerminalTypeMap = validateAndMapToPolls(pollRequest, username);</span>
+<span class="nc" id="L143">                responseList = createPolls(pollMobileTerminalTypeMap, pollRequest.getPollType());</span>
+<span class="nc" id="L144">                break;</span>
+            default:
+<span class="nc" id="L146">                LOG.error(&quot;[ Could not decide poll type ] {}&quot;, pollRequest.getPollType());</span>
+<span class="nc" id="L147">                throw new MobileTerminalModelException(&quot;Could not decide Poll Type when creating polls&quot;);</span>
+        }
+<span class="nc" id="L149">        return responseList;</span>
+    }
+
+    private Map&lt;PollProgram, MobileTerminalType&gt; validateAndMapToProgramPolls(PollRequestType pollRequest, String username) throws MobileTerminalModelException {
+<span class="nc" id="L153">        Map&lt;PollProgram, MobileTerminalType&gt; map = new HashMap&lt;&gt;();</span>
+
+<span class="nc bnc" id="L155" title="All 2 branches missed.">        for(PollMobileTerminal pollTerminal : pollRequest.getMobileTerminals()) {</span>
+<span class="nc" id="L156">            MobileTerminal mobileTerminalEntity = terminalDao.getMobileTerminalByGuid(pollTerminal.getMobileTerminalId());</span>
+<span class="nc" id="L157">            String connectId = mobileTerminalEntity.getCurrentEvent().getConnectId();</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if (!pollTerminal.getConnectId().equals(connectId)) {</span>
+<span class="nc" id="L159">                throw new MobileTerminalModelException(&quot;Terminal &quot; + mobileTerminalEntity.getGuid() + &quot; can not be polled, because it is not linked to asset &quot; + connectId);</span>
+            }
+<span class="nc" id="L161">            MobileTerminalType terminalType = getPollableTerminalType(pollTerminal.getMobileTerminalId(), pollTerminal.getComChannelId());</span>
+<span class="nc" id="L162">            PollProgram pollProgram = PollModelToEntityMapper.mapToProgramPoll(mobileTerminalEntity, connectId, pollTerminal.getComChannelId(), pollRequest, username);</span>
+<span class="nc" id="L163">            map.put(pollProgram, terminalType);</span>
+<span class="nc" id="L164">        }</span>
+<span class="nc" id="L165">        return map;</span>
+    }
+
+    private Map&lt;Poll, MobileTerminalType&gt; validateAndMapToPolls(PollRequestType pollRequest, String username) throws MobileTerminalModelException {
+<span class="nc" id="L169">        Map&lt;Poll, MobileTerminalType&gt; map = new HashMap&lt;&gt;();</span>
+
+<span class="nc bnc" id="L171" title="All 2 branches missed.">        for(PollMobileTerminal pollTerminal : pollRequest.getMobileTerminals()) {</span>
+<span class="nc" id="L172">            MobileTerminal mobileTerminalEntity = terminalDao.getMobileTerminalByGuid(pollTerminal.getMobileTerminalId());</span>
+<span class="nc" id="L173">            String connectId = mobileTerminalEntity.getCurrentEvent().getConnectId();</span>
+<span class="nc bnc" id="L174" title="All 2 branches missed.">            if (!pollTerminal.getConnectId().equals(connectId)) {</span>
+<span class="nc" id="L175">                throw new MobileTerminalModelException(&quot;Terminal &quot; + mobileTerminalEntity.getGuid() + &quot; can not be polled, because it is not linked to asset &quot; + connectId);</span>
+            }
+
+<span class="nc bnc" id="L178" title="All 2 branches missed.">            if(pollRequest.getPollType() != PollType.MANUAL_POLL){</span>
+<span class="nc" id="L179">                validateMobileTerminalPluginCapability(mobileTerminalEntity.getPlugin().getCapabilities(), pollRequest.getPollType(), mobileTerminalEntity.getPlugin().getPluginServiceName());</span>
+            }
+<span class="nc" id="L181">            MobileTerminalType terminalType = getPollableTerminalType(pollTerminal.getMobileTerminalId(), pollTerminal.getComChannelId());</span>
+<span class="nc" id="L182">            Poll poll = PollModelToEntityMapper.mapToPoll(mobileTerminalEntity, connectId, pollTerminal.getComChannelId(), pollRequest, username);</span>
+<span class="nc" id="L183">            map.put(poll, terminalType);</span>
+<span class="nc" id="L184">        }</span>
+<span class="nc" id="L185">        return map;</span>
+    }
+
+    private void validateMobileTerminalPluginCapability(Set&lt;MobileTerminalPluginCapability&gt; capabilities, PollType pollType, String pluginServiceName) throws MobileTerminalModelException {
+<span class="nc" id="L189">        PluginCapabilityType pluginCapabilityType = PluginCapabilityType.CONFIGURABLE;</span>
+<span class="nc bnc" id="L190" title="All 3 branches missed.">        switch (pollType){</span>
+            case CONFIGURATION_POLL:
+<span class="nc" id="L192">                pluginCapabilityType = PluginCapabilityType.CONFIGURABLE;</span>
+<span class="nc" id="L193">                break;</span>
+            case SAMPLING_POLL:
+<span class="nc" id="L195">                pluginCapabilityType = PluginCapabilityType.SAMPLING;</span>
+<span class="nc" id="L196">                break;</span>
+            default:
+<span class="nc" id="L198">                throw new MobileTerminalModelException(&quot;Cannot create &quot; + pollType.name() +&quot;  poll when plugin: &quot; + pluginServiceName);</span>
+        }
+<span class="nc bnc" id="L200" title="All 2 branches missed.">        if (!validatePluginHasCapabilityConfigurable(capabilities, pluginCapabilityType)){</span>
+<span class="nc" id="L201">            throw new MobileTerminalModelException(&quot;Cannot create &quot; + pollType.name() +&quot;  poll when plugin: &quot; + pluginServiceName + &quot; has not capability &quot; + pluginCapabilityType.name()+&quot; set&quot;);</span>
+        }
+<span class="nc" id="L203">    }</span>
+
+    private boolean validatePluginHasCapabilityConfigurable(Set&lt;MobileTerminalPluginCapability&gt; capabilities, PluginCapabilityType pluginCapability) {
+<span class="nc bnc" id="L206" title="All 2 branches missed.">        for (MobileTerminalPluginCapability pluginCap : capabilities){</span>
+<span class="nc bnc" id="L207" title="All 2 branches missed.">            if(pluginCapability.name().equalsIgnoreCase(pluginCap.getName())){</span>
+<span class="nc" id="L208">                return true;</span>
+            }
+<span class="nc" id="L210">        }</span>
+<span class="nc" id="L211">        return false;</span>
+    }
+
+    private List&lt;PollResponseType&gt; createPollPrograms(Map&lt;PollProgram, MobileTerminalType&gt; map, String username) throws MobileTerminalModelException {
+<span class="nc" id="L215">        List&lt;PollResponseType&gt; responseList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L216">        Iterator&lt;Map.Entry&lt;PollProgram, MobileTerminalType&gt;&gt; iterator = map.entrySet().iterator();</span>
+<span class="nc bnc" id="L217" title="All 2 branches missed.">        while (iterator.hasNext()){</span>
+<span class="nc" id="L218">            Map.Entry&lt;PollProgram, MobileTerminalType&gt; next = iterator.next();</span>
+<span class="nc" id="L219">            PollProgram pollProgram = next.getKey();</span>
+<span class="nc" id="L220">            MobileTerminalType mobileTerminalType = next.getValue();</span>
+            try {
+<span class="nc" id="L222">                pollDao.createPollProgram(pollProgram);</span>
+<span class="nc" id="L223">                responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, mobileTerminalType));</span>
+<span class="nc" id="L224">            } catch (PollDaoException e) {</span>
+<span class="nc" id="L225">                LOG.error(&quot;[ Could not persist PollProgram ]&quot;);</span>
+<span class="nc" id="L226">                throw new MobileTerminalModelException(&quot;Could not persist PollProgam&quot;);</span>
+<span class="nc" id="L227">            } catch (MobileTerminalModelMapperException e) {</span>
+<span class="nc" id="L228">                LOG.error(&quot;Could not map PollProgram to PollResponseType&quot;);</span>
+<span class="nc" id="L229">                throw e;</span>
+<span class="nc" id="L230">            }</span>
+<span class="nc" id="L231">        }</span>
+<span class="nc" id="L232">        return responseList;</span>
+    }
+
+    private List&lt;PollResponseType&gt; createPolls(Map&lt;Poll, MobileTerminalType&gt; map, PollType pollType) throws MobileTerminalModelException {
+<span class="nc" id="L236">        List&lt;PollResponseType&gt; responseList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L237">        Iterator&lt;Map.Entry&lt;Poll, MobileTerminalType&gt;&gt; iterator = map.entrySet().iterator();</span>
+<span class="nc bnc" id="L238" title="All 2 branches missed.">        while (iterator.hasNext()){</span>
+<span class="nc" id="L239">            Map.Entry&lt;Poll, MobileTerminalType&gt; next = iterator.next();</span>
+<span class="nc" id="L240">            Poll poll = next.getKey();</span>
+<span class="nc" id="L241">            MobileTerminalType mobileTerminalType = next.getValue();</span>
+            try {
+<span class="nc" id="L243">                pollDao.createPoll(poll);</span>
+<span class="nc" id="L244">                responseList.add(PollEntityToModelMapper.mapToPollResponseType(poll, mobileTerminalType, pollType));</span>
+<span class="nc" id="L245">            } catch (PollDaoException e) {</span>
+<span class="nc" id="L246">                LOG.error(&quot;[ Could not persist Poll ]&quot;);</span>
+<span class="nc" id="L247">                throw new MobileTerminalModelException(&quot;Could not persist Poll&quot;);</span>
+<span class="nc" id="L248">            } catch (MobileTerminalModelMapperException e) {</span>
+<span class="nc" id="L249">                LOG.error(&quot;Could not map Poll to PollResponseType&quot;);</span>
+<span class="nc" id="L250">                throw e;</span>
+<span class="nc" id="L251">            }</span>
+<span class="nc" id="L252">        }</span>
+<span class="nc" id="L253">        return responseList;</span>
+
+    }
+
+    @Override
+    public PollListResponse getPollList(PollListQuery query) throws MobileTerminalModelException {
+<span class="nc" id="L259">        LOG.info(&quot;Get poll list from query&quot;);</span>
+
+<span class="nc bnc" id="L261" title="All 2 branches missed.">        if (query == null) {</span>
+<span class="nc" id="L262">        	throw new InputArgumentException(&quot;Cannot get poll list because no query.&quot;);</span>
+        }
+
+<span class="nc bnc" id="L265" title="All 2 branches missed.">        if (query.getPagination() == null) {</span>
+<span class="nc" id="L266">        	throw new InputArgumentException(&quot;Cannot get poll list because no list pagination.&quot;);</span>
+        }
+
+<span class="nc bnc" id="L269" title="All 4 branches missed.">        if(query.getPollSearchCriteria() == null || query.getPollSearchCriteria().getCriterias() == null) {</span>
+<span class="nc" id="L270">        	throw new InputArgumentException(&quot;Cannot get poll list because criteria are null.&quot;);</span>
+        }
+<span class="nc" id="L272">        PollListResponse response = new PollListResponse();</span>
+<span class="nc" id="L273">        List&lt;PollResponseType&gt; pollResponseList = new ArrayList&lt;&gt;();</span>
+
+<span class="nc" id="L275">        Integer page = query.getPagination().getPage();</span>
+<span class="nc" id="L276">        Integer listSize = query.getPagination().getListSize();</span>
+<span class="nc" id="L277">        boolean isDynamic = query.getPollSearchCriteria().isIsDynamic();</span>
+<span class="nc" id="L278">        List&lt;PollSearchKeyValue&gt; searchKeys = PollSearchMapper.createSearchFields(query.getPollSearchCriteria().getCriterias());</span>
+        
+<span class="nc" id="L280">        String countSql = PollSearchMapper.createCountSearchSql(searchKeys, isDynamic);</span>
+<span class="nc" id="L281">        String sql = PollSearchMapper.createSelectSearchSql(searchKeys, isDynamic);</span>
+
+<span class="nc" id="L283">        Long numberMatches = pollDao.getPollListSearchCount(countSql, searchKeys, isDynamic);</span>
+<span class="nc" id="L284">        List&lt;Poll&gt; pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, searchKeys, isDynamic);</span>
+        
+<span class="nc bnc" id="L286" title="All 2 branches missed.">        for (Poll poll : pollList) {</span>
+        	try {
+<span class="nc" id="L288">        		MobileTerminal mobileTerminalEntity = poll.getPollBase().getMobileTerminal();</span>
+<span class="nc" id="L289">        		MobileTerminalType mobileTerminalType = mapPollableTerminalType(mobileTerminalEntity.getMobileTerminalType(), mobileTerminalEntity.getGuid());</span>
+<span class="nc" id="L290">        		PollResponseType pollType = PollEntityToModelMapper.mapToPollResponseType(poll, mobileTerminalType, EnumMapper.getPollModelFromType(poll.getPollType()));</span>
+<span class="nc" id="L291">        		pollResponseList.add(pollType);</span>
+<span class="nc" id="L292">        	} catch (EnumException e) {</span>
+<span class="nc" id="L293">        		LOG.error(&quot;[ Poll &quot; + poll.getGuid() + &quot;  couldn't map type ]&quot;);</span>
+<span class="nc" id="L294">        	}</span>
+<span class="nc" id="L295">        }</span>
+
+<span class="nc" id="L297">        int numberOfPages = (int) (numberMatches / listSize);</span>
+<span class="nc bnc" id="L298" title="All 2 branches missed.">        if (numberMatches % listSize != 0) {</span>
+<span class="nc" id="L299">            numberOfPages += 1;</span>
+        }
+
+<span class="nc" id="L302">        response.setTotalNumberOfPages(numberOfPages);</span>
+<span class="nc" id="L303">        response.setCurrentPage(query.getPagination().getPage());</span>
+<span class="nc" id="L304">        response.getPollList().addAll(pollResponseList);</span>
+<span class="nc" id="L305">        return response;</span>
+    }
+    
+    @Override
+    public List&lt;PollResponseType&gt; getPollProgramList(boolean onlyAlivePrograms) throws MobileTerminalModelException {
+<span class="nc" id="L310">        LOG.info(&quot;Get poll program list&quot;);</span>
+<span class="nc" id="L311">        List&lt;PollProgram&gt; pollPrograms = pollProgramDao.getProgramPollsAlive();</span>
+        
+<span class="nc" id="L313">        List&lt;PollResponseType&gt; responseList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L314" title="All 2 branches missed.">        for(PollProgram pollProgram : pollPrograms) {</span>
+        	try {
+<span class="nc" id="L316">        		MobileTerminal terminal = pollProgram.getPollBase().getMobileTerminal();</span>
+<span class="nc" id="L317">        		MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());</span>
+<span class="nc" id="L318">        		responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, terminalType));</span>
+<span class="nc" id="L319">        	} catch (NoEntityFoundException e) {</span>
+<span class="nc" id="L320">        		LOG.error(&quot;[ Unvalid mobile terminal connected to poll program &quot; + pollProgram.getGuid() + &quot; ]&quot;);</span>
+<span class="nc" id="L321">        	    throw new MobileTerminalModelException(&quot;[ Unvalid mobile terminal connected to poll program &quot; + pollProgram.getGuid() + &quot; ]&quot;);</span>
+<span class="nc" id="L322">        	}</span>
+<span class="nc" id="L323">        }</span>
+<span class="nc" id="L324">        return responseList;</span>
+    }
+
+    @Override
+    public List&lt;PollResponseType&gt; getPollProgramRunningAndStarted() throws MobileTerminalModelException {
+<span class="nc" id="L329">        LOG.info(&quot;Get running and started poll program list&quot;);</span>
+<span class="nc" id="L330">        List&lt;PollProgram&gt; pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();</span>
+
+<span class="nc" id="L332">        List&lt;PollResponseType&gt; responseList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L333" title="All 2 branches missed.">        for(PollProgram pollProgram : pollPrograms) {</span>
+        	try {
+<span class="nc" id="L335">        		MobileTerminal terminal = pollProgram.getPollBase().getMobileTerminal();</span>
+<span class="nc" id="L336">        		MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());</span>
+<span class="nc" id="L337">        		responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, terminalType));</span>
+<span class="nc" id="L338">        	} catch (NoEntityFoundException e) {</span>
+<span class="nc" id="L339">        		LOG.error(&quot;[ Unvalid mobile terminal connected to poll program &quot; + pollProgram.getGuid() + &quot; ]&quot;);</span>
+<span class="nc" id="L340">        	    throw new MobileTerminalModelException(&quot;[ Unvalid mobile terminal connected to poll program &quot; + pollProgram.getGuid() + &quot; ]&quot;);</span>
+<span class="nc" id="L341">        	}</span>
+<span class="nc" id="L342">        }</span>
+<span class="nc" id="L343">        return responseList;</span>
+    }
+
+    @Override
+    public PollResponseType setStatusPollProgram(PollId id, PollStatus state) throws MobileTerminalModelException {
+<span class="nc" id="L348">        LOG.info(&quot;Set status of poll&quot;);</span>
+
+<span class="nc bnc" id="L350" title="All 6 branches missed.">        if (id == null || id.getGuid() == null || id.getGuid().isEmpty()) {</span>
+<span class="nc" id="L351">            throw new InputArgumentException(&quot;No poll id given&quot;);</span>
+        }
+<span class="nc bnc" id="L353" title="All 2 branches missed.">        if (state == null) {</span>
+<span class="nc" id="L354">            throw new InputArgumentException(&quot;No status to set&quot;);</span>
+        }
+        
+        try {
+<span class="nc" id="L358">            PollProgram program = pollProgramDao.getPollProgramByGuid(id.getGuid());</span>
+<span class="nc" id="L359">            MobileTerminal terminal = program.getPollBase().getMobileTerminal();</span>
+<span class="nc" id="L360">            MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());</span>
+            
+<span class="nc bnc" id="L362" title="All 2 branches missed.">            switch (program.getPollState()) {</span>
+            case ARCHIVED:
+<span class="nc" id="L364">                throw new MobileTerminalModelException(&quot;Can not change status of archived program poll, id: [ &quot; + id.getGuid() + &quot; ]&quot;);</span>
+            case STARTED:
+            case STOPPED:
+            }
+
+            // TODO
+            // check terminal/comchannel?
+
+<span class="nc" id="L372">            program.setPollState(EnumMapper.getPollStateTypeFromModel(state));</span>
+
+<span class="nc" id="L374">            return PollEntityToModelMapper.mapToPollResponseType(program, terminalType);</span>
+<span class="nc" id="L375">        } catch (EnumException e) {</span>
+<span class="nc" id="L376">            LOG.error(&quot;[ Error when setting poll program status. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L377">            throw new MobileTerminalModelException(e.getMessage());</span>
+<span class="nc" id="L378">        } catch (NoEntityFoundException e) {</span>
+<span class="nc" id="L379">        	LOG.error(&quot;[ Unvalid mobile terminal connected to poll program ]&quot;);</span>
+<span class="nc" id="L380">        	throw new MobileTerminalModelException(&quot;[ Unvalid mobile terminal connected to poll program ]&quot;);</span>
+        }
+    }
+
+    @Override
+    public ListResponseDto getMobileTerminalPollableList(PollableQuery query) throws MobileTerminalModelException {
+<span class="nc" id="L386">        LOG.info(&quot;Get list of pollable InmarsatC terminals.&quot;);</span>
+
+<span class="nc bnc" id="L388" title="All 2 branches missed.">        if (query == null) {</span>
+<span class="nc" id="L389">            throw new InputArgumentException(&quot;No query&quot;);</span>
+        }
+
+<span class="nc bnc" id="L392" title="All 2 branches missed.">        if (query.getPagination() == null) {</span>
+<span class="nc" id="L393">            throw new InputArgumentException(&quot;No list pagination&quot;);</span>
+        }
+
+<span class="nc" id="L396">        ListResponseDto response = new ListResponseDto();</span>
+<span class="nc" id="L397">        List&lt;MobileTerminalType&gt; mobileTerminalList = new ArrayList&lt;MobileTerminalType&gt;();</span>
+
+<span class="nc" id="L399">        Integer page = query.getPagination().getPage();</span>
+<span class="nc" id="L400">        Integer listSize = query.getPagination().getListSize();</span>
+<span class="nc" id="L401">        int startIndex = (page-1)*listSize;</span>
+<span class="nc" id="L402">        int stopIndex = startIndex+listSize;</span>
+<span class="nc" id="L403">        LOG.debug(&quot;page: &quot; + page + &quot;, listSize: &quot; + listSize + &quot;, startIndex: &quot; + startIndex);</span>
+        
+<span class="nc" id="L405">        List&lt;String&gt; idList = query.getConnectIdList();</span>
+<span class="nc" id="L406">        long in = System.currentTimeMillis();</span>
+
+        //Long numberMatches = channelInmarsatCDao.getPollableListSearchCount(countSql, idList);
+<span class="nc" id="L409">        List&lt;Channel&gt; channels = channelDao.getPollableListSearch(idList);</span>
+        
+<span class="nc bnc" id="L411" title="All 2 branches missed.">        for (Channel comchannel : channels) {</span>
+        	//TODO slim response from Pollable
+<span class="nc" id="L413">        	MobileTerminalType terminal = MobileTerminalEntityToModelMapper.mapToMobileTerminalType(comchannel.getMobileTerminal(), comchannel);</span>
+<span class="nc" id="L414">            mobileTerminalList.add(terminal);</span>
+<span class="nc" id="L415">        }</span>
+        
+<span class="nc" id="L417">        int numberMatches = mobileTerminalList.size();</span>
+        
+<span class="nc" id="L419">        int numberOfPages = (int) (numberMatches / listSize);</span>
+<span class="nc bnc" id="L420" title="All 2 branches missed.">        if (numberMatches % listSize != 0) {</span>
+<span class="nc" id="L421">            numberOfPages += 1;</span>
+        }
+
+<span class="nc bnc" id="L424" title="All 2 branches missed.">        if((numberMatches-1) &lt;= 0) {</span>
+<span class="nc" id="L425">        	response.setMobileTerminalList(mobileTerminalList);</span>
+        } else {
+<span class="nc bnc" id="L427" title="All 2 branches missed.">        	if(stopIndex &gt;= numberMatches) {</span>
+<span class="nc" id="L428">            	stopIndex = numberMatches;</span>
+            }
+<span class="nc" id="L430">        	LOG.debug(&quot;stopIndex: &quot; + stopIndex);</span>
+<span class="nc" id="L431">            List&lt;MobileTerminalType&gt; newList = new ArrayList&lt;&gt;(mobileTerminalList.subList(startIndex, stopIndex));</span>
+<span class="nc" id="L432">        	response.setMobileTerminalList(newList);</span>
+        }
+        
+        
+<span class="nc" id="L436">        response.setTotalNumberOfPages(numberOfPages);</span>
+<span class="nc" id="L437">        response.setCurrentPage(query.getPagination().getPage());</span>
+        
+<span class="nc" id="L439">        long out = System.currentTimeMillis();</span>
+<span class="nc" id="L440">        LOG.debug(&quot;Get pollable channels &quot; + (out-in) + &quot; ms&quot;);</span>
+<span class="nc" id="L441">        return response;</span>
+
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

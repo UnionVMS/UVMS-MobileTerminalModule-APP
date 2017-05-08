@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>AttributeMapper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.mapper</a> &gt; <span class="el_source">AttributeMapper.java</span></div><h1>AttributeMapper.java</h1><pre class="source lang-java linenums">/*
+ Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+ © European Union, 2015-2016.
+
+ This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+ redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+ Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+ FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+ copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+
+package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
+
+/**
+ * Created by osdjup on 2016-11-16.
+ */
+<span class="nc" id="L26">public class AttributeMapper {</span>
+
+    public static List&lt;Map&lt;String, String&gt;&gt; mapAttributeStrings(List&lt;String&gt; attributeStrings) {
+<span class="fc" id="L29">        List&lt;Map&lt;String, String&gt;&gt; attributes = new ArrayList&lt;&gt;();</span>
+<span class="pc bpc" id="L30" title="1 of 2 branches missed.">        for (String attributeString : attributeStrings) {</span>
+<span class="nc" id="L31">            attributes.add(mapAttributeString(attributeString));</span>
+<span class="nc" id="L32">        }</span>
+
+<span class="fc" id="L34">        return attributes;</span>
+    }
+
+    public static Map&lt;String, String&gt; mapAttributeString(String attributeString) {
+<span class="nc" id="L38">        Map&lt;String, String&gt; attributes = new HashMap&lt;&gt;();</span>
+
+<span class="nc" id="L40">        String[] parts = attributeString.split(&quot;;&quot;);</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">        for (String attribute : parts) {</span>
+<span class="nc" id="L42">            String[] pair =attribute.split(&quot;=&quot;);</span>
+<span class="nc" id="L43">            attributes.put(pair[0], pair[1]);</span>
+        }
+
+<span class="nc" id="L46">        return attributes;</span>
+    }
+
+    public static List&lt;ComChannelAttribute&gt; mapAttributeStringToComChannelAttribute(String attributeString) {
+<span class="nc" id="L50">        List&lt;ComChannelAttribute&gt; attributeList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L51">        Map&lt;String, String&gt; attributes = mapAttributeString(attributeString);</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        for (String key : attributes.keySet()) {</span>
+<span class="nc" id="L53">            ComChannelAttribute attribute = new ComChannelAttribute();</span>
+<span class="nc" id="L54">            attribute.setType(key);</span>
+<span class="nc" id="L55">            attribute.setValue(attributes.get(key));</span>
+<span class="nc" id="L56">            attributeList.add(attribute);</span>
+<span class="nc" id="L57">        }</span>
+
+<span class="nc" id="L59">        return attributeList;</span>
+    }
+
+    public static List&lt;MobileTerminalAttribute&gt; mapAttributeStringToTerminalAttribute(String attributeString) {
+<span class="nc" id="L63">        List&lt;MobileTerminalAttribute&gt; attributeList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L64">        Map&lt;String, String&gt; attributes = mapAttributeString(attributeString);</span>
+<span class="nc bnc" id="L65" title="All 2 branches missed.">        for (String key : attributes.keySet()) {</span>
+<span class="nc" id="L66">            MobileTerminalAttribute attribute = new MobileTerminalAttribute();</span>
+<span class="nc" id="L67">            attribute.setType(key);</span>
+<span class="nc" id="L68">            attribute.setValue(attributes.get(key));</span>
+<span class="nc" id="L69">            attributeList.add(attribute);</span>
+<span class="nc" id="L70">        }</span>
+
+<span class="nc" id="L72">        return attributeList;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

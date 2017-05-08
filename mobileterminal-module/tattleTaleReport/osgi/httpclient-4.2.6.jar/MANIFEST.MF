@@ -1,0 +1,53 @@
+Manifest-Version: 1.0
+Implementation-Title: HttpComponents Apache HttpClient
+Implementation-Version: 4.2.6
+Built-By: oleg
+Specification-Vendor: The Apache Software Foundation
+Created-By: Apache Maven 3.0.5
+url: http://hc.apache.org/httpcomponents-client
+X-Compile-Source-JDK: 1.5
+Implementation-Vendor: The Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Build-Jdk: 1.7.0_21
+Specification-Title: HttpComponents Apache HttpClient
+Implementation-Build: tags/4.2.6-RC2/httpclient@r1520084; 2013-09-04 2
+ 0:15:00+0200
+Specification-Version: 4.2.6
+Archiver-Version: Plexus Archiver
+X-Compile-Target-JDK: 1.5
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.apache.http.impl.client
+Bundle-Description: httpclient-4.2.6
+Bundle-Name: httpclient-4.2.6
+Bundle-Version: 4.2.6
+Export-Package: org.apache.http.auth,org.apache.http.auth.params,org.a
+ pache.http.client,org.apache.http.client.entity;uses:="org.apache.htt
+ p.entity",org.apache.http.client.methods,org.apache.http.client.param
+ s,org.apache.http.client.protocol;uses:="org.apache.http.auth",org.ap
+ ache.http.client.utils;uses:="org.apache.http,org.apache.http.entity"
+ ,org.apache.http.conn,org.apache.http.conn.params,org.apache.http.con
+ n.routing,org.apache.http.conn.scheme,org.apache.http.conn.ssl;uses:=
+ "org.apache.http.conn,org.apache.http.conn.scheme",org.apache.http.co
+ nn.util,org.apache.http.cookie,org.apache.http.cookie.params,org.apac
+ he.http.impl.auth;uses:="org.apache.http.auth",org.apache.http.impl.c
+ lient;uses:="org.apache.http.auth,org.apache.http.client,org.apache.h
+ ttp.client.methods,org.apache.http.impl.auth,org.apache.http.impl.con
+ n,org.apache.http.pool",org.apache.http.impl.conn;uses:="org.apache.h
+ ttp,org.apache.http.conn,org.apache.http.conn.scheme,org.apache.http.
+ pool",org.apache.http.impl.conn.tsccm,org.apache.http.impl.cookie
+Import-Package: java.io,java.lang,java.lang.ref,java.lang.reflect,java
+ .net,java.nio,java.nio.charset,java.security,java.security.cert,java.
+ text,java.util,java.util.concurrent,java.util.concurrent.atomic,java.
+ util.concurrent.locks,java.util.regex,java.util.zip,javax.crypto,java
+ x.crypto.spec,javax.net,javax.net.ssl,javax.security.auth.x500,org.ap
+ ache.commons.codec.binary;version="1.6",org.apache.commons.logging;ve
+ rsion="1.0",org.apache.http;version="4.2.5",org.apache.http.annotatio
+ n;version="4.2.5",org.apache.http.entity;version="4.2.5",org.apache.h
+ ttp.impl;version="4.2.5",org.apache.http.impl.io;version="4.2.5",org.
+ apache.http.io;version="4.2.5",org.apache.http.message;version="4.2.5
+ ",org.apache.http.params;version="4.2.5",org.apache.http.pool;version
+ ="4.2.5",org.apache.http.protocol;version="4.2.5",org.apache.http.uti
+ l;version="4.2.5",org.ietf.jgss

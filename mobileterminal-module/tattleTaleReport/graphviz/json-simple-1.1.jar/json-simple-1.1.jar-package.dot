@@ -1,0 +1,5 @@
+digraph json_simple_1_1_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  org_json_simple -> org_json_simple_parser;
+  org_json_simple_parser -> org_json_simple;
+}

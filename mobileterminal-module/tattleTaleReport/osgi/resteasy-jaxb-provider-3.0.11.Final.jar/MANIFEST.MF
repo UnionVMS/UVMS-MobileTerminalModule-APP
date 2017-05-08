@@ -1,0 +1,32 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_67
+Built-By: William
+Created-By: Apache Maven 3.1.1
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.jboss.resteasy.plugins.providers.jaxb
+Bundle-Description: resteasy-jaxb-provider-3.0.11.Final
+Bundle-Name: resteasy-jaxb-provider-3.0.11.Final
+Bundle-Version: 0.0.0
+Export-Package: org.jboss.resteasy.annotations.providers.jaxb,org.jbos
+ s.resteasy.plugins.providers.jaxb;uses:="org.jboss.resteasy.util",org
+ .jboss.resteasy.plugins.stats;uses:="org.jboss.resteasy.core"
+Import-Package: com.sun.xml.bind.marshaller;version="2.2.7",java.io,ja
+ va.lang,java.lang.annotation,java.lang.reflect,java.net,java.util,jav
+ a.util.concurrent,java.util.concurrent.atomic,javax.ws.rs;version="0.
+ 0.0",javax.ws.rs.core;version="0.0.0",javax.ws.rs.ext;version="0.0.0"
+ ,javax.xml.bind;version="2.2.7",javax.xml.bind.annotation;version="2.
+ 2.7",javax.xml.bind.annotation.adapters;version="2.2.7",javax.xml.bin
+ d.attachment;version="2.2.7",javax.xml.namespace;version="0.0.0",java
+ x.xml.parsers;version="1.1",javax.xml.stream;version="0.0.0",javax.xm
+ l.transform;version="1.1",javax.xml.transform.sax;version="1.1",javax
+ .xml.transform.stream;version="1.1",javax.xml.validation,org.jboss.re
+ steasy.annotations;version="0.0.0",org.jboss.resteasy.core;version="0
+ .0.0",org.jboss.resteasy.core.interception;version="0.0.0",org.jboss.
+ resteasy.logging;version="0.0.0",org.jboss.resteasy.plugins.providers
+ ;version="0.0.0",org.jboss.resteasy.spi;version="0.0.0",org.jboss.res
+ teasy.spi.interception;version="0.0.0",org.jboss.resteasy.util;versio
+ n="0.0.0",org.w3c.dom;version="1.1",org.xml.sax;version="1.1"

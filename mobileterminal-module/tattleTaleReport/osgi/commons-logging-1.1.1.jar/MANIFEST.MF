@@ -1,0 +1,28 @@
+Manifest-Version: 1.0
+Implementation-Title: Jakarta Commons Logging
+Implementation-Version: 1.1.1
+Built-By: dlg01
+Specification-Vendor: Apache Software Foundation
+Created-By: Apache Maven
+X-Compile-Source-JDK: 1.2
+Implementation-Vendor: Apache Software Foundation
+Implementation-Vendor-Id: org.apache
+Build-Jdk: 1.4.2_16
+Specification-Title: Jakarta Commons Logging
+Specification-Version: 1.0
+Extension-Name: org.apache.commons.logging
+X-Compile-Target-JDK: 1.2
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.apache.commons.logging.impl
+Bundle-Description: commons-logging-1.1.1
+Bundle-Name: commons-logging-1.1.1
+Bundle-Version: 1.0
+Export-Package: org.apache.commons.logging,org.apache.commons.logging.
+ impl;uses:="org.apache.avalon.framework.logger,org.apache.log"
+Import-Package: java.io,java.lang,java.lang.ref,java.lang.reflect,java
+ .net,java.security,java.text,java.util,java.util.logging,javax.servle
+ t,org.apache.avalon.framework.logger,org.apache.log,org.apache.log4j

@@ -1,0 +1,42 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_80
+Built-By: roblar
+Created-By: Apache Maven 3.3.9
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: eu.europa.ec.fisheries.uvms.rest.security
+Bundle-Description: usm4uvms-3.0.4
+Bundle-Name: usm4uvms-3.0.4
+Bundle-Version: 0.0.0
+Export-Package: eu.europa.ec.fisheries.uvms.constants,eu.europa.ec.fis
+ heries.uvms.init;uses:="eu.europa.ec.fisheries.uvms.exception,eu.euro
+ pa.ec.fisheries.uvms.message,eu.europa.ec.fisheries.uvms.rest.securit
+ y.bean,eu.europa.ec.fisheries.wsdl.user.module,eu.europa.ec.fisheries
+ .wsdl.user.types",eu.europa.ec.fisheries.uvms.jms;uses:="eu.europa.ec
+ .fisheries.uvms.message",eu.europa.ec.fisheries.uvms.rest.security;us
+ es:="eu.europa.ec.fisheries.uvms.constants,eu.europa.ec.fisheries.uvm
+ s.exception,eu.europa.ec.fisheries.uvms.rest.security.bean,eu.europa.
+ ec.fisheries.wsdl.user.types,eu.europa.ec.mare.usm.jwt,io.jsonwebtoke
+ n,javax.ws.rs.container",eu.europa.ec.fisheries.uvms.rest.security.be
+ an;uses:="eu.europa.ec.fisheries.uvms.exception,eu.europa.ec.fisherie
+ s.uvms.jms,eu.europa.ec.fisheries.uvms.message,eu.europa.ec.fisheries
+ .uvms.user.model.exception,eu.europa.ec.fisheries.uvms.user.model.map
+ per,eu.europa.ec.fisheries.wsdl.user.module,eu.europa.ec.fisheries.ws
+ dl.user.types,javax.transaction,net.sf.ehcache,org.apache.commons.lan
+ g3"
+Import-Package: eu.europa.ec.fisheries.uvms.exception;version="0.0.0",
+ eu.europa.ec.fisheries.uvms.message;version="0.0.0",eu.europa.ec.fish
+ eries.uvms.user.model.exception;version="0.0.0",eu.europa.ec.fisherie
+ s.uvms.user.model.mapper;version="0.0.0",eu.europa.ec.fisheries.wsdl.
+ user.module;version="0.0.0",eu.europa.ec.fisheries.wsdl.user.types;ve
+ rsion="0.0.0",eu.europa.ec.mare.usm.jwt;version="0.0.0",io.jsonwebtok
+ en;version="0.4",java.io,java.lang,java.lang.annotation,java.lang.ref
+ lect,java.math,java.security,java.util,javax.annotation;version="1.1"
+ ,javax.crypto.spec,javax.ejb,javax.jms,javax.naming,javax.servlet,jav
+ ax.servlet.http,javax.transaction,javax.ws.rs.container;version="0.0.
+ 0",javax.ws.rs.core;version="0.0.0",javax.ws.rs.ext;version="0.0.0",j
+ avax.xml.bind;version="2.2.7",net.sf.ehcache;version="2.10.1",org.apa
+ che.commons.lang3;version="3.4",org.slf4j

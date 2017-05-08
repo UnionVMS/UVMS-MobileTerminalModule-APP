@@ -1,0 +1,13 @@
+digraph jjwt_0_4_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  io_jsonwebtoken -> io_jsonwebtoken_impl;
+  io_jsonwebtoken -> io_jsonwebtoken_lang;
+  io_jsonwebtoken_impl -> com_fasterxml_jackson_core;
+  io_jsonwebtoken_impl -> com_fasterxml_jackson_databind;
+  io_jsonwebtoken_impl -> io_jsonwebtoken;
+  io_jsonwebtoken_impl -> io_jsonwebtoken_impl_crypto;
+  io_jsonwebtoken_impl -> io_jsonwebtoken_lang;
+  io_jsonwebtoken_impl_crypto -> io_jsonwebtoken;
+  io_jsonwebtoken_impl_crypto -> io_jsonwebtoken_impl;
+  io_jsonwebtoken_impl_crypto -> io_jsonwebtoken_lang;
+}

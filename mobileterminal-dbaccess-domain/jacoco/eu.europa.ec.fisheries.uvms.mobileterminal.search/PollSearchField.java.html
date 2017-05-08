@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PollSearchField.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.search</a> &gt; <span class="el_source">PollSearchField.java</span></div><h1>PollSearchField.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.search;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
+
+<span class="nc" id="L17">public enum PollSearchField {</span>
+<span class="nc" id="L18">	CONNECT_ID(SearchTable.TERMINALCONNECT, &quot;connectValue&quot;, &quot;connectionValue&quot;),</span>
+<span class="nc" id="L19">	TERMINAL_TYPE(SearchTable.TERMINAL, &quot;mobileTerminalType&quot;, &quot;mobileTerminalType&quot;, MobileTerminalTypeEnum.class),</span>
+<span class="nc" id="L20">	POLL_ID(SearchTable.POLL, &quot;guid&quot;, &quot;guid&quot;),</span>
+<span class="nc" id="L21">	POLL_TYPE(SearchTable.POLL, &quot;pollType&quot;, &quot;pollType&quot;, PollTypeEnum.class),</span>
+<span class="nc" id="L22">	USER(SearchTable.POLLBASE, &quot;creator&quot;, &quot;creator&quot;);</span>
+	
+	private final SearchTable table;
+    private final String sqlColumnName;
+    private final String sqlReplaceToken;
+    private final Class clazz;
+    
+<span class="nc" id="L29">    private PollSearchField(SearchTable table, String sqlColumnName, String sqlReplaceToken) {</span>
+<span class="nc" id="L30">    	this.table = table;</span>
+<span class="nc" id="L31">        this.sqlColumnName = sqlColumnName;</span>
+<span class="nc" id="L32">        this.sqlReplaceToken = sqlReplaceToken;</span>
+<span class="nc" id="L33">        this.clazz = String.class;</span>
+<span class="nc" id="L34">    }</span>
+    
+<span class="nc" id="L36">    private PollSearchField(SearchTable table, String sqlColumnName, String sqlReplaceToken, Class clazz) {</span>
+<span class="nc" id="L37">    	this.table = table;</span>
+<span class="nc" id="L38">        this.sqlColumnName = sqlColumnName;</span>
+<span class="nc" id="L39">        this.sqlReplaceToken = sqlReplaceToken;</span>
+<span class="nc" id="L40">        this.clazz = clazz;</span>
+<span class="nc" id="L41">    }</span>
+
+    public SearchTable getTable() {
+<span class="nc" id="L44">    	return table;</span>
+    }
+    
+    public String getSqlColumnName() {
+<span class="nc" id="L48">        return sqlColumnName;</span>
+    }
+
+    public String getSqlReplaceToken() {
+<span class="nc" id="L52">        return sqlReplaceToken;</span>
+    }
+    
+    public Class getClazz() {
+<span class="nc" id="L56">    	return clazz;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

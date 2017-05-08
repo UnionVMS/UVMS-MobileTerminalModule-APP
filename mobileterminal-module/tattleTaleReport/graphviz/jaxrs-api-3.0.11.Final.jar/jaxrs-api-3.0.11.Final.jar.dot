@@ -1,0 +1,5 @@
+digraph jaxrs_api_3_0_11_Final_dependencies {
+  node [shape = box, fontsize=10.0];
+  jaxrs_api_3_0_11_Final -> jaxb_api_2_2_7;
+  jaxrs_api_3_0_11_Final -> jsr173_api_1_0;
+}

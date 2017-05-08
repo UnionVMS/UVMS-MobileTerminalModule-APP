@@ -1,0 +1,294 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MobileTerminalServiceBean.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.service.bean</a> &gt; <span class="el_source">MobileTerminalServiceBean.java</span></div><h1>MobileTerminalServiceBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
+import javax.jms.TextMessage;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAssignQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalHistory;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.InputArgumentException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+
+@Stateless
+<span class="nc" id="L52">public class MobileTerminalServiceBean implements MobileTerminalService {</span>
+
+<span class="nc" id="L54">    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalServiceBean.class);</span>
+
+    @EJB
+    MessageProducer messageProducer;
+
+    @EJB
+    MessageConsumer reciever;
+
+    @EJB
+    PluginService pluginService;
+    @EJB(lookup = ServiceConstants.DB_ACCESS_MOBILE_TERMINAL_DOMAIN_MODEL)
+    MobileTerminalDomainModel mobileTerminalModel;
+    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
+    ConfigModel configModel;
+    @EJB(lookup = ServiceConstants.DB_ACCESS_POLL_DOMAIN_MODEL)
+    PollDomainModel pollModel;
+    
+    /**
+     * {@inheritDoc}
+     *
+     * @param mobileTerminal
+     * @throws MobileTerminalServiceException
+     */
+    @Override
+    public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, MobileTerminalSource source, String username) throws MobileTerminalException {
+<span class="nc" id="L79">        LOG.debug(&quot;CREATE MOBILE TERMINAL INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc" id="L80">        mobileTerminal.setSource(source);</span>
+<span class="nc" id="L81">        MobileTerminalType createdMobileTerminal = mobileTerminalModel.createMobileTerminal(mobileTerminal, username);</span>
+<span class="nc" id="L82">        boolean dnidUpdated = configModel.checkDNIDListChange(createdMobileTerminal.getPlugin().getServiceName());</span>
+        
+        try {
+<span class="nc" id="L85">            String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalCreated(createdMobileTerminal.getMobileTerminalId().getGuid(), username);</span>
+<span class="nc" id="L86">            messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L87">        } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L88">            LOG.error(&quot;Failed to send audit log message! Mobile Terminal with guid {} was created&quot;, createdMobileTerminal.getMobileTerminalId()</span>
+                    .getGuid());
+<span class="nc" id="L90">        }</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        if(dnidUpdated) {</span>
+<span class="nc" id="L92">        	pluginService.processUpdatedDNIDList(createdMobileTerminal.getPlugin().getServiceName());</span>
+        }
+        
+<span class="nc" id="L95">        return createdMobileTerminal;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return
+     * @throws MobileTerminalServiceException
+     */
+    @Override
+    public MobileTerminalListResponse getMobileTerminalList(MobileTerminalListQuery query) throws MobileTerminalException {
+<span class="nc" id="L106">        LOG.debug(&quot;GET MOBILE TERMINAL LIST INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc" id="L107">        ListResponseDto listResponse = mobileTerminalModel.getTerminalListByQuery(query);</span>
+<span class="nc" id="L108">        MobileTerminalListResponse response = new MobileTerminalListResponse();</span>
+<span class="nc" id="L109">        response.setCurrentPage(listResponse.getCurrentPage());</span>
+<span class="nc" id="L110">        response.setTotalNumberOfPages(listResponse.getTotalNumberOfPages());</span>
+<span class="nc" id="L111">        response.getMobileTerminal().addAll(listResponse.getMobileTerminalList());</span>
+<span class="nc" id="L112">        return response;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param guid
+     * @return
+     * @throws MobileTerminalServiceException
+     */
+    @Override
+    public MobileTerminalType getMobileTerminalById(String guid) throws MobileTerminalException {
+<span class="nc" id="L124">        LOG.debug(&quot;GET MOBILE TERMINAL BY ID INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc bnc" id="L125" title="All 2 branches missed.">        if (guid == null) {</span>
+<span class="nc" id="L126">            throw new InputArgumentException(&quot;No id&quot;);</span>
+        }
+<span class="nc" id="L128">        MobileTerminalId id = new MobileTerminalId();</span>
+<span class="nc" id="L129">        id.setGuid(guid);</span>
+<span class="nc" id="L130">        MobileTerminalType terminalGet = mobileTerminalModel.getMobileTerminalById(id);</span>
+<span class="nc" id="L131">        return terminalGet;</span>
+    }
+
+    /**
+     *
+     * {@inheritDoc}
+     *
+     * @param data
+     * @return
+     * @throws MobileTerminalServiceException
+     */
+    @Override
+    public MobileTerminalType upsertMobileTerminal(MobileTerminalType data, MobileTerminalSource source, String username) throws MobileTerminalException {
+<span class="nc" id="L144">        LOG.debug(&quot;UPSERT MOBILE TERMINAL INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">        if (data == null) {</span>
+<span class="nc" id="L146">            throw new InputArgumentException(&quot;No Mobile terminal to update [ NULL ]&quot;);</span>
+        }
+<span class="nc" id="L148">        data.setSource(source);</span>
+<span class="nc" id="L149">        MobileTerminalType terminalUpserted = mobileTerminalModel.upsertMobileTerminal(data, username);</span>
+        
+<span class="nc" id="L151">        boolean dnidUpdated = configModel.checkDNIDListChange(terminalUpserted.getPlugin().getServiceName());</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if(dnidUpdated) {</span>
+<span class="nc" id="L153">        	pluginService.processUpdatedDNIDList(data.getPlugin().getServiceName());</span>
+        }
+        
+<span class="nc" id="L156">        return terminalUpserted;</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param id
+     * @throws MobileTerminalServiceException
+     */
+    @Override
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    public MobileTerminalType getMobileTerminalById(MobileTerminalId id, DataSourceQueue queue) throws MobileTerminalException {
+<span class="nc" id="L168">        LOG.debug(&quot;GET MOBILE TERMINAL BY ID ( FROM SPECIFIC QUEUE ) INVOKED IN SERVICE LAYER, QUEUE = &quot;, queue.name());</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L170">            throw new InputArgumentException(&quot;No id&quot;);</span>
+        }
+<span class="nc bnc" id="L172" title="All 4 branches missed.">        if (queue != null &amp;&amp; queue.equals(DataSourceQueue.INTERNAL)) {</span>
+<span class="nc" id="L173">            return getMobileTerminalById(id.getGuid());</span>
+        }
+<span class="nc" id="L175">        String data = MobileTerminalDataSourceRequestMapper.mapGetMobileTerminal(id);</span>
+<span class="nc" id="L176">        String messageId = messageProducer.sendDataSourceMessage(data, queue);</span>
+<span class="nc" id="L177">        TextMessage response = reciever.getMessage(messageId, TextMessage.class);</span>
+<span class="nc" id="L178">        return MobileTerminalDataSourceResponseMapper.mapToMobileTerminalFromResponse(response, messageId);</span>
+    }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @param mobileTerminal
+     * @param source
+     */
+    @Override
+    public MobileTerminalType updateMobileTerminal(MobileTerminalType mobileTerminal, String comment, MobileTerminalSource source, String username)
+            throws MobileTerminalException {
+<span class="nc" id="L190">        LOG.debug(&quot;UPDATE MOBILE TERMINAL INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc" id="L191">        mobileTerminal.setSource(source);</span>
+<span class="nc" id="L192">        MobileTerminalType terminalUpdate = mobileTerminalModel.updateMobileTerminal(mobileTerminal, comment, username);</span>
+        try {
+<span class="nc" id="L194">            String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUpdated(terminalUpdate.getMobileTerminalId().getGuid(), comment, username);</span>
+<span class="nc" id="L195">            messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L196">        } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L197">            LOG.error(&quot;Failed to send audit log message! Mobile Terminal with guid {} was updated&quot;, terminalUpdate.getMobileTerminalId()</span>
+                    .getGuid());
+<span class="nc" id="L199">        }</span>
+        
+<span class="nc" id="L201">        boolean dnidUpdated = configModel.checkDNIDListChange(terminalUpdate.getPlugin().getServiceName());</span>
+<span class="nc bnc" id="L202" title="All 2 branches missed.">        if(dnidUpdated) {</span>
+<span class="nc" id="L203">        	pluginService.processUpdatedDNIDList(terminalUpdate.getPlugin().getServiceName());</span>
+        }
+        
+<span class="nc" id="L206">        return terminalUpdate;</span>
+    }
+
+    @Override
+    public MobileTerminalType assignMobileTerminal(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalException {
+<span class="nc" id="L211">        LOG.debug(&quot;ASSIGN MOBILE TERMINAL INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc" id="L212">        MobileTerminalType terminalAssign = mobileTerminalModel.assignMobileTerminalToCarrier(query, comment, username);</span>
+        try {
+<span class="nc" id="L214">            String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalAssigned(terminalAssign.getMobileTerminalId().getGuid(), comment, username);</span>
+<span class="nc" id="L215">            messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L216">        } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L217">            LOG.error(&quot;Failed to send audit log message! Mobile Terminal with guid {} was assigned&quot;, terminalAssign.getMobileTerminalId()</span>
+                    .getGuid());
+<span class="nc" id="L219">        }</span>
+
+<span class="nc" id="L221">        return terminalAssign;</span>
+    }
+
+    @Override
+    public MobileTerminalType unAssignMobileTerminal(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalException {
+<span class="nc" id="L226">        LOG.debug(&quot;UNASSIGN MOBILE TERMINAL INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc" id="L227">        MobileTerminalType terminalUnAssign = mobileTerminalModel.unAssignMobileTerminalFromCarrier(query, comment, username);</span>
+        try {
+<span class="nc" id="L229">            String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUnassigned(terminalUnAssign.getMobileTerminalId().getGuid(), comment, username);</span>
+<span class="nc" id="L230">            messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L231">        } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L232">            LOG.error(&quot;Failed to send audit log message! Mobile Terminal with guid {} was unassigned&quot;, terminalUnAssign.getMobileTerminalId()</span>
+                    .getGuid());
+<span class="nc" id="L234">        }</span>
+
+<span class="nc" id="L236">        return terminalUnAssign;</span>
+    }
+
+    @Override
+    public MobileTerminalType setStatusMobileTerminal(MobileTerminalId terminalId, String comment, MobileTerminalStatus status, String username)
+            throws MobileTerminalException {
+<span class="nc" id="L242">        LOG.debug(&quot;SET STATUS OF MOBILE TERMINAL INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc" id="L243">        MobileTerminalType terminalStatus = mobileTerminalModel.setStatusMobileTerminal(terminalId, comment, status, username);</span>
+        try {
+<span class="nc" id="L245">            String auditData = null;</span>
+<span class="nc bnc" id="L246" title="All 4 branches missed.">            switch (status) {</span>
+            case ACTIVE:
+<span class="nc" id="L248">                auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalActivated(terminalStatus.getMobileTerminalId().getGuid(),comment, username);</span>
+<span class="nc" id="L249">                break;</span>
+            case INACTIVE:
+<span class="nc" id="L251">                auditData = AuditModuleRequestMapper</span>
+                .mapAuditLogMobileTerminalInactivated(terminalStatus.getMobileTerminalId().getGuid(), comment, username);
+<span class="nc" id="L253">                break;</span>
+            case ARCHIVE:
+<span class="nc" id="L255">                auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalArchived(terminalStatus.getMobileTerminalId().getGuid(), comment,username);</span>
+<span class="nc" id="L256">                break;</span>
+            default:
+<span class="nc" id="L258">                break;</span>
+            }
+<span class="nc" id="L260">            messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L261">        } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L262">            LOG.error(&quot;Failed to send audit log message! Mobile Terminal with guid {} was set to status {}&quot;, terminalStatus</span>
+                    .getMobileTerminalId().getGuid(), status);
+<span class="nc" id="L264">        }</span>
+
+<span class="nc" id="L266">        boolean dnidUpdated = configModel.checkDNIDListChange(terminalStatus.getPlugin().getServiceName());</span>
+<span class="nc bnc" id="L267" title="All 2 branches missed.">        if(dnidUpdated) {</span>
+<span class="nc" id="L268">        	pluginService.processUpdatedDNIDList(terminalStatus.getPlugin().getServiceName());</span>
+        }
+        
+<span class="nc" id="L271">        return terminalStatus;</span>
+    }
+
+    @Override
+    public MobileTerminalHistory getMobileTerminalHistoryList(String guid) throws MobileTerminalException {
+<span class="nc" id="L276">        LOG.debug(&quot;GET HISTORY OF MOBILE TERMINAL INVOKED IN SERVICE LAYER&quot;);</span>
+<span class="nc" id="L277">        MobileTerminalId terminalId = new MobileTerminalId();</span>
+<span class="nc" id="L278">        terminalId.setGuid(guid);</span>
+<span class="nc" id="L279">        MobileTerminalHistory historyList = mobileTerminalModel.getMobileTerminalHistoryList(terminalId);</span>
+<span class="nc" id="L280">        return historyList;</span>
+    }
+
+    @Override
+    public MobileTerminalListResponse getPollableMobileTerminal(PollableQuery query) throws MobileTerminalException {
+<span class="nc" id="L285">        LOG.debug(&quot;Get pollable mobile terminals&quot;);</span>
+<span class="nc" id="L286">        ListResponseDto listResponse = pollModel.getMobileTerminalPollableList(query);</span>
+<span class="nc" id="L287">        MobileTerminalListResponse response = new MobileTerminalListResponse();</span>
+<span class="nc" id="L288">        response.setCurrentPage(listResponse.getCurrentPage());</span>
+<span class="nc" id="L289">        response.setTotalNumberOfPages(listResponse.getTotalNumberOfPages());</span>
+<span class="nc" id="L290">        response.getMobileTerminal().addAll(listResponse.getMobileTerminalList());</span>
+<span class="nc" id="L291">        return response;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

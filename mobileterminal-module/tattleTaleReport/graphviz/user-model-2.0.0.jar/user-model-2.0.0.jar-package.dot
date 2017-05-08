@@ -1,0 +1,8 @@
+digraph user_model_2_0_0_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  eu_europa_ec_fisheries_uvms_user_model -> eu_europa_ec_fisheries_uvms_user_model_exception;
+  eu_europa_ec_fisheries_uvms_user_model_mapper -> eu_europa_ec_fisheries_uvms_user_model_exception;
+  eu_europa_ec_fisheries_uvms_user_model_mapper -> eu_europa_ec_fisheries_wsdl_user_module;
+  eu_europa_ec_fisheries_uvms_user_model_mapper -> eu_europa_ec_fisheries_wsdl_user_types;
+  eu_europa_ec_fisheries_wsdl_user_module -> eu_europa_ec_fisheries_wsdl_user_types;
+}

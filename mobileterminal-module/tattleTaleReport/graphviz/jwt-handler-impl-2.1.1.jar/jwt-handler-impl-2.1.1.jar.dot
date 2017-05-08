@@ -1,0 +1,7 @@
+digraph jwt_handler_impl_2_1_1_dependencies {
+  node [shape = box, fontsize=10.0];
+  jwt_handler_impl_2_1_1 -> jaxb_api_2_2_7;
+  jwt_handler_impl_2_1_1 -> jboss_annotations_api_1_1_spec_1_0_1_Final;
+  jwt_handler_impl_2_1_1 -> jjwt_0_4;
+  jwt_handler_impl_2_1_1 -> jwt_handler_api_2_1_1;
+}

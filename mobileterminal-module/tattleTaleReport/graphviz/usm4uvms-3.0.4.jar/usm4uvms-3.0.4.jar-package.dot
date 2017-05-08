@@ -1,0 +1,26 @@
+digraph usm4uvms_3_0_4_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  eu_europa_ec_fisheries_uvms_init -> eu_europa_ec_fisheries_uvms_exception;
+  eu_europa_ec_fisheries_uvms_init -> eu_europa_ec_fisheries_uvms_message;
+  eu_europa_ec_fisheries_uvms_init -> eu_europa_ec_fisheries_uvms_rest_security_bean;
+  eu_europa_ec_fisheries_uvms_init -> eu_europa_ec_fisheries_wsdl_user_module;
+  eu_europa_ec_fisheries_uvms_init -> eu_europa_ec_fisheries_wsdl_user_types;
+  eu_europa_ec_fisheries_uvms_jms -> eu_europa_ec_fisheries_uvms_message;
+  eu_europa_ec_fisheries_uvms_rest_security -> eu_europa_ec_fisheries_uvms_constants;
+  eu_europa_ec_fisheries_uvms_rest_security -> eu_europa_ec_fisheries_uvms_exception;
+  eu_europa_ec_fisheries_uvms_rest_security -> eu_europa_ec_fisheries_uvms_rest_security_bean;
+  eu_europa_ec_fisheries_uvms_rest_security -> eu_europa_ec_fisheries_wsdl_user_types;
+  eu_europa_ec_fisheries_uvms_rest_security -> eu_europa_ec_mare_usm_jwt;
+  eu_europa_ec_fisheries_uvms_rest_security -> io_jsonwebtoken;
+  eu_europa_ec_fisheries_uvms_rest_security -> javax_ws_rs_container;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> eu_europa_ec_fisheries_uvms_exception;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> eu_europa_ec_fisheries_uvms_jms;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> eu_europa_ec_fisheries_uvms_message;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> eu_europa_ec_fisheries_uvms_user_model_exception;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> eu_europa_ec_fisheries_uvms_user_model_mapper;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> eu_europa_ec_fisheries_wsdl_user_module;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> eu_europa_ec_fisheries_wsdl_user_types;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> javax_transaction;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> net_sf_ehcache;
+  eu_europa_ec_fisheries_uvms_rest_security_bean -> org_apache_commons_lang3;
+}

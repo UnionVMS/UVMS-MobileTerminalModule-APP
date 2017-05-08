@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>EnumMapper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.mapper</a> &gt; <span class="el_source">EnumMapper.java</span></div><h1>EnumMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.EventCode;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.TerminalSourceEnum;
+
+<span class="nc" id="L24">public class EnumMapper {</span>
+
+    // Terminalsource
+    // TerminalSourceEnum, MobileTerminalSource, Terminalsource
+    public static TerminalSourceEnum getSourceTypeFromId(Integer id) throws EnumException {
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        if (id != null) {</span>
+<span class="nc bnc" id="L30" title="All 2 branches missed.">            for (TerminalSourceEnum source : TerminalSourceEnum.values()) {</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">                if (id.equals(source.getId())) {</span>
+<span class="nc" id="L32">                    return source;</span>
+                }
+            }
+        }
+<span class="nc" id="L36">        throw new EnumException(&quot;Couldn't map enum (from id) in &quot; + TerminalSourceEnum.class.getName());</span>
+    }
+
+    public static MobileTerminalSource getSourceModelFromType(TerminalSourceEnum type) throws EnumException {
+<span class="nc bnc" id="L40" title="All 2 branches missed.">        if (type != null) {</span>
+<span class="nc bnc" id="L41" title="All 3 branches missed.">            switch (type) {</span>
+            case INTERNAL:
+<span class="nc" id="L43">                return MobileTerminalSource.INTERNAL;</span>
+            case NATIONAL:
+<span class="nc" id="L45">                return MobileTerminalSource.NATIONAL;</span>
+            }
+        }
+<span class="nc" id="L48">        throw new EnumException(&quot;Couldn't map enum (from type) in &quot; + TerminalSourceEnum.class.getName());</span>
+    }
+
+    public static TerminalSourceEnum getSourceTypeFromModel(MobileTerminalSource model) throws EnumException {
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (model != null) {</span>
+<span class="nc bnc" id="L53" title="All 3 branches missed.">            switch (model) {</span>
+            case INTERNAL:
+<span class="nc" id="L55">                return TerminalSourceEnum.INTERNAL;</span>
+            case NATIONAL:
+<span class="nc" id="L57">                return TerminalSourceEnum.NATIONAL;</span>
+            }
+        }
+<span class="nc" id="L60">        throw new EnumException(&quot;Couldn't map enum (from model) in &quot; + TerminalSourceEnum.class.getName());</span>
+    }
+
+    // Terminaleventtype
+    public static EventCodeEnum getEventTypeFromId(Integer id) throws EnumException {
+<span class="pc bpc" id="L65" title="1 of 2 branches missed.">        if (id != null) {</span>
+<span class="pc bpc" id="L66" title="1 of 2 branches missed.">            for (EventCodeEnum channel : EventCodeEnum.values()) {</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">                if (id.equals(channel.getId())) {</span>
+<span class="fc" id="L68">                    return channel;</span>
+                }
+            }
+        }
+<span class="nc" id="L72">        throw new EnumException(&quot;Couldn't map enum (from id) in &quot; + EventCodeEnum.class.getName());</span>
+    }
+
+    public static EventCode getEventModelFromType(EventCodeEnum type) throws EnumException {
+<span class="nc bnc" id="L76" title="All 2 branches missed.">        if (type != null) {</span>
+<span class="nc bnc" id="L77" title="All 8 branches missed.">            switch (type) {</span>
+            case CREATE:
+<span class="nc" id="L79">                return EventCode.CREATE;</span>
+            case MODIFY:
+<span class="nc" id="L81">                return EventCode.MODIFY;</span>
+            case ACTIVATE:
+<span class="nc" id="L83">                return EventCode.ACTIVATE;</span>
+            case INACTIVATE:
+<span class="nc" id="L85">                return EventCode.INACTIVATE;</span>
+            case ARCHIVE:
+<span class="nc" id="L87">                return EventCode.ARCHIVE;</span>
+            case LINK:
+<span class="nc" id="L89">                return EventCode.LINK;</span>
+            case UNLINK:
+<span class="nc" id="L91">                return EventCode.UNLINK;</span>
+            }
+        }
+<span class="nc" id="L94">        throw new EnumException(&quot;Couldn't map enum (from type) in &quot; + EventCodeEnum.class.getName());</span>
+    }
+
+    public static EventCodeEnum getEventTypeFromModel(EventCode model) throws EnumException {
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        if (model != null) {</span>
+<span class="nc bnc" id="L99" title="All 8 branches missed.">            switch (model) {</span>
+            case CREATE:
+<span class="nc" id="L101">                return EventCodeEnum.CREATE;</span>
+            case MODIFY:
+<span class="nc" id="L103">                return EventCodeEnum.MODIFY;</span>
+            case ACTIVATE:
+<span class="nc" id="L105">                return EventCodeEnum.ACTIVATE;</span>
+            case INACTIVATE:
+<span class="nc" id="L107">                return EventCodeEnum.INACTIVATE;</span>
+            case ARCHIVE:
+<span class="nc" id="L109">                return EventCodeEnum.ARCHIVE;</span>
+            case LINK:
+<span class="nc" id="L111">                return EventCodeEnum.LINK;</span>
+            case UNLINK:
+<span class="nc" id="L113">                return EventCodeEnum.UNLINK;</span>
+            }
+        }
+<span class="nc" id="L116">        throw new EnumException(&quot;Couldn't map enum (from model) in &quot; + EventCodeEnum.class.getName());</span>
+    }
+
+    public static PollTypeEnum getPollTypeFromId(Integer id) throws EnumException {
+<span class="nc bnc" id="L120" title="All 2 branches missed.">        if (id != null) {</span>
+<span class="nc bnc" id="L121" title="All 2 branches missed.">            for (PollTypeEnum polltype : PollTypeEnum.values()) {</span>
+<span class="nc bnc" id="L122" title="All 2 branches missed.">                if (id.equals(polltype.getId())) {</span>
+<span class="nc" id="L123">                    return polltype;</span>
+                }
+            }
+        }
+<span class="nc" id="L127">        throw new EnumException(&quot;Couldn't map enum (from id) in &quot; + PollTypeEnum.class.getName());</span>
+    }
+
+    public static PollType getPollModelFromType(PollTypeEnum type) throws EnumException {
+<span class="nc bnc" id="L131" title="All 2 branches missed.">        if (type != null) {</span>
+<span class="nc bnc" id="L132" title="All 5 branches missed.">            switch (type) {</span>
+            case MANUAL_POLL:
+<span class="nc" id="L134">                return PollType.MANUAL_POLL;</span>
+            case PROGRAM_POLL:
+<span class="nc" id="L136">                return PollType.PROGRAM_POLL;</span>
+            case SAMPLING_POLL:
+<span class="nc" id="L138">                return PollType.SAMPLING_POLL;</span>
+            case CONFIGURATION_POLL:
+<span class="nc" id="L140">                return PollType.CONFIGURATION_POLL;</span>
+            }
+        }
+<span class="nc" id="L143">        throw new EnumException(&quot;Couldn't map enum (from type) in &quot; + PollTypeEnum.class.getName());</span>
+    }
+
+    public static PollTypeEnum getPollTypeFromModel(PollType model) throws EnumException {
+<span class="nc bnc" id="L147" title="All 2 branches missed.">        if (model != null) {</span>
+<span class="nc bnc" id="L148" title="All 5 branches missed.">            switch (model) {</span>
+            case MANUAL_POLL:
+<span class="nc" id="L150">                return PollTypeEnum.MANUAL_POLL;</span>
+            case PROGRAM_POLL:
+<span class="nc" id="L152">                return PollTypeEnum.PROGRAM_POLL;</span>
+            case SAMPLING_POLL:
+<span class="nc" id="L154">                return PollTypeEnum.SAMPLING_POLL;</span>
+            case CONFIGURATION_POLL:
+<span class="nc" id="L156">                return PollTypeEnum.CONFIGURATION_POLL;</span>
+            }
+        }
+<span class="nc" id="L159">        throw new EnumException(&quot;Couldn't map enum (from model) in &quot; + PollTypeEnum.class.getName());</span>
+    }
+
+    /**
+     * POLL STATE ENUM
+     *
+     * @param status
+     * @return
+     * @throws EnumException
+     */
+    public static PollStateEnum getPollStateTypeFromId(Integer id) throws EnumException {
+<span class="nc bnc" id="L170" title="All 2 branches missed.">        if (id != null) {</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">            for (PollStateEnum polltype : PollStateEnum.values()) {</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                if (id.equals(polltype.getId())) {</span>
+<span class="nc" id="L173">                    return polltype;</span>
+                }
+            }
+        }
+<span class="nc" id="L177">        throw new EnumException(&quot;Couldn't map enum (from id) in &quot; + PollStateEnum.class.getName());</span>
+    }
+
+    public static PollStatus getPollStateModelFromType(PollStateEnum type) throws EnumException {
+<span class="nc bnc" id="L181" title="All 2 branches missed.">        if (type != null) {</span>
+<span class="nc bnc" id="L182" title="All 4 branches missed.">            switch (type) {</span>
+            case STARTED:
+<span class="nc" id="L184">                return PollStatus.STARTED;</span>
+            case STOPPED:
+<span class="nc" id="L186">                return PollStatus.STOPPED;</span>
+            case ARCHIVED:
+<span class="nc" id="L188">                return PollStatus.ARCHIVED;</span>
+            }
+        }
+<span class="nc" id="L191">        throw new EnumException(&quot;Couldn't map enum (from type) in &quot; + PollTypeEnum.class.getName());</span>
+    }
+
+    public static PollStateEnum getPollStateTypeFromModel(PollStatus model) throws EnumException {
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        if (model != null) {</span>
+<span class="nc bnc" id="L196" title="All 4 branches missed.">            switch (model) {</span>
+            case STARTED:
+<span class="nc" id="L198">                return PollStateEnum.STARTED;</span>
+            case STOPPED:
+<span class="nc" id="L200">                return PollStateEnum.STOPPED;</span>
+            case ARCHIVED:
+<span class="nc" id="L202">                return PollStateEnum.ARCHIVED;</span>
+            }
+        }
+<span class="nc" id="L205">        throw new EnumException(&quot;Couldn't map enum (from model) in &quot; + PollStateEnum.class.getName());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,9 @@
+digraph resteasy_jaxb_provider_3_0_11_Final_dependencies {
+  node [shape = box, fontsize=10.0];
+  resteasy_jaxb_provider_3_0_11_Final -> jaxb_api_2_2_7;
+  resteasy_jaxb_provider_3_0_11_Final -> jaxb_impl_2_2_7;
+  resteasy_jaxb_provider_3_0_11_Final -> jaxrs_api_3_0_11_Final;
+  resteasy_jaxb_provider_3_0_11_Final -> jsr173_api_1_0;
+  resteasy_jaxb_provider_3_0_11_Final -> resteasy_jaxrs_3_0_11_Final;
+  resteasy_jaxb_provider_3_0_11_Final -> xml_apis_1_0_b2;
+}

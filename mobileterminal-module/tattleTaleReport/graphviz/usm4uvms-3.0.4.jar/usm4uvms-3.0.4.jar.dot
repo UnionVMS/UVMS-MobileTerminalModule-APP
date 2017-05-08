@@ -1,0 +1,12 @@
+digraph usm4uvms_3_0_4_dependencies {
+  node [shape = box, fontsize=10.0];
+  usm4uvms_3_0_4 -> commons_lang3_3_4;
+  usm4uvms_3_0_4 -> ehcache_2_10_1;
+  usm4uvms_3_0_4 -> jaxb_api_2_2_7;
+  usm4uvms_3_0_4 -> jaxrs_api_3_0_11_Final;
+  usm4uvms_3_0_4 -> jboss_annotations_api_1_1_spec_1_0_1_Final;
+  usm4uvms_3_0_4 -> jjwt_0_4;
+  usm4uvms_3_0_4 -> jwt_handler_impl_2_1_1;
+  usm4uvms_3_0_4 -> user_model_2_0_0;
+  usm4uvms_3_0_4 -> uvms_commons_2_0_17;
+}

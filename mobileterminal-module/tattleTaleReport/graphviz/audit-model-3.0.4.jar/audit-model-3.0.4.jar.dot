@@ -1,0 +1,6 @@
+digraph audit_model_3_0_4_dependencies {
+  node [shape = box, fontsize=10.0];
+  audit_model_3_0_4 -> jaxb_api_2_2_7;
+  audit_model_3_0_4 -> jsr173_api_1_0;
+  audit_model_3_0_4 -> xml_apis_1_0_b2;
+}

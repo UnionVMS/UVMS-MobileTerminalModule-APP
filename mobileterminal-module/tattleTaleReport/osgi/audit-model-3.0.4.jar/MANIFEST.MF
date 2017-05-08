@@ -1,0 +1,36 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_80
+Built-By: roblar
+Created-By: Apache Maven
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: eu.europa.ec.fisheries.schema.audit.module.v1
+Bundle-Description: audit-model-3.0.4
+Bundle-Name: audit-model-3.0.4
+Bundle-Version: 0.0.0
+Export-Package: eu.europa.ec.fisheries.schema.audit.common.v1,eu.europ
+ a.ec.fisheries.schema.audit.module.v1;uses:="eu.europa.ec.fisheries.s
+ chema.audit.common.v1,eu.europa.ec.fisheries.schema.audit.search.v1,e
+ u.europa.ec.fisheries.schema.audit.v1",eu.europa.ec.fisheries.schema.
+ audit.search.v1,eu.europa.ec.fisheries.schema.audit.source.v1;uses:="
+ eu.europa.ec.fisheries.schema.audit.common.v1,eu.europa.ec.fisheries.
+ schema.audit.search.v1,eu.europa.ec.fisheries.schema.audit.v1",eu.eur
+ opa.ec.fisheries.schema.audit.v1,eu.europa.ec.fisheries.uvms.audit;us
+ es:="eu.europa.ec.fisheries.schema.audit.search.v1,eu.europa.ec.fishe
+ ries.schema.audit.v1,eu.europa.ec.fisheries.uvms.audit.dto,eu.europa.
+ ec.fisheries.uvms.audit.model.exception",eu.europa.ec.fisheries.uvms.
+ audit.dto,eu.europa.ec.fisheries.uvms.audit.model;uses:="eu.europa.ec
+ .fisheries.uvms.audit.model.exception",eu.europa.ec.fisheries.uvms.au
+ dit.model.exception,eu.europa.ec.fisheries.uvms.audit.model.mapper;us
+ es:="eu.europa.ec.fisheries.schema.audit.source.v1,eu.europa.ec.fishe
+ ries.schema.audit.v1,eu.europa.ec.fisheries.uvms.audit.dto,eu.europa.
+ ec.fisheries.uvms.audit.model.exception"
+Import-Package: java.io,java.lang,java.math,java.net,java.util,java.ut
+ il.logging,javax.ejb,javax.jms,javax.jws,javax.jws.soap,javax.xml.bin
+ d;version="2.2.7",javax.xml.bind.annotation;version="2.2.7",javax.xml
+ .datatype,javax.xml.namespace;version="0.0.0",javax.xml.transform;ver
+ sion="1.1",javax.xml.transform.stream;version="1.1",javax.xml.ws,org.
+ slf4j

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ServiceToPluginMapper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.mapper</a> &gt; <span class="el_source">ServiceToPluginMapper.java</span></div><h1>ServiceToPluginMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityType;
+import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapability;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapabilityType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
+
+<span class="nc" id="L23">public class ServiceToPluginMapper {</span>
+
+	public static List&lt;PluginService&gt; mapToPluginList(List&lt;ServiceResponseType&gt; serviceList) {
+<span class="nc" id="L26">		List&lt;PluginService&gt; pluginList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">		for(ServiceResponseType service : serviceList) {</span>
+<span class="nc" id="L28">			PluginService plugin = new PluginService();</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">			plugin.setInactive(!service.isActive()); </span>
+<span class="nc" id="L30">			plugin.setLabelName(service.getName());</span>
+<span class="nc" id="L31">			plugin.setServiceName(service.getServiceClassName());</span>
+<span class="nc" id="L32">			plugin.setSatelliteType(service.getSatelliteType());</span>
+<span class="nc bnc" id="L33" title="All 2 branches missed.">			if(service.getCapabilityList() != null) {</span>
+<span class="nc" id="L34">				plugin.getCapability().addAll(mapToPluginCapabilityList(service.getCapabilityList().getCapability()));</span>
+			}
+<span class="nc" id="L36">			pluginList.add(plugin);</span>
+<span class="nc" id="L37">		}</span>
+<span class="nc" id="L38">		return pluginList;</span>
+	}
+	
+	private static List&lt;PluginCapability&gt; mapToPluginCapabilityList(List&lt;CapabilityType&gt; capabilities) {
+<span class="nc" id="L42">		List&lt;PluginCapability&gt; capabilityList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">		if(capabilities != null) {</span>
+<span class="nc bnc" id="L44" title="All 2 branches missed.">			for(CapabilityType capability : capabilities) {</span>
+<span class="nc" id="L45">				PluginCapability pluginCapability = new PluginCapability();</span>
+<span class="nc" id="L46">				pluginCapability.setName(PluginCapabilityType.fromValue(capability.getType().name()));</span>
+<span class="nc" id="L47">				pluginCapability.setValue(capability.getValue());</span>
+<span class="nc" id="L48">				capabilityList.add(pluginCapability);</span>
+<span class="nc" id="L49">			}</span>
+		}
+<span class="nc" id="L51">		return capabilityList;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

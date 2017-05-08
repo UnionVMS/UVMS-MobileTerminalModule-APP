@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.6.2
+Created-By: 10.0-b23 (Sun Microsystems Inc.)
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.json.simple
+Bundle-Description: json-simple-1.1
+Bundle-Name: json-simple-1.1
+Bundle-Version: 0.0.0
+Export-Package: org.json.simple;uses:="org.json.simple.parser",org.jso
+ n.simple.parser;uses:="org.json.simple"
+Import-Package: java.io,java.lang,java.util

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MobileTerminalResource.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-rest</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.rest.service</a> &gt; <span class="el_source">MobileTerminalResource.java</span></div><h1>MobileTerminalResource.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAssignQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ErrorHandler;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
+import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
+
+/**
+ **/
+@Path(&quot;/mobileterminal&quot;)
+@Stateless
+<span class="fc" id="L48">public class MobileTerminalResource {</span>
+
+<span class="fc" id="L50">    final static Logger LOG = LoggerFactory.getLogger(ResponseCode.class);</span>
+
+    @EJB
+    MobileTerminalService mobileTerminalService;
+
+    @Context
+    private HttpServletRequest request;
+
+    /**
+     *
+     * @responseMessage 200 Mobile Terminal successfully created
+     * @responseMessage 500 Error when creating mobile Terminal
+     *
+     * @summary Creates a mobile terminal
+     *
+     */
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/&quot;)
+    @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
+    public ResponseDto createMobileTerminal(MobileTerminalType mobileterminal) {
+<span class="fc" id="L72">        LOG.info(&quot;Create mobile terminal invoked in rest layer.&quot;);</span>
+        try {
+<span class="fc" id="L74">            return new ResponseDto(mobileTerminalService.createMobileTerminal(mobileterminal, MobileTerminalSource.INTERNAL, request.getRemoteUser()), ResponseCode.OK);</span>
+<span class="nc" id="L75">        } catch (Exception ex) {</span>
+<span class="nc" id="L76">            LOG.error(&quot;[ Error when creating mobile terminal ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L77">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile Terminal successfully retrieved
+     * @responseMessage 500 Error when retrieveing Mobile Terminal by id
+     *
+     * @summary Gets a mobile terminal by its id
+     *
+     */
+    @GET
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/{id}&quot;)
+    @RequiresFeature(UnionVMSFeature.viewVesselsAndMobileTerminals)
+    public ResponseDto getMobileTerminalById(@PathParam(&quot;id&quot;) String mobileterminalId) {
+<span class="fc" id="L95">        LOG.info(&quot;Get mobile terminal by id invoked in rest layer.&quot;);</span>
+        try {
+<span class="fc" id="L97">            return new ResponseDto(mobileTerminalService.getMobileTerminalById(mobileterminalId), ResponseCode.OK);</span>
+<span class="nc" id="L98">        } catch (Exception ex) {</span>
+<span class="nc" id="L99">            LOG.error(&quot;[ Error when creating mobile terminal ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L100">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile Terminal successfully updated
+     * @responseMessage 500 Error when updating Mobile Terminal
+     *
+     * @summary Updates a mobile terminal with new values
+     *
+     */
+    @PUT
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/&quot;)
+    @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
+    public ResponseDto updateMobileTerminal(@QueryParam(&quot;comment&quot;) String comment, MobileTerminalType mobileterminal) {
+<span class="fc" id="L118">        LOG.info(&quot;Update mobile terminal by id invoked in rest layer.&quot;);</span>
+        try {
+<span class="fc" id="L120">            return new ResponseDto(mobileTerminalService.updateMobileTerminal(mobileterminal, comment, MobileTerminalSource.INTERNAL, request.getRemoteUser()),</span>
+                    ResponseCode.OK);
+<span class="nc" id="L122">        } catch (Exception ex) {</span>
+<span class="nc" id="L123">            LOG.error(&quot;[ Error when updating mobile terminal ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L124">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile Terminal list successfully retrieved
+     * @responseMessage 500 Error when getting mobile terminal list
+     *
+     * @summary Gets a list fo mobile terminals based on a query
+     *
+     */
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/list&quot;)
+    @RequiresFeature(UnionVMSFeature.viewVesselsAndMobileTerminals)
+    public ResponseDto getMobileTerminalList(MobileTerminalListQuery query) {
+<span class="fc" id="L142">        LOG.info(&quot;Get mobile terminal list invoked in rest layer.&quot;);</span>
+        try {
+<span class="fc" id="L144">            return new ResponseDto(mobileTerminalService.getMobileTerminalList(query), ResponseCode.OK);</span>
+<span class="nc" id="L145">        } catch (Exception ex) {</span>
+<span class="nc" id="L146">            LOG.error(&quot;[ Error when getting mobile terminal list ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L147">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile Terminal list successfully assigned to a
+     *                  carrier
+     * @responseMessage 500 Error when assigning the mobile terminal to a
+     *                  carrier
+     *
+     * @summary Assigns a mobile terminal to a carrier
+     *
+     */
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/assign&quot;)
+    @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
+    public ResponseDto assignMobileTerminal(@QueryParam(&quot;comment&quot;) String comment, MobileTerminalAssignQuery query) {
+<span class="nc" id="L167">        LOG.info(&quot;Assign mobile terminal invoked in rest layer.&quot;);</span>
+        try {
+<span class="nc" id="L169">            return new ResponseDto(mobileTerminalService.assignMobileTerminal(query, comment, request.getRemoteUser()), ResponseCode.OK);</span>
+<span class="nc" id="L170">        } catch (Exception ex) {</span>
+<span class="nc" id="L171">            LOG.error(&quot;[ Error when assigning mobile terminal ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L172">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile successfully unassigned from the carrier
+     * @responseMessage 500 Error when unassigning the mobile terminal from the
+     *                  carrier
+     *
+     * @summary Unassigns a mobile terminal from a carrier
+     *
+     */
+    @POST
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/unassign&quot;)
+    @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
+    public ResponseDto unAssignMobileTerminal(@QueryParam(&quot;comment&quot;) String comment, MobileTerminalAssignQuery query) {
+<span class="nc" id="L191">        LOG.info(&quot;Unassign mobile terminal invoked in rest layer.&quot;);</span>
+        try {
+<span class="nc" id="L193">            return new ResponseDto(mobileTerminalService.unAssignMobileTerminal(query, comment, request.getRemoteUser()), ResponseCode.OK);</span>
+<span class="nc" id="L194">        } catch (Exception ex) {</span>
+<span class="nc" id="L195">            LOG.error(&quot;[ Error when unassigning mobile terminal ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L196">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile successfully activated
+     * @responseMessage 500 Error when activating the mobile terminal
+     *
+     * @summary Activates a mobile terminal
+     *
+     */
+    @PUT
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/status/activate&quot;)
+    @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
+    public ResponseDto setStatusActive(@QueryParam(&quot;comment&quot;) String comment, MobileTerminalId terminalId) {
+<span class="nc" id="L214">        LOG.info(&quot;Set mobile terminal status active invoked in rest layer.&quot;);</span>
+        try {
+<span class="nc" id="L216">            return new ResponseDto(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.ACTIVE, request.getRemoteUser()), ResponseCode.OK);</span>
+<span class="nc" id="L217">        } catch (Exception ex) {</span>
+<span class="nc" id="L218">            LOG.error(&quot;[ Error when activating mobile terminal ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L219">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile successfully inactivated
+     * @responseMessage 500 Error when inactivating the mobile terminal
+     *
+     * @summary Inactivates a mobile terminal
+     *
+     */
+    @PUT
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/status/inactivate&quot;)
+    @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
+    public ResponseDto setStatusInactive(@QueryParam(&quot;comment&quot;) String comment, MobileTerminalId terminalId) {
+<span class="nc" id="L237">        LOG.info(&quot;Set mobile terminal status inactive invoked in rest layer.&quot;);</span>
+        try {
+<span class="nc" id="L239">            return new ResponseDto(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.INACTIVE, request.getRemoteUser()), ResponseCode.OK);</span>
+<span class="nc" id="L240">        } catch (Exception ex) {</span>
+<span class="nc" id="L241">            LOG.error(&quot;[ Error when inactivating mobile terminal ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L242">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile successfully removed
+     * @responseMessage 500 Error when removing the mobile terminal
+     *
+     * @summary Removes a mobile terminal. It is archived but not readable
+     *
+     */
+    @PUT
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/status/remove&quot;)
+    @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
+    public ResponseDto setStatusRemoved(@QueryParam(&quot;comment&quot;) String comment, MobileTerminalId terminalId) {
+<span class="nc" id="L260">        LOG.info(&quot;Set mobile terminal status removed invoked in rest layer.&quot;);</span>
+        try {
+<span class="nc" id="L262">            return new ResponseDto(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.ARCHIVE, request.getRemoteUser()), ResponseCode.OK);</span>
+<span class="nc" id="L263">        } catch (Exception ex) {</span>
+<span class="nc" id="L264">            LOG.error(&quot;[ Error when removing mobile terminal ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L265">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+    /**
+     *
+     * @responseMessage 200 Mobile terminal history successfully retrieved
+     * @responseMessage 500 Error when retrieving the mobile terminals history
+     *
+     * @summary Gets all historical events connected to the specified mobiel
+     *          terminal
+     *
+     */
+    @GET
+    @Consumes(value = { MediaType.APPLICATION_JSON })
+    @Produces(value = { MediaType.APPLICATION_JSON })
+    @Path(&quot;/history/{id}&quot;)
+    @RequiresFeature(UnionVMSFeature.viewVesselsAndMobileTerminals)
+    public ResponseDto getMobileTerminalHistoryListByMobileTerminalId(@PathParam(&quot;id&quot;) String guid) {
+<span class="nc" id="L284">        LOG.info(&quot;Get mobile terminal history by mobile terminal id invoked in rest layer.&quot;);</span>
+        try {
+<span class="nc" id="L286">            return new ResponseDto(mobileTerminalService.getMobileTerminalHistoryList(guid), ResponseCode.OK);</span>
+<span class="nc" id="L287">        } catch (Exception ex) {</span>
+<span class="nc" id="L288">            LOG.error(&quot;[ Error when getting mobile terminal history by terminalId ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L289">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

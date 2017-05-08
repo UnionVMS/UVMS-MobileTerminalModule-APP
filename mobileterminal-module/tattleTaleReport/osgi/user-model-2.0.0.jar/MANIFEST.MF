@@ -1,0 +1,25 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.8.0_74
+Built-By: kroger
+Created-By: Apache Maven
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: eu.europa.ec.fisheries.wsdl.user.module
+Bundle-Description: user-model-2.0.0
+Bundle-Name: user-model-2.0.0
+Bundle-Version: 0.0.0
+Export-Package: eu.europa.ec.fisheries.uvms.user.model;uses:="eu.europ
+ a.ec.fisheries.uvms.user.model.exception",eu.europa.ec.fisheries.uvms
+ .user.model.exception,eu.europa.ec.fisheries.uvms.user.model.mapper;u
+ ses:="eu.europa.ec.fisheries.uvms.user.model.exception,eu.europa.ec.f
+ isheries.wsdl.user.module,eu.europa.ec.fisheries.wsdl.user.types",eu.
+ europa.ec.fisheries.wsdl.user.module;uses:="eu.europa.ec.fisheries.ws
+ dl.user.types",eu.europa.ec.fisheries.wsdl.user.types
+Import-Package: java.io,java.lang,java.math,java.net,java.util,java.ut
+ il.logging,javax.ejb,javax.jms,javax.jws,javax.jws.soap,javax.xml.bin
+ d;version="2.2.7",javax.xml.bind.annotation;version="2.2.7",javax.xml
+ .bind.annotation.adapters;version="2.2.7",javax.xml.datatype,javax.xm
+ l.namespace;version="0.0.0",javax.xml.ws,org.slf4j

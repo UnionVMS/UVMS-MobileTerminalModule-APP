@@ -1,0 +1,12 @@
+digraph resteasy_jaxrs_3_0_11_Final_dependencies {
+  node [shape = box, fontsize=10.0];
+  resteasy_jaxrs_3_0_11_Final -> activation_1_1;
+  resteasy_jaxrs_3_0_11_Final -> commons_codec_1_6;
+  resteasy_jaxrs_3_0_11_Final -> commons_io_2_4;
+  resteasy_jaxrs_3_0_11_Final -> httpclient_4_2_6;
+  resteasy_jaxrs_3_0_11_Final -> httpcore_4_2_5;
+  resteasy_jaxrs_3_0_11_Final -> jaxb_api_2_2_7;
+  resteasy_jaxrs_3_0_11_Final -> jaxrs_api_3_0_11_Final;
+  resteasy_jaxrs_3_0_11_Final -> jboss_annotations_api_1_1_spec_1_0_1_Final;
+  resteasy_jaxrs_3_0_11_Final -> xml_apis_1_0_b2;
+}

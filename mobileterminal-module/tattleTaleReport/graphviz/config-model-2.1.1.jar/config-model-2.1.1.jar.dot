@@ -1,0 +1,6 @@
+digraph config_model_2_1_1_dependencies {
+  node [shape = box, fontsize=10.0];
+  config_model_2_1_1 -> jaxb_api_2_2_7;
+  config_model_2_1_1 -> jsr173_api_1_0;
+  config_model_2_1_1 -> xml_apis_1_0_b2;
+}

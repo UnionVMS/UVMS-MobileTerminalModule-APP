@@ -1,0 +1,61 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_80
+Built-By: roblar
+Created-By: Apache Maven 3.3.9
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: eu.europa.ec.fisheries.uvms.message
+Bundle-Description: uvms-commons-2.0.17
+Bundle-Name: uvms-commons-2.0.17
+Bundle-Version: 0.0.0
+Export-Package: eu.europa.ec.fisheries.uvms,eu.europa.ec.fisheries.uvm
+ s.common;uses:="java.nio.file",eu.europa.ec.fisheries.uvms.deserializ
+ er;uses:="com.fasterxml.jackson.core,com.fasterxml.jackson.databind,c
+ om.vividsolutions.jts.geom,com.vividsolutions.jts.io,eu.europa.ec.fis
+ heries.uvms.mapper,eu.europa.ec.fisheries.uvms.model",eu.europa.ec.fi
+ sheries.uvms.domain;uses:="javax.persistence",eu.europa.ec.fisheries.
+ uvms.exception,eu.europa.ec.fisheries.uvms.interceptors,eu.europa.ec.
+ fisheries.uvms.mapper;uses:="com.vividsolutions.jts.geom,com.vividsol
+ utions.jts.io,eu.europa.ec.fisheries.uvms.model,org.geotools.feature,
+ org.geotools.geojson.feature,org.geotools.geojson.geom,org.mapstruct,
+ org.mapstruct.factory,org.opengis.feature.simple",eu.europa.ec.fisher
+ ies.uvms.message,eu.europa.ec.fisheries.uvms.model;uses:="com.vividso
+ lutions.jts.geom,org.geotools.feature,org.opengis.feature.simple",eu.
+ europa.ec.fisheries.uvms.notifications;uses:="com.fasterxml.jackson.c
+ ore,com.fasterxml.jackson.databind",eu.europa.ec.fisheries.uvms.rest;
+ uses:="com.fasterxml.jackson.databind,com.fasterxml.jackson.databind.
+ node,com.vividsolutions.jts.geom,eu.europa.ec.fisheries.uvms.mapper,e
+ u.europa.ec.fisheries.uvms.model,org.geotools.feature,org.opengis.fea
+ ture,org.opengis.feature.simple,org.opengis.feature.type",eu.europa.e
+ c.fisheries.uvms.rest.constants,eu.europa.ec.fisheries.uvms.rest.dto;
+ uses:="com.fasterxml.jackson.annotation,java.util",eu.europa.ec.fishe
+ ries.uvms.rest.filter,eu.europa.ec.fisheries.uvms.rest.mapper;uses:="
+ com.fasterxml.jackson.databind,eu.europa.ec.fisheries.uvms.exception"
+ ,eu.europa.ec.fisheries.uvms.rest.resource;uses:="eu.europa.ec.fisher
+ ies.uvms.rest.dto",eu.europa.ec.fisheries.uvms.rest.serializer;uses:=
+ "com.fasterxml.jackson.core,com.fasterxml.jackson.databind,eu.europa.
+ ec.fisheries.uvms.common",eu.europa.ec.fisheries.uvms.service;uses:="
+ eu.europa.ec.fisheries.uvms.exception",eu.europa.ec.fisheries.uvms.se
+ rvice.interceptor;uses:="eu.europa.ec.fisheries.uvms.common,eu.europa
+ .ec.fisheries.uvms.rest.dto"
+Import-Package: com.fasterxml.jackson.annotation;version="2.4.0",com.f
+ asterxml.jackson.core;version="2.4.2",com.fasterxml.jackson.databind;
+ version="2.4.2",com.fasterxml.jackson.databind.node;version="2.4.2",c
+ om.google.common.base,com.vividsolutions.jts.geom;version="0.0.0",com
+ .vividsolutions.jts.io;version="0.0.0",java.beans,java.io,java.lang,j
+ ava.lang.annotation,java.lang.reflect,java.nio.file,java.text,java.ut
+ il,java.util.zip,javax.annotation;version="1.1",javax.ejb,javax.enter
+ prise.util,javax.inject,javax.interceptor,javax.jms,javax.naming,java
+ x.persistence,javax.servlet,javax.servlet.annotation,javax.servlet.ht
+ tp,javax.validation,javax.ws.rs;version="0.0.0",javax.ws.rs.core;vers
+ ion="0.0.0",javax.xml.bind;version="2.2.7",javax.xml.datatype,org.geo
+ tools.feature;version="0.0.0",org.geotools.geojson.feature;version="0
+ .0.0",org.geotools.geojson.geom;version="0.0.0",org.jboss.resteasy.an
+ notations.providers.multipart;version="0.0.0",org.joda.time;version="
+ 2.7",org.joda.time.format;version="2.7",org.mapstruct;version="0.0.0"
+ ,org.mapstruct.factory;version="0.0.0",org.opengis.feature;version="0
+ .0.0",org.opengis.feature.simple;version="0.0.0",org.opengis.feature.
+ type;version="0.0.0",org.slf4j

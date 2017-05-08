@@ -1,0 +1,5 @@
+digraph commons_logging_1_1_1_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  org_apache_commons_logging_impl -> org_apache_avalon_framework_logger;
+  org_apache_commons_logging_impl -> org_apache_log;
+}

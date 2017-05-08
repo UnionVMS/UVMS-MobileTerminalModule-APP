@@ -1,0 +1,44 @@
+Manifest-Version: 1.0
+Implementation-Title: JAXB Reference Implementation 
+Implementation-Version: 2.2.7
+Class-Path: jaxb-api.jar
+Specification-Vendor: Oracle Corporation
+Created-By: 1.6.0_32-b05 (Sun Microsystems Inc.)
+Ant-Version: Apache Ant 1.8.3
+Implementation-Vendor: Oracle Corporation
+Implementation-Vendor-Id: com.sun
+Specification-Title: Java Architecture for XML Binding
+Specification-Version: 2.2.7
+Extension-Name: com.sun.xml.bind.core
+Build-Id: hudson-jaxb-ri-2.2.7-promote-release-2
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: com.sun.xml.txw2
+Bundle-Description: jaxb-core-2.2.7
+Bundle-Name: jaxb-core-2.2.7
+Bundle-Version: 2.2.7
+Export-Package: com.sun.istack,com.sun.istack.localization,com.sun.ist
+ ack.logging,com.sun.xml.bind,com.sun.xml.bind.annotation,com.sun.xml.
+ bind.api,com.sun.xml.bind.api.impl,com.sun.xml.bind.marshaller;uses:=
+ "com.sun.xml.bind.v2.util",com.sun.xml.bind.unmarshaller,com.sun.xml.
+ bind.util,com.sun.xml.bind.v2,com.sun.xml.bind.v2.model.annotation,co
+ m.sun.xml.bind.v2.model.core;uses:="com.sun.xml.bind.v2.model.impl",c
+ om.sun.xml.bind.v2.model.impl,com.sun.xml.bind.v2.model.nav,com.sun.x
+ ml.bind.v2.model.util,com.sun.xml.bind.v2.runtime,com.sun.xml.bind.v2
+ .runtime.unmarshaller,com.sun.xml.bind.v2.schemagen.episode,com.sun.x
+ ml.bind.v2.util,com.sun.xml.txw2,com.sun.xml.txw2.annotation,com.sun.
+ xml.txw2.output
+Import-Package: java.io,java.lang,java.lang.annotation,java.lang.ref,j
+ ava.lang.reflect,java.net,java.security,java.text,java.util,java.util
+ .concurrent,java.util.logging,javax.activation;version="1.1",javax.la
+ ng.model,javax.xml.bind;version="2.2.7",javax.xml.bind.annotation;ver
+ sion="2.2.7",javax.xml.bind.annotation.adapters;version="2.2.7",javax
+ .xml.bind.helpers;version="2.2.7",javax.xml.namespace;version="0.0.0"
+ ,javax.xml.parsers;version="1.1",javax.xml.stream;version="0.0.0",jav
+ ax.xml.transform;version="1.1",javax.xml.transform.dom;version="1.1",
+ javax.xml.transform.sax;version="1.1",javax.xml.transform.stream;vers
+ ion="1.1",javax.xml.validation,javax.xml.xpath,org.w3c.dom;version="1
+ .1",org.xml.sax;version="1.1",org.xml.sax.ext;version="1.1",org.xml.s
+ ax.helpers;version="1.1"

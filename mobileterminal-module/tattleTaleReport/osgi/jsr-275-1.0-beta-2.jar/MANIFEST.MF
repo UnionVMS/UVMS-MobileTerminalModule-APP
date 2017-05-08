@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.6.0_05
+Built-By: legrand
+Created-By: Apache Maven
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: javax.measure.quantity
+Bundle-Description: jsr-275-1.0-beta-2
+Bundle-Name: jsr-275-1.0-beta-2
+Bundle-Version: 0.0.0
+Export-Package: javax.measure;uses:="javax.measure.converter,javax.mea
+ sure.unit",javax.measure.converter,javax.measure.quantity;uses:="java
+ x.measure.unit",javax.measure.unit;uses:="javax.measure.converter,jav
+ ax.measure.quantity"
+Import-Package: java.io,java.lang,java.lang.reflect,java.math,java.tex
+ t,java.util

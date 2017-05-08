@@ -1,0 +1,5 @@
+digraph commons_beanutils_1_9_1_dependencies {
+  node [shape = box, fontsize=10.0];
+  commons_beanutils_1_9_1 -> commons_collections_3_2_1;
+  commons_beanutils_1_9_1 -> commons_logging_1_1_1;
+}

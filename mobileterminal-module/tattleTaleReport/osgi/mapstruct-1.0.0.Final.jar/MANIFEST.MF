@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.8.0_66
+Built-By: gunnar
+Created-By: Apache Maven 3.0.4
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.mapstruct
+Bundle-Description: mapstruct-1.0.0.Final
+Bundle-Name: mapstruct-1.0.0.Final
+Bundle-Version: 0.0.0
+Export-Package: org.mapstruct,org.mapstruct.factory,org.mapstruct.util
+Import-Package: java.lang,java.lang.annotation,java.util

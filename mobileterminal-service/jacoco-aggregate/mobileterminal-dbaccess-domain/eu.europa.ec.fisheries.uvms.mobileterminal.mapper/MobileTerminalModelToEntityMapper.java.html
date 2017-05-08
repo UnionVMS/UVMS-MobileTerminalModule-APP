@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MobileTerminalModelToEntityMapper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.mapper</a> &gt; <span class="el_source">MobileTerminalModelToEntityMapper.java</span></div><h1>MobileTerminalModelToEntityMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelCapability;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.common.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.ChannelHistory;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+
+
+<span class="nc" id="L42">public class MobileTerminalModelToEntityMapper {</span>
+<span class="nc" id="L43">    private static Logger LOG = LoggerFactory.getLogger(MobileTerminalModelToEntityMapper.class);</span>
+
+    public static MobileTerminal mapMobileTerminalEntity(MobileTerminal entity, MobileTerminalType model, String serialNumber, MobileTerminalPlugin plugin, String username, String comment, EventCodeEnum event) throws MobileTerminalModelMapperException {
+<span class="nc bnc" id="L46" title="All 2 branches missed.">        if (model == null) throw new MobileTerminalModelMapperException(&quot;No mobile terminal to map&quot;);</span>
+<span class="nc bnc" id="L47" title="All 2 branches missed.">        if (entity.getGuid() == null) {</span>
+<span class="nc" id="L48">            entity.setGuid(UUID.randomUUID().toString());</span>
+        }
+<span class="nc" id="L50">        entity.setArchived(model.isArchived());</span>
+<span class="nc" id="L51">        entity.setInactivated(model.isInactive());</span>
+<span class="nc" id="L52">        entity.setPlugin(plugin);</span>
+<span class="nc" id="L53">        entity.setSerialNo(serialNumber);</span>
+
+        try {
+<span class="nc" id="L56">            entity.setSource(getSourceTypeFromModel(model.getSource()));</span>
+<span class="nc" id="L57">        } catch (EnumException e) {</span>
+<span class="nc" id="L58">            LOG.error(&quot;[ Error when getting terminal source enum from source.] &quot;, e.getMessage());</span>
+<span class="nc" id="L59">            throw new MobileTerminalModelMapperException(e.getMessage());</span>
+<span class="nc" id="L60">        }</span>
+
+<span class="nc" id="L62">        MobileTerminalTypeEnum type = MobileTerminalTypeEnum.getType(model.getType());</span>
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        if (type == null) throw new MobileTerminalModelMapperException(&quot;Non valid mobile terminal type when mapping&quot;);</span>
+<span class="nc" id="L64">        entity.setMobileTerminalType(type);</span>
+<span class="nc" id="L65">        entity.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L66">        entity.setUpdatedBy(username);</span>
+
+        try {
+<span class="nc" id="L69">            mapHistoryAttributes(entity, model, username, comment, event);</span>
+<span class="nc" id="L70">        } catch (EnumException e) {</span>
+<span class="nc" id="L71">            LOG.error(&quot;[ Error when mapping attribute types ]&quot;);</span>
+<span class="nc" id="L72">            throw new MobileTerminalModelMapperException(e.getMessage());</span>
+<span class="nc" id="L73">        }</span>
+
+        // Channels can only change for these events
+<span class="nc bnc" id="L76" title="All 4 branches missed.">        if (event == EventCodeEnum.MODIFY || event == EventCodeEnum.CREATE) {</span>
+            try {
+<span class="nc" id="L78">                mapChannels(entity, model, username);</span>
+<span class="nc" id="L79">            } catch (EnumException e) {</span>
+<span class="nc" id="L80">                LOG.error(&quot;[ Error when mapping channel field types ]&quot;);</span>
+<span class="nc" id="L81">                throw new MobileTerminalModelMapperException(e.getMessage());</span>
+<span class="nc" id="L82">            }</span>
+        }
+
+<span class="nc" id="L85">        entity.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L86">        entity.setUpdatedBy(username);</span>
+
+
+<span class="nc" id="L89">        return entity;</span>
+    }
+
+    public static MobileTerminal mapNewMobileTerminalEntity(MobileTerminalType model, String serialNumber, MobileTerminalPlugin plugin, String username) throws MobileTerminalModelMapperException {
+<span class="nc bnc" id="L93" title="All 2 branches missed.">        if (model == null) throw new MobileTerminalModelMapperException(&quot;No mobile terminal to map&quot;);</span>
+<span class="nc" id="L94">        return mapMobileTerminalEntity(new MobileTerminal(), model, serialNumber, plugin, username, MobileTerminalConstants.CREATE_COMMENT, EventCodeEnum.CREATE);</span>
+    }
+
+    private static void mapChannels(MobileTerminal entity, MobileTerminalType model, String username) throws EnumException, MobileTerminalModelMapperException {
+<span class="nc" id="L98">        List&lt;ComChannelType&gt; modelChannels = model.getChannels();</span>
+<span class="nc" id="L99">        Set&lt;Channel&gt; channels = new HashSet&lt;&gt;();</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">        for (ComChannelType channelType : modelChannels) {</span>
+<span class="nc" id="L101">            Channel channel = null;</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">            if (entity != null) {</span>
+<span class="nc bnc" id="L103" title="All 2 branches missed.">                for (Channel c : entity.getChannels()) {</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                    if (c.getGuid().equals(channelType.getGuid())) {</span>
+<span class="nc" id="L105">                        channel = c;</span>
+<span class="nc" id="L106">                        break;</span>
+                    }
+<span class="nc" id="L108">                }</span>
+            }
+
+<span class="nc bnc" id="L111" title="All 2 branches missed.">            if (channel == null) {</span>
+<span class="nc" id="L112">                channel = new Channel();</span>
+<span class="nc" id="L113">                channel.setGuid(UUID.randomUUID().toString());</span>
+            }
+<span class="nc" id="L115">            channel.setMobileTerminal(entity);</span>
+<span class="nc" id="L116">            channel.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L117">            channel.setUpdateUser(username);</span>
+<span class="nc" id="L118">            channel.setArchived(false);</span>
+
+
+<span class="nc" id="L121">            ChannelHistory history = new ChannelHistory();</span>
+<span class="nc" id="L122">            history.setChannel(channel);</span>
+<span class="nc" id="L123">            history.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L124">            history.setName(channelType.getName());</span>
+<span class="nc" id="L125">            history.setActive(true);</span>
+<span class="nc" id="L126">            history.setUpdatedBy(username);</span>
+<span class="nc" id="L127">            history.setMobileTerminalEvent(entity.getCurrentEvent());</span>
+
+<span class="nc" id="L129">            String attributes = mapComChannelAttributes(channelType.getAttributes());</span>
+<span class="nc" id="L130">            history.setAttributes(attributes);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">            if (channel.getHistories().size() == 0) {</span>
+<span class="nc" id="L132">                history.setEventCodeType(EventCodeEnum.CREATE);</span>
+            } else {
+<span class="nc" id="L134">                history.setEventCodeType(EventCodeEnum.MODIFY);</span>
+            }
+
+<span class="nc bnc" id="L137" title="All 2 branches missed.">            for (ComChannelCapability capability : channelType.getCapabilities()) {</span>
+<span class="nc bnc" id="L138" title="All 4 branches missed.">                if (MobileTerminalConstants.CAPABILITY_CONFIGURABLE.equalsIgnoreCase(capability.getType()) &amp;&amp; capability.isValue()) {</span>
+<span class="nc" id="L139">                    entity.getCurrentEvent().setConfigChannel(channel);</span>
+<span class="nc" id="L140">                    history.setConfigChannel(capability.isValue());</span>
+                }
+<span class="nc bnc" id="L142" title="All 4 branches missed.">                if (MobileTerminalConstants.CAPABILITY_DEFAULT_REPORTING.equalsIgnoreCase(capability.getType()) &amp;&amp; capability.isValue()) {</span>
+<span class="nc" id="L143">                    entity.getCurrentEvent().setDefaultChannel(channel);</span>
+<span class="nc" id="L144">                    history.setDefaultChannel(capability.isValue());</span>
+                }
+<span class="nc bnc" id="L146" title="All 4 branches missed.">                if (MobileTerminalConstants.CAPABILITY_POLLABLE.equalsIgnoreCase(capability.getType()) &amp;&amp; capability.isValue()) {</span>
+<span class="nc" id="L147">                    entity.getCurrentEvent().setPollChannel(channel);</span>
+<span class="nc" id="L148">                    history.setPollChannel(capability.isValue());</span>
+                }
+<span class="nc" id="L150">            }</span>
+
+            // No changes to channel means no new history
+<span class="nc" id="L153">            ChannelHistory channelHistory = channel.getCurrentHistory();</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">            if (channelHistory != null) {</span>
+<span class="nc bnc" id="L155" title="All 2 branches missed.">                if (channelHistory.equals(history)) {</span>
+<span class="nc" id="L156">                    channels.add(channel);</span>
+<span class="nc" id="L157">                    continue;</span>
+                } else {
+<span class="nc bnc" id="L159" title="All 2 branches missed.">                    for (ChannelHistory ch : channel.getHistories()) {</span>
+<span class="nc" id="L160">                        ch.setActive(false);</span>
+<span class="nc" id="L161">                        channels.add(channel);</span>
+<span class="nc" id="L162">                    }</span>
+                }
+            }
+
+<span class="nc bnc" id="L166" title="All 2 branches missed.">            for (ChannelHistory ch : channel.getHistories()) {</span>
+<span class="nc" id="L167">                ch.setActive(false);</span>
+<span class="nc" id="L168">            }</span>
+<span class="nc" id="L169">            channel.getHistories().add(history);</span>
+<span class="nc" id="L170">            channels.add(channel);</span>
+
+<span class="nc" id="L172">        }</span>
+
+<span class="nc bnc" id="L174" title="All 2 branches missed.">        for (Channel channel : entity.getChannels()) {</span>
+<span class="nc bnc" id="L175" title="All 2 branches missed.">            if (!channels.contains(channel)) {</span>
+<span class="nc" id="L176">                channel.setArchived(true);</span>
+<span class="nc" id="L177">                ChannelHistory current = channel.getCurrentHistory();</span>
+<span class="nc" id="L178">                current.setActive(false);</span>
+
+<span class="nc" id="L180">                ChannelHistory archive = new ChannelHistory();</span>
+<span class="nc" id="L181">                archive.setEventCodeType(EventCodeEnum.ARCHIVE);</span>
+<span class="nc" id="L182">                archive.setName(current.getName());</span>
+<span class="nc" id="L183">                archive.setMobileTerminalEvent(entity.getCurrentEvent());</span>
+<span class="nc" id="L184">                archive.setActive(true);</span>
+<span class="nc" id="L185">                archive.setAttributes(current.getAttributes());</span>
+<span class="nc" id="L186">                archive.setChannel(channel);</span>
+<span class="nc" id="L187">                archive.setUpdatedBy(username);</span>
+<span class="nc" id="L188">                archive.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L189">                channel.getHistories().add(archive);</span>
+            }
+<span class="nc" id="L191">        }</span>
+
+<span class="nc" id="L193">        entity.setChannels(channels);</span>
+<span class="nc" id="L194">    }</span>
+
+    private static void mapHistoryAttributes(MobileTerminal entity, MobileTerminalType model, String username, String comment, EventCodeEnum eventCode) throws EnumException, MobileTerminalModelMapperException {
+<span class="nc" id="L197">        List&lt;MobileTerminalAttribute&gt; modelAttributes = model.getAttributes();</span>
+<span class="nc" id="L198">        MobileTerminalEvent current = entity.getCurrentEvent();</span>
+
+<span class="nc" id="L200">        MobileTerminalEvent history = new MobileTerminalEvent();</span>
+<span class="nc" id="L201">        history.setActive(true);</span>
+<span class="nc" id="L202">        history.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L203">        history.setUpdatedBy(username);</span>
+<span class="nc" id="L204">        history.setMobileTerminal(entity);</span>
+<span class="nc" id="L205">        history.setComment(comment);</span>
+<span class="nc" id="L206">        history.setEventCodeType(eventCode);</span>
+<span class="nc bnc" id="L207" title="All 6 branches missed.">        if (current != null &amp;&amp; model.getConnectId() == null &amp;&amp; eventCode != EventCodeEnum.UNLINK) {</span>
+<span class="nc" id="L208">            history.setConnectId(current.getConnectId());</span>
+        } else {
+<span class="nc" id="L210">            history.setConnectId(model.getConnectId());</span>
+        }
+
+<span class="nc" id="L213">        history.setAttributes(mapHistoryAttributes(modelAttributes));</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">        for (MobileTerminalEvent event : entity.getMobileTerminalEvents()) {</span>
+<span class="nc" id="L215">            event.setActive(false);</span>
+<span class="nc" id="L216">        }</span>
+<span class="nc" id="L217">        entity.getMobileTerminalEvents().add(history);</span>
+<span class="nc" id="L218">    }</span>
+
+    private static String mapHistoryAttributes(List&lt;MobileTerminalAttribute&gt; modelAttributes) {
+<span class="nc" id="L221">        StringBuffer sb = new StringBuffer();</span>
+<span class="nc bnc" id="L222" title="All 2 branches missed.">        for (MobileTerminalAttribute attr : modelAttributes) {</span>
+<span class="nc" id="L223">            sb.append(attr.getType()).append(&quot;=&quot;);</span>
+<span class="nc" id="L224">            sb.append(attr.getValue()).append(&quot;;&quot;);</span>
+<span class="nc" id="L225">        }</span>
+
+<span class="nc" id="L227">        return sb.toString();</span>
+    }
+
+    private static String mapComChannelAttributes(List&lt;ComChannelAttribute&gt; modelAttributes) {
+<span class="nc" id="L231">        StringBuffer sb = new StringBuffer();</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">        for (ComChannelAttribute attr : modelAttributes) {</span>
+<span class="nc" id="L233">            sb.append(attr.getType()).append(&quot;=&quot;);</span>
+<span class="nc" id="L234">            sb.append(attr.getValue()).append(&quot;;&quot;);</span>
+<span class="nc" id="L235">        }</span>
+
+<span class="nc" id="L237">        return sb.toString();</span>
+    }
+
+    private static MobileTerminalSourceEnum getSourceTypeFromModel(MobileTerminalSource model) throws EnumException {
+<span class="nc bnc" id="L241" title="All 2 branches missed.">        if (model != null) {</span>
+<span class="nc bnc" id="L242" title="All 3 branches missed.">            switch (model) {</span>
+                case INTERNAL:
+<span class="nc" id="L244">                    return MobileTerminalSourceEnum.INTERNAL;</span>
+                case NATIONAL:
+<span class="nc" id="L246">                    return MobileTerminalSourceEnum.NATIONAL;</span>
+            }
+        }
+<span class="nc" id="L249">        throw new EnumException(&quot;Couldn't map enum (from model) in &quot; + MobileTerminalSourceEnum.class.getName());</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

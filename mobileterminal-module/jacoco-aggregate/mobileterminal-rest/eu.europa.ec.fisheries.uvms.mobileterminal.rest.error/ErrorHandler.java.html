@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ErrorHandler.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-rest</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.rest.error</a> &gt; <span class="el_source">ErrorHandler.java</span></div><h1>ErrorHandler.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.rest.error;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalFaultException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelValidationException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.InputArgumentException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceMapperException;
+
+/**
+ **/
+<span class="nc" id="L28">public class ErrorHandler {</span>
+    
+    public static ResponseDto getFault(Exception ex) {
+<span class="nc bnc" id="L31" title="All 2 branches missed.">    	if(ex instanceof MobileTerminalServiceException) {</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">    		if(ex instanceof InputArgumentException) {</span>
+<span class="nc" id="L33">    			return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.INPUT_ERROR);</span>
+            }
+    		
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if(ex instanceof MobileTerminalServiceMapperException) {</span>
+<span class="nc" id="L37">            	return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.MAPPING_ERROR);</span>
+            }
+<span class="nc" id="L39">            return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.SERVICE_ERROR);</span>
+    	}
+    	
+<span class="nc bnc" id="L42" title="All 2 branches missed.">    	if(ex instanceof MobileTerminalModelException) {</span>
+<span class="nc bnc" id="L43" title="All 2 branches missed.">    		if(ex instanceof MobileTerminalModelValidationException) {</span>
+<span class="nc" id="L44">    			return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.INPUT_ERROR);</span>
+    		}
+    		
+<span class="nc bnc" id="L47" title="All 2 branches missed.">    		if(ex instanceof MobileTerminalModelMapperException) {</span>
+    			//MobileTerminalValidationException
+        		//MobileTerminalUnmarshallException
+<span class="nc" id="L50">    			return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.MAPPING_ERROR);</span>
+    		}
+    		
+<span class="nc bnc" id="L53" title="All 2 branches missed.">    		if(ex instanceof MobileTerminalFaultException) {</span>
+<span class="nc" id="L54">        		return extractFault((MobileTerminalFaultException)ex);</span>
+        	}
+    		
+<span class="nc" id="L57">    		return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.MODEL_ERROR);</span>
+    	}
+    	
+<span class="nc bnc" id="L60" title="All 2 branches missed.">    	if(ex instanceof MobileTerminalException) {</span>
+<span class="nc" id="L61">    		return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.MOBILE_TERMINAL_ERROR);</span>
+    	}
+    	
+<span class="nc" id="L64">        return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.UNDEFINED_ERROR);</span>
+    }
+
+    private static ResponseDto extractFault(MobileTerminalFaultException ex) {
+<span class="nc" id="L68">        MobileTerminalFault fault = ex.getMobileTerminalFault();</span>
+<span class="nc bnc" id="L69" title="All 2 branches missed.">        if (fault == null) {</span>
+<span class="nc" id="L70">            return new ResponseDto&lt;String&gt;(ex.getMessage(), ResponseCode.DOMAIN_ERROR);</span>
+        }
+
+<span class="nc" id="L73">        MobileTerminalType terminal = fault.getTerminal();</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (terminal == null) {</span>
+<span class="nc" id="L75">            return new ResponseDto&lt;String&gt;(fault.getMessage(), fault.getCode());</span>
+        }
+
+<span class="nc" id="L78">        return new ResponseDto&lt;MobileTerminalType&gt;(terminal, fault.getCode());</span>
+    }
+    
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

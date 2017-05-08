@@ -1,0 +1,31 @@
+digraph reflections_0_9_10_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  org_reflections -> javax_annotation;
+  org_reflections -> org_reflections_adapters;
+  org_reflections -> org_reflections_scanners;
+  org_reflections -> org_reflections_serializers;
+  org_reflections -> org_reflections_util;
+  org_reflections -> org_reflections_vfs;
+  org_reflections_adapters -> javax_annotation;
+  org_reflections_adapters -> org_reflections;
+  org_reflections_adapters -> org_reflections_util;
+  org_reflections_adapters -> org_reflections_vfs;
+  org_reflections_scanners -> javax_annotation;
+  org_reflections_scanners -> org_reflections;
+  org_reflections_scanners -> org_reflections_adapters;
+  org_reflections_scanners -> org_reflections_util;
+  org_reflections_scanners -> org_reflections_vfs;
+  org_reflections_serializers -> com_google_gson;
+  org_reflections_serializers -> org_reflections;
+  org_reflections_serializers -> org_reflections_scanners;
+  org_reflections_serializers -> org_reflections_util;
+  org_reflections_util -> javax_annotation;
+  org_reflections_util -> org_reflections;
+  org_reflections_util -> org_reflections_adapters;
+  org_reflections_util -> org_reflections_scanners;
+  org_reflections_util -> org_reflections_serializers;
+  org_reflections_vfs -> javax_annotation;
+  org_reflections_vfs -> org_apache_commons_vfs2;
+  org_reflections_vfs -> org_reflections;
+  org_reflections_vfs -> org_reflections_util;
+}

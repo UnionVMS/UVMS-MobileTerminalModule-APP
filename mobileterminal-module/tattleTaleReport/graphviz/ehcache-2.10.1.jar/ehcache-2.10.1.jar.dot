@@ -1,0 +1,5 @@
+digraph ehcache_2_10_1_dependencies {
+  node [shape = box, fontsize=10.0];
+  ehcache_2_10_1 -> jsr173_api_1_0;
+  ehcache_2_10_1 -> xml_apis_1_0_b2;
+}

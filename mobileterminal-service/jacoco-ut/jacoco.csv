@@ -1,0 +1,35 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,MobileTerminalPollTimerServiceBean,87,0,4,0,18,0,5,0,3,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,MobileTerminalConfigHelper,27,5,2,0,4,2,2,2,1,2
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,PluginServiceBean,215,0,2,0,48,0,7,0,6,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,MobileTerminalEventServiceBean,555,0,12,0,127,0,17,0,11,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,MobileTerminalServiceBean,427,0,22,0,105,0,25,0,13,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,MobileTerminalServiceBean.new Object() {...},26,0,0,0,1,0,1,0,1,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,PollServiceBean,310,0,9,0,83,0,14,0,9,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,MappedPollServiceBean,152,0,4,0,37,0,11,0,9,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,PollServiceBean.new Object() {...},19,0,0,0,1,0,1,0,1,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.bean,ConfigServiceBean,53,16,0,0,15,5,3,3,3,3
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.dto,PollTypeDto,58,0,0,0,6,0,4,0,4,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.dto,AttributeDto,17,0,0,0,7,0,5,0,5,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.dto,PollDto,25,0,0,0,7,0,4,0,4,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.dto,PollChannelDto,45,0,0,0,19,0,13,0,13,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.dto,PollValue,23,0,0,0,10,0,5,0,5,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.dto,CreatePollResultDto,34,0,0,0,13,0,7,0,7,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.dto,PollChannelListDto,24,0,0,0,10,0,7,0,7,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.dto,PollKey,118,0,0,0,11,0,4,0,4,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.timer,PluginTimerTask,37,0,2,0,13,0,4,0,3,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.timer,PollTimerTask,90,0,4,0,20,0,5,0,3,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.timer,MobileTerminalExecutorServiceBean,55,0,4,0,18,0,6,0,4,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,AuditModuleRequestMapper.new Object() {...},12,0,0,0,1,0,1,0,1,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,ServiceToPluginMapper,97,0,10,0,22,0,8,0,3,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollToCommandRequestMapper.new Object() {...},33,0,0,0,1,0,1,0,1,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollToCommandRequestMapper.PollReceiverIridium,48,0,0,0,3,0,4,0,4,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,AuditModuleRequestMapper,157,0,2,0,22,0,18,0,17,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollToCommandRequestMapper,338,0,40,0,66,0,27,0,6,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollToCommandRequestMapper.PollReceiverInmarsatC,98,0,0,0,3,0,4,0,4,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.mapper,PollMapper,255,0,24,0,63,0,20,0,8,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.exception,MobileTerminalServiceException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.exception,MobileTerminalServiceMapperException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.service.exception,InputArgumentException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.constant,ParameterKey,35,0,0,0,6,0,5,0,5,0
+mobileterminal-service,eu.europa.ec.fisheries.uvms.mobileterminal.constant,ServiceConstants,3,0,0,0,1,0,1,0,1,0

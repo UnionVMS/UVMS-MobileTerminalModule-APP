@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>ConfigModelBean.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.bean</a> &gt; <span class="el_source">ConfigModelBean.java</span></div><h1>ConfigModelBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityConfiguration;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemConfiguration;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
+import eu.europa.ec.fisheries.uvms.common.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConfigType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.OceanRegionDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PluginMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+
+@Stateless
+<span class="fc" id="L55">public class ConfigModelBean implements ConfigModel {</span>
+
+<span class="fc" id="L57">    final static Logger LOG = LoggerFactory.getLogger(ConfigModelBean.class);</span>
+    
+    @EJB
+    OceanRegionDao oceanRegionDao;
+
+    @EJB
+    MobileTerminalPluginDao mobileTerminalPluginDao;
+    
+    @EJB
+    DNIDListDao dnidListDao;
+    
+    @EJB
+	ChannelDao channelDao;
+    
+    @Override
+    public List&lt;TerminalSystemType&gt; getAllTerminalSystems() throws MobileTerminalModelException {
+<span class="nc" id="L73">        LOG.info(&quot;Get all terminal systems&quot;);</span>
+
+<span class="nc" id="L75">        Map&lt;MobileTerminalTypeEnum, List&lt;MobileTerminalPlugin&gt;&gt; pluginsByType = getPlugins();</span>
+<span class="nc" id="L76">		List&lt;TerminalSystemType&gt; terminalSystemList = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L78" title="All 2 branches missed.">		for (MobileTerminalTypeEnum type : pluginsByType.keySet()) {</span>
+
+<span class="nc" id="L80">			TerminalSystemConfiguration terminalFieldConfiguration = PluginMapper.mapTerminalFieldConfiguration(type);</span>
+<span class="nc" id="L81">			TerminalSystemConfiguration comchannelFieldConfiguration = PluginMapper.mapComchannelFieldConfiguration(type);</span>
+<span class="nc" id="L82">			List&lt;OceanRegion&gt; oceanRegionList = oceanRegionDao.getOceanRegionList();</span>
+<span class="nc" id="L83">			CapabilityConfiguration capabilityConfiguration = PluginMapper.mapCapabilityConfiguration(type, pluginsByType.get(type), oceanRegionList);</span>
+
+<span class="nc" id="L85">			TerminalSystemType systemType = new TerminalSystemType();</span>
+
+<span class="nc" id="L87">			systemType.setType(type.name());</span>
+<span class="nc" id="L88">			systemType.setTerminalConfiguration(terminalFieldConfiguration);</span>
+<span class="nc" id="L89">			systemType.setComchannelConfiguration(comchannelFieldConfiguration);</span>
+<span class="nc" id="L90">			systemType.setCapabilityConfiguration(capabilityConfiguration);</span>
+
+<span class="nc" id="L92">			terminalSystemList.add(systemType);</span>
+<span class="nc" id="L93">		}</span>
+
+<span class="nc" id="L95">        return terminalSystemList;</span>
+    }
+
+	@Override
+	public List&lt;ConfigList&gt; getConfigValues() throws MobileTerminalModelException {
+<span class="fc" id="L100">		LOG.info(&quot;Get config list values&quot;);</span>
+<span class="fc" id="L101">		List&lt;ConfigList&gt; configValues = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L102" title="All 2 branches covered.">		for(MobileTerminalConfigType config : MobileTerminalConfigType.values()) {</span>
+<span class="fc" id="L103">			ConfigList list = new ConfigList();</span>
+<span class="fc" id="L104">			list.setName(config.name());</span>
+<span class="pc bpc" id="L105" title="1 of 4 branches missed.">			switch(config) {</span>
+			case POLL_TYPE:
+<span class="fc" id="L107">				list.getValue().addAll(getPollTypes());</span>
+<span class="fc" id="L108">				break;</span>
+			case TRANSPONDERS:
+<span class="fc" id="L110">				list.getValue().addAll(getTransponders());</span>
+<span class="fc" id="L111">				break;</span>
+			case POLL_TIME_SPAN:
+<span class="fc" id="L113">				list.getValue().addAll(getPollTimeSpan());</span>
+<span class="fc" id="L114">				break;</span>
+			}
+<span class="fc" id="L116">			configValues.add(list);</span>
+		}
+<span class="fc" id="L118">		return configValues;</span>
+	}
+
+	private List&lt;String&gt; getPollTimeSpan() {
+<span class="fc" id="L122">		List&lt;String&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L123">		list.add(&quot;Today&quot;);</span>
+<span class="fc" id="L124">		return list;</span>
+	}
+
+	private List&lt;String&gt; getTransponders() {
+<span class="fc" id="L128">		List&lt;String&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L129" title="All 2 branches covered.">		for(MobileTerminalTypeEnum transponder : MobileTerminalTypeEnum.values()) {</span>
+<span class="fc" id="L130">			list.add(transponder.name());</span>
+		}
+<span class="fc" id="L132">		return list;</span>
+	}
+
+	private List&lt;String&gt; getPollTypes() {
+<span class="fc" id="L136">		List&lt;String&gt; list = new ArrayList&lt;&gt;();</span>
+<span class="fc bfc" id="L137" title="All 2 branches covered.">		for(PollTypeEnum type : PollTypeEnum.values()) {</span>
+<span class="fc" id="L138">			list.add(type.name());</span>
+		}
+<span class="fc" id="L140">		return list;</span>
+	}
+	
+	MobileTerminalPlugin updatePlugin(PluginService plugin) throws TerminalDaoException {
+		try {
+<span class="nc" id="L145">			MobileTerminalPlugin entity = mobileTerminalPluginDao.getPluginByServiceName(plugin.getServiceName());</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">			if(PluginMapper.equals(entity, plugin)) {</span>
+<span class="nc" id="L147">				return entity;</span>
+			} else {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">				for(MobileTerminalPluginCapability capability : entity.getCapabilities()) {</span>
+<span class="nc" id="L150">					capability.setPlugin(null);</span>
+<span class="nc" id="L151">				}</span>
+<span class="nc" id="L152">				entity.getCapabilities().clear();</span>
+<span class="nc" id="L153">				entity = PluginMapper.mapModelToEntity(entity, plugin);</span>
+<span class="nc" id="L154">				mobileTerminalPluginDao.updatePlugin(entity);</span>
+<span class="nc" id="L155">				return entity;</span>
+			}
+<span class="nc" id="L157">		} catch (NoEntityFoundException e) {</span>
+<span class="nc" id="L158">			return null;</span>
+		}
+	}
+	
+	@Override
+	public List&lt;Plugin&gt; upsertPlugins(List&lt;PluginService&gt; pluginList) throws MobileTerminalModelException {
+<span class="nc" id="L164">		LOG.debug(&quot;Start upsert plugin list&quot;);</span>
+<span class="nc bnc" id="L165" title="All 2 branches missed.">		if(pluginList == null) {</span>
+<span class="nc" id="L166">			throw new InputArgumentException(&quot;No pluginList to upsert&quot;);</span>
+		}
+		
+<span class="nc" id="L169">		Map&lt;String, PluginService&gt; map = new HashMap&lt;&gt;();</span>
+<span class="nc" id="L170">		List&lt;Plugin&gt; responseList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L171" title="All 2 branches missed.">		for(PluginService plugin : pluginList) {</span>
+<span class="nc bnc" id="L172" title="All 4 branches missed.">			if(plugin.getLabelName() == null || plugin.getLabelName().isEmpty()) {</span>
+<span class="nc" id="L173">				throw new InputArgumentException(&quot;No plugin name&quot;);</span>
+			}
+<span class="nc bnc" id="L175" title="All 4 branches missed.">			if(plugin.getServiceName() == null || plugin.getServiceName().isEmpty()) {</span>
+<span class="nc" id="L176">				throw new InputArgumentException(&quot;No service name&quot;);</span>
+			}
+			
+			try {
+<span class="nc" id="L180">				MobileTerminalPlugin entity = updatePlugin(plugin);</span>
+<span class="nc bnc" id="L181" title="All 2 branches missed.">				if(entity == null) {</span>
+<span class="nc" id="L182">					entity = PluginMapper.mapModelToEntity(plugin);</span>
+<span class="nc" id="L183">					entity = mobileTerminalPluginDao.createMobileTerminalPlugin(entity);</span>
+				}
+<span class="nc" id="L185">				map.put(plugin.getServiceName(), plugin);</span>
+<span class="nc" id="L186">				responseList.add(PluginMapper.mapEntityToModel(entity));</span>
+<span class="nc" id="L187">			} catch (TerminalDaoException e) {</span>
+<span class="nc" id="L188">				throw new MobileTerminalModelException(&quot;Couldn't persist plugin &quot; + e.getMessage());</span>
+<span class="nc" id="L189">			}</span>
+<span class="nc" id="L190">		}</span>
+		
+<span class="nc" id="L192">		responseList.addAll(inactivatePlugins(map));</span>
+		
+<span class="nc" id="L194">		return responseList;</span>
+	}
+	
+	List&lt;Plugin&gt; inactivatePlugins(Map&lt;String, PluginService&gt; map) throws ConfigDaoException {
+<span class="nc" id="L198">		List&lt;Plugin&gt; responseList = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L199">		List&lt;MobileTerminalPlugin&gt; availablePlugins = mobileTerminalPluginDao.getPluginList();</span>
+<span class="nc bnc" id="L200" title="All 2 branches missed.">		for(MobileTerminalPlugin plugin : availablePlugins) {</span>
+<span class="nc" id="L201">			PluginService pluginService = map.get(plugin.getPluginServiceName());</span>
+<span class="nc bnc" id="L202" title="All 4 branches missed.">			if(pluginService == null &amp;&amp; !plugin.getPluginInactive()) {</span>
+<span class="nc" id="L203">				LOG.debug(&quot;inactivate no longer available plugin&quot;);</span>
+<span class="nc" id="L204">				plugin.setPluginInactive(true);</span>
+<span class="nc" id="L205">				responseList.add(PluginMapper.mapEntityToModel(plugin));</span>
+			}
+<span class="nc" id="L207">		}</span>
+<span class="nc" id="L208">		return responseList;</span>
+	}
+
+	@Override
+	public List&lt;String&gt; updatedDNIDList(String pluginName) throws MobileTerminalModelException {
+<span class="nc" id="L213">		List&lt;String&gt; dnids = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L214">		List&lt;DNIDList&gt; dnidList = dnidListDao.getDNIDList(pluginName);</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">		for(DNIDList entity : dnidList) {</span>
+<span class="nc" id="L216">			dnids.add(entity.getDNID());</span>
+<span class="nc" id="L217">		}</span>
+<span class="nc" id="L218">		return dnids;</span>
+	}
+	
+	private boolean changed(List&lt;String&gt; activeDnidList, List&lt;DNIDList&gt; existingDNIDList) {
+<span class="nc bnc" id="L222" title="All 4 branches missed.">		if(activeDnidList.isEmpty() &amp;&amp; existingDNIDList.isEmpty()) {</span>
+<span class="nc" id="L223">			return false;</span>
+		}
+<span class="nc" id="L225">		Set&lt;String&gt; activeDnidSet = new HashSet&lt;String&gt;(activeDnidList);</span>
+<span class="nc" id="L226">		Set&lt;String&gt; entityDnidSet = new HashSet&lt;String&gt;();</span>
+<span class="nc bnc" id="L227" title="All 2 branches missed.">		for(DNIDList entity : existingDNIDList) {</span>
+<span class="nc" id="L228">			entityDnidSet.add(entity.getDNID());</span>
+<span class="nc" id="L229">		}</span>
+<span class="nc bnc" id="L230" title="All 2 branches missed.">		if(activeDnidSet.size() != entityDnidSet.size()) return true;</span>
+		
+<span class="nc bnc" id="L232" title="All 2 branches missed.">		for(String activeDnid : activeDnidSet) {</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">			if(!entityDnidSet.contains(activeDnid)) {</span>
+<span class="nc" id="L234">				return true;</span>
+			}
+<span class="nc" id="L236">		}</span>
+		
+<span class="nc bnc" id="L238" title="All 2 branches missed.">		for(String entityDnid : entityDnidSet) {</span>
+<span class="nc bnc" id="L239" title="All 2 branches missed.">			if(!activeDnidSet.contains(entityDnid)) {</span>
+<span class="nc" id="L240">				return true;</span>
+			}
+<span class="nc" id="L242">		}</span>
+		
+<span class="nc" id="L244">		return false;</span>
+	}
+
+	/**
+	 * Creates a map containing the available plugins for each mobile terminal type.
+	 * 
+	 * Mobile terminal types will only be included if at least one plugin exists
+	 * for it. Plugins with no type (satellite type) are not included.
+	 * 
+	 * @return a map from mobile terminal type, to list of plugins
+	 * @throws ConfigDaoException if unable to fetch original plugin list
+	 */
+	private Map&lt;MobileTerminalTypeEnum, List&lt;MobileTerminalPlugin&gt;&gt; getPlugins() throws ConfigDaoException {
+<span class="nc" id="L257">        Map&lt;MobileTerminalTypeEnum, List&lt;MobileTerminalPlugin&gt;&gt; plugins = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L258" title="All 2 branches missed.">        for (MobileTerminalPlugin plugin : mobileTerminalPluginDao.getPluginList()) {</span>
+<span class="nc" id="L259">            MobileTerminalTypeEnum mobileTerminalType = MobileTerminalTypeEnum.getType(plugin.getPluginSatelliteType());</span>
+<span class="nc bnc" id="L260" title="All 2 branches missed.">            if (mobileTerminalType == null) {</span>
+<span class="nc" id="L261">                continue;</span>
+            }
+
+<span class="nc" id="L264">            List&lt;MobileTerminalPlugin&gt; typePlugins = plugins.get(mobileTerminalType);</span>
+<span class="nc bnc" id="L265" title="All 2 branches missed.">            if (typePlugins == null) {</span>
+<span class="nc" id="L266">                typePlugins = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L267">                plugins.put(mobileTerminalType, typePlugins);</span>
+            }
+
+<span class="nc" id="L270">            typePlugins.add(plugin);</span>
+<span class="nc" id="L271">        }</span>
+
+<span class="nc" id="L273">        return plugins;</span>
+	}
+
+	@Override
+	public boolean checkDNIDListChange(String pluginName) {
+		//TODO fix sql query:
+
+<span class="nc" id="L280">		List&lt;String&gt; activeDnidList = channelDao.getActiveDNID(pluginName);</span>
+		try {
+<span class="nc" id="L282">			List&lt;DNIDList&gt; dnidList = dnidListDao.getDNIDList(pluginName);</span>
+<span class="nc bnc" id="L283" title="All 2 branches missed.">			if(changed(activeDnidList, dnidList)) {</span>
+<span class="nc" id="L284">				dnidListDao.removeByPluginName(pluginName);</span>
+<span class="nc bnc" id="L285" title="All 2 branches missed.">				for(String terminalDnid : activeDnidList) {</span>
+<span class="nc" id="L286">					DNIDList dnid = new DNIDList();</span>
+<span class="nc" id="L287">					dnid.setDNID(terminalDnid);</span>
+<span class="nc" id="L288">					dnid.setPluginName(pluginName);</span>
+<span class="nc" id="L289">					dnid.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L290">					dnid.setUpdateUser(MobileTerminalConstants.UPDATE_USER);</span>
+<span class="nc" id="L291">					dnidListDao.create(dnid);</span>
+<span class="nc" id="L292">				}</span>
+<span class="nc" id="L293">				return true;</span>
+			}
+<span class="nc" id="L295">		} catch (ConfigDaoException e) {</span>
+<span class="nc" id="L296">			LOG.error(&quot;Couldn't use DNID List&quot;);</span>
+<span class="nc" id="L297">		}</span>
+<span class="nc" id="L298">		return false;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

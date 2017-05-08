@@ -1,0 +1,6 @@
+digraph jjwt_0_4_dependencies {
+  node [shape = box, fontsize=10.0];
+  jjwt_0_4 -> jackson_core_2_4_2;
+  jjwt_0_4 -> jackson_databind_2_4_2;
+  jjwt_0_4 -> jaxb_api_2_2_7;
+}

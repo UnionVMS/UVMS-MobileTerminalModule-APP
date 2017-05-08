@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PollServiceBean.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.service.bean</a> &gt; <span class="el_source">PollServiceBean.java</span></div><h1>PollServiceBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollId;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
+import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollTimerService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+
+@Stateless
+<span class="nc" id="L48">public class PollServiceBean implements PollService {</span>
+
+<span class="nc" id="L50">    final static Logger LOG = LoggerFactory.getLogger(PollServiceBean.class);</span>
+
+    @EJB
+    MessageProducer messageProducer;
+
+    @EJB
+    MessageConsumer reciever;
+
+    @EJB
+    PluginService sendPollService;
+
+    @EJB
+    PollTimerService timerService;
+
+    @EJB(lookup = ServiceConstants.DB_ACCESS_POLL_DOMAIN_MODEL)
+    PollDomainModel pollModel;
+
+    @Override
+    public CreatePollResultDto createPoll(PollRequestType poll, String username) throws MobileTerminalServiceException {
+<span class="nc" id="L69">        LOG.debug(&quot;CREATE POLL INVOKED IN SERVICE LAYER&quot;);</span>
+        try {
+<span class="nc" id="L71">            List&lt;PollResponseType&gt; createdPolls = pollModel.createPolls(poll, username);</span>
+
+<span class="nc" id="L73">            boolean triggerTimer = false;</span>
+<span class="nc" id="L74">            List&lt;String&gt; unsentPolls = new ArrayList&lt;&gt;();</span>
+<span class="nc" id="L75">            List&lt;String&gt; sentPolls = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L76" title="All 2 branches missed.">            for (PollResponseType createdPoll : createdPolls) {</span>
+<span class="nc" id="L77">                triggerTimer = PollType.PROGRAM_POLL.equals(createdPoll.getPollType());</span>
+                try {
+<span class="nc" id="L79">                    AcknowledgeTypeType ack = sendPollService.sendPoll(createdPoll, username);</span>
+<span class="nc bnc" id="L80" title="All 3 branches missed.">                    switch (ack) {</span>
+                        case NOK:
+<span class="nc" id="L82">                            unsentPolls.add(createdPoll.getPollId().getGuid());</span>
+<span class="nc" id="L83">                            break;</span>
+                        case OK:
+<span class="nc" id="L85">                            sentPolls.add(createdPoll.getPollId().getGuid());</span>
+<span class="nc" id="L86">                            break;</span>
+                    }
+<span class="nc" id="L88">                } catch (MobileTerminalServiceException e) {</span>
+<span class="nc" id="L89">                    LOG.error(e.getMessage());</span>
+<span class="nc" id="L90">                }</span>
+
+                try {
+<span class="nc" id="L93">                    String auditData = AuditModuleRequestMapper.mapAuditLogPollCreated(createdPoll.getPollType(), createdPoll.getPollId().getGuid(), createdPoll.getComment(), username);</span>
+<span class="nc" id="L94">                    messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L95">                } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L96">                    LOG.error(&quot;Failed to send audit log message! Poll with guid {} was created&quot;, createdPoll.getPollId().getGuid());</span>
+<span class="nc" id="L97">                }</span>
+<span class="nc" id="L98">            }</span>
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">            if (triggerTimer) {</span>
+<span class="nc" id="L101">                timerService.timerTimeout();</span>
+            }
+
+<span class="nc" id="L104">            CreatePollResultDto result = new CreatePollResultDto();</span>
+<span class="nc" id="L105">            result.setSentPolls(sentPolls);</span>
+<span class="nc" id="L106">            result.setUnsentPolls(unsentPolls);</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">            result.setUnsentPoll(!unsentPolls.isEmpty());</span>
+<span class="nc" id="L108">            return result;</span>
+<span class="nc" id="L109">        } catch (MobileTerminalModelException | MobileTerminalMessageException e) {</span>
+<span class="nc" id="L110">        	LOG.error(&quot;Failed to create poll&quot;,e);</span>
+<span class="nc" id="L111">            throw new MobileTerminalServiceException(e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public List&lt;PollResponseType&gt; getRunningProgramPolls() throws MobileTerminalServiceException {
+<span class="nc" id="L117">        LOG.debug(&quot;GET RUNNING PROGRAM POLLS INVOKED IN SERVICE LAYER&quot;);</span>
+        try {
+<span class="nc" id="L119">            List&lt;PollResponseType&gt; pollProgramList = pollModel.getPollProgramList(true);</span>
+<span class="nc" id="L120">            return pollProgramList;</span>
+<span class="nc" id="L121">        } catch (MobileTerminalModelException e) {</span>
+<span class="nc" id="L122">            throw new MobileTerminalServiceException(e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public PollResponseType startProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+<span class="nc" id="L128">        LOG.debug(&quot;START POLLING INVOKED IN SERVICE LAYER&quot;);</span>
+        try {
+<span class="nc" id="L130">            PollId pollIdType = new PollId();</span>
+<span class="nc" id="L131">            pollIdType.setGuid(pollId);</span>
+<span class="nc" id="L132">            PollResponseType startedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.STARTED);</span>
+            try {
+<span class="nc" id="L134">                String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStarted(startedPoll.getPollId().getGuid(), username);</span>
+<span class="nc" id="L135">                messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L136">            } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L137">                LOG.error(&quot;Failed to send audit log message! Poll with guid {} was started&quot;, startedPoll.getPollId().getGuid());</span>
+<span class="nc" id="L138">            }</span>
+
+<span class="nc" id="L140">            return startedPoll;</span>
+<span class="nc" id="L141">        } catch (MobileTerminalModelException | MobileTerminalMessageException e) {</span>
+<span class="nc" id="L142">            throw new MobileTerminalServiceException(e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public PollResponseType stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+<span class="nc" id="L148">        LOG.debug(&quot;STOP POLLING INVOKED IN SERVICE LAYER&quot;);</span>
+        try {
+<span class="nc" id="L150">            PollId pollIdType = new PollId();</span>
+<span class="nc" id="L151">            pollIdType.setGuid(pollId);</span>
+<span class="nc" id="L152">            PollResponseType stoppedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.STOPPED);</span>
+            try {
+<span class="nc" id="L154">                String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStopped(stoppedPoll.getPollId().getGuid(), username);</span>
+<span class="nc" id="L155">                messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L156">            } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L157">                LOG.error(&quot;Failed to send audit log message! Poll with guid {} was stopped&quot;, stoppedPoll.getPollId().getGuid());</span>
+<span class="nc" id="L158">            }</span>
+
+<span class="nc" id="L160">            return stoppedPoll;</span>
+<span class="nc" id="L161">        } catch (MobileTerminalModelException | MobileTerminalMessageException e) {</span>
+<span class="nc" id="L162">            throw new MobileTerminalServiceException(e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public PollResponseType inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+<span class="nc" id="L168">        LOG.debug(&quot;INACTIVATE PROGRAM POLL INVOKED IN SERVICE LAYER&quot;);</span>
+        try {
+<span class="nc" id="L170">            PollId pollIdType = new PollId();</span>
+<span class="nc" id="L171">            pollIdType.setGuid(pollId);</span>
+<span class="nc" id="L172">            PollResponseType inactivatedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.ARCHIVED);</span>
+            try {
+<span class="nc" id="L174">                String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollInactivated(inactivatedPoll.getPollId().getGuid(), username);</span>
+<span class="nc" id="L175">                messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);</span>
+<span class="nc" id="L176">            } catch (AuditModelMarshallException e) {</span>
+<span class="nc" id="L177">                LOG.error(&quot;Failed to send audit log message! Poll with guid {} was inactivated&quot;, inactivatedPoll.getPollId().getGuid());</span>
+<span class="nc" id="L178">            }</span>
+
+<span class="nc" id="L180">            return inactivatedPoll;</span>
+<span class="nc" id="L181">        } catch (MobileTerminalModelException | MobileTerminalMessageException e) {</span>
+<span class="nc" id="L182">            throw new MobileTerminalServiceException(e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public PollListResponse getPollBySearchCriteria(PollListQuery query) throws MobileTerminalServiceException {
+<span class="nc" id="L188">        LOG.debug(&quot;GET POLL BY SEARCHCRITERIA INVOKED IN SERVICE LAYER&quot;);</span>
+        try {
+<span class="nc" id="L190">            PollListResponse pollResponse = pollModel.getPollList(query);</span>
+<span class="nc" id="L191">            return pollResponse;</span>
+<span class="nc" id="L192">        } catch (MobileTerminalModelException e) {</span>
+<span class="nc" id="L193">            throw new MobileTerminalServiceException(e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public List&lt;PollResponseType&gt; timer() throws MobileTerminalException {
+<span class="nc" id="L199">        LOG.debug(&quot;TIMER TRIGGERED IN SERVICE LAYER&quot;);</span>
+
+<span class="nc" id="L201">        List&lt;PollResponseType&gt; pollTimerProgramList = pollModel.getPollProgramRunningAndStarted();</span>
+
+<span class="nc" id="L203">        return pollTimerProgramList;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

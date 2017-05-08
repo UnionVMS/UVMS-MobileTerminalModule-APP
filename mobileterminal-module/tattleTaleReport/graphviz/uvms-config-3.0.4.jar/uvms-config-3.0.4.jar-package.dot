@@ -1,0 +1,19 @@
+digraph uvms_config_3_0_4_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  eu_europa_ec_fisheries_uvms_config_message -> eu_europa_ec_fisheries_schema_config_module_v1;
+  eu_europa_ec_fisheries_uvms_config_message -> eu_europa_ec_fisheries_schema_config_types_v1;
+  eu_europa_ec_fisheries_uvms_config_message -> eu_europa_ec_fisheries_uvms_config_constants;
+  eu_europa_ec_fisheries_uvms_config_message -> eu_europa_ec_fisheries_uvms_config_exception;
+  eu_europa_ec_fisheries_uvms_config_message -> eu_europa_ec_fisheries_uvms_config_model_exception;
+  eu_europa_ec_fisheries_uvms_config_message -> eu_europa_ec_fisheries_uvms_config_model_mapper;
+  eu_europa_ec_fisheries_uvms_config_message -> eu_europa_ec_fisheries_uvms_config_service;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_schema_config_module_v1;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_schema_config_types_v1;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_uvms_config_constants;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_uvms_config_event;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_uvms_config_exception;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_uvms_config_message;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_uvms_config_model_exception;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_uvms_config_model_mapper;
+  eu_europa_ec_fisheries_uvms_config_service -> eu_europa_ec_fisheries_uvms_config_service_entity;
+}

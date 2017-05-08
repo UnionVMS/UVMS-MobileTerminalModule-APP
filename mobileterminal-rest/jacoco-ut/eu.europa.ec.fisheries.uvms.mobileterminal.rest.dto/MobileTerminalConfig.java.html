@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MobileTerminalConfig.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-rest</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto</a> &gt; <span class="el_source">MobileTerminalConfig.java</span></div><h1>MobileTerminalConfig.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.Capability;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityConfiguration;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
+
+public class MobileTerminalConfig {
+
+<span class="nc" id="L26">    private MobileTerminalConfig() {</span>
+<span class="nc" id="L27">    }</span>
+
+    public static List&lt;MobileTerminalDeviceConfig&gt; mapConfigTransponders(List&lt;TerminalSystemType&gt; list) {
+<span class="nc" id="L30">        List&lt;MobileTerminalDeviceConfig&gt; transponders = new ArrayList&lt;MobileTerminalDeviceConfig&gt;();</span>
+      
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        for (TerminalSystemType system : list) {</span>
+
+<span class="nc" id="L34">            MobileTerminalDeviceConfig transponder = new MobileTerminalDeviceConfig();</span>
+<span class="nc" id="L35">            transponder.setTerminalSystemType(system.getType());</span>
+
+<span class="nc bnc" id="L37" title="All 2 branches missed.">            if (system.getTerminalConfiguration() != null) {</span>
+<span class="nc" id="L38">                transponder.setTerminalFieldList(system.getTerminalConfiguration().getAttribute());</span>
+            }
+<span class="nc bnc" id="L40" title="All 2 branches missed.">            if (system.getComchannelConfiguration() != null) {</span>
+<span class="nc" id="L41">                transponder.setChannelFieldList(system.getComchannelConfiguration().getAttribute());</span>
+            }
+
+<span class="nc bnc" id="L44" title="All 2 branches missed.">            if (system.getCapabilityConfiguration() != null) {</span>
+<span class="nc" id="L45">                CapabilityConfiguration configuration = system.getCapabilityConfiguration();</span>
+<span class="nc bnc" id="L46" title="All 4 branches missed.">                if (configuration != null &amp;&amp; configuration.getCapability() != null) {</span>
+<span class="nc" id="L47">                    List&lt;CapabilityDto&gt; capabilityList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">                    for (Capability capability : configuration.getCapability()) {</span>
+<span class="nc" id="L49">                        CapabilityDto dto = new CapabilityDto();</span>
+<span class="nc" id="L50">                        dto.setName(capability.getName());</span>
+<span class="nc bnc" id="L51" title="All 2 branches missed.">                        if (capability.getOptions() != null) {</span>
+<span class="nc" id="L52">                            dto.setOptionList(capability.getOptions());</span>
+                        }
+<span class="nc" id="L54">                        capabilityList.add(dto);</span>
+<span class="nc" id="L55">                    }</span>
+<span class="nc" id="L56">                    transponder.setCapabilityList(capabilityList);</span>
+                }
+            }
+<span class="nc" id="L59">            transponders.add(transponder);</span>
+<span class="nc" id="L60">        }</span>
+<span class="nc" id="L61">        return transponders;</span>
+    }
+
+    public static Map&lt;String, List&lt;String&gt;&gt; mapConfigList(List&lt;ConfigList&gt; config) {
+<span class="nc" id="L65">        Map&lt;String, List&lt;String&gt;&gt; configValues = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (ConfigList list : config) {</span>
+<span class="nc" id="L67">            configValues.put(list.getName(), list.getValue());</span>
+<span class="nc" id="L68">        }</span>
+<span class="nc" id="L69">        return configValues;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

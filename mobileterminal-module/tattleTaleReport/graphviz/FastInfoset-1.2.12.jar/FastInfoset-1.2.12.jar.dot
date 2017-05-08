@@ -1,0 +1,5 @@
+digraph FastInfoset_1_2_12_dependencies {
+  node [shape = box, fontsize=10.0];
+  FastInfoset_1_2_12 -> jsr173_api_1_0;
+  FastInfoset_1_2_12 -> xml_apis_1_0_b2;
+}

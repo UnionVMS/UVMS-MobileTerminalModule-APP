@@ -1,0 +1,14 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto,CapabilityDto,17,0,0,0,7,0,5,0,5,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto,ResponseDto,61,34,8,0,18,7,7,4,3,4
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto,MobileTerminalConfig,121,0,18,0,30,0,12,0,3,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto,MobileTerminalDeviceConfig,31,0,0,0,14,0,9,0,9,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto,ConfigOption,17,0,0,0,7,0,5,0,5,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest,RestConstants,3,0,0,0,1,0,1,0,1,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest,RestActivator,46,0,0,0,12,0,4,0,4,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.error,ResponseCode,9,103,0,0,0,13,2,3,2,3
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.error,ErrorHandler,121,0,20,0,25,0,13,0,3,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.filter,RequestFilter,35,0,0,0,12,0,5,0,5,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.service,ConfigResource,63,0,0,0,17,0,5,0,5,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.service,PollResource,179,0,0,0,44,0,9,0,9,0
+mobileterminal-rest,eu.europa.ec.fisheries.uvms.mobileterminal.rest.service,MobileTerminalResource,185,64,0,0,42,10,6,6,6,6

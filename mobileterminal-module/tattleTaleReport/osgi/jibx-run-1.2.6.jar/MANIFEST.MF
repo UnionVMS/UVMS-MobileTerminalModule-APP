@@ -1,0 +1,24 @@
+Manifest-Version: 1.0
+Export-Package: org.jibx.runtime;version="1.2.6";uses:="org.jibx.runti
+ me.impl,org.joda.time",org.jibx.runtime.impl;version="1.2.6";uses:="j
+ avax.xml.stream,org.jibx.runtime"
+Class-Path: xpp3.jar stax-api.jar wstx-asl.jar
+Built-By: dcorley
+Tool: Bnd-2.3.0.201405100607
+Bundle-Name: jibx-run - JiBX runtime
+Created-By: Apache Maven Bundle Plugin
+Require-Capability: osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=1.5))"
+Bundle-Vendor: jibx.org
+Build-Jdk: 1.7.0_67
+Bundle-Version: 1.2.6
+Bnd-LastModified: 1420005725197
+Bundle-ManifestVersion: 2
+Bundle-Description: JiBX runtime code
+Bundle-License: http://jibx.sourceforge.net/jibx-license.html
+Import-Package: javax.xml.stream;resolution:=optional,org.joda.time;re
+ solution:=optional;version="[2.2,3)",org.xmlpull.v1;resolution:=optio
+ nal
+Bundle-DocURL: http://www.jibx.org
+Bundle-SymbolicName: jibx-run
+Main-Class: org.jibx.runtime.PrintInfo
+

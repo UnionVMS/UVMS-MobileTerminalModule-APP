@@ -1,0 +1,6 @@
+digraph istack_commons_runtime_2_16_dependencies {
+  node [shape = box, fontsize=10.0];
+  istack_commons_runtime_2_16 -> activation_1_1;
+  istack_commons_runtime_2_16 -> jsr173_api_1_0;
+  istack_commons_runtime_2_16 -> xml_apis_1_0_b2;
+}

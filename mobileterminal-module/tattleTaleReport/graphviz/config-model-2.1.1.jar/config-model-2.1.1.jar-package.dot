@@ -1,0 +1,10 @@
+digraph config_model_2_1_1_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  eu_europa_ec_fisheries_schema_config_module_v1 -> eu_europa_ec_fisheries_schema_config_types_v1;
+  eu_europa_ec_fisheries_schema_config_source_v1 -> eu_europa_ec_fisheries_schema_config_types_v1;
+  eu_europa_ec_fisheries_uvms_config -> eu_europa_ec_fisheries_schema_config_types_v1;
+  eu_europa_ec_fisheries_uvms_config -> eu_europa_ec_fisheries_uvms_config_model_exception;
+  eu_europa_ec_fisheries_uvms_config_model_mapper -> eu_europa_ec_fisheries_schema_config_module_v1;
+  eu_europa_ec_fisheries_uvms_config_model_mapper -> eu_europa_ec_fisheries_schema_config_types_v1;
+  eu_europa_ec_fisheries_uvms_config_model_mapper -> eu_europa_ec_fisheries_uvms_config_model_exception;
+}

@@ -1,0 +1,5 @@
+digraph org_jibx_schema_org_apache_maven_maven_v4_0_0_1_1_4_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  org_jibx_schema_org_apache_maven_maven_v4_0_0 -> org_jibx_runtime;
+  org_jibx_schema_org_apache_maven_maven_v4_0_0 -> org_jibx_runtime_impl;
+}

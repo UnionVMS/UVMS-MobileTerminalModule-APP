@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PollSearchMapper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.search.poll</a> &gt; <span class="el_source">PollSearchMapper.java</span></div><h1>PollSearchMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.search.poll;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.ListCriteria;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.SearchKey;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception.SearchMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+
+<span class="nc" id="L25">public class PollSearchMapper {</span>
+
+	public static List&lt;PollSearchKeyValue&gt; createSearchFields(List&lt;ListCriteria&gt; criterias) throws SearchMapperException {
+<span class="nc" id="L28">		Map&lt;PollSearchField, PollSearchKeyValue&gt; searchKeyValues = new HashMap&lt;&gt;();</span>
+<span class="nc bnc" id="L29" title="All 2 branches missed.">        for (ListCriteria criteria : criterias) {</span>
+<span class="nc" id="L30">        	PollSearchKeyValue keyValue = mapSearchKey(criteria, searchKeyValues);</span>
+<span class="nc" id="L31">            searchKeyValues.put(keyValue.getSearchField(), keyValue);</span>
+<span class="nc" id="L32">        }</span>
+<span class="nc" id="L33">        return new ArrayList&lt;PollSearchKeyValue&gt;(searchKeyValues.values());</span>
+	}
+	
+    private static PollSearchKeyValue mapSearchKey(ListCriteria criteria, Map&lt;PollSearchField, PollSearchKeyValue&gt; searchKeys) throws SearchMapperException {
+<span class="nc bnc" id="L37" title="All 6 branches missed.">        if (criteria == null || criteria.getKey() == null || criteria.getValue() == null) {</span>
+<span class="nc" id="L38">            throw new SearchMapperException(&quot;Non valid search criteria&quot;);</span>
+        }
+
+<span class="nc" id="L41">        PollSearchKeyValue searchKeyValue = getSearchKeyValue(getSearchField(criteria.getKey()), searchKeys);</span>
+<span class="nc" id="L42">        searchKeyValue.getValues().add(criteria.getValue());</span>
+<span class="nc" id="L43">        return searchKeyValue;</span>
+    }
+	
+    private static PollSearchKeyValue getSearchKeyValue(PollSearchField field, Map&lt;PollSearchField, PollSearchKeyValue&gt; searchKeys) {
+<span class="nc" id="L47">    	PollSearchKeyValue searchKeyValue = searchKeys.get(field);</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">        if (searchKeyValue == null) {</span>
+<span class="nc" id="L49">            searchKeyValue = new PollSearchKeyValue();</span>
+        }
+<span class="nc" id="L51">        searchKeyValue.setSearchField(field);</span>
+<span class="nc" id="L52">        return searchKeyValue;</span>
+    }
+    
+	private static PollSearchField getSearchField(SearchKey key) throws SearchMapperException {
+<span class="nc bnc" id="L56" title="All 6 branches missed.">		switch(key) {</span>
+		case CONNECT_ID:
+<span class="nc" id="L58">			return PollSearchField.CONNECT_ID;</span>
+		case POLL_ID:
+<span class="nc" id="L60">			return PollSearchField.POLL_ID;</span>
+		case POLL_TYPE:
+<span class="nc" id="L62">			return PollSearchField.POLL_TYPE;</span>
+		case TERMINAL_TYPE:
+<span class="nc" id="L64">			return PollSearchField.TERMINAL_TYPE;</span>
+		case USER:
+<span class="nc" id="L66">			return PollSearchField.USER;</span>
+		default:
+<span class="nc" id="L68">			throw new SearchMapperException(&quot;No searchKey &quot; + key.name());</span>
+		}
+	}
+
+	private static String createSearchSql(List&lt;PollSearchKeyValue&gt; searchKeys, boolean isDynamic) {
+<span class="nc" id="L73">		StringBuilder builder = new StringBuilder();</span>
+<span class="nc" id="L74">		String OPERATOR = &quot; OR &quot;;</span>
+<span class="nc bnc" id="L75" title="All 2 branches missed.">		if(isDynamic) {</span>
+<span class="nc" id="L76">			OPERATOR = &quot; AND &quot;;</span>
+		}
+		
+<span class="nc" id="L79">		builder.append(&quot; INNER JOIN p.pollBase pb &quot;);</span>
+<span class="nc" id="L80">		builder.append(&quot; INNER JOIN pb.mobileterminal mt &quot;);</span>
+		
+<span class="nc bnc" id="L82" title="All 2 branches missed.">		if(!searchKeys.isEmpty()) {</span>
+<span class="nc" id="L83">			builder.append(&quot; WHERE &quot;);</span>
+<span class="nc" id="L84">			boolean first = true;</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">			for(PollSearchKeyValue keyValue : searchKeys) {</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">				if(first) {</span>
+<span class="nc" id="L87">					first = false;</span>
+				} else {
+<span class="nc" id="L89">					builder.append(OPERATOR);</span>
+				}
+<span class="nc" id="L91">				builder.append(keyValue.getSearchField().getTable().getTableAlias()).append(&quot;.&quot;).append(keyValue.getSearchField().getSqlColumnName());</span>
+<span class="nc" id="L92">				builder.append(&quot; IN (:&quot;).append(keyValue.getSearchField().getSqlReplaceToken()).append(&quot;) &quot;);</span>
+<span class="nc" id="L93">			}</span>
+		}
+		
+<span class="nc" id="L96">		return builder.toString();</span>
+	}
+	
+	public static String createCountSearchSql(List&lt;PollSearchKeyValue&gt; searchKeys, boolean isDynamic) {
+<span class="nc" id="L100">		StringBuilder builder = new StringBuilder();</span>
+<span class="nc" id="L101">		builder.append(&quot;SELECT COUNT (DISTINCT p) FROM Poll p &quot;);</span>
+<span class="nc" id="L102">		builder.append(createSearchSql(searchKeys, isDynamic));</span>
+<span class="nc" id="L103">		return builder.toString();</span>
+	}
+
+	public static String createSelectSearchSql(List&lt;PollSearchKeyValue&gt; searchKeys, boolean isDynamic) {
+<span class="nc" id="L107">		StringBuilder builder = new StringBuilder();</span>
+<span class="nc" id="L108">		builder.append(&quot;SELECT DISTINCT p FROM Poll p &quot;);</span>
+<span class="nc" id="L109">		builder.append(createSearchSql(searchKeys, isDynamic));</span>
+<span class="nc" id="L110">		return builder.toString();</span>
+	}
+	
+	public static String createPollableSearchSql(List&lt;String&gt; idList) {
+<span class="fc" id="L114">		StringBuilder builder = new StringBuilder();</span>
+<span class="fc" id="L115">		builder.append(&quot;SELECT DISTINCT c FROM Channel c&quot;);</span>
+<span class="fc" id="L116">		builder.append(&quot; INNER JOIN FETCH c.mobileTerminal mt&quot;);</span>
+<span class="fc" id="L117">		builder.append(&quot; INNER JOIN FETCH mt.mobileTerminalEvents me&quot;);</span>
+<span class="fc" id="L118">		builder.append(&quot; INNER JOIN FETCH me.pollChannel pc&quot;);</span>
+<span class="fc" id="L119">		builder.append(&quot; INNER JOIN FETCH mt.plugin p &quot;);</span>
+<span class="fc" id="L120">		builder.append(&quot; INNER JOIN FETCH p.capabilities cap &quot;);</span>
+<span class="fc" id="L121">		builder.append(&quot; WHERE &quot;);</span>
+<span class="fc" id="L122">		builder.append(&quot; c.guid = pc.guid &quot;);</span>
+<span class="fc" id="L123">		builder.append(&quot; AND me.active = true &quot;);</span>
+<span class="fc" id="L124">		builder.append(&quot; AND mt.archived = '0' AND mt.inactivated = '0' AND p.pluginInactive = '0' &quot;);</span>
+<span class="fc" id="L125">		builder.append(&quot; AND (cap.name = 'POLLABLE' AND UPPER(cap.value) = 'TRUE' ) &quot;);</span>
+<span class="fc" id="L126">		builder.append(&quot; AND (me.connectId is not null) &quot;);</span>
+<span class="pc bpc" id="L127" title="1 of 4 branches missed.">		if( idList != null &amp;&amp; !idList.isEmpty()) {</span>
+<span class="fc" id="L128">			builder.append(&quot; AND me.connectId IN :idList&quot;);</span>
+		}
+<span class="fc" id="L130">		builder.append(&quot; ORDER BY c.guid DESC &quot;);</span>
+<span class="fc" id="L131">		return builder.toString();</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

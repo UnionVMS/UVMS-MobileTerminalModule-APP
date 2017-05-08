@@ -1,0 +1,7 @@
+digraph mobileterminal_dbaccess_domain_3_0_6_SNAPSHOT_dependencies {
+  node [shape = box, fontsize=10.0];
+  mobileterminal_dbaccess_domain_3_0_6_SNAPSHOT -> commons_collections_3_2_1;
+  mobileterminal_dbaccess_domain_3_0_6_SNAPSHOT -> jaxb_api_2_2_7;
+  mobileterminal_dbaccess_domain_3_0_6_SNAPSHOT -> mobileterminal_model_3_0_4_date;
+  mobileterminal_dbaccess_domain_3_0_6_SNAPSHOT -> uvms_commons_2_0_17;
+}

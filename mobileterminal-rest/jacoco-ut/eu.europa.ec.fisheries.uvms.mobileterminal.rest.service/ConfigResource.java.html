@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ConfigResource.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-rest</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.rest.service</a> &gt; <span class="el_source">ConfigResource.java</span></div><h1>ConfigResource.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
+
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.SearchKey;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.MobileTerminalConfig;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.MobileTerminalDeviceConfig;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ErrorHandler;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
+import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
+
+/**
+ * @apiDescription Handles all Polls*/
+@Path(&quot;/config&quot;)
+@Stateless
+@RequiresFeature(UnionVMSFeature.viewVesselsAndMobileTerminals)
+<span class="nc" id="L44">public class ConfigResource {</span>
+
+<span class="nc" id="L46">    final static Logger LOG = LoggerFactory.getLogger(ConfigResource.class);</span>
+
+    @EJB
+    ConfigService configService;
+    
+    /**
+    *
+    * @responseMessage 200 Config transponders successfully retreived
+    * @responseMessage 500 Error when retrieveing the config values for
+    * transponders
+    *
+    * @summary Get all available config values for Mobile Terminals
+    *
+    */
+   @GET
+   @Consumes(value = {MediaType.APPLICATION_JSON})
+   @Produces(value = {MediaType.APPLICATION_JSON})
+   @Path(&quot;/transponders&quot;)
+	public ResponseDto&lt;List&lt;MobileTerminalDeviceConfig&gt;&gt; getConfigTransponders() {
+       try {
+<span class="nc" id="L66">           LOG.info(&quot;Get config transponders invoked in rest layer.&quot;);</span>
+<span class="nc" id="L67">           List&lt;TerminalSystemType&gt; list = configService.getTerminalSystems();</span>
+<span class="nc" id="L68">           return new ResponseDto(MobileTerminalConfig.mapConfigTransponders(list), ResponseCode.OK);</span>
+<span class="nc" id="L69">       } catch (Exception ex) {</span>
+<span class="nc" id="L70">           LOG.error(&quot;[ Error when getting configTransponders ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L71">           return ErrorHandler.getFault(ex);</span>
+       }
+   }
+
+   /**
+    *
+    * @responseMessage 200 Config search fields successfully retreived
+    * @responseMessage 500 Error when retrieveing the config search fields for
+    * transponders
+    *
+    * @summary Gets all available search fields for Mobile Terminal
+    *
+    */
+   @GET
+   @Consumes(value = {MediaType.APPLICATION_JSON})
+   @Produces(value = {MediaType.APPLICATION_JSON})
+   @Path(&quot;/searchfields&quot;)
+   public ResponseDto&lt;List&lt;String&gt;&gt; getConfigSearchFields() {
+<span class="nc" id="L89">       LOG.info(&quot;Get config search fields invoked in rest layer.&quot;);</span>
+       try {
+<span class="nc" id="L91">           return new ResponseDto(SearchKey.values(), ResponseCode.OK);</span>
+<span class="nc" id="L92">       } catch (Exception ex) {</span>
+<span class="nc" id="L93">           LOG.error(&quot;[ Error when getting config search fields ] {}&quot;, ex.getStackTrace());</span>
+<span class="nc" id="L94">           return ErrorHandler.getFault(ex);</span>
+       }
+   }
+    
+    @GET
+    @Consumes(value = {MediaType.APPLICATION_JSON})
+    @Produces(value = {MediaType.APPLICATION_JSON})
+    @Path(&quot;/&quot;)
+    public ResponseDto getConfiguration() {
+        try {
+<span class="nc" id="L104">        	List&lt;ConfigList&gt; config = configService.getConfig();</span>
+<span class="nc" id="L105">            return new ResponseDto(MobileTerminalConfig.mapConfigList(config), ResponseCode.OK);</span>
+<span class="nc" id="L106">        } catch (Exception ex) {</span>
+<span class="nc" id="L107">            return ErrorHandler.getFault(ex);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

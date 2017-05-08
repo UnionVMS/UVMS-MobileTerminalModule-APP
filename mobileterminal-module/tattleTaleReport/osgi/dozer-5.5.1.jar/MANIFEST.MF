@@ -1,0 +1,57 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_51
+Built-By: buzdin
+Created-By: Apache Maven 3.0.4
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: org.dozer.loader.api
+Bundle-Description: dozer-5.5.1
+Bundle-Name: dozer-5.5.1
+Bundle-Version: 0.0.0
+Export-Package: org.dozer;uses:="org.apache.commons.lang3,org.dozer.bu
+ ilder,org.dozer.cache,org.dozer.classmap,org.dozer.config,org.dozer.c
+ onverters,org.dozer.event,org.dozer.factory,org.dozer.fieldmap,org.do
+ zer.jmx,org.dozer.loader,org.dozer.loader.api,org.dozer.loader.xml,or
+ g.dozer.metadata,org.dozer.stats,org.dozer.util",org.dozer.builder;us
+ es:="org.dozer,org.dozer.factory",org.dozer.cache;uses:="org.apache.c
+ ommons.lang3.builder,org.dozer.stats,org.dozer.util",org.dozer.classm
+ ap;uses:="org.apache.commons.lang3,org.apache.commons.lang3.builder,o
+ rg.dozer,org.dozer.classmap.generator,org.dozer.converters,org.dozer.
+ fieldmap,org.dozer.util",org.dozer.classmap.generator;uses:="org.doze
+ r.classmap,org.dozer.fieldmap,org.dozer.util",org.dozer.config;uses:=
+ "org.dozer.loader.xml,org.dozer.util",org.dozer.converters;uses:="org
+ .apache.commons.lang3,org.apache.commons.lang3.builder,org.dozer,org.
+ dozer.cache,org.dozer.util",org.dozer.event;uses:="org.dozer,org.doze
+ r.classmap,org.dozer.fieldmap,org.dozer.util",org.dozer.factory;uses:
+ ="org.dozer,org.dozer.config,org.dozer.util",org.dozer.fieldmap;uses:
+ ="org.apache.commons.lang3.builder,org.dozer,org.dozer.builder,org.do
+ zer.classmap,org.dozer.factory,org.dozer.propertydescriptor,org.dozer
+ .util",org.dozer.inject;uses:="org.dozer,org.dozer.util",org.dozer.jm
+ x;uses:="org.dozer.config,org.dozer.stats",org.dozer.loader;uses:="or
+ g.apache.commons.lang3,org.dozer,org.dozer.classmap,org.dozer.convert
+ ers,org.dozer.fieldmap,org.dozer.util",org.dozer.loader.api;uses:="or
+ g.apache.commons.lang3,org.dozer.classmap,org.dozer.loader",org.dozer
+ .loader.xml;uses:="org.apache.commons.lang3,org.dozer,org.dozer.class
+ map,org.dozer.config,org.dozer.loader,org.dozer.util",org.dozer.metad
+ ata;uses:="org.dozer,org.dozer.classmap,org.dozer.fieldmap",org.dozer
+ .osgi;uses:="org.dozer,org.dozer.config,org.dozer.util",org.dozer.pro
+ pertydescriptor;uses:="org.dozer,org.dozer.classmap,org.dozer.factory
+ ,org.dozer.fieldmap,org.dozer.util",org.dozer.stats;uses:="org.apache
+ .commons.lang3.builder,org.dozer.config,org.dozer.util",org.dozer.uti
+ l;uses:="org.apache.commons.lang3,org.apache.commons.lang3.builder,or
+ g.dozer,org.dozer.cache,org.dozer.classmap,org.dozer.config,org.dozer
+ .converters,org.dozer.factory,org.dozer.fieldmap,org.dozer.propertyde
+ scriptor"
+Import-Package: java.beans,java.io,java.lang,java.lang.annotation,java
+ .lang.management,java.lang.ref,java.lang.reflect,java.math,java.net,j
+ ava.sql,java.text,java.util,java.util.concurrent,java.util.concurrent
+ .atomic,java.util.regex,javassist.util.proxy;version="0.0.0",javax.el
+ ,javax.management,javax.xml.datatype,javax.xml.parsers;version="1.1",
+ org.apache.commons.beanutils;version="1.9.1",org.apache.commons.beanu
+ tils.converters;version="1.9.1",org.apache.commons.lang3;version="3.4
+ ",org.apache.commons.lang3.builder;version="3.4",org.hibernate.proxy,
+ org.osgi.framework,org.slf4j,org.w3c.dom;version="1.1",org.xml.sax;ve
+ rsion="1.1",org.xml.sax.helpers;version="1.1"

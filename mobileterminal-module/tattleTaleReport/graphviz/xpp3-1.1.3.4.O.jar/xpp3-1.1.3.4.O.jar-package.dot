@@ -1,0 +1,20 @@
+digraph xpp3_1_1_3_4_O_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  org_xmlpull_mxp1 -> org_xmlpull_mxp1_serializer;
+  org_xmlpull_mxp1 -> org_xmlpull_v1;
+  org_xmlpull_mxp1_serializer -> org_xmlpull_v1;
+  org_xmlpull_v1_builder -> org_xmlpull_v1;
+  org_xmlpull_v1_builder -> org_xmlpull_v1_builder_impl;
+  org_xmlpull_v1_builder_adapter -> org_xmlpull_v1_builder;
+  org_xmlpull_v1_builder_impl -> org_xmlpull_v1;
+  org_xmlpull_v1_builder_impl -> org_xmlpull_v1_builder;
+  org_xmlpull_v1_dom2_builder -> org_xmlpull_v1;
+  org_xmlpull_v1_parser_pool -> org_xmlpull_v1;
+  org_xmlpull_v1_sax2 -> org_xmlpull_v1;
+  org_xmlpull_v1_util -> org_xmlpull_v1;
+  org_xmlpull_v1_wrapper -> org_xmlpull_v1;
+  org_xmlpull_v1_wrapper -> org_xmlpull_v1_wrapper_classic;
+  org_xmlpull_v1_wrapper_classic -> org_xmlpull_v1;
+  org_xmlpull_v1_wrapper_classic -> org_xmlpull_v1_util;
+  org_xmlpull_v1_wrapper_classic -> org_xmlpull_v1_wrapper;
+}

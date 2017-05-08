@@ -1,0 +1,4 @@
+digraph resteasy_multipart_provider_3_0_11_Final_package_dependencies {
+  node [shape = box, fontsize=10.0];
+  org_jboss_resteasy_plugins_providers_multipart -> org_jboss_resteasy_annotations_providers_multipart;
+}

@@ -1,0 +1,6 @@
+digraph logback_core_1_1_8_dependencies {
+  node [shape = box, fontsize=10.0];
+  logback_core_1_1_8 -> jsr173_api_1_0;
+  logback_core_1_1_8 -> mail_1_5_0_b01;
+  logback_core_1_1_8 -> xml_apis_1_0_b2;
+}

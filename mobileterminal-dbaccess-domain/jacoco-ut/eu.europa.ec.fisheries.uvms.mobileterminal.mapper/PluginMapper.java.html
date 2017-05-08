@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PluginMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.mapper</a> &gt; <span class="el_source">PluginMapper.java</span></div><h1>PluginMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.Capability;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityConfiguration;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityOption;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.LandEarthStationType;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.OceanRegionType;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemConfiguration;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapability;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.AttributeInmarsatC;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.AttributeIridium;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.CapabilitiesInmarsatC;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.CapabilitiesIridium;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ChannelFieldInmarsatC;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ChannelFieldIridium;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.TerminalCapability;
+
+<span class="nc" id="L44">public class PluginMapper {</span>
+<span class="nc" id="L45">	final static Logger LOG = LoggerFactory.getLogger(PluginMapper.class);</span>
+	
+	private static Plugin mapEntityToModel(Plugin model, MobileTerminalPlugin entity) {
+<span class="nc" id="L48">	    model.setSatelliteType(entity.getPluginSatelliteType());</span>
+<span class="nc" id="L49">		model.setInactive(entity.getPluginInactive());</span>
+<span class="nc" id="L50">		model.setLabelName(entity.getName());</span>
+<span class="nc" id="L51">		model.setServiceName(entity.getPluginServiceName());</span>
+<span class="nc" id="L52">		return model;</span>
+	}
+	
+	public static Plugin mapEntityToModel(MobileTerminalPlugin entity) {
+<span class="nc" id="L56">		Plugin plugin = new Plugin();</span>
+<span class="nc" id="L57">		return mapEntityToModel(plugin, entity);</span>
+	}
+	
+	public static MobileTerminalPlugin mapModelToEntity(MobileTerminalPlugin entity, PluginService model) {
+<span class="nc" id="L61">		entity.setDescription(model.getLabelName());</span>
+<span class="nc" id="L62">		entity.setPluginServiceName(model.getServiceName());</span>
+<span class="nc" id="L63">		entity.setPluginSatelliteType(model.getSatelliteType());</span>
+<span class="nc" id="L64">		entity.setName(model.getLabelName());</span>
+<span class="nc" id="L65">		entity.setPluginInactive(model.isInactive());</span>
+<span class="nc" id="L66">		entity.setUpdatedBy(MobileTerminalConstants.UPDATE_USER);</span>
+<span class="nc" id="L67">		entity.setUpdateTime(new Date());</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">		if(entity.getCapabilities() == null) {</span>
+<span class="nc" id="L69">			entity.setCapabilities(new HashSet&lt;MobileTerminalPluginCapability&gt;());</span>
+		}
+<span class="nc" id="L71">		entity.getCapabilities().addAll(mapCapabilityModelToEntity(entity, model.getCapability()));</span>
+<span class="nc" id="L72">		return entity;</span>
+	}
+	
+	private static List&lt;MobileTerminalPluginCapability&gt; mapCapabilityModelToEntity(MobileTerminalPlugin parent, List&lt;PluginCapability&gt; capabilities) {
+<span class="nc" id="L76">		List&lt;MobileTerminalPluginCapability&gt; capabilityList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L77" title="All 2 branches missed.">		for(PluginCapability capability : capabilities) {</span>
+<span class="nc" id="L78">			MobileTerminalPluginCapability entity = new MobileTerminalPluginCapability();</span>
+<span class="nc" id="L79">			entity.setPlugin(parent);</span>
+<span class="nc" id="L80">			entity.setName(capability.getName().name());</span>
+<span class="nc" id="L81">			entity.setValue(capability.getValue());</span>
+<span class="nc" id="L82">			entity.setUpdatedBy(MobileTerminalConstants.UPDATE_USER);</span>
+<span class="nc" id="L83">			entity.setUpdateTime(new Date());</span>
+<span class="nc" id="L84">			capabilityList.add(entity);</span>
+<span class="nc" id="L85">		}</span>
+<span class="nc" id="L86">		return capabilityList;</span>
+	}
+	
+	public static MobileTerminalPlugin mapModelToEntity(PluginService model) {
+<span class="nc" id="L90">		MobileTerminalPlugin plugin = new MobileTerminalPlugin();</span>
+<span class="nc" id="L91">		return mapModelToEntity(plugin, model);</span>
+	}
+
+	public static boolean equals(MobileTerminalPlugin entity, PluginService plugin) {
+<span class="nc bnc" id="L95" title="All 2 branches missed.">		if(!entity.getName().equalsIgnoreCase(plugin.getLabelName())) {</span>
+<span class="nc" id="L96">			return false;</span>
+		}
+<span class="nc bnc" id="L98" title="All 2 branches missed.">		if(entity.getPluginInactive() != plugin.isInactive()) {</span>
+<span class="nc" id="L99">			return false;</span>
+		}
+<span class="nc bnc" id="L101" title="All 2 branches missed.">		if(!entity.getPluginServiceName().equalsIgnoreCase(plugin.getServiceName())) {</span>
+<span class="nc" id="L102">			return false;</span>
+		}
+<span class="nc bnc" id="L104" title="All 4 branches missed.">		if(plugin.getCapability() != null &amp;&amp; entity.getCapabilities() != null) {</span>
+<span class="nc bnc" id="L105" title="All 2 branches missed.">			if(plugin.getCapability().size() != entity.getCapabilities().size()) {</span>
+<span class="nc" id="L106">				return false;</span>
+			}
+<span class="nc bnc" id="L108" title="All 2 branches missed.">			for(PluginCapability capability : plugin.getCapability()) {</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">				for(MobileTerminalPluginCapability entityCapability : entity.getCapabilities()) {</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">					if(entityCapability.getName().equalsIgnoreCase(capability.getName().name())) {</span>
+<span class="nc bnc" id="L111" title="All 2 branches missed.">						if(!entityCapability.getValue().equalsIgnoreCase(capability.getValue())) {</span>
+<span class="nc" id="L112">							return false;</span>
+						}
+					}
+<span class="nc" id="L115">				}</span>
+<span class="nc" id="L116">			}</span>
+<span class="nc bnc" id="L117" title="All 4 branches missed.">		} else if(plugin.getCapability() == null &amp;&amp; entity.getCapabilities() != null) {</span>
+<span class="nc" id="L118">			return false;</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">		} else if(entity.getCapabilities() == null &amp;&amp; plugin.getCapability() != null) {</span>
+<span class="nc" id="L120">			return false;</span>
+		}
+<span class="nc" id="L122">		return true;</span>
+	}
+
+	public static TerminalSystemConfiguration mapTerminalFieldConfiguration(MobileTerminalTypeEnum type) {
+<span class="nc" id="L126">		TerminalSystemConfiguration configuration = new TerminalSystemConfiguration();</span>
+
+<span class="nc bnc" id="L128" title="All 2 branches missed.">		switch (type) {</span>
+			default:
+			case INMARSAT_C:
+<span class="nc bnc" id="L131" title="All 2 branches missed.">				for (AttributeInmarsatC attribute : AttributeInmarsatC.values()) {</span>
+<span class="nc" id="L132">					configuration.getAttribute().add(attribute.toString());</span>
+				}
+<span class="nc" id="L134">				break;</span>
+			case IRIDIUM:
+<span class="nc bnc" id="L136" title="All 2 branches missed.">				for (AttributeIridium attribute : AttributeIridium.values()) {</span>
+<span class="nc" id="L137">					configuration.getAttribute().add(attribute.toString());</span>
+				}
+<span class="nc" id="L139">				break;</span>
+		}
+
+
+<span class="nc" id="L143">		return configuration;</span>
+	}
+
+	public static TerminalSystemConfiguration mapComchannelFieldConfiguration(MobileTerminalTypeEnum type) {
+<span class="nc" id="L147">		TerminalSystemConfiguration configuration = new TerminalSystemConfiguration();</span>
+
+<span class="nc bnc" id="L149" title="All 2 branches missed.">		switch (type) {</span>
+			default:
+			case INMARSAT_C:
+<span class="nc bnc" id="L152" title="All 2 branches missed.">				for (ChannelFieldInmarsatC attribute : ChannelFieldInmarsatC.values()) {</span>
+<span class="nc" id="L153">					configuration.getAttribute().add(attribute.toString());</span>
+				}
+<span class="nc" id="L155">				break;</span>
+			case IRIDIUM:
+<span class="nc bnc" id="L157" title="All 2 branches missed.">				for (ChannelFieldIridium attribute : ChannelFieldIridium.values()) {</span>
+<span class="nc" id="L158">					configuration.getAttribute().add(attribute.toString());</span>
+				}
+				break;
+		}
+
+
+<span class="nc" id="L164">		return configuration;</span>
+	}
+
+	public static CapabilityConfiguration mapCapabilityConfiguration(MobileTerminalTypeEnum type, List&lt;MobileTerminalPlugin&gt; plugins, List&lt;OceanRegion&gt; oceanRegionList) {
+<span class="nc" id="L168">		CapabilityConfiguration capabilityConfiguration = new CapabilityConfiguration();</span>
+<span class="nc" id="L169">		List&lt;Capability&gt; capabilities = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">		for(TerminalCapability capabilityType : TerminalCapability.values()) {</span>
+<span class="nc" id="L171">			boolean hasCapability = false;</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">			switch (type) {</span>
+				default:
+				case INMARSAT_C:
+<span class="nc" id="L175">					hasCapability = CapabilitiesInmarsatC.getCapability(capabilityType);</span>
+<span class="nc" id="L176">					break;</span>
+				case IRIDIUM:
+<span class="nc" id="L178">					hasCapability = CapabilitiesIridium.getCapability(capabilityType);</span>
+<span class="nc" id="L179">					oceanRegionList = null;</span>
+					break;
+			}
+<span class="nc bnc" id="L182" title="All 2 branches missed.">			if(hasCapability) {</span>
+<span class="nc" id="L183">				Capability capability = new Capability();</span>
+<span class="nc" id="L184">				capability.setName(capabilityType.name());</span>
+<span class="nc" id="L185">				List&lt;? extends CapabilityOption&gt; options = mapCapabilityOption(capabilityType, oceanRegionList, plugins);</span>
+<span class="nc bnc" id="L186" title="All 2 branches missed.">				if(options != null) {</span>
+<span class="nc" id="L187">					capability.getOptions().addAll(options);</span>
+				}
+<span class="nc" id="L189">				capabilities.add(capability);</span>
+			}
+		}
+<span class="nc" id="L192">		capabilityConfiguration.getCapability().addAll(capabilities);</span>
+<span class="nc" id="L193">		return capabilityConfiguration;</span>
+	}
+
+	public static List&lt;? extends CapabilityOption&gt; mapCapabilityOption(TerminalCapability capabilityValue, List&lt;OceanRegion&gt; oceanRegionList, List&lt;MobileTerminalPlugin&gt; lesList) {
+<span class="nc bnc" id="L197" title="All 4 branches missed.">		switch(capabilityValue) {</span>
+			case SUPPORT_SINGLE_OCEAN:
+<span class="nc" id="L199">				return mapOceanRegions(oceanRegionList);</span>
+			case SUPPORT_MULTIPLE_OCEAN:
+<span class="nc" id="L201">				return mapOceanRegions(oceanRegionList);</span>
+			case PLUGIN:
+<span class="nc" id="L203">				return mapLandearthstation(lesList);</span>
+			default:
+<span class="nc" id="L205">				return null;</span>
+		}
+	}
+	private static List&lt;? extends CapabilityOption&gt; mapLandearthstation(List&lt;MobileTerminalPlugin&gt; lesList) {
+<span class="nc" id="L209">		List&lt;LandEarthStationType&gt; landEarthStations = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L210" title="All 2 branches missed.">		if(lesList != null) {</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">			for(MobileTerminalPlugin les : lesList) {</span>
+<span class="nc" id="L212">				LandEarthStationType type = new LandEarthStationType();</span>
+<span class="nc" id="L213">				type.setLabelName(les.getName());</span>
+<span class="nc" id="L214">				type.setServiceName(les.getPluginServiceName());</span>
+<span class="nc" id="L215">				landEarthStations.add(type);</span>
+<span class="nc" id="L216">			}</span>
+		}
+<span class="nc" id="L218">		return landEarthStations;</span>
+	}
+
+	private static List&lt;? extends CapabilityOption&gt; mapOceanRegions(List&lt;OceanRegion&gt; oceanRegionList) {
+<span class="nc" id="L222">		List&lt;OceanRegionType&gt; oceanRegions = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L223" title="All 2 branches missed.">		if(oceanRegionList != null) {</span>
+<span class="nc bnc" id="L224" title="All 2 branches missed.">			for(OceanRegion oceanRegion : oceanRegionList) {</span>
+<span class="nc" id="L225">				OceanRegionType type = new OceanRegionType();</span>
+<span class="nc" id="L226">				type.setCode(oceanRegion.getCode());</span>
+<span class="nc" id="L227">				type.setName(oceanRegion.getName());</span>
+<span class="nc" id="L228">				oceanRegions.add(type);</span>
+<span class="nc" id="L229">			}</span>
+		}
+<span class="nc" id="L231">		return oceanRegions;</span>
+	}
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>SearchMapper.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.search</a> &gt; <span class="el_source">SearchMapper.java</span></div><h1>SearchMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.search;
+
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ListCriteria;
+
+<span class="nc" id="L21">public class SearchMapper {</span>
+
+<span class="nc" id="L23">    final static Logger LOG = LoggerFactory.getLogger(SearchMapper.class);</span>
+
+    public static String createSelectSearchSql(List&lt;ListCriteria&gt; criteriaList, boolean isDynamic) {
+<span class="nc" id="L26">        StringBuilder buffer = new StringBuilder();</span>
+
+<span class="nc" id="L28">        buffer.append(&quot;SELECT DISTINCT mt&quot;)</span>
+                .append(&quot; FROM MobileTerminal mt&quot;)
+                .append(&quot; INNER JOIN FETCH mt.mobileTerminalEvents me&quot;)
+                .append(&quot; LEFT JOIN FETCH mt.channels c&quot;)
+                .append(&quot; LEFT JOIN FETCH c.histories ch&quot;)
+                .append(&quot; WHERE ( &quot;)
+                .append(&quot;me.active = true &quot;)
+                .append(&quot;AND &quot;)
+                .append(&quot;mt.archived = false &quot;)
+                .append(&quot;AND &quot;)
+                .append(&quot;ch.active = true &quot;)
+                .append(&quot;AND &quot;)
+                .append(&quot;c.archived = false &quot;)
+                .append(&quot; ) &quot;);
+
+<span class="nc bnc" id="L43" title="All 2 branches missed.">        String operator = isDynamic ? &quot;OR&quot; : &quot;AND&quot;;</span>
+
+<span class="nc bnc" id="L45" title="All 4 branches missed.">        if (criteriaList != null &amp;&amp; !criteriaList.isEmpty()) {</span>
+<span class="nc" id="L46">            buffer.append(&quot; AND (&quot;);</span>
+<span class="nc" id="L47">            boolean first = true;</span>
+<span class="nc bnc" id="L48" title="All 2 branches missed.">            for (ListCriteria criteria : criteriaList) {</span>
+<span class="nc" id="L49">                String key = criteria.getKey().value();</span>
+<span class="nc bnc" id="L50" title="All 2 branches missed.">                if (first) {</span>
+<span class="nc" id="L51">                    first = false;</span>
+                } else {
+<span class="nc" id="L53">                    buffer.append(operator);</span>
+                }
+<span class="nc bnc" id="L55" title="All 2 branches missed.">                if (&quot;CONNECT_ID&quot;.equals(key)) {</span>
+<span class="nc" id="L56">                    buffer.append(&quot; ( me.connectId = &quot;)</span>
+                          .append(&quot;'&quot;).append(criteria.getValue()).append(&quot;' ) &quot;);
+                } else {
+<span class="nc bnc" id="L59" title="All 2 branches missed.">                    if (MobileTerminalSearchAttributes.isAttribute(key)) {</span>
+<span class="nc" id="L60">                        buffer.append(&quot; ( me.attributes LIKE &quot;)</span>
+                                .append(&quot;'%&quot;).append(key).append(&quot;=&quot;)
+                                .append(criteria.getValue().replace('*', '%')).append(&quot;;%' ) &quot;);
+<span class="nc bnc" id="L63" title="All 2 branches missed.">                    } else if (ChannelSearchAttributes.isAttribute(key)) {</span>
+<span class="nc" id="L64">                        buffer.append(&quot; ( ch.attributes LIKE &quot;)</span>
+                                .append(&quot;'%&quot;).append(key).append(&quot;=&quot;)
+                                .append(criteria.getValue().replace('*', '%')).append(&quot;;%' ) &quot;);
+                    } else {
+<span class="nc" id="L68">                        buffer.append(&quot; ( ch.attributes LIKE &quot;)</span>
+                                .append(&quot;'%&quot;).append(key).append(&quot;=&quot;)
+                                .append(criteria.getValue().replace('*', '%')).append(&quot;;%' &quot;);
+<span class="nc" id="L71">                        buffer.append(&quot; OR &quot;);</span>
+<span class="nc" id="L72">                        buffer.append(&quot; me.attributes LIKE &quot;)</span>
+                                .append(&quot;'%&quot;).append(key).append(&quot;=&quot;)
+                                .append(criteria.getValue().replace('*', '%')).append(&quot;;%' ) &quot;);
+                    }
+                }
+<span class="nc" id="L77">            }</span>
+<span class="nc" id="L78">            buffer.append(&quot;)&quot;);</span>
+        }
+<span class="nc" id="L80">        LOG.debug(&quot;SELECT SQL {}&quot;, buffer.toString());</span>
+<span class="nc" id="L81">        return buffer.toString();</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,13 @@
+GROUP,PACKAGE,CLASS,INSTRUCTION_MISSED,INSTRUCTION_COVERED,BRANCH_MISSED,BRANCH_COVERED,LINE_MISSED,LINE_COVERED,COMPLEXITY_MISSED,COMPLEXITY_COVERED,METHOD_MISSED,METHOD_COVERED
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier,EventMessage,29,0,0,0,13,0,6,0,6,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier,PollTimerMessage,16,0,0,0,8,0,4,0,4,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.exception,MobileTerminalMessageException,4,0,0,0,2,0,1,0,1,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.constants,DataSourceQueue,38,0,0,0,2,0,4,0,4,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.constants,MessageConstants,3,0,0,0,1,0,1,0,1,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.constants,ModuleQueue,48,0,0,0,2,0,4,0,4,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean,MessageConsumerBean,77,0,4,0,19,0,6,0,3,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean,MobileTerminalMessageConsumer,197,0,8,0,48,0,11,0,7,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean,MessageConsumerBean.new Object() {...},26,0,0,0,1,0,1,0,1,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean,MessageProducerBean,164,0,4,0,45,0,10,0,7,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean,MessageProducerBean.new Object() {...},37,0,0,0,2,0,1,0,1,0
+mobileterminal-message,eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean,JMSConnectorBean,102,0,2,0,30,0,6,0,5,0

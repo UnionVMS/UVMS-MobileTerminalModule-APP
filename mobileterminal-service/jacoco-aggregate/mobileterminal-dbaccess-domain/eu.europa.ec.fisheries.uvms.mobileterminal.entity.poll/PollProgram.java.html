@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PollProgram.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll</a> &gt; <span class="el_source">PollProgram.java</span></div><h1>PollProgram.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll;
+
+import java.io.Serializable;
+import java.util.Date;
+import java.util.UUID;
+
+import javax.persistence.Basic;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
+import javax.persistence.PrePersist;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
+
+/**
+ * WHERE p.startDate &lt; :currentDate AND p.stopDate &gt; :currentDate AND p.state &lt;&gt;
+ * 'ARCHIVED'
+ **/
+@Table(name = &quot;pollprogram&quot;)
+@Entity
+@DiscriminatorValue(&quot;true&quot;)
+@NamedQueries({
+	@NamedQuery(name = &quot;PollProgram.findAll&quot;, query = &quot;SELECT p FROM PollProgram p&quot;),
+	@NamedQuery(name = MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID, query = &quot;SELECT p FROM PollProgram p WHERE p.guid = :guid&quot;),
+	@NamedQuery(name = MobileTerminalConstants.POLL_PROGRAM_FIND_ALIVE, query = &quot;SELECT p FROM PollProgram  p WHERE p.stopDate &gt; :currentDate &quot; +
+	&quot;AND p.pollState &lt;&gt; eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum.ARCHIVED&quot;),
+    @NamedQuery(name = MobileTerminalConstants.POLL_PROGRAM_FIND_RUNNING_AND_STARTED,
+    query = &quot;SELECT p FROM PollProgram  p WHERE p.startDate &lt; :currentDate AND p.pollState = eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum.STARTED&quot;) })
+public class PollProgram implements Serializable {
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Basic(optional = false)
+    @Column(name = &quot;id&quot;)
+    private Long id;
+
+    @Size(max = 36)
+    @NotNull
+    @Column(name = &quot;guid&quot;, unique=true)
+    private String guid;
+
+    @Column(name = &quot;frequency&quot;)
+    private Integer frequency;
+
+    @Column(name = &quot;startdate&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date startDate;
+
+    @Column(name = &quot;stopdate&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date stopDate;
+
+    @Column(name = &quot;latestruntime&quot;)
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date latestRun;
+
+    @Size(max = 60)
+    @Column(name = &quot;upuser&quot;)
+    private String updatedBy;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = &quot;updattim&quot;)
+    private Date updateTime;
+
+    @JoinColumn(name = &quot;pollbase_id&quot;)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private PollBase pollBase;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = &quot;pollstate&quot;)
+    private PollStateEnum pollState;
+
+<span class="fc" id="L102">    public PollProgram() {</span>
+<span class="fc" id="L103">    }</span>
+
+    public Long getId() {
+<span class="nc" id="L106">        return id;</span>
+    }
+
+    public void setId(Long id) {
+<span class="nc" id="L110">        this.id = id;</span>
+<span class="nc" id="L111">    }</span>
+
+    @PrePersist
+    public void atPrePersist() {
+<span class="nc" id="L115">        setGuid(UUID.randomUUID().toString());</span>
+<span class="nc" id="L116">    }</span>
+
+    public Integer getFrequency() {
+<span class="nc" id="L119">        return frequency;</span>
+    }
+
+    public void setFrequency(Integer frequency) {
+<span class="nc" id="L123">        this.frequency = frequency;</span>
+<span class="nc" id="L124">    }</span>
+
+    public Date getStartDate() {
+<span class="nc" id="L127">        return startDate;</span>
+    }
+
+    public void setStartDate(Date startDate) {
+<span class="nc" id="L131">        this.startDate = startDate;</span>
+<span class="nc" id="L132">    }</span>
+
+    public Date getStopDate() {
+<span class="nc" id="L135">        return stopDate;</span>
+    }
+
+    public void setStopDate(Date stopDate) {
+<span class="nc" id="L139">        this.stopDate = stopDate;</span>
+<span class="nc" id="L140">    }</span>
+
+    public Date getLatestRun() {
+<span class="nc" id="L143">        return latestRun;</span>
+    }
+
+    public void setLatestRun(Date latestRun) {
+<span class="nc" id="L147">        this.latestRun = latestRun;</span>
+<span class="nc" id="L148">    }</span>
+
+    public String getUpdatedBy() {
+<span class="nc" id="L151">        return updatedBy;</span>
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+<span class="nc" id="L155">        this.updatedBy = updatedBy;</span>
+<span class="nc" id="L156">    }</span>
+
+    public Date getUpdateTime() {
+<span class="nc" id="L159">        return updateTime;</span>
+    }
+
+    public void setUpdateTime(Date updateTime) {
+<span class="nc" id="L163">        this.updateTime = updateTime;</span>
+<span class="nc" id="L164">    }</span>
+
+    public PollStateEnum getPollState() {
+<span class="nc" id="L167">        return pollState;</span>
+    }
+
+    public void setPollState(PollStateEnum pollState) {
+<span class="nc" id="L171">        this.pollState = pollState;</span>
+<span class="nc" id="L172">    }</span>
+
+    public PollBase getPollBase() {
+<span class="nc" id="L175">        return pollBase;</span>
+    }
+
+    public void setPollBase(PollBase pollBase) {
+<span class="nc" id="L179">        this.pollBase = pollBase;</span>
+<span class="nc" id="L180">    }</span>
+
+    public String getGuid() {
+<span class="nc" id="L183">        return guid;</span>
+    }
+
+    public void setGuid(String guid) {
+<span class="nc" id="L187">        this.guid = guid;</span>
+<span class="nc" id="L188">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>PollProgramDaoBean.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-dbaccess-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean</a> &gt; <span class="el_source">PollProgramDaoBean.java</span></div><h1>PollProgramDaoBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
+
+@Stateless
+<span class="nc" id="L34">public class PollProgramDaoBean extends Dao implements PollProgramDao {</span>
+
+<span class="nc" id="L36">    final static Logger LOG = LoggerFactory.getLogger(PollProgramDaoBean.class);</span>
+
+    @Override
+    public void createPollProgram(PollProgram pollProgram) throws PollDaoException {
+        try {
+<span class="nc" id="L41">            em.persist(pollProgram);</span>
+<span class="nc" id="L42">        } catch (EntityExistsException | IllegalArgumentException e) {</span>
+<span class="nc" id="L43">            LOG.error(&quot;[ Error when creating poll program. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L44">            throw new PollDaoException(&quot;[ create poll program ] &quot; + e.getMessage());</span>
+<span class="nc" id="L45">        }</span>
+<span class="nc" id="L46">    }</span>
+
+    @Override
+    public PollProgram updatePollProgram(PollProgram pollProgram) throws PollDaoException {
+        try {
+<span class="nc" id="L51">            em.merge(pollProgram);</span>
+<span class="nc" id="L52">            em.flush();</span>
+<span class="nc" id="L53">            return pollProgram;</span>
+<span class="nc" id="L54">        } catch (EntityExistsException | IllegalArgumentException e) {</span>
+<span class="nc" id="L55">            LOG.error(&quot;[ Error when updating poll program. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L56">            throw new PollDaoException(&quot;[ update poll program ] &quot; + e.getMessage());</span>
+        }
+    }
+
+    @Override
+    public List&lt;PollProgram&gt; getProgramPollsAlive() throws PollDaoException {
+        try {
+<span class="nc" id="L63">            TypedQuery&lt;PollProgram&gt; query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_ALIVE, PollProgram.class);</span>
+<span class="nc" id="L64">            query.setParameter(&quot;currentDate&quot;, DateUtils.getUTCNow());</span>
+<span class="nc" id="L65">            return query.getResultList();</span>
+<span class="nc" id="L66">        } catch (NoResultException e) {</span>
+<span class="nc" id="L67">            LOG.error(&quot;[ Error when getting poll program alive. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L68">            throw new PollDaoException(&quot;No entities found when retrieving getPollProgramAlive&quot;);</span>
+        }
+    }
+
+    @Override
+    public List&lt;PollProgram&gt; getPollProgramRunningAndStarted() throws PollDaoException {
+        try {
+<span class="nc" id="L75">            TypedQuery&lt;PollProgram&gt; query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_RUNNING_AND_STARTED, PollProgram.class);</span>
+<span class="nc" id="L76">            query.setParameter(&quot;currentDate&quot;, DateUtils.getUTCNow());</span>
+<span class="nc" id="L77">            List&lt;PollProgram&gt; pollPrograms = query.getResultList();</span>
+<span class="nc" id="L78">            List&lt;PollProgram&gt; validPollPrograms = new ArrayList&lt;PollProgram&gt;();</span>
+
+<span class="nc bnc" id="L80" title="All 2 branches missed.">            for (PollProgram pollProgram : pollPrograms) {</span>
+<span class="nc" id="L81">                Date lastRun = pollProgram.getLatestRun();</span>
+<span class="nc" id="L82">                Integer frequency = pollProgram.getFrequency();</span>
+<span class="nc" id="L83">                Date now = DateUtils.getUTCNow();</span>
+
+<span class="nc bnc" id="L85" title="All 4 branches missed.">                boolean createPoll = lastRun == null || now.getTime() &gt;= lastRun.getTime() + frequency * 1000;</span>
+<span class="nc" id="L86">                LOG.debug(&quot;createPoll:{} for guid '{}' (lastRun:{}, frequency:{}, now:{})&quot;, createPoll, pollProgram.getGuid(), lastRun, frequency, now);</span>
+
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                if (createPoll) {</span>
+<span class="nc" id="L89">                    pollProgram.setLatestRun(now);</span>
+<span class="nc" id="L90">                    validPollPrograms.add(pollProgram);</span>
+                }
+<span class="nc" id="L92">            }</span>
+
+<span class="nc" id="L94">            return validPollPrograms;</span>
+<span class="nc" id="L95">        } catch (NoResultException e) {</span>
+<span class="nc" id="L96">            LOG.error(&quot;[ Error when getting poll program running and started. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L97">            throw new PollDaoException(&quot;No entities found when retrieving getPollProgramRunningAndStarted&quot;);</span>
+        }
+    }
+
+    @Override
+    public PollProgram getPollProgramByGuid(String guid) throws PollDaoException {
+        try {
+<span class="nc" id="L104">            TypedQuery&lt;PollProgram&gt; query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID, PollProgram.class);</span>
+<span class="nc" id="L105">            query.setParameter(&quot;guid&quot;, guid);</span>
+<span class="nc" id="L106">            return query.getSingleResult();</span>
+<span class="nc" id="L107">        } catch (NoResultException e) {</span>
+<span class="nc" id="L108">            LOG.error(&quot;[ Error when getting poll program by id. ] {}&quot;, e.getMessage());</span>
+<span class="nc" id="L109">            throw new PollDaoException(&quot;No entity found getting by id&quot;);</span>
+        }
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

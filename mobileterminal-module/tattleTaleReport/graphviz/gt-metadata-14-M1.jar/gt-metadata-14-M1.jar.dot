@@ -1,0 +1,8 @@
+digraph gt_metadata_14_M1_dependencies {
+  node [shape = box, fontsize=10.0];
+  gt_metadata_14_M1 -> commons_logging_1_1_1;
+  gt_metadata_14_M1 -> gt_opengis_14_M1;
+  gt_metadata_14_M1 -> jai_core_1_1_3;
+  gt_metadata_14_M1 -> jsr_275_1_0_beta_2;
+  gt_metadata_14_M1 -> xml_apis_1_0_b2;
+}

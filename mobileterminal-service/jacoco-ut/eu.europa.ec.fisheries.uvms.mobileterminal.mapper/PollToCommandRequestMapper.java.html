@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>PollToCommandRequestMapper.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.mapper</a> &gt; <span class="el_source">PollToCommandRequestMapper.java</span></div><h1>PollToCommandRequestMapper.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import eu.europa.ec.fisheries.schema.exchange.common.v1.KeyValueType;
+import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PollType;
+import eu.europa.ec.fisheries.schema.exchange.plugin.types.v1.PollTypeType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+
+/**
+ **/
+<span class="nc" id="L32">public class PollToCommandRequestMapper {</span>
+
+<span class="nc" id="L34">    public enum PollReceiverInmarsatC {</span>
+
+<span class="nc" id="L36">        MOBILE_TERMINAL_ID, CONNECT_ID,</span>
+<span class="nc" id="L37">        SERIAL_NUMBER, DNID, MEMBER_NUMBER, LES_NAME, LES_SERVICE_NAME, SATELLITE_NUMBER;</span>
+    }
+
+<span class="nc" id="L40">    public enum PollReceiverIridium {</span>
+
+<span class="nc" id="L42">        MOBILE_TERMINAL_ID, CONNECT_ID,</span>
+<span class="nc" id="L43">        SERIAL_NUMBER;</span>
+    }
+
+    private static PollTypeType mapToPollType(eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType pollType) throws MobileTerminalModelMapperException {
+<span class="nc bnc" id="L47" title="All 4 branches missed.">        switch (pollType) {</span>
+            case CONFIGURATION_POLL:
+<span class="nc" id="L49">                return PollTypeType.CONFIG;</span>
+            case SAMPLING_POLL:
+<span class="nc" id="L51">                return PollTypeType.SAMPLING;</span>
+            case MANUAL_POLL:
+            case PROGRAM_POLL:
+<span class="nc" id="L54">                return PollTypeType.POLL;</span>
+            default:
+<span class="nc" id="L56">                throw new MobileTerminalModelMapperException(&quot;Error when mapping PollType to PollTypeType &quot;);</span>
+        }
+    }
+
+    public static PollType mapToPollType(PollResponseType pollResponse) throws MobileTerminalModelMapperException {
+<span class="nc" id="L61">        PollType pollType = new PollType();</span>
+
+<span class="nc bnc" id="L63" title="All 2 branches missed.">        String pollId = pollResponse.getPollId() == null ? null : pollResponse.getPollId().getGuid();</span>
+<span class="nc bnc" id="L64" title="All 2 branches missed.">        List&lt;PollAttribute&gt; pollAttributes = pollResponse.getAttributes() == null ? new ArrayList&lt;PollAttribute&gt;() : pollResponse.getAttributes();</span>
+
+<span class="nc" id="L66">        pollType.setPollTypeType(mapToPollType(pollResponse.getPollType()));</span>
+<span class="nc" id="L67">        pollType.setPollId(pollId);</span>
+<span class="nc" id="L68">        pollType.setMessage(pollResponse.getUserName() + &quot; : &quot; + pollResponse.getComment());</span>
+
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        for (PollAttribute attr : pollAttributes) {</span>
+<span class="nc" id="L71">            pollType.getPollPayload().add(mapPollAttributeToKeyValue(attr.getKey(), attr.getValue()));</span>
+<span class="nc" id="L72">        }</span>
+
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        if (pollResponse.getMobileTerminal() != null) {</span>
+
+<span class="nc" id="L76">            MobileTerminalType mobTerm = pollResponse.getMobileTerminal();</span>
+<span class="nc" id="L77">            String mobileTerminalType = mobTerm.getType();</span>
+
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            if (&quot;INMARSAT_C&quot;.equalsIgnoreCase(mobileTerminalType)) {</span>
+<span class="nc" id="L80">                String connectId = mobTerm.getConnectId();</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                String mobileTerminalId = mobTerm.getMobileTerminalId() == null ? null : mobTerm.getMobileTerminalId().getGuid();</span>
+<span class="nc" id="L82">                Plugin plugin = mobTerm.getPlugin();</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">                if (plugin != null) {</span>
+<span class="nc" id="L84">                    pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.LES_NAME, plugin.getLabelName()));</span>
+<span class="nc" id="L85">                    pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.LES_SERVICE_NAME, plugin.getServiceName()));</span>
+                }
+<span class="nc" id="L87">                pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.CONNECT_ID, connectId));</span>
+<span class="nc" id="L88">                pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.MOBILE_TERMINAL_ID, mobileTerminalId));</span>
+
+<span class="nc" id="L90">                List&lt;MobileTerminalAttribute&gt; attributes = mobTerm.getAttributes();</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">                for (MobileTerminalAttribute attr : attributes) {</span>
+<span class="nc bnc" id="L92" title="All 2 branches missed.">                    if (PollReceiverInmarsatC.SERIAL_NUMBER.name().equalsIgnoreCase(attr.getType())) {</span>
+<span class="nc" id="L93">                        pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.SERIAL_NUMBER, attr.getValue()));</span>
+                    }
+<span class="nc bnc" id="L95" title="All 2 branches missed.">                    if (PollReceiverInmarsatC.SATELLITE_NUMBER.name().equalsIgnoreCase(attr.getType())) {</span>
+<span class="nc" id="L96">                        pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.SATELLITE_NUMBER, attr.getValue()));</span>
+                    }
+<span class="nc" id="L98">                }</span>
+
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                for (ComChannelType channel : mobTerm.getChannels()) {</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">                    for (ComChannelAttribute attr : channel.getAttributes()) {</span>
+<span class="nc bnc" id="L102" title="All 2 branches missed.">                        if (PollReceiverInmarsatC.DNID.name().equalsIgnoreCase(attr.getType())) {</span>
+<span class="nc" id="L103">                            pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.DNID, attr.getValue()));</span>
+                        }
+<span class="nc bnc" id="L105" title="All 2 branches missed.">                        if (PollReceiverInmarsatC.MEMBER_NUMBER.name().equalsIgnoreCase(attr.getType())) {</span>
+<span class="nc" id="L106">                            pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.MEMBER_NUMBER, attr.getValue()));</span>
+                        }
+<span class="nc" id="L108">                    }</span>
+<span class="nc" id="L109">                }</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">            } else if (&quot;IRIDIUM&quot;.equalsIgnoreCase(mobileTerminalType)) {</span>
+<span class="nc" id="L111">                String connectId = mobTerm.getConnectId();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                String mobileTerminalId = mobTerm.getMobileTerminalId() == null ? null : mobTerm.getMobileTerminalId().getGuid();</span>
+
+<span class="nc" id="L114">                pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverIridium.CONNECT_ID, connectId));</span>
+<span class="nc" id="L115">                pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverIridium.MOBILE_TERMINAL_ID, mobileTerminalId));</span>
+
+<span class="nc" id="L117">                List&lt;MobileTerminalAttribute&gt; attributes = mobTerm.getAttributes();</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                for (MobileTerminalAttribute attr : attributes) {</span>
+<span class="nc bnc" id="L119" title="All 2 branches missed.">                    if (PollReceiverIridium.SERIAL_NUMBER.name().equalsIgnoreCase(attr.getType())) {</span>
+<span class="nc" id="L120">                        pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverIridium.SERIAL_NUMBER, attr.getValue()));</span>
+                    }
+<span class="nc" id="L122">                }</span>
+            }
+        }
+
+<span class="nc" id="L126">        return pollType;</span>
+    }
+
+    private static KeyValueType mapPollAttributeToKeyValue(PollAttributeType key, String value) {
+<span class="nc" id="L130">        KeyValueType keyValue = new KeyValueType();</span>
+<span class="nc" id="L131">        keyValue.setKey(key.name());</span>
+<span class="nc" id="L132">        keyValue.setValue(value);</span>
+<span class="nc" id="L133">        return keyValue;</span>
+    }
+
+    private static KeyValueType mapReceiverToKeyValue(PollReceiverInmarsatC key, String value) {
+<span class="nc" id="L137">        KeyValueType keyValue = new KeyValueType();</span>
+<span class="nc" id="L138">        keyValue.setKey(key.name());</span>
+<span class="nc" id="L139">        keyValue.setValue(value);</span>
+<span class="nc" id="L140">        return keyValue;</span>
+    }
+
+    private static KeyValueType mapReceiverToKeyValue(PollReceiverIridium key, String value) {
+<span class="nc" id="L144">        KeyValueType keyValue = new KeyValueType();</span>
+<span class="nc" id="L145">        keyValue.setKey(key.name());</span>
+<span class="nc" id="L146">        keyValue.setValue(value);</span>
+<span class="nc" id="L147">        return keyValue;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

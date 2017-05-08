@@ -1,0 +1,425 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>MobileTerminalDomainModelBean.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">mobileterminal-domain</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.bean</a> &gt; <span class="el_source">MobileTerminalDomainModelBean.java</span></div><h1>MobileTerminalDomainModelBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ListCriteria;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAssignQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalHistory;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.common.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalDomainModel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalExistsException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalTypeComparator;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.HistoryMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToModelMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalModelToEntityMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
+
+@Stateless
+<span class="nc" id="L55">public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel {</span>
+
+<span class="nc" id="L57">    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalDomainModelBean.class);</span>
+
+    @EJB
+    TerminalDao terminalDao;
+    
+    @EJB
+    ConfigModel config;
+
+    @EJB
+    MobileTerminalPluginDao pluginDao;
+    
+    public MobileTerminal getMobileTerminalEntityById(MobileTerminalId id) throws InputArgumentException, NoEntityFoundException {
+<span class="nc bnc" id="L69" title="All 6 branches missed.">    	if(id == null || id.getGuid() == null || id.getGuid().isEmpty()) throw new InputArgumentException(&quot;Non valid id&quot;);</span>
+<span class="nc" id="L70">    	return terminalDao.getMobileTerminalByGuid(id.getGuid());</span>
+    }
+
+    public MobileTerminal getMobileTerminalEntityBySerialNo(String serialNo) throws InputArgumentException, NoEntityFoundException {
+<span class="nc bnc" id="L74" title="All 4 branches missed.">        if(serialNo == null || serialNo.isEmpty()) throw new InputArgumentException(&quot;Non valid serial no&quot;);</span>
+<span class="nc" id="L75">        return terminalDao.getMobileTerminalBySerialNo(serialNo);</span>
+    }
+    
+    @Override
+    public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, String username) throws MobileTerminalModelException {
+<span class="nc" id="L80">        LOG.info(&quot;Create mobileterminal.&quot;);</span>
+
+        try {
+<span class="nc" id="L83">            assertTerminalNotExists(mobileTerminal);</span>
+<span class="nc" id="L84">            String serialNumber = assertTerminalHasNeededData(mobileTerminal);</span>
+
+<span class="nc" id="L86">            MobileTerminalPlugin plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());</span>
+
+<span class="nc" id="L88">            MobileTerminal terminal = MobileTerminalModelToEntityMapper.mapNewMobileTerminalEntity(mobileTerminal, serialNumber, plugin, username);</span>
+<span class="nc" id="L89">            terminalDao.createMobileTerminal(terminal);</span>
+<span class="nc" id="L90">            return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);</span>
+<span class="nc" id="L91">        } catch (TerminalDaoException e) {</span>
+<span class="nc" id="L92">            throw new MobileTerminalModelException(&quot;Error when persisting terminal &quot; + mobileTerminal.getMobileTerminalId());</span>
+<span class="nc" id="L93">        } catch (MobileTerminalModelException e) {</span>
+<span class="nc" id="L94">            LOG.error(&quot;Error in model when creating mobile terminal: {}&quot;, e.getMessage());</span>
+<span class="nc" id="L95">            throw e;</span>
+        }
+    }
+
+    private String assertTerminalHasNeededData(MobileTerminalType mobileTerminal) throws MobileTerminalModelException {
+<span class="nc" id="L100">        String serialNumber = null;</span>
+<span class="nc bnc" id="L101" title="All 2 branches missed.">        for (MobileTerminalAttribute attribute : mobileTerminal.getAttributes()) {</span>
+<span class="nc bnc" id="L102" title="All 6 branches missed.">            if (MobileTerminalConstants.SERIAL_NUMBER.equalsIgnoreCase(attribute.getType()) &amp;&amp;</span>
+                    attribute.getValue() != null &amp;&amp; !attribute.getValue().isEmpty()) {
+<span class="nc" id="L104">                serialNumber = attribute.getValue();</span>
+<span class="nc" id="L105">                break;</span>
+            }
+<span class="nc" id="L107">        }</span>
+
+<span class="nc bnc" id="L109" title="All 2 branches missed.">        if (serialNumber == null) {</span>
+<span class="nc" id="L110">            throw new MobileTerminalModelException(&quot;Cannot create mobile terminal without serial number&quot;);</span>
+        }
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        if(mobileTerminal.getPlugin() == null){</span>
+<span class="nc" id="L113">            throw new MobileTerminalModelException(&quot;Cannot create Mobile terminal when plugin is not null&quot;);</span>
+        }
+
+<span class="nc" id="L116">        return serialNumber;</span>
+    }
+
+    private void assertTerminalNotExists(MobileTerminalType mobileTerminal) throws MobileTerminalModelException {
+        try {
+<span class="nc" id="L121">        	MobileTerminal terminal = getMobileTerminalEntityById(mobileTerminal.getMobileTerminalId());</span>
+<span class="nc" id="L122">            throw new MobileTerminalModelException(&quot;Mobile terminal already exists in database for id: &quot; + mobileTerminal.getMobileTerminalId());</span>
+<span class="nc" id="L123">        } catch (InputArgumentException | NoEntityFoundException e) {</span>
+            //Terminal does not exist, ok to create a new one
+        }
+        try {
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            for (MobileTerminalAttribute attribute : mobileTerminal.getAttributes()) {</span>
+<span class="nc bnc" id="L128" title="All 2 branches missed.">                if (MobileTerminalConstants.SERIAL_NUMBER.equalsIgnoreCase(attribute.getType())) {</span>
+<span class="nc" id="L129">                    MobileTerminal terminal = getMobileTerminalEntityBySerialNo(attribute.getValue());</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                    if (!terminal.getArchived()) {</span>
+<span class="nc" id="L131">                        throw new MobileTerminalModelException(&quot;Mobile terminal already exists in database for serial number: &quot; + attribute.getValue());</span>
+                    }
+                }
+<span class="nc" id="L134">            }</span>
+<span class="nc" id="L135">        } catch (InputArgumentException | NoEntityFoundException e) {</span>
+            //Terminal does not exist, ok to create a new one
+<span class="nc" id="L137">        }</span>
+<span class="nc" id="L138">    }</span>
+
+    @Override
+    public MobileTerminalType getMobileTerminalById(MobileTerminalId id) throws MobileTerminalModelException {
+<span class="nc" id="L142">        LOG.info(&quot;Get mobileterminal&quot;);</span>
+
+<span class="nc bnc" id="L144" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L145">            throw new InputArgumentException(&quot;No id to fetch&quot;);</span>
+        }
+
+<span class="nc" id="L148">        MobileTerminal terminal = getMobileTerminalEntityById(id);</span>
+<span class="nc" id="L149">        return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);</span>
+    }
+    
+    @Override
+    public MobileTerminalType updateMobileTerminal(MobileTerminalType model, String comment, String username) throws MobileTerminalModelException {
+<span class="nc" id="L154">        LOG.info(&quot;Update mobileterminal&quot;);</span>
+
+<span class="nc bnc" id="L156" title="All 2 branches missed.">        if (model == null) {</span>
+<span class="nc" id="L157">            throw new InputArgumentException(&quot;No terminal to update&quot;);</span>
+        }
+<span class="nc bnc" id="L159" title="All 6 branches missed.">        if (model.getMobileTerminalId() == null || model.getMobileTerminalId().getGuid() == null || model.getMobileTerminalId().getGuid().isEmpty()) {</span>
+<span class="nc" id="L160">            throw new InputArgumentException(&quot;Non valid id of terminal to update&quot;);</span>
+        }
+
+<span class="nc" id="L163">        MobileTerminal terminal = getMobileTerminalEntityById(model.getMobileTerminalId());</span>
+<span class="nc" id="L164">        MobileTerminalPlugin updatedPlugin = null;</span>
+
+<span class="nc bnc" id="L166" title="All 6 branches missed.">        if(model.getPlugin() != null &amp;&amp; model.getPlugin().getLabelName() != null &amp;&amp; terminal.getPlugin() != null) {</span>
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        	if(!model.getPlugin().getLabelName().equalsIgnoreCase(terminal.getPlugin().getName())) {</span>
+<span class="nc" id="L168">        		updatedPlugin = pluginDao.getPluginByServiceName(model.getPlugin().getServiceName());</span>
+<span class="nc" id="L169">        		terminal.setPlugin(updatedPlugin);</span>
+        	}
+        }
+
+<span class="nc bnc" id="L173" title="All 2 branches missed.">        if (updatedPlugin == null) {</span>
+<span class="nc" id="L174">            updatedPlugin = terminal.getPlugin();</span>
+        }
+
+<span class="nc" id="L177">        String serialNumber = assertTerminalHasNeededData(model);</span>
+
+        //TODO check type
+<span class="nc bnc" id="L180" title="All 2 branches missed.">        if(terminal.getMobileTerminalType() != null) {</span>
+<span class="nc" id="L181">            MobileTerminal updatedTerminal = MobileTerminalModelToEntityMapper.mapMobileTerminalEntity(terminal, model, serialNumber, updatedPlugin, username, comment, EventCodeEnum.MODIFY);</span>
+<span class="nc" id="L182">            terminalDao.updateMobileTerminal(updatedTerminal);</span>
+<span class="nc" id="L183">            return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(updatedTerminal);</span>
+
+        }
+<span class="nc" id="L186">        throw new MobileTerminalModelException(&quot;Update - Not supported mobile terminal type&quot;);</span>
+    }
+
+    @Override
+    public MobileTerminalType assignMobileTerminalToCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
+<span class="nc" id="L191">        LOG.info(&quot;Assign mobile terminal to carrier&quot;);</span>
+<span class="nc bnc" id="L192" title="All 2 branches missed.">        if (query == null) {</span>
+<span class="nc" id="L193">            throw new InputArgumentException(&quot;RequestQuery is null&quot;);</span>
+        }
+<span class="nc bnc" id="L195" title="All 2 branches missed.">        if (query.getMobileTerminalId() == null) {</span>
+<span class="nc" id="L196">            throw new InputArgumentException(&quot;No Mobile terminalId in request&quot;);</span>
+        }
+<span class="nc bnc" id="L198" title="All 4 branches missed.">        if (query.getConnectId() == null || query.getConnectId().isEmpty()) {</span>
+<span class="nc" id="L199">            throw new InputArgumentException(&quot;No connect id in requesst&quot;);</span>
+        }
+
+<span class="nc" id="L202">        MobileTerminalId mobTermId = query.getMobileTerminalId();</span>
+<span class="nc" id="L203">        String connectId = query.getConnectId();</span>
+        
+<span class="nc" id="L205">        MobileTerminal terminal = getMobileTerminalEntityById(mobTermId);</span>
+<span class="nc" id="L206">        String currentConnectId = terminal.getCurrentEvent().getConnectId();</span>
+<span class="nc bnc" id="L207" title="All 4 branches missed.">        if (currentConnectId == null || currentConnectId.isEmpty()) {</span>
+<span class="nc" id="L208">            MobileTerminalEvent current = terminal.getCurrentEvent();</span>
+<span class="nc" id="L209">            current.setActive(false);</span>
+<span class="nc" id="L210">            MobileTerminalEvent event = new MobileTerminalEvent();</span>
+<span class="nc" id="L211">            event.setActive(true);</span>
+<span class="nc" id="L212">            event.setPollChannel(current.getPollChannel());</span>
+<span class="nc" id="L213">            event.setDefaultChannel(current.getDefaultChannel());</span>
+<span class="nc" id="L214">            event.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L215">            event.setConfigChannel(current.getConfigChannel());</span>
+<span class="nc" id="L216">            event.setAttributes(current.getAttributes());</span>
+<span class="nc" id="L217">            event.setComment(comment);</span>
+<span class="nc" id="L218">            event.setConnectId(connectId);</span>
+<span class="nc" id="L219">            event.setMobileTerminal(terminal);</span>
+<span class="nc" id="L220">            event.setUpdatedBy(username);</span>
+<span class="nc" id="L221">            event.setEventCodeType(EventCodeEnum.LINK);</span>
+<span class="nc" id="L222">            terminal.getMobileTerminalEvents().add(event);</span>
+<span class="nc" id="L223">            terminalDao.updateMobileTerminal(terminal);</span>
+
+<span class="nc" id="L225">            return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);</span>
+        }
+
+<span class="nc" id="L228">        throw new MobileTerminalModelException(&quot;Terminal &quot; + mobTermId + &quot; is already linked to an asset with guid &quot; + currentConnectId);</span>
+    }
+
+    @Override
+    public MobileTerminalType unAssignMobileTerminalFromCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
+<span class="nc" id="L233">        LOG.info(&quot;Unassign mobile terminal to carrier&quot;);</span>
+<span class="nc bnc" id="L234" title="All 2 branches missed.">        if (query == null) {</span>
+<span class="nc" id="L235">            throw new InputArgumentException(&quot;RequestQuery is null&quot;);</span>
+        }
+<span class="nc bnc" id="L237" title="All 2 branches missed.">        if (query.getMobileTerminalId() == null) {</span>
+<span class="nc" id="L238">            throw new InputArgumentException(&quot;No Mobile terminalId in request&quot;);</span>
+        }
+<span class="nc bnc" id="L240" title="All 4 branches missed.">        if (query.getConnectId() == null || query.getConnectId().isEmpty()) {</span>
+<span class="nc" id="L241">            throw new InputArgumentException(&quot;No connect id in requesst&quot;);</span>
+        }
+
+<span class="nc" id="L244">        MobileTerminalId mobTermId = query.getMobileTerminalId();</span>
+<span class="nc" id="L245">        String connectId = query.getConnectId();</span>
+
+<span class="nc" id="L247">        MobileTerminal terminal = getMobileTerminalEntityById(mobTermId);</span>
+<span class="nc" id="L248">        String currentConnectId = terminal.getCurrentEvent().getConnectId();</span>
+<span class="nc bnc" id="L249" title="All 4 branches missed.">        if (currentConnectId != null &amp;&amp; currentConnectId.equals(connectId)) {</span>
+<span class="nc" id="L250">            MobileTerminalEvent current = terminal.getCurrentEvent();</span>
+<span class="nc" id="L251">            current.setActive(false);</span>
+<span class="nc" id="L252">            MobileTerminalEvent event = new MobileTerminalEvent();</span>
+<span class="nc" id="L253">            event.setActive(true);</span>
+<span class="nc" id="L254">            event.setPollChannel(current.getPollChannel());</span>
+<span class="nc" id="L255">            event.setDefaultChannel(current.getDefaultChannel());</span>
+<span class="nc" id="L256">            event.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L257">            event.setConfigChannel(current.getConfigChannel());</span>
+<span class="nc" id="L258">            event.setAttributes(current.getAttributes());</span>
+<span class="nc" id="L259">            event.setComment(comment);</span>
+<span class="nc" id="L260">            event.setConnectId(null);</span>
+<span class="nc" id="L261">            event.setMobileTerminal(terminal);</span>
+<span class="nc" id="L262">            event.setUpdatedBy(username);</span>
+<span class="nc" id="L263">            event.setEventCodeType(EventCodeEnum.UNLINK);</span>
+<span class="nc" id="L264">            terminal.getMobileTerminalEvents().add(event);</span>
+<span class="nc" id="L265">            terminalDao.updateMobileTerminal(terminal);</span>
+
+<span class="nc" id="L267">            return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);</span>
+        }
+
+<span class="nc" id="L270">        throw new MobileTerminalModelException(&quot;Terminal &quot; + mobTermId + &quot; is not linked to an asset with guid &quot; + connectId);</span>
+    }
+
+    @Override
+    public MobileTerminalType upsertMobileTerminal(MobileTerminalType mobileTerminal,String username) throws InputArgumentException, MobileTerminalModelException {
+
+<span class="nc bnc" id="L276" title="All 2 branches missed.">        if (mobileTerminal == null) {</span>
+<span class="nc" id="L277">            throw new InputArgumentException(&quot;RequestQuery is null&quot;);</span>
+        }
+<span class="nc bnc" id="L279" title="All 2 branches missed.">        if (mobileTerminal.getMobileTerminalId() == null) {</span>
+<span class="nc" id="L280">            throw new InputArgumentException(&quot;No Mobile terminalId in request&quot;);</span>
+        }
+
+        try {
+<span class="nc" id="L284">            MobileTerminalType terminal = updateMobileTerminal(mobileTerminal, &quot;Upserted by external module&quot;, username); //TODO comment?</span>
+<span class="nc" id="L285">            return terminal;</span>
+<span class="nc" id="L286">        } catch (NumberFormatException | MobileTerminalModelException e) {</span>
+<span class="nc" id="L287">            LOG.error(&quot;[ Error when upserting mobile terminal: Mobile terminal update failed trying to insert. ] {} {}&quot;, e.getMessage(), e.getStackTrace());</span>
+<span class="nc bnc" id="L288" title="All 2 branches missed.">            if (e instanceof MobileTerminalExistsException) {</span>
+<span class="nc" id="L289">                throw e;</span>
+            }
+        }
+
+<span class="nc" id="L293">        return createMobileTerminal(mobileTerminal, username);</span>
+    }
+
+    @Override
+    public MobileTerminalType setStatusMobileTerminal(MobileTerminalId id, String comment, MobileTerminalStatus status, String username) throws MobileTerminalModelException {
+<span class="nc" id="L298">        LOG.info(&quot;Setting mobile terminal status.&quot;);</span>
+
+<span class="nc bnc" id="L300" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L301">            throw new InputArgumentException(&quot;No Mobile Terminal&quot;);</span>
+        }
+<span class="nc bnc" id="L303" title="All 2 branches missed.">        if (status == null) {</span>
+<span class="nc" id="L304">            throw new InputArgumentException(&quot;No terminal status to set&quot;);</span>
+        }
+
+<span class="nc" id="L307">        MobileTerminal terminal = getMobileTerminalEntityById(id);</span>
+
+<span class="nc" id="L309">        MobileTerminalEvent current = terminal.getCurrentEvent();</span>
+<span class="nc" id="L310">        current.setActive(false);</span>
+
+<span class="nc" id="L312">        MobileTerminalEvent event = new MobileTerminalEvent();</span>
+<span class="nc" id="L313">        event.setActive(true);</span>
+<span class="nc" id="L314">        event.setPollChannel(current.getPollChannel());</span>
+<span class="nc" id="L315">        event.setDefaultChannel(current.getDefaultChannel());</span>
+<span class="nc" id="L316">        event.setUpdateTime(DateUtils.getNowDateUTC());</span>
+<span class="nc" id="L317">        event.setConfigChannel(current.getConfigChannel());</span>
+<span class="nc" id="L318">        event.setAttributes(current.getAttributes());</span>
+<span class="nc" id="L319">        event.setComment(comment);</span>
+<span class="nc" id="L320">        event.setConnectId(current.getConnectId());</span>
+<span class="nc" id="L321">        event.setMobileTerminal(terminal);</span>
+<span class="nc" id="L322">        event.setUpdatedBy(username);</span>
+<span class="nc bnc" id="L323" title="All 4 branches missed.">        switch (status) {</span>
+            case ACTIVE:
+<span class="nc" id="L325">                event.setEventCodeType(EventCodeEnum.ACTIVATE);</span>
+<span class="nc" id="L326">                terminal.setInactivated(false);</span>
+<span class="nc" id="L327">                break;</span>
+            case INACTIVE:
+<span class="nc" id="L329">                event.setEventCodeType(EventCodeEnum.INACTIVATE);</span>
+<span class="nc" id="L330">                terminal.setInactivated(true);</span>
+<span class="nc" id="L331">                break;</span>
+            case ARCHIVE:
+<span class="nc" id="L333">                event.setEventCodeType(EventCodeEnum.ARCHIVE);</span>
+<span class="nc" id="L334">                terminal.setArchived(true);</span>
+<span class="nc" id="L335">                break;</span>
+            default:
+<span class="nc" id="L337">                LOG.error(&quot;[ Non valid status to set ] {}&quot;, status);</span>
+<span class="nc" id="L338">                throw new MobileTerminalModelException(&quot;Non valid status to set&quot;);</span>
+        }
+
+<span class="nc" id="L341">        terminal.getMobileTerminalEvents().add(event);</span>
+<span class="nc" id="L342">        terminalDao.updateMobileTerminal(terminal);</span>
+        
+<span class="nc" id="L344">        return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);</span>
+    }
+
+    @Override
+    public MobileTerminalHistory getMobileTerminalHistoryList(MobileTerminalId id) throws MobileTerminalModelException {
+<span class="nc" id="L349">        LOG.info(&quot;Mobile terminal history.&quot;);</span>
+<span class="nc bnc" id="L350" title="All 2 branches missed.">        if (id == null) {</span>
+<span class="nc" id="L351">            throw new InputArgumentException(&quot;No Mobile Terminal&quot;);</span>
+        }
+
+<span class="nc" id="L354">        MobileTerminal terminal = getMobileTerminalEntityById(id);</span>
+
+<span class="nc" id="L356">        return HistoryMapper.getHistory(terminal);</span>
+    }
+
+    @Override
+    public ListResponseDto getTerminalListByQuery(MobileTerminalListQuery query) throws MobileTerminalModelException {
+<span class="nc" id="L361">        LOG.info(&quot;Get list of InmarsatC terminal from query.&quot;);</span>
+
+<span class="nc bnc" id="L363" title="All 2 branches missed.">        if (query == null) {</span>
+<span class="nc" id="L364">            throw new InputArgumentException(&quot;No list query&quot;);</span>
+        }
+<span class="nc bnc" id="L366" title="All 2 branches missed.">        if (query.getPagination() == null) {</span>
+<span class="nc" id="L367">            throw new InputArgumentException(&quot;No list pagination&quot;);</span>
+        }
+<span class="nc bnc" id="L369" title="All 2 branches missed.">        if (query.getMobileTerminalSearchCriteria() == null) {</span>
+<span class="nc" id="L370">            throw new InputArgumentException(&quot;No list criteria&quot;);</span>
+        }
+<span class="nc bnc" id="L372" title="All 2 branches missed.">        if (query.getMobileTerminalSearchCriteria().getCriterias() == null) {</span>
+<span class="nc" id="L373">            throw new InputArgumentException(&quot;No list criteria&quot;);</span>
+        }
+
+
+<span class="nc" id="L377">        ListResponseDto response = new ListResponseDto();</span>
+<span class="nc" id="L378">        List&lt;MobileTerminalType&gt; mobileTerminalList = new ArrayList&lt;MobileTerminalType&gt;();</span>
+
+<span class="nc" id="L380">        Integer page = query.getPagination().getPage();</span>
+<span class="nc" id="L381">        Integer listSize = query.getPagination().getListSize();</span>
+<span class="nc" id="L382">        int startIndex = (page-1)*listSize;</span>
+<span class="nc" id="L383">        int stopIndex = startIndex+listSize;</span>
+<span class="nc" id="L384">        LOG.debug(&quot;page: &quot; + page + &quot;, listSize: &quot; + listSize + &quot;, startIndex: &quot; + startIndex);</span>
+        
+<span class="nc bnc" id="L386" title="All 2 branches missed.">        boolean isDynamic = query.getMobileTerminalSearchCriteria().isIsDynamic() == null ? true : query.getMobileTerminalSearchCriteria().isIsDynamic();</span>
+
+<span class="nc" id="L388">        List&lt;ListCriteria&gt; criterias = query.getMobileTerminalSearchCriteria().getCriterias();</span>
+
+<span class="nc" id="L390">        String searchSql = SearchMapper.createSelectSearchSql(criterias, isDynamic);</span>
+
+<span class="nc" id="L392">        List&lt;MobileTerminal&gt; terminals = terminalDao.getMobileTerminalsByQuery(searchSql);</span>
+
+<span class="nc bnc" id="L394" title="All 2 branches missed.">        for (MobileTerminal terminal : terminals) {</span>
+<span class="nc" id="L395">            MobileTerminalType terminalType = MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);</span>
+<span class="nc" id="L396">            mobileTerminalList.add(terminalType);</span>
+<span class="nc" id="L397">        }</span>
+
+<span class="nc" id="L399">        Collections.sort(mobileTerminalList, new MobileTerminalTypeComparator());</span>
+<span class="nc" id="L400">        int totalMatches = mobileTerminalList.size();</span>
+<span class="nc" id="L401">        LOG.debug(&quot;totalMatches: &quot; + totalMatches);</span>
+
+<span class="nc" id="L403">        int numberOfPages =  totalMatches / listSize;</span>
+<span class="nc bnc" id="L404" title="All 2 branches missed.">        if (totalMatches % listSize != 0) {</span>
+<span class="nc" id="L405">            numberOfPages += 1;</span>
+        }
+
+<span class="nc" id="L408">        response.setMobileTerminalList(mobileTerminalList);</span>
+<span class="nc bnc" id="L409" title="All 2 branches missed.">        if((totalMatches-1) &lt;= 0) {</span>
+        } else {
+<span class="nc bnc" id="L411" title="All 2 branches missed.">        	if(stopIndex &gt;= totalMatches) {</span>
+<span class="nc" id="L412">            	stopIndex = totalMatches;</span>
+            }
+<span class="nc" id="L414">        	LOG.debug(&quot;stopIndex: &quot; + stopIndex);</span>
+<span class="nc" id="L415">        	response.setMobileTerminalList(new ArrayList&lt;&gt;(mobileTerminalList.subList(startIndex, stopIndex)));</span>
+        }
+        
+<span class="nc" id="L418">        response.setTotalNumberOfPages(numberOfPages);</span>
+<span class="nc" id="L419">        response.setCurrentPage(page);</span>
+
+        
+<span class="nc" id="L422">        return response;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

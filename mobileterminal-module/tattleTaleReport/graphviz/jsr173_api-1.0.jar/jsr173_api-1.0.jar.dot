@@ -1,0 +1,4 @@
+digraph jsr173_api_1_0_dependencies {
+  node [shape = box, fontsize=10.0];
+  jsr173_api_1_0 -> xml_apis_1_0_b2;
+}

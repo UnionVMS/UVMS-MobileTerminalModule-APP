@@ -1,0 +1,10 @@
+digraph mobileterminal_service_3_0_6_SNAPSHOT_dependencies {
+  node [shape = box, fontsize=10.0];
+  mobileterminal_service_3_0_6_SNAPSHOT -> audit_model_3_0_4;
+  mobileterminal_service_3_0_6_SNAPSHOT -> config_model_2_1_1;
+  mobileterminal_service_3_0_6_SNAPSHOT -> exchange_model_3_0_4_date;
+  mobileterminal_service_3_0_6_SNAPSHOT -> jaxb_api_2_2_7;
+  mobileterminal_service_3_0_6_SNAPSHOT -> mobileterminal_message_3_0_6_SNAPSHOT;
+  mobileterminal_service_3_0_6_SNAPSHOT -> mobileterminal_model_3_0_4_date;
+  mobileterminal_service_3_0_6_SNAPSHOT -> uvms_config_3_0_4;
+}

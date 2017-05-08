@@ -1,0 +1,4 @@
+digraph apache_mime4j_0_6_dependencies {
+  node [shape = box, fontsize=10.0];
+  apache_mime4j_0_6 -> commons_logging_1_1_1;
+}

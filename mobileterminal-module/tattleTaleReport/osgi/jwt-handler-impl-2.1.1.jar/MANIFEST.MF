@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Build-Jdk: 1.7.0_55
+Built-By: kroger
+Created-By: Apache Maven 3.3.9
+Archiver-Version: Plexus Archiver
+
+
+### OSGi information
+Bundle-ManifestVersion: 2
+Bundle-SymbolicName: eu.europa.ec.mare.usm.jwt
+Bundle-Description: jwt-handler-impl-2.1.1
+Bundle-Name: jwt-handler-impl-2.1.1
+Bundle-Version: 0.0.0
+Export-Package: eu.europa.ec.mare.usm.jwt;uses:="io.jsonwebtoken"
+Import-Package: eu.europa.ec.mare.usm.jwt;version="0.0.0",io.jsonwebto
+ ken;version="0.4",java.io,java.lang,java.lang.reflect,java.security,j
+ ava.util,javax.annotation;version="1.1",javax.crypto.spec,javax.ejb,j
+ avax.naming,javax.xml.bind;version="2.2.7",org.slf4j

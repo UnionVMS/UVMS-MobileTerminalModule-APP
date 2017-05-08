@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../../jacoco-resources/report.gif" type="image/gif"/><title>MappedPollServiceBean.java</title><link rel="stylesheet" href="../../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../../index.html" class="el_report">mobileterminal-module</a> &gt; <a href="../index.html" class="el_bundle">mobileterminal-service</a> &gt; <a href="index.source.html" class="el_package">eu.europa.ec.fisheries.uvms.mobileterminal.service.bean</a> &gt; <span class="el_source">MappedPollServiceBean.java</span></div><h1>MappedPollServiceBean.java</h1><pre class="source lang-java linenums">/*
+﻿Developed with the contribution of the European Commission - Directorate General for Maritime Affairs and Fisheries
+© European Union, 2015-2016.
+
+This file is part of the Integrated Fisheries Data Management (IFDM) Suite. The IFDM Suite is free software: you can
+redistribute it and/or modify it under the terms of the GNU General Public License as published by the
+Free Software Foundation, either version 3 of the License, or any later version. The IFDM Suite is distributed in
+the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
+copy of the GNU General Public License along with the IFDM Suite. If not, see &lt;http://www.gnu.org/licenses/&gt;.
+ */
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelListDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+
+@Stateless
+<span class="nc" id="L42">public class MappedPollServiceBean implements MappedPollService {</span>
+<span class="nc" id="L43">    final static Logger LOG = LoggerFactory.getLogger(MappedPollServiceBean.class);</span>
+
+    @EJB
+    PollService pollService;
+
+    @EJB
+    MobileTerminalService mobileTerminalService;
+
+    @Override
+    public CreatePollResultDto createPoll(PollRequestType pollRequest, String username) throws MobileTerminalServiceException {
+<span class="nc" id="L53">        LOG.debug(&quot;Create poll&quot;);</span>
+
+<span class="nc" id="L55">        CreatePollResultDto pollResponse = pollService.createPoll(pollRequest, username);</span>
+<span class="nc" id="L56">        return pollResponse;</span>
+    }
+
+    @Override
+    public List&lt;PollDto&gt; getRunningProgramPolls() throws MobileTerminalServiceException {
+<span class="nc" id="L61">        LOG.debug(&quot;Get running program polls&quot;);</span>
+
+<span class="nc" id="L63">        List&lt;PollResponseType&gt; pollResponse = pollService.getRunningProgramPolls();</span>
+<span class="nc" id="L64">        return PollMapper.mapPolls(pollResponse);</span>
+    }
+
+    @Override
+    public PollDto startProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+<span class="nc" id="L69">        PollResponseType pollResponse = pollService.startProgramPoll(pollId, username);</span>
+<span class="nc" id="L70">        return PollMapper.mapPoll(pollResponse);</span>
+    }
+
+    @Override
+    public PollDto stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+<span class="nc" id="L75">        PollResponseType pollResponse = pollService.stopProgramPoll(pollId, username);</span>
+<span class="nc" id="L76">        return PollMapper.mapPoll(pollResponse);</span>
+    }
+
+    @Override
+    public PollDto inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+<span class="nc" id="L81">        PollResponseType pollResponse = pollService.inactivateProgramPoll(pollId, username);</span>
+<span class="nc" id="L82">        return PollMapper.mapPoll(pollResponse);</span>
+    }
+
+    @Override
+    public PollChannelListDto getPollBySearchQuery(PollListQuery query) throws MobileTerminalServiceException {
+<span class="nc" id="L87">    	PollChannelListDto channelListDto = new PollChannelListDto();</span>
+    	
+<span class="nc" id="L89">    	PollListResponse pollResponse = pollService.getPollBySearchCriteria(query);</span>
+<span class="nc" id="L90">        channelListDto.setCurrentPage(pollResponse.getCurrentPage());</span>
+<span class="nc" id="L91">        channelListDto.setTotalNumberOfPages(pollResponse.getTotalNumberOfPages());</span>
+    	
+<span class="nc" id="L93">        ArrayList&lt;PollChannelDto&gt; pollChannelList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        for(PollResponseType responseType : pollResponse.getPollList()) {</span>
+<span class="nc" id="L95">        	PollChannelDto terminal = PollMapper.mapPollChannel(responseType.getMobileTerminal());</span>
+<span class="nc" id="L96">        	terminal.setPoll(PollMapper.mapPoll(responseType));</span>
+<span class="nc" id="L97">        	pollChannelList.add(terminal);</span>
+<span class="nc" id="L98">        }</span>
+<span class="nc" id="L99">        channelListDto.setPollableChannels(pollChannelList);</span>
+<span class="nc" id="L100">        return channelListDto;</span>
+    }
+
+    @Override
+    public PollChannelListDto getPollableChannels(PollableQuery query) throws MobileTerminalException {
+<span class="nc" id="L105">        PollChannelListDto channelListDto = new PollChannelListDto();</span>
+
+<span class="nc" id="L107">        MobileTerminalListResponse response = mobileTerminalService.getPollableMobileTerminal(query);</span>
+<span class="nc" id="L108">        channelListDto.setCurrentPage(response.getCurrentPage());</span>
+<span class="nc" id="L109">        channelListDto.setTotalNumberOfPages(response.getTotalNumberOfPages());</span>
+
+<span class="nc" id="L111">        ArrayList&lt;PollChannelDto&gt; pollChannelList = new ArrayList&lt;&gt;();</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">        for(MobileTerminalType terminalType : response.getMobileTerminal()) {</span>
+<span class="nc" id="L113">        	PollChannelDto terminal = PollMapper.mapPollChannel(terminalType);</span>
+<span class="nc" id="L114">        	pollChannelList.add(terminal);</span>
+<span class="nc" id="L115">        }</span>
+<span class="nc" id="L116">        channelListDto.setPollableChannels(pollChannelList);</span>
+<span class="nc" id="L117">        return channelListDto;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span></div></body></html>

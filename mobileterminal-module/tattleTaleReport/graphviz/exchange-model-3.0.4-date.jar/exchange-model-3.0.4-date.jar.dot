@@ -1,0 +1,7 @@
+digraph exchange_model_3_0_4_date_dependencies {
+  node [shape = box, fontsize=10.0];
+  exchange_model_3_0_4_date -> jaxb_api_2_2_7;
+  exchange_model_3_0_4_date -> joda_time_2_7;
+  exchange_model_3_0_4_date -> jsr173_api_1_0;
+  exchange_model_3_0_4_date -> xml_apis_1_0_b2;
+}
