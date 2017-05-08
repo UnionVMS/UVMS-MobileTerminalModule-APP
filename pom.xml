@@ -3,7 +3,7 @@
 
     <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
     <artifactId>mobileterminal</artifactId>
-    <version>3.0.6-SNAPSHOT</version>
+    <version>3.0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Maven projekt-archetype for UnionVms modules</description>
 
@@ -18,7 +18,7 @@
         <powermock.version>1.6.2</powermock.version>
         <uvms.commons.version>2.0.17</uvms.commons.version>
         <mobileterminal.model.classifier>date</mobileterminal.model.classifier>
-        <mobileterminal.model.version>3.0.4</mobileterminal.model.version>
+        <mobileterminal.model.version>3.0.7-SNAPSHOT</mobileterminal.model.version>
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
         <uvms.config.version>3.0.4</uvms.config.version>
         <usm4uvms.version>3.0.4</usm4uvms.version>
@@ -470,12 +470,12 @@
 										<wait>
 											<log>WildFly 8.2.0.Final "Tweek" started in</log>
 											<time>300000</time>
-											<kill>5000</kill>
-											<shutdown>5000</shutdown>
+											<kill>10000</kill>
+											<shutdown>10000</shutdown>
 										</wait>
 										<cmd>
 											<shell>/opt/jboss/wildfly/bin/standalone.sh -c
-												standalone-uvms.xml -b 0.0.0.0 -bmanagement 0.0.0.0</shell>
+												standalone-uvms.xml -b 0.0.0.0 -bmanagement 0.0.0.0 --debug</shell>
 										</cmd>
 										<dependsOn>
 											<container>postgres</container>
