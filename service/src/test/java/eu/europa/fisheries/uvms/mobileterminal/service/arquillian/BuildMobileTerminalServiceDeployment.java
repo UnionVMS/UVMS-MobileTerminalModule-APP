@@ -22,11 +22,20 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 @ArquillianSuiteDeployment
 public abstract class BuildMobileTerminalServiceDeployment {
+
+    final static Logger LOG = LoggerFactory.getLogger(BuildMobileTerminalServiceDeployment.class);
+
 
     @Deployment(name = "normal", order = 1)
     public static Archive<?> createDeployment() {
@@ -34,6 +43,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         // Import Maven runtime dependencies
         File[] files = Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
                 .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
+        printFiles(files);
 
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
@@ -66,7 +76,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(MobileTerminalServiceBean.class);
         testWar.addClass(PollService.class);
         testWar.addClass(PollServiceBean.class);
-    //    testWar.addClass(ConfigModelBean.class);
+        //    testWar.addClass(ConfigModelBean.class);
         //testWar.addClass(NoEntityFoundException.class);
         //testWar.addClass(TerminalDaoException.class);
         //testWar.addClass(MobileTerminalModelException.class);
@@ -90,7 +100,27 @@ public abstract class BuildMobileTerminalServiceDeployment {
         return testWar;
     }
 
+    private static void printFiles(File[] files) {
 
+        List<File> filesSorted = new ArrayList<>();
+        for(File f : files){
+            filesSorted.add(f);
+        }
 
+        Collections.sort(filesSorted, new Comparator<File>() {
+            @Override
+            public int compare(File o1, File o2) {
+                return o1.getName().compareTo(o2.getName());
+            }
+        });
+
+        LOG.info("FROM POM - begin");
+        for(File f : filesSorted){
+            LOG.info("       --->>>   "   +   f.getName());
+        }
+        LOG.info("FROM POM - end");
     }
+
+
+}
 
