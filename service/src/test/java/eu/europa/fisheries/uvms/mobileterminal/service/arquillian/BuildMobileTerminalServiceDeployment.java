@@ -32,7 +32,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
     public static Archive<?> createDeployment() {
 
         // Import Maven runtime dependencies
-        File[] files = Maven.resolver().loadPomFromFile("pom.xml")
+        File[] files = Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
                 .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
 
         // Embedding war package which contains the test class is needed
