@@ -1,11 +1,14 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.SearchKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
+import org.hibernate.hql.internal.ast.QuerySyntaxException;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Rule;
@@ -100,66 +103,159 @@ public class PollDaoBeanIntTest extends TransactionalTests {
         assertEquals(pollProgramId, pollProgramReadFromDatabase.getId());
     }
 
+    //ToDo: Need to understand SQL phrases from PollSearchMapper to test this one. Work in progress.
+    /**
+     *
+     *  String baseSql = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE";
+     *  String countSqlConnectId = baseSql + " tc.connectValue IN (:connectionValue) "; // Fails with "Invalid path: 'tc.connectValue'".
+     *  //String countSqlConnectId = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE tc.connectValue IN (:connectionValue) "; // Fails with "Invalid path: 'tc.connectValue'".
+
+
+     //String countSqlPollId = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE p.guid IN (:guid) "; // Works ok together with PollSearchField.POLL_ID.
+     String countSqlPollId = baseSql + " p.guid IN (:guid) "; // Works ok together with PollSearchField.POLL_ID.
+     //String countSqlPollType = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE p.pollType IN (:pollType) "; // Fails with javax.ejb.EJBTransactionRolledbackException: No enum constant eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum.testKeyValue1
+     String countSqlPollType = baseSql + " p.pollType IN (:pollType) "; // Fails with javax.ejb.EJBTransactionRolledbackException: No enum constant eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum.testKeyValue1
+     //String countSqlTerminalType = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE mt.mobileTerminalType IN (:mobileTerminalType) "; // Fails with java.lang.IllegalArgumentException: No enum constant eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum.testKeyValue1
+     String countSqlTerminalType = baseSql + " mt.mobileTerminalType IN (:mobileTerminalType) ";
+     //String countSqlUser = "SELECT DISTINCT p FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE pb.creator IN (:creator) "; //Fails with java.lang.IllegalArgumentException: Type specified for TypedQuery [java.lang.Long] is incompatible with query return type [class eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll]
+     String countSqlUser = baseSql + " pb.creator IN (:creator) "; //Fails with java.lang.IllegalArgumentException: Type specified for TypedQuery [java.lang.Long] is incompatible with query return type [class eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll]
+
+     *
+     *
+     *
+     *
+     *
+     */
+
     @Test
     @OperateOnDeployment("normal")
-    //ToDo: Need to understand SQL phrases from PollSearchMapper to test this one. Work in progress.
-    public void testGetPollListSearchCount() throws PollDaoException {
+    public void testGetPollListSearchCount_SearchField_POLL_ID() {
 
-        String baseSql = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE";
-        String countSqlConnectId = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE tc.connectValue IN (:connectionValue) "; // Fails with "Invalid path: 'tc.connectValue'".
-        String countSqlPollId = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE p.guid IN (:guid) "; // Works ok together with PollSearchField.POLL_ID.
-        String countSqlPollType = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE p.pollType IN (:pollType) "; // Fails with javax.ejb.EJBTransactionRolledbackException: No enum constant eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum.testKeyValue1
-        String countSqlTerminalType = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE mt.mobileTerminalType IN (:mobileTerminalType) "; // Fails with java.lang.IllegalArgumentException: No enum constant eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum.testKeyValue1
-        String countSqlUser = "SELECT DISTINCT p FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE pb.creator IN (:creator) "; //Fails with java.lang.IllegalArgumentException: Type specified for TypedQuery [java.lang.Long] is incompatible with query return type [class eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll]
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.POLL_ID);
 
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.POLL_ID);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+        boolean isDynamic = true;
+
+        String countSearchSql = PollSearchMapper.createCountSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        Long number = pollDao.getPollListSearchCount(countSearchSql, listOfPollSearchKeyValue, isDynamic);
+
+        assertNotNull(number);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchCount_SearchField_TERMINAL_TYPE() {
 
         /***
-         * Godkända PollTypeEnum-värden:
+         * Ok MobileTerminalTypeEnum values:
+         * INMARSAT_C, IRIDIUM;
+         */
+
+        String mobileTerminalTypeEnumInmarsatC = "INMARSAT_C";
+        String mobileTerminalTypeEnumIridium = "IRIDIUM";
+
+        List<String> listOfPollSearchKeyValues = Arrays.asList(mobileTerminalTypeEnumInmarsatC, mobileTerminalTypeEnumIridium);
+
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.TERMINAL_TYPE);
+        pollSearchKeyValue1.setValues(listOfPollSearchKeyValues);
+
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.TERMINAL_TYPE);
+        pollSearchKeyValue2.setValues(listOfPollSearchKeyValues);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+        boolean isDynamic = true;
+
+        String countSearchSql = PollSearchMapper.createCountSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        Long number = pollDao.getPollListSearchCount(countSearchSql, listOfPollSearchKeyValue, isDynamic);
+
+        assertNotNull(number);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchCount_SearchField_POLL_TYPE() {
+
+        /***
+         * Ok PollTypeEnum values:
          * PROGRAM_POLL(1),
          * SAMPLING_POLL(2),
          * MANUAL_POLL(3),
          * CONFIGURATION_POLL(4);
          */
+        String pollTypeEnumProgramPoll = "PROGRAM_POLL";
+        String pollTypeEnumSamplingPoll = "SAMPLING_POLL";
+        String pollTypeEnumManualPoll = "MANUAL_POLL";
+        String pollTypeEnumConfigurationPoll = "CONFIGURATION_POLL";
 
-        /***
-         * Godkända MobileTerminalTypeEnum-värden:
-         * INMARSAT_C, IRIDIUM;
-         */
-
-        //String keyValue1 = "testKeyValue1";
-        String pollTypeEnumValue1 = "PROGRAM_POLL";
-        String mobileTerminalTypeEnumValue1 = "INMARSAT_C";
-
-        //String keyValue2 = "testKeyValue2";
-        String pollTypeEnumValue2 = "SAMPLING_POLL";
-        String mobileTerminalTypeEnumValue2 = "IRIDIUM";
-
-        //List<String> listOfKeyValues = Arrays.asList(pollTypeEnumValue1, pollTypeEnumValue2);
-        List<String> listOfKeyValues = Arrays.asList(mobileTerminalTypeEnumValue1, mobileTerminalTypeEnumValue2);
+        List<String> listOfPollSearchKeyValues = Arrays.asList(pollTypeEnumProgramPoll, pollTypeEnumSamplingPoll,
+                pollTypeEnumManualPoll, pollTypeEnumConfigurationPoll);
 
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
-        //pollSearchKeyValue1.setSearchField(PollSearchField.POLL_ID);
-        //pollSearchKeyValue1.setSearchField(PollSearchField.CONNECT_ID);
-        //pollSearchKeyValue1.setSearchField(PollSearchField.POLL_TYPE);
-        //pollSearchKeyValue1.setSearchField(PollSearchField.TERMINAL_TYPE);
-        pollSearchKeyValue1.setSearchField(PollSearchField.USER);
-        pollSearchKeyValue1.setValues(listOfKeyValues);
+        pollSearchKeyValue1.setSearchField(PollSearchField.POLL_TYPE);
+        pollSearchKeyValue1.setValues(listOfPollSearchKeyValues);
 
         PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
-        //pollSearchKeyValue2.setSearchField(PollSearchField.POLL_ID);
-        //pollSearchKeyValue2.setSearchField(PollSearchField.CONNECT_ID);
-        //pollSearchKeyValue2.setSearchField(PollSearchField.POLL_TYPE);
-        //pollSearchKeyValue2.setSearchField(PollSearchField.TERMINAL_TYPE);
-        pollSearchKeyValue2.setSearchField(PollSearchField.USER);
-        pollSearchKeyValue2.setValues(listOfKeyValues);
+        pollSearchKeyValue2.setSearchField(PollSearchField.POLL_TYPE);
+        pollSearchKeyValue2.setValues(listOfPollSearchKeyValues);
 
         List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
-        //boolean isDynamic = false;
         boolean isDynamic = true;
 
-        Long number = pollDao.getPollListSearchCount(countSqlUser, listOfPollSearchKeyValue, isDynamic);
+        String countSearchSql = PollSearchMapper.createCountSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        Long number = pollDao.getPollListSearchCount(countSearchSql, listOfPollSearchKeyValue, isDynamic);
 
         assertNotNull(number);
+    }
+
+    @Test(expected = QuerySyntaxException.class)
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchCount_settingSearchField_CONNECT_ID_inPollSearchKeyValueWillBuildNoneWorkingSqlPhrase() {
+
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.CONNECT_ID);
+
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.CONNECT_ID);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+        boolean isDynamic = true;
+
+        String countSearchSql = PollSearchMapper.createCountSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        Long number = pollDao.getPollListSearchCount(countSearchSql, listOfPollSearchKeyValue, isDynamic);
+
+        thrown.expect(QuerySyntaxException.class);
+        thrown.expectMessage("Invalid path: 'tc.connectValue' [SELECT COUNT (DISTINCT p) FROM eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE tc.connectValue IN (:connectionValue) ]");
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchCount_settingSearchField_USER_inPollSearchKeyValueWillCauseTypeMismatch() {
+
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.USER);
+
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.USER);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+        boolean isDynamic = true;
+
+        String countSearchSql = PollSearchMapper.createCountSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        Long number = pollDao.getPollListSearchCount(countSearchSql, listOfPollSearchKeyValue, isDynamic);
+
+        thrown.expect(IllegalArgumentException.class);
+        thrown.expectMessage("Type specified for TypedQuery [java.lang.Long] is incompatible with query return type [class eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll]");
     }
 
     @Test
@@ -203,6 +299,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testGetPollListSearchPaginated() {
+        
 
     }
 
