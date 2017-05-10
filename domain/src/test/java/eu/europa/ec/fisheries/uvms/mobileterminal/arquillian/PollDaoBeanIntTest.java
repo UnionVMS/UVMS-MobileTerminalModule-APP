@@ -299,7 +299,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testGetPollListSearchPaginated() {
-        
+
 
     }
 
