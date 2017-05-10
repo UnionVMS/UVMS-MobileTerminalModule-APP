@@ -1,6 +1,5 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.SearchKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
@@ -103,30 +102,6 @@ public class PollDaoBeanIntTest extends TransactionalTests {
         assertEquals(pollProgramId, pollProgramReadFromDatabase.getId());
     }
 
-    //ToDo: Need to understand SQL phrases from PollSearchMapper to test this one. Work in progress.
-    /**
-     *
-     *  String baseSql = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE";
-     *  String countSqlConnectId = baseSql + " tc.connectValue IN (:connectionValue) "; // Fails with "Invalid path: 'tc.connectValue'".
-     *  //String countSqlConnectId = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE tc.connectValue IN (:connectionValue) "; // Fails with "Invalid path: 'tc.connectValue'".
-
-
-     //String countSqlPollId = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE p.guid IN (:guid) "; // Works ok together with PollSearchField.POLL_ID.
-     String countSqlPollId = baseSql + " p.guid IN (:guid) "; // Works ok together with PollSearchField.POLL_ID.
-     //String countSqlPollType = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE p.pollType IN (:pollType) "; // Fails with javax.ejb.EJBTransactionRolledbackException: No enum constant eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum.testKeyValue1
-     String countSqlPollType = baseSql + " p.pollType IN (:pollType) "; // Fails with javax.ejb.EJBTransactionRolledbackException: No enum constant eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum.testKeyValue1
-     //String countSqlTerminalType = "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE mt.mobileTerminalType IN (:mobileTerminalType) "; // Fails with java.lang.IllegalArgumentException: No enum constant eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum.testKeyValue1
-     String countSqlTerminalType = baseSql + " mt.mobileTerminalType IN (:mobileTerminalType) ";
-     //String countSqlUser = "SELECT DISTINCT p FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE pb.creator IN (:creator) "; //Fails with java.lang.IllegalArgumentException: Type specified for TypedQuery [java.lang.Long] is incompatible with query return type [class eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll]
-     String countSqlUser = baseSql + " pb.creator IN (:creator) "; //Fails with java.lang.IllegalArgumentException: Type specified for TypedQuery [java.lang.Long] is incompatible with query return type [class eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll]
-
-     *
-     *
-     *
-     *
-     *
-     */
-
     @Test
     @OperateOnDeployment("normal")
     public void testGetPollListSearchCount_SearchField_POLL_ID() {
@@ -218,7 +193,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test(expected = QuerySyntaxException.class)
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchCount_settingSearchField_CONNECT_ID_inPollSearchKeyValueWillBuildNoneWorkingSqlPhrase() {
+    public void testGetPollListSearchCount_settingPollSearchField_CONNECT_ID_inPollSearchKeyValueWillBuildNoneWorkingSqlPhrase() {
 
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
         pollSearchKeyValue1.setSearchField(PollSearchField.CONNECT_ID);
@@ -239,7 +214,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test(expected = IllegalArgumentException.class)
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchCount_settingSearchField_USER_inPollSearchKeyValueWillCauseTypeMismatch() {
+    public void testGetPollListSearchCount_settingPollSearchField_USER_inPollSearchKeyValueWillCauseTypeMismatch() {
 
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
         pollSearchKeyValue1.setSearchField(PollSearchField.USER);
@@ -298,9 +273,117 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchPaginated() {
+    public void testGetPollListSearchPaginated_PollSearchField_CONNECT_ID() throws PollDaoException {
 
+        boolean isDynamic = true;
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.CONNECT_ID);
 
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.CONNECT_ID);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+
+        Integer page = 1;
+        Integer listSize = 2;
+
+        String sql = PollSearchMapper.createSelectSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, listOfPollSearchKeyValue, isDynamic);
+
+        assertNotNull(pollList);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchPaginated_PollSearchField_POLL_ID() throws PollDaoException {
+
+        boolean isDynamic = true;
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.POLL_ID);
+
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.POLL_ID);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+
+        Integer page = 1;
+        Integer listSize = 2;
+
+        String sql = PollSearchMapper.createSelectSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, listOfPollSearchKeyValue, isDynamic);
+
+        assertNotNull(pollList);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchPaginated_PollSearchField_POLL_TYPE() throws PollDaoException {
+
+        boolean isDynamic = true;
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.POLL_TYPE);
+
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.POLL_TYPE);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+
+        Integer page = 1;
+        Integer listSize = 2;
+
+        String sql = PollSearchMapper.createSelectSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, listOfPollSearchKeyValue, isDynamic);
+
+        assertNotNull(pollList);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchPaginated_PollSearchField_TERMINAL_TYPE() throws PollDaoException {
+
+        boolean isDynamic = true;
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.TERMINAL_TYPE);
+
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.TERMINAL_TYPE);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+
+        Integer page = 1;
+        Integer listSize = 2;
+
+        String sql = PollSearchMapper.createSelectSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, listOfPollSearchKeyValue, isDynamic);
+
+        assertNotNull(pollList);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testGetPollListSearchPaginated_PollSearchField_USER() throws PollDaoException {
+
+        boolean isDynamic = true;
+        PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
+        pollSearchKeyValue1.setSearchField(PollSearchField.USER);
+
+        PollSearchKeyValue pollSearchKeyValue2 = new PollSearchKeyValue();
+        pollSearchKeyValue2.setSearchField(PollSearchField.USER);
+
+        List<PollSearchKeyValue> listOfPollSearchKeyValue = Arrays.asList(pollSearchKeyValue1, pollSearchKeyValue2);
+
+        Integer page = 1;
+        Integer listSize = 2;
+
+        String sql = PollSearchMapper.createSelectSearchSql(listOfPollSearchKeyValue, isDynamic);
+
+        List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, listOfPollSearchKeyValue, isDynamic);
+
+        assertNotNull(pollList);
     }
 
     private Poll createPollHelper() {
