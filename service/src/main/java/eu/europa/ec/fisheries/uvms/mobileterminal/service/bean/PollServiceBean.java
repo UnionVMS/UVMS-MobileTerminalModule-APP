@@ -17,13 +17,18 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollId;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollStatus;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
 import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
@@ -33,9 +38,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTermin
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollTimerService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
 @Stateless
@@ -55,8 +60,8 @@ public class PollServiceBean implements PollService {
     @EJB
     PollTimerService timerService;
 
-    @EJB(lookup = ServiceConstants.DB_ACCESS_POLL_DOMAIN_MODEL)
-    PollDomainModel pollModel;
+    @EJB
+    PollDomainModelBean pollModel;
 
     @Override
     public CreatePollResultDto createPoll(PollRequestType poll, String username) throws MobileTerminalServiceException {
@@ -101,7 +106,7 @@ public class PollServiceBean implements PollService {
             result.setUnsentPoll(!unsentPolls.isEmpty());
             return result;
         } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
-            e.printStackTrace();
+        	LOG.error("Failed to create poll",e);
             throw new MobileTerminalServiceException(e.getMessage());
         }
     }

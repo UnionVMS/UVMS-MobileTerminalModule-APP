@@ -11,42 +11,38 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
 
-import java.util.*;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalExistsException;
+import eu.europa.ec.fisheries.uvms.common.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalTypeComparator;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.HistoryMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToModelMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchKeyValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchTable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalDomainModel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.HistoryMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToModelMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalModelToEntityMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.common.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Stateless
-public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel {
+@LocalBean
+public class MobileTerminalDomainModelBean  {
 
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalDomainModelBean.class);
 
@@ -54,7 +50,7 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
     TerminalDao terminalDao;
     
     @EJB
-    ConfigModel config;
+    ConfigModelBean config;
 
     @EJB
     MobileTerminalPluginDao pluginDao;
@@ -69,7 +65,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         return terminalDao.getMobileTerminalBySerialNo(serialNo);
     }
     
-    @Override
     public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, String username) throws MobileTerminalModelException {
         LOG.info("Create mobileterminal.");
 
@@ -131,7 +126,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         }
     }
 
-    @Override
     public MobileTerminalType getMobileTerminalById(MobileTerminalId id) throws MobileTerminalModelException {
         LOG.info("Get mobileterminal");
 
@@ -143,7 +137,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
     }
     
-    @Override
     public MobileTerminalType updateMobileTerminal(MobileTerminalType model, String comment, String username) throws MobileTerminalModelException {
         LOG.info("Update mobileterminal");
 
@@ -180,7 +173,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         throw new MobileTerminalModelException("Update - Not supported mobile terminal type");
     }
 
-    @Override
     public MobileTerminalType assignMobileTerminalToCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
         LOG.info("Assign mobile terminal to carrier");
         if (query == null) {
@@ -222,7 +214,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         throw new MobileTerminalModelException("Terminal " + mobTermId + " is already linked to an asset with guid " + currentConnectId);
     }
 
-    @Override
     public MobileTerminalType unAssignMobileTerminalFromCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
         LOG.info("Unassign mobile terminal to carrier");
         if (query == null) {
@@ -264,7 +255,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         throw new MobileTerminalModelException("Terminal " + mobTermId + " is not linked to an asset with guid " + connectId);
     }
 
-    @Override
     public MobileTerminalType upsertMobileTerminal(MobileTerminalType mobileTerminal,String username) throws InputArgumentException, MobileTerminalModelException {
 
         if (mobileTerminal == null) {
@@ -287,7 +277,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         return createMobileTerminal(mobileTerminal, username);
     }
 
-    @Override
     public MobileTerminalType setStatusMobileTerminal(MobileTerminalId id, String comment, MobileTerminalStatus status, String username) throws MobileTerminalModelException {
         LOG.info("Setting mobile terminal status.");
 
@@ -338,7 +327,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
     }
 
-    @Override
     public MobileTerminalHistory getMobileTerminalHistoryList(MobileTerminalId id) throws MobileTerminalModelException {
         LOG.info("Mobile terminal history.");
         if (id == null) {
@@ -350,7 +338,6 @@ public class MobileTerminalDomainModelBean implements MobileTerminalDomainModel 
         return HistoryMapper.getHistory(terminal);
     }
 
-    @Override
     public ListResponseDto getTerminalListByQuery(MobileTerminalListQuery query) throws MobileTerminalModelException {
         LOG.info("Get list of InmarsatC terminal from query.");
 

@@ -11,12 +11,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 import javax.ejb.Local;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.enterprise.event.Observes;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.GetReceivedEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ListReceivedEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 
 @Local
 public interface EventService {

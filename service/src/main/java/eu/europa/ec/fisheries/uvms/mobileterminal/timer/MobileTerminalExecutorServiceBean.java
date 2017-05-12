@@ -11,12 +11,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+import javax.ejb.EJB;
+import javax.ejb.Schedule;
+import javax.ejb.Stateless;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 
 @Stateless
 public class MobileTerminalExecutorServiceBean {

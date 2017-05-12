@@ -17,16 +17,14 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;

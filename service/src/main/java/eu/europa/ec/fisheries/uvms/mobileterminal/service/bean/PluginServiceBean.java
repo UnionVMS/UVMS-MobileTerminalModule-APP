@@ -17,9 +17,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jms.TextMessage;
 
-
-import eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,8 +58,9 @@ public class PluginServiceBean implements PluginService {
     @EJB
     MessageConsumer reciever;
 
-    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
-    ConfigModel configModel;
+//    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
+    @EJB
+    ConfigModelBean configModel;
 
     @Override
     public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException {

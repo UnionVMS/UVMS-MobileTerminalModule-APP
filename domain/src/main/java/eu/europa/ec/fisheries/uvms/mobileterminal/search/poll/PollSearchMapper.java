@@ -18,11 +18,9 @@ import java.util.Map;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.ListCriteria;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.SearchKey;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception.SearchMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchTable;
 
 public class PollSearchMapper {
 

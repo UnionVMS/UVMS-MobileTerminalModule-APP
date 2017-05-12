@@ -9,8 +9,13 @@
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
         <artifactId>mobileterminal</artifactId>
-        <version>3.0.6-SNAPSHOT</version>
+        <version>3.0.7-SNAPSHOT</version>
     </parent>
+    
+    <properties>
+        <docker.dev.stop.phase>verify</docker.dev.stop.phase>
+        <docker.dev.prestop.phase>install</docker.dev.prestop.phase>        		
+	</properties>
     
     <build>
         <finalName>${project.name}</finalName>
@@ -80,6 +85,18 @@
             <artifactId>usm4uvms</artifactId>
             <version>${usm4uvms.version}</version>
         </dependency>
+        <dependency>
+			<groupId>fish.focus.uvms.maven</groupId>
+			<artifactId>uvms-pom-monitoring-deps</artifactId>
+			<type>pom</type>
+		</dependency>
+		<dependency>
+			<groupId>fish.focus.uvms.maven</groupId>
+			<artifactId>uvms-pom-arquillian-deps</artifactId>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>				        
+        
     </dependencies>
     
     <profiles>

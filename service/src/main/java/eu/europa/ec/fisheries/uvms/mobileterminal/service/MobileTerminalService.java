@@ -11,8 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
-import java.util.List;
-
 import javax.ejb.Local;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;

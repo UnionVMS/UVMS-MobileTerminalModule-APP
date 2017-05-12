@@ -14,8 +14,10 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapabilityType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
@@ -39,13 +41,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import java.util.*;
 
 /**
  **/
 @Stateless
-public class PollDomainModelBean implements PollDomainModel {
+@LocalBean
+public class PollDomainModelBean  {
     final static Logger LOG = LoggerFactory.getLogger(PollDomainModelBean.class);
 
     @EJB
@@ -95,7 +99,6 @@ public class PollDomainModelBean implements PollDomainModel {
     	}
     }
     
-    @Override
     public List<PollResponseType> createPolls(PollRequestType pollRequest, String username) throws MobileTerminalModelException {
         LOG.info("Create polls.");
 
@@ -236,7 +239,6 @@ public class PollDomainModelBean implements PollDomainModel {
 
     }
 
-    @Override
     public PollListResponse getPollList(PollListQuery query) throws MobileTerminalModelException {
         LOG.info("Get poll list from query");
 
@@ -287,7 +289,6 @@ public class PollDomainModelBean implements PollDomainModel {
         return response;
     }
     
-    @Override
     public List<PollResponseType> getPollProgramList(boolean onlyAlivePrograms) throws MobileTerminalModelException {
         LOG.info("Get poll program list");
         List<PollProgram> pollPrograms = pollProgramDao.getProgramPollsAlive();
@@ -306,7 +307,6 @@ public class PollDomainModelBean implements PollDomainModel {
         return responseList;
     }
 
-    @Override
     public List<PollResponseType> getPollProgramRunningAndStarted() throws MobileTerminalModelException {
         LOG.info("Get running and started poll program list");
         List<PollProgram> pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
@@ -325,7 +325,6 @@ public class PollDomainModelBean implements PollDomainModel {
         return responseList;
     }
 
-    @Override
     public PollResponseType setStatusPollProgram(PollId id, PollStatus state) throws MobileTerminalModelException {
         LOG.info("Set status of poll");
 
@@ -363,7 +362,6 @@ public class PollDomainModelBean implements PollDomainModel {
         }
     }
 
-    @Override
     public ListResponseDto getMobileTerminalPollableList(PollableQuery query) throws MobileTerminalModelException {
         LOG.info("Get list of pollable InmarsatC terminals.");
 

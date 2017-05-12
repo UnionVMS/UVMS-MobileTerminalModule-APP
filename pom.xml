@@ -3,136 +3,71 @@
 
     <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
     <artifactId>mobileterminal</artifactId>
-    <version>3.0.6-SNAPSHOT</version>
+    <version>3.0.7-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Maven projekt-archetype for UnionVms modules</description>
 
-    <parent>
-        <groupId>eu.europa.ec.fisheries.uvms</groupId>
-        <artifactId>uvms-app-parent</artifactId>
-        <version>1.0.2</version>
-    </parent>
-
+	<parent>
+		<groupId>fish.focus.uvms.maven</groupId>
+		<artifactId>uvms-pom</artifactId>
+		<version>2.1.1</version>
+	</parent>
 
     <properties>
-        <powermock.version>1.6.2</powermock.version>
         <uvms.commons.version>2.0.17</uvms.commons.version>
         <mobileterminal.model.classifier>date</mobileterminal.model.classifier>
-        <mobileterminal.model.version>3.0.4</mobileterminal.model.version>
+        <mobileterminal.model.version>3.0.7-SNAPSHOT</mobileterminal.model.version>
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
         <uvms.config.version>3.0.4</uvms.config.version>
         <usm4uvms.version>3.0.4</usm4uvms.version>
         <audit.model.version>3.0.4</audit.model.version>
         <exchange.model.version>3.0.4</exchange.model.version>
 
-        <version.org.wildfly>8.2.0.Final</version.org.wildfly>
-        <version.org.jboss.arquillian>1.1.12.Final</version.org.jboss.arquillian>
-        <version.arquillian_jacoco>1.0.0.Alpha9</version.arquillian_jacoco>
-        <version.arquillian.suite.extension>1.1.2</version.arquillian.suite.extension>
-
+        <docker.dev.version>3.1.0.pre1</docker.dev.version>
+        <docker.dev.start.phase>none</docker.dev.start.phase>
+        <docker.dev.stop.phase>none</docker.dev.stop.phase>
+        <docker.dev.prestop.phase>none</docker.dev.prestop.phase>        
     </properties>
 
+	<dependencies>
+		<dependency>
+			<groupId>javax</groupId>
+			<artifactId>javaee-api</artifactId>
+		</dependency>
+	</dependencies>
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>javax</groupId>
-                <artifactId>javaee-api</artifactId>
-                <version>${javaee.version}</version>
-                <scope>provided</scope>
-            </dependency>
-
-
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-module-junit4</artifactId>
-                <version>${powermock.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.powermock</groupId>
-                <artifactId>powermock-api-mockito</artifactId>
-                <version>${powermock.version}</version>
-                <scope>test</scope>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${sl4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-classic</artifactId>
-                <version>${logback.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>ch.qos.logback</groupId>
-                <artifactId>logback-core</artifactId>
-                <version>${logback.core.version}</version>
-            </dependency>
-
-            <!-- Arquillian BOM (Bill Of Materials). -->
-            <dependency>
-                <groupId>org.jboss.arquillian</groupId>
-                <artifactId>arquillian-bom</artifactId>
-                <version>${version.org.jboss.arquillian}</version>
-                <scope>import</scope>
-                <type>pom</type>
-            </dependency>
-            <dependency>
-                <groupId>org.eu.ingwar.tools</groupId>
-                <artifactId>arquillian-suite-extension</artifactId>
-                <version>${version.arquillian.suite.extension}</version>
-                <scope>test</scope>
-                <exclusions>
-                    <exclusion>
-                        <groupId>javax.inject</groupId>
-                        <artifactId>javax.inject</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.annotation</groupId>
-                        <artifactId>jsr250-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javax.enterprise</groupId>
-                        <artifactId>cdi-api</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>com.google.guava</groupId>
-                        <artifactId>guava</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>19.0</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.jboss.arquillian.extension</groupId>
-                <artifactId>arquillian-jacoco</artifactId>
-                <version>${version.arquillian_jacoco}</version>
-                <scope>test</scope>
-            </dependency>
-        </dependencies>
+        	<dependency>
+				<groupId>fish.focus.uvms.maven</groupId>
+				<artifactId>uvms-pom-gis-deps</artifactId>
+				<version>2.1.1</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>fish.focus.uvms.maven</groupId>
+				<artifactId>uvms-pom-logging-deps</artifactId>
+				<version>2.1.1</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>fish.focus.uvms.maven</groupId>
+				<artifactId>uvms-pom-monitoring-deps</artifactId>
+				<version>2.1.1</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>fish.focus.uvms.maven</groupId>
+				<artifactId>uvms-pom-test-deps</artifactId>
+				<version>2.1.1</version>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>fish.focus.uvms.maven</groupId>
+				<artifactId>uvms-pom-arquillian-deps</artifactId>
+				<version>2.1.1</version>
+				<type>pom</type>
+			</dependency>
+        </dependencies>        
     </dependencyManagement>
 
     <repositories>
@@ -172,55 +107,163 @@
                     <outputDirectory>target/dir</outputDirectory>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-release-plugin</artifactId>
-                <version>2.5.3</version>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.apache.maven.scm</groupId>
-                        <artifactId>maven-scm-provider-gitexe</artifactId>
-                        <version>1.8.1</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
         </plugins>
     </build>
 
     <profiles>
-        <profile>
-            <id>wildfly-remote</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <dependencies>
-                <dependency>
-                    <groupId>org.wildfly</groupId>
-                    <artifactId>wildfly-arquillian-container-remote</artifactId>
-                    <version>${version.org.wildfly}</version>
-                    <scope>test</scope>
-                    <exclusions>
-                        <exclusion>
-                            <groupId>javax.inject</groupId>
-                            <artifactId>javax.inject</artifactId>
-                        </exclusion>
-                    </exclusions>
-                </dependency>
-                <dependency>
-                    <groupId>org.jboss.shrinkwrap.resolver</groupId>
-                    <artifactId>shrinkwrap-resolver-depchain</artifactId>
-                    <type>pom</type>
-                    <scope>test</scope>
-                </dependency>
-                <dependency>
-                    <groupId>com.google.guava</groupId>
-                    <artifactId>guava</artifactId>
-                    <version>19.0</version>
-                    <scope>test</scope>
-                </dependency>
-            </dependencies>
-        </profile>
-
+		<profile>
+			<id>docker</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>io.fabric8</groupId>
+						<artifactId>docker-maven-plugin</artifactId>
+						<version>0.20.1</version>
+						<executions>
+							<execution>
+								<id>verifyallstopped</id>
+								<phase>${docker.dev.prestop.phase}</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+								<configuration>
+									<allContainers>true</allContainers>
+								</configuration>								
+							</execution>
+							<execution>
+								<id>start</id>
+								<phase>${docker.dev.start.phase}</phase>
+								<goals>
+									<goal>start</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>stop</id>
+								<phase>${docker.dev.stop.phase}</phase>
+								<goals>
+									<goal>stop</goal>
+								</goals>
+								<configuration>
+									<allContainers>true</allContainers>
+								</configuration>								
+							</execution>
+						</executions>
+						<configuration>
+							<images>
+								<image>
+									<alias>activemq</alias>
+									<name>uvms/activemq:${docker.dev.version}</name>
+									<run>
+										<net>bridge</net>
+										<namingStrategy>none</namingStrategy>
+										<ports>
+											<port>18161:8161</port>
+										</ports>
+										<wait>
+											<log>database system is ready to accept connections</log>
+											<tcp>
+												<host>127.0.0.1</host>
+												<ports>
+													<port>8161</port>
+												</ports>
+											</tcp>
+											<kill>5000</kill>
+											<shutdown>5000</shutdown>
+											<time>15000</time>
+										</wait>
+										<log>
+											<enabled>true</enabled>
+											<color>red</color>
+										</log>
+										<hostname>activemq</hostname>
+									</run>
+								</image>
+								<image>
+									<alias>postgres</alias>
+									<name>uvms/postgres-release:${docker.dev.version}</name>
+									<run>
+										<net>bridge</net>
+										<namingStrategy>none</namingStrategy>
+										<ports>
+											<port>15432:5432</port>
+										</ports>
+										<wait>
+											<log>All uvms databases created</log>
+											<time>240000</time>
+											<kill>5000</kill>
+											<shutdown>5000</shutdown>
+										</wait>
+										<dependsOn>
+											<container>activemq</container>
+										</dependsOn>
+										<links>
+											<link>activemq:activemq</link>
+										</links>
+										<log>
+											<enabled>true</enabled>
+											<color>green</color>
+										</log>
+										<hostname>postgres</hostname>
+									</run>
+								</image>
+								<image>
+									<alias>wildfly</alias>
+									<name>uvms/wildfly-base:${docker.dev.version}</name>
+									<run>
+										<net>bridge</net>
+										<namingStrategy>none</namingStrategy>
+										<links>
+											<link>postgres:postgres</link>
+											<link>activemq:activemq</link>
+										</links>
+										<ports>
+											<port>9990:9990</port>
+											<port>28787:8787</port>
+											<port>28080:8080</port>
+										</ports>
+										<wait>
+											<log>WildFly 8.2.0.Final "Tweek" started in</log>
+											<time>300000</time>
+											<kill>10000</kill>
+											<shutdown>10000</shutdown>
+										</wait>
+										<cmd>
+											<shell>/opt/jboss/wildfly/bin/standalone.sh -c
+												standalone-uvms.xml -b 0.0.0.0 -bmanagement 0.0.0.0 --debug</shell>
+										</cmd>
+										<dependsOn>
+											<container>postgres</container>
+											<container>activemq</container>
+										</dependsOn>
+										<log>
+											<enabled>true</enabled>
+											<color>blue</color>
+										</log>
+										<hostname>wildfly</hostname>
+									</run>
+								</image>
+							</images>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>	
+		</profile>
+		<profile>
+			<id>docker-start</id>
+			<properties>
+				<docker.dev.start.phase>validate</docker.dev.start.phase>
+        		<docker.dev.stop.phase>none</docker.dev.stop.phase>
+       			<docker.dev.prestop.phase>none</docker.dev.prestop.phase>        				
+			</properties>
+		</profile>
+		<profile>
+			<id>docker-stop</id>
+			<properties>
+				<docker.dev.start.phase>none</docker.dev.start.phase>
+        		<docker.dev.stop.phase>validate</docker.dev.stop.phase>
+       			<docker.dev.prestop.phase>validate</docker.dev.prestop.phase>        				
+			</properties>
+		</profile>		
     </profiles>
 
     <modules>

@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import org.slf4j.Logger;
@@ -87,10 +88,10 @@ public class MappedPollServiceBean implements MappedPollService {
     	PollChannelListDto channelListDto = new PollChannelListDto();
     	
     	PollListResponse pollResponse = pollService.getPollBySearchCriteria(query);
-        channelListDto.setCurrentPage(pollResponse.getCurrentPage().intValue());
-        channelListDto.setTotalNumberOfPages(pollResponse.getTotalNumberOfPages().intValue());
+        channelListDto.setCurrentPage(pollResponse.getCurrentPage());
+        channelListDto.setTotalNumberOfPages(pollResponse.getTotalNumberOfPages());
     	
-        List<PollChannelDto> pollChannelList = new ArrayList<>();
+        ArrayList<PollChannelDto> pollChannelList = new ArrayList<>();
         for(PollResponseType responseType : pollResponse.getPollList()) {
         	PollChannelDto terminal = PollMapper.mapPollChannel(responseType.getMobileTerminal());
         	terminal.setPoll(PollMapper.mapPoll(responseType));
@@ -108,7 +109,7 @@ public class MappedPollServiceBean implements MappedPollService {
         channelListDto.setCurrentPage(response.getCurrentPage());
         channelListDto.setTotalNumberOfPages(response.getTotalNumberOfPages());
 
-        List<PollChannelDto> pollChannelList = new ArrayList<>();
+        ArrayList<PollChannelDto> pollChannelList = new ArrayList<>();
         for(MobileTerminalType terminalType : response.getMobileTerminal()) {
         	PollChannelDto terminal = PollMapper.mapPollChannel(terminalType);
         	pollChannelList.add(terminal);

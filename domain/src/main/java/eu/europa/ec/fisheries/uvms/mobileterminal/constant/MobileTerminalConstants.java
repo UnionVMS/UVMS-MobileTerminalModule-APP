@@ -32,12 +32,12 @@ public class MobileTerminalConstants {
 
 	public static final String SERIAL_NUMBER = "SERIAL_NUMBER";
 
-    public static String UPDATE_USER = "UVMS";
+    public static final String UPDATE_USER = "UVMS";
 
-    public static String TRUE = "TRUE";
-    public static String FALSE = "FALSE";
+    public static final String TRUE = "TRUE";
+    public static final String FALSE = "FALSE";
 
-	public static String CAPABILITY_CONFIGURABLE = "CONFIGURABLE";
-	public static String CAPABILITY_DEFAULT_REPORTING = "DEFAULT_REPORTING";
-	public static String CAPABILITY_POLLABLE = "POLLABLE";
+	public static final String CAPABILITY_CONFIGURABLE = "CONFIGURABLE";
+	public static final String CAPABILITY_DEFAULT_REPORTING = "DEFAULT_REPORTING";
+	public static final String CAPABILITY_POLLABLE = "POLLABLE";
 }

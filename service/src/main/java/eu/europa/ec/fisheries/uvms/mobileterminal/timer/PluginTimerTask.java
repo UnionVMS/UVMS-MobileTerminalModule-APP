@@ -11,15 +11,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 
-import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.ServiceToPluginMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.List;
+import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.ServiceToPluginMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 
 public class PluginTimerTask implements Runnable{
 

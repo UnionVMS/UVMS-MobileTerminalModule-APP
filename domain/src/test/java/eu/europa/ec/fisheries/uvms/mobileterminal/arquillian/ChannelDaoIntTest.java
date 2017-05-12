@@ -1,20 +1,22 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertThat;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
+import javax.inject.Inject;
+
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 
 /**
  * Created by roblar on 2017-04-28.
