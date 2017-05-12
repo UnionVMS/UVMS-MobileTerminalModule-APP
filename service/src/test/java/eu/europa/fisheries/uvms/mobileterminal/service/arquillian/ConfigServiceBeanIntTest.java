@@ -62,6 +62,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
+    @Ignore
     public void testUpsertPluginsBadServiceName() throws MobileTerminalException {
         List<PluginService> pluginList = new ArrayList<>();
         PluginService pluginService = new PluginService();
@@ -77,6 +78,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
+    @Ignore
     public void testGetTerminalSystems() throws MobileTerminalException {
         List<TerminalSystemType> rs =  configService.getTerminalSystems();
         Assert.assertNotNull(rs);
