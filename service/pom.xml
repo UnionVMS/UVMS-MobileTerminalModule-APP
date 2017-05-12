@@ -32,6 +32,12 @@
             <artifactId>audit-model</artifactId>
             <version>${audit.model.version}</version>
             <type>jar</type>
+            <exclusions>
+                <exclusion>
+                    <groupId>ch.qos.logback</groupId>
+                    <artifactId>logback-classic</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
