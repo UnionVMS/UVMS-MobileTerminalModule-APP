@@ -139,7 +139,7 @@
         <repository>
             <id>focus-repo</id>
             <name>Focus nexus repository</name>
-            <url>http://nexus.focus.fish/</url>
+            <url>http://nexus.focus.fish/nexus</url>
         </repository>
     </repositories>
 

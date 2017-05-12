@@ -104,7 +104,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchCount_SearchField_POLL_ID() {
+    public void testGetPollListSearchCount_PollSearchField_POLL_ID() {
 
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
         pollSearchKeyValue1.setSearchField(PollSearchField.POLL_ID);
@@ -191,7 +191,8 @@ public class PollDaoBeanIntTest extends TransactionalTests {
         assertNotNull(number);
     }
 
-    @Test(expected = QuerySyntaxException.class)
+    //@Test(expected = QuerySyntaxException.class)
+    @Test(expected = EJBTransactionRolledbackException.class)
     @OperateOnDeployment("normal")
     public void testGetPollListSearchCount_settingPollSearchField_CONNECT_ID_inPollSearchKeyValueWillBuildNoneWorkingSqlPhrase() {
 
@@ -208,11 +209,13 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
         Long number = pollDao.getPollListSearchCount(countSearchSql, listOfPollSearchKeyValue, isDynamic);
 
-        thrown.expect(QuerySyntaxException.class);
+        //thrown.expect(QuerySyntaxException.class);
+        thrown.expect(EJBTransactionRolledbackException.class);
         thrown.expectMessage("Invalid path: 'tc.connectValue' [SELECT COUNT (DISTINCT p) FROM eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE tc.connectValue IN (:connectionValue) ]");
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    //@Test(expected = IllegalArgumentException.class)
+    @Test(expected = EJBTransactionRolledbackException.class)
     @OperateOnDeployment("normal")
     public void testGetPollListSearchCount_settingPollSearchField_USER_inPollSearchKeyValueWillCauseTypeMismatch() {
 
@@ -229,7 +232,8 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
         Long number = pollDao.getPollListSearchCount(countSearchSql, listOfPollSearchKeyValue, isDynamic);
 
-        thrown.expect(IllegalArgumentException.class);
+        //thrown.expect(IllegalArgumentException.class);
+        thrown.expect(EJBTransactionRolledbackException.class);
         thrown.expectMessage("Type specified for TypedQuery [java.lang.Long] is incompatible with query return type [class eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll]");
     }
 
@@ -271,9 +275,9 @@ public class PollDaoBeanIntTest extends TransactionalTests {
         thrown.expectMessage("unexpected token: * near line");
     }
 
-    @Test
+    @Test(expected = EJBTransactionRolledbackException.class)
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchPaginated_PollSearchField_CONNECT_ID() throws PollDaoException {
+    public void testGetPollListSearchPaginated_settingPollSearchField_CONNECT_ID_inPollSearchKeyValueWillBuildNoneWorkingSqlPhrase() throws PollDaoException {
 
         boolean isDynamic = true;
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
@@ -287,11 +291,12 @@ public class PollDaoBeanIntTest extends TransactionalTests {
         Integer page = 1;
         Integer listSize = 2;
 
-        String sql = PollSearchMapper.createSelectSearchSql(listOfPollSearchKeyValue, isDynamic);
+        String selectSearchSql = PollSearchMapper.createSelectSearchSql(listOfPollSearchKeyValue, isDynamic);
 
-        List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, listOfPollSearchKeyValue, isDynamic);
+        List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, selectSearchSql, listOfPollSearchKeyValue, isDynamic);
 
-        assertNotNull(pollList);
+        thrown.expect(EJBTransactionRolledbackException.class);
+        thrown.expectMessage("Invalid path: 'tc.connectValue' [SELECT DISTINCT p FROM eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE tc.connectValue IN (:connectionValue)  AND tc.connectValue IN (:connectionValue) ]");
     }
 
     @Test
