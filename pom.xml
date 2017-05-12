@@ -270,8 +270,9 @@
         <module>rest</module>
         <module>service</module>
         <module>message</module>
-        <module>module</module>
         <module>domain</module>
+        <module>module</module>
+        <module>module-integration-test</module>       
     </modules>
 
 </project>
