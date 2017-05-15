@@ -7,6 +7,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundExc
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollToCommandRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
@@ -76,6 +78,8 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(MobileTerminalServiceBean.class);
         testWar.addClass(PollService.class);
         testWar.addClass(PollServiceBean.class);
+        testWar.addClass(PollToCommandRequestMapper.class);
+        testWar.addClass(AuditModuleRequestMapper.class);
         //    testWar.addClass(ConfigModelBean.class);
         //testWar.addClass(NoEntityFoundException.class);
         //testWar.addClass(TerminalDaoException.class);
