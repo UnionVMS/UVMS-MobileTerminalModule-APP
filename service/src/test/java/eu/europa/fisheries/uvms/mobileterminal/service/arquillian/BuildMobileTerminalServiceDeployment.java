@@ -1,6 +1,7 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
@@ -80,6 +81,11 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(PollServiceBean.class);
         testWar.addClass(PollToCommandRequestMapper.class);
         testWar.addClass(AuditModuleRequestMapper.class);
+
+        testWar.addClass(PluginService.class);
+        testWar.deleteClass(PluginServiceBean.class);
+        testWar.addClass(PluginServiceMOCKBean.class);
+
         //    testWar.addClass(ConfigModelBean.class);
         //testWar.addClass(NoEntityFoundException.class);
         //testWar.addClass(TerminalDaoException.class);
