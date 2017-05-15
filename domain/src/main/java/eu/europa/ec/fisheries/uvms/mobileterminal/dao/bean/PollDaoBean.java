@@ -130,6 +130,7 @@ public class PollDaoBean extends Dao implements PollDao {
 			}
 		}
 		
+		//ToDo: Need a validation check here to make sure that listSize * (page -1) >= 1.  
 		query.setFirstResult(listSize * (page -1));
 		query.setMaxResults(listSize);
 		return query.getResultList();
