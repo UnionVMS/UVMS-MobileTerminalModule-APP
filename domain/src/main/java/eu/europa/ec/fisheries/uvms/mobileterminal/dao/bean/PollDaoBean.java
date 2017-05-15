@@ -50,6 +50,8 @@ public class PollDaoBean extends Dao implements PollDao {
     @Override
     public Poll getPoll(String pollId) throws PollDaoException {
         try {
+        	//ToDo: The query string POLL_FIND_BY_ID is not implemented anywhere causing this method to always throw an exception.
+			//ToDo: Either it needs to be implemented in e.g. a named query in the Poll entity or this query needs to use a different query string.
             TypedQuery<Poll> query = em.createNamedQuery(MobileTerminalConstants.POLL_FIND_BY_ID, Poll.class);
             query.setParameter("polltrackId", pollId);
             return query.getSingleResult();
@@ -60,6 +62,7 @@ public class PollDaoBean extends Dao implements PollDao {
     }
 
     @Override
+	//ToDo: This method is not implemented. Need to evaluate if the functionality is required or not.
     public List<Poll> getPollListByProgramPoll(Integer pollProgramId) throws PollDaoException {
         throw new PollDaoException("Not yet implemented");
     }
@@ -127,6 +130,7 @@ public class PollDaoBean extends Dao implements PollDao {
 			}
 		}
 		
+		//ToDo: Need a validation check here to make sure that listSize * (page -1) >= 1.  
 		query.setFirstResult(listSize * (page -1));
 		query.setMaxResults(listSize);
 		return query.getResultList();

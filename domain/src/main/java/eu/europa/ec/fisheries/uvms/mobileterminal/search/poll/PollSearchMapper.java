@@ -69,6 +69,13 @@ public class PollSearchMapper {
 		}
 	}
 
+	/**
+	 * ToDo: This method builds an invalid sql phrase when enum PollSearchField.CONNECT_ID is set in PollSearchKeyValue.
+	 * ToDo: Sql being built is: "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE tc.connectValue IN (:connectionValue) "
+	 * ToDo: It also causes an exception in method getPollListSearchCount() in PollDaoBean (row 84) when enum SearchField.USER is set in PollSearchKeyValue
+	 * ToDo: as it expects a Long return value but it gets an object of type Poll.
+	 */
+
 	private static String createSearchSql(List<PollSearchKeyValue> searchKeys, boolean isDynamic) {
 		StringBuilder builder = new StringBuilder();
 		String OPERATOR = " OR ";
