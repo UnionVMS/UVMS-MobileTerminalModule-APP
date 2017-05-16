@@ -55,9 +55,9 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
             CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
             em.flush();
             List<String> sendPolls = createPollResultDto.getSentPolls();
-            String pollGuid = sendPolls.get(0);
+          //  String pollGuid = sendPolls.get(0);
 
-            Query qry = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID);
+          /*  Query qry = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID);
             qry.setParameter("guid", pollGuid);
 
             List<PollProgram> rs = qry.getResultList();
@@ -69,7 +69,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
             //
             //breakPoint
             System.out.println("XXXX");
-
+*/
 
         } catch (MobileTerminalServiceException e) {
             e.printStackTrace();

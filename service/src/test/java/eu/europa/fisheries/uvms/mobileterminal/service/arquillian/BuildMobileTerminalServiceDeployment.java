@@ -81,8 +81,6 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(AuditModuleRequestMapper.class);
 
         testWar.addClass(PluginService.class);
-        //testWar.deleteClass(PluginServiceBean.class);
-        //testWar.addClass(PluginServiceMOCKBean.class);
         testWar.addClass(MobileTerminalModelMapperException.class);
         testWar.addClass(MobileTerminalModelException.class);
         testWar.addClass(MobileTerminalException.class);
@@ -90,20 +88,6 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(ConfigServiceException.class);
 
 
-        //    testWar.addClass(ConfigModelBean.class);
-        //testWar.addClass(NoEntityFoundException.class);
-        //testWar.addClass(TerminalDaoException.class);
-        //testWar.addClass(MobileTerminalModelException.class);
-        //testWar.addClass(PollDaoException.class);
-/*
-        testWar.addClass(MobileTerminalService.class);
-        testWar.addClass(MobileTerminalServiceBean.class);
-        testWar.addClass(PluginService.class);
-        testWar.addClass(PluginServiceBean.class);
-        testWar.addClass(PollDto.class);
-
-        testWar.addClass(PollType.class);
-*/
 
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
