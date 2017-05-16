@@ -10,20 +10,20 @@
 	<parent>
 		<groupId>fish.focus.uvms.maven</groupId>
 		<artifactId>uvms-pom</artifactId>
-		<version>2.1.1</version>
+		<version>2.1.2</version>
 	</parent>
 
     <properties>
         <uvms.commons.version>2.0.17</uvms.commons.version>
         <mobileterminal.model.classifier>date</mobileterminal.model.classifier>
-        <mobileterminal.model.version>3.0.7-SNAPSHOT</mobileterminal.model.version>
+        <mobileterminal.model.version>3.0.7</mobileterminal.model.version>
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
         <uvms.config.version>3.0.4</uvms.config.version>
         <usm4uvms.version>3.0.4</usm4uvms.version>
         <audit.model.version>3.0.4</audit.model.version>
         <exchange.model.version>3.0.4</exchange.model.version>
 
-        <docker.dev.version>3.1.0.pre1</docker.dev.version>
+        <docker.dev.version>3.1.0</docker.dev.version>
         <docker.dev.start.phase>none</docker.dev.start.phase>
         <docker.dev.stop.phase>none</docker.dev.stop.phase>
         <docker.dev.prestop.phase>none</docker.dev.prestop.phase>        
@@ -40,31 +40,31 @@
         	<dependency>
 				<groupId>fish.focus.uvms.maven</groupId>
 				<artifactId>uvms-pom-gis-deps</artifactId>
-				<version>2.1.1</version>
+				<version>2.1.2</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>fish.focus.uvms.maven</groupId>
 				<artifactId>uvms-pom-logging-deps</artifactId>
-				<version>2.1.1</version>
+				<version>2.1.2</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>fish.focus.uvms.maven</groupId>
 				<artifactId>uvms-pom-monitoring-deps</artifactId>
-				<version>2.1.1</version>
+				<version>2.1.2</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>fish.focus.uvms.maven</groupId>
 				<artifactId>uvms-pom-test-deps</artifactId>
-				<version>2.1.1</version>
+				<version>2.1.2</version>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>fish.focus.uvms.maven</groupId>
 				<artifactId>uvms-pom-arquillian-deps</artifactId>
-				<version>2.1.1</version>
+				<version>2.1.2</version>
 				<type>pom</type>
 			</dependency>
         </dependencies>        
