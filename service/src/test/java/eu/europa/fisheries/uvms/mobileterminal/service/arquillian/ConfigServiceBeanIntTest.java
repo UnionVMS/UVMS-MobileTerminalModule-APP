@@ -6,6 +6,10 @@ import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConfigType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -14,7 +18,6 @@ import org.junit.Assert;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
 import javax.ejb.EJB;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +27,9 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
 
     @EJB
     private ConfigService configService;
+
+    @EJB
+    private MobileTerminalPluginDao mobileTerminalPluginDao;
 
     @Test
     @OperateOnDeployment("normal")
@@ -48,55 +54,81 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testUpsertPlugins() throws MobileTerminalException {
         List<PluginService> pluginList = new ArrayList<>();
-        PluginService pluginService = new PluginService();
-        pluginService.setInactive(false);
-        pluginService.setLabelName("IRIDIUM_TEST_SERVICE");
-        pluginService.setSatelliteType("IRIDIUM");
-        pluginService.setServiceName("TEST_SERVICE");
+        PluginService pluginService = createPluginService();
         pluginList.add(pluginService);
         List<Plugin> plugins = configService.upsertPlugins(pluginList, "TEST");
         Assert.assertNotNull(plugins);
         Assert.assertTrue(pluginsContains(pluginList, "TEST_SERVICE"));
     }
 
+    @Test
+    @OperateOnDeployment("normal")
+    public void testUpsertPluginsBadServiceName() {
+        List<PluginService> pluginList = new ArrayList<>();
+        PluginService pluginService = createPluginService();
+        pluginService.setServiceName("");
+        pluginList.add(pluginService);
+        try {
+            configService.upsertPlugins(pluginList, "TEST");
+        } catch (MobileTerminalException e) {
+            if(!(e instanceof InputArgumentException)) {
+                Assert.fail("Should be InputArgumentException");
+            }
+        }
+    }
 
     @Test
     @OperateOnDeployment("normal")
-    @Ignore
-    public void testUpsertPluginsBadServiceName() throws MobileTerminalException {
+    public void testUpsertPluginsBadLabelName() {
         List<PluginService> pluginList = new ArrayList<>();
-        PluginService pluginService = new PluginService();
-        pluginService.setInactive(false);
-        pluginService.setLabelName("IRIDIUM_TEST_SERVICE");
-        pluginService.setSatelliteType("IRIDIUM");
-        pluginService.setServiceName("");
+        PluginService pluginService = createPluginService();
+        pluginService.setLabelName("");
         pluginList.add(pluginService);
-        List<Plugin> plugins = configService.upsertPlugins(pluginList, "TEST");
-        Assert.assertNotNull(plugins);
-        Assert.assertFalse(pluginsContains(pluginList, ""));
+        try {
+            configService.upsertPlugins(pluginList, "TEST");
+        } catch (MobileTerminalException e) {
+            if(!(e instanceof InputArgumentException)) {
+                Assert.fail("Should be InputArgumentException");
+            }
+        }
     }
 
     @Test
     @OperateOnDeployment("normal")
     @Ignore
     public void testGetTerminalSystems() throws MobileTerminalException {
+        MobileTerminalPlugin mobileTerminalPlugin = new MobileTerminalPlugin();
+        mobileTerminalPlugin.setName("TEST");
+        mobileTerminalPlugin.setPluginSatelliteType("TEST");
+        mobileTerminalPlugin.setDescription("TEST");
+        mobileTerminalPlugin.setPluginSatelliteType(MobileTerminalTypeEnum.INMARSAT_C.toString());
+        mobileTerminalPlugin.setPluginInactive(false);
+        mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
+
         List<TerminalSystemType> rs =  configService.getTerminalSystems();
         Assert.assertNotNull(rs);
-        Assert.assertTrue(rs.size() > 1);
-        Assert.assertTrue(terminalSystemsContains(rs, "IRIDIUM"));
-        Assert.assertTrue(terminalSystemsContains(rs, "INMARSAT-C"));
+        Assert.assertTrue(rs.size() > 0);
+        Assert.assertTrue(terminalSystemsContains(rs, MobileTerminalTypeEnum.INMARSAT_C.toString()));
+    }
+
+    private PluginService createPluginService() {
+        PluginService pluginService = new PluginService();
+        pluginService.setInactive(false);
+        pluginService.setLabelName("IRIDIUM_TEST_SERVICE");
+        pluginService.setSatelliteType("IRIDIUM");
+        pluginService.setServiceName("TEST_SERVICE");
+        return pluginService;
     }
 
 
-    private boolean terminalSystemsContains(List<TerminalSystemType> list, String name) {
+    private boolean terminalSystemsContains(List<TerminalSystemType> list, String type) {
         for(TerminalSystemType each : list) {
-            if(each.getType().equals(name)) {
+            if(each.getType().equals(type)) {
                 return true;
             }
         }
         return false;
     }
-
 
     private boolean configListContains(List<ConfigList> configLists, String value) {
         for(ConfigList each : configLists) {
