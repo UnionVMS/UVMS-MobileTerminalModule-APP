@@ -273,6 +273,8 @@
         <module>message</module>
         <module>module</module>
         <module>domain</module>
+        <module>message-impl</module>
+        <module>mobileterminal-message-mock</module>
     </modules>
 
 </project>

@@ -1,6 +1,7 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
@@ -10,6 +11,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
@@ -21,6 +23,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
+import javax.persistence.Query;
 import java.util.*;
 
 /**
@@ -50,11 +53,22 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
         try {
             CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
+            em.flush();
+            List<String> sendPolls = createPollResultDto.getSentPolls();
+            String pollGuid = sendPolls.get(0);
+
+            Query qry = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID);
+            qry.setParameter("guid", pollGuid);
+
+            List<PollProgram> rs = qry.getResultList();
+            if (rs.size() > 0) {
+                PollProgram pp = rs.get(1);
+            }
 
 
             //
             //breakPoint
-            System.out.println("HEPP");
+            System.out.println("XXXX");
 
 
         } catch (MobileTerminalServiceException e) {
@@ -157,7 +171,6 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         mt.setInactivated(false);
 
 
-
         Set<MobileTerminalEvent> events = new HashSet<>();
         MobileTerminalEvent event = new MobileTerminalEvent();
         event.setConnectId(connectId);
@@ -195,7 +208,6 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
 
     }
-
 
 
 }

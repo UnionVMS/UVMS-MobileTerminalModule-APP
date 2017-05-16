@@ -2,6 +2,7 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
+import eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
@@ -11,7 +12,10 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollToCommandRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
@@ -83,8 +87,14 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(AuditModuleRequestMapper.class);
 
         testWar.addClass(PluginService.class);
-        testWar.deleteClass(PluginServiceBean.class);
-        testWar.addClass(PluginServiceMOCKBean.class);
+        //testWar.deleteClass(PluginServiceBean.class);
+        //testWar.addClass(PluginServiceMOCKBean.class);
+        testWar.addClass(MobileTerminalModelMapperException.class);
+        testWar.addClass(MobileTerminalModelException.class);
+        testWar.addClass(MobileTerminalException.class);
+        testWar.addClass(MobileTerminalUnmarshallException.class);
+        testWar.addClass(ConfigServiceException.class);
+
 
         //    testWar.addClass(ConfigModelBean.class);
         //testWar.addClass(NoEntityFoundException.class);
