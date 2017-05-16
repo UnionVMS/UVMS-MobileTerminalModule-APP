@@ -1,21 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
-
-    <artifactId>mobileterminal-message</artifactId>
-    <name>${project.parent.artifactId}-message</name>
-    <packaging>ejb</packaging>
+    <artifactId>mobileterminal-message-impl</artifactId>
 
 
     <parent>
-        <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
         <artifactId>mobileterminal</artifactId>
-        <version>3.0.8-SNAPSHOT</version>
+        <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
+        <version>3.0.7-SNAPSHOT</version>
     </parent>
 
 
     <dependencies>
+        <dependency>
+            <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
+            <artifactId>mobileterminal-message</artifactId>
+            <version>3.0.7-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-model</artifactId>
@@ -34,16 +37,16 @@
             <version>${uvms.commons.version}</version>
         </dependency>
         <dependency>
-			<groupId>fish.focus.uvms.maven</groupId>
-			<artifactId>uvms-pom-monitoring-deps</artifactId>
-			<type>pom</type>
-		</dependency>
-		<dependency>
-			<groupId>fish.focus.uvms.maven</groupId>
-			<artifactId>uvms-pom-arquillian-deps</artifactId>
-			<type>pom</type>
-			<scope>test</scope>
-		</dependency>				                
+            <groupId>fish.focus.uvms.maven</groupId>
+            <artifactId>uvms-pom-monitoring-deps</artifactId>
+            <type>pom</type>
+        </dependency>
+        <dependency>
+            <groupId>fish.focus.uvms.maven</groupId>
+            <artifactId>uvms-pom-arquillian-deps</artifactId>
+            <type>pom</type>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -59,5 +62,7 @@
             </plugin>
         </plugins>
     </build>
-    
+
+
+
 </project>
