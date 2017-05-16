@@ -43,7 +43,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
     public static Archive<?> createDeployment() {
 
         // Import Maven runtime dependencies
-        File[] files = Maven.configureResolver().workOffline().loadPomFromFile("pom.xml")
+        File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")
                 .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
         printFiles(files);
 
