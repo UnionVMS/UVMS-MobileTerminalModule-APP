@@ -15,12 +15,7 @@ import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.JMSException;
-import javax.jms.Queue;
-import javax.jms.QueueConnectionFactory;
-import javax.jms.Session;
+import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
@@ -78,27 +73,18 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public <T> T getMessage(String correlationId, Class type) throws MobileTerminalMessageException {
+
+
+        Message message = null;
         try {
-
-            if (correlationId == null || correlationId.isEmpty()) {
-                throw new MobileTerminalMessageException("No CorrelationID provided!");
-            }
-
-            connectToQueue();
-
-            T response = (T) session.createConsumer(responseMobileTerminalQueue, "JMSCorrelationID='" + correlationId + "'").receive(TIMEOUT);
-
-            if (response == null) {
-                throw new MobileTerminalMessageException("[ Timeout reached or message null in MobileTerminalMessageConsumer. ]");
-            }
-
-            return response;
-        } catch (Exception e) {
-            LOG.error("[ Error when consuming message. ] {}", e.getMessage());
-            throw new MobileTerminalMessageException("Error when retrieving message: " + e.getMessage());
-        } finally {
-            disconnectQueue();
+            message = session.createMessage();
+        } catch (JMSException e) {
+            e.printStackTrace();
         }
+
+        return (T) message;
+
+
     }
 
     private void connectToQueue() throws JMSException {
