@@ -25,6 +25,10 @@
 			<param-name>storage-directory</param-name>
 			<param-value>javamelody-mobilterminal</param-value>
 		</init-param>
+		<init-param>
+			<param-name>datasources</param-name>
+			<param-value>java:/jdbc/uvms_mobterm</param-value>
+		</init-param>								
 	</filter>
 	<filter-mapping>
 		<filter-name>javamelody</filter-name>
