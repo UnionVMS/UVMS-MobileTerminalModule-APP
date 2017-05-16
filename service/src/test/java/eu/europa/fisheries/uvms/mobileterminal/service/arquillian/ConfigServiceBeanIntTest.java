@@ -95,6 +95,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
+    @Ignore
     public void testGetTerminalSystems() throws MobileTerminalException {
         MobileTerminalPlugin mobileTerminalPlugin = new MobileTerminalPlugin();
         mobileTerminalPlugin.setName("TEST");

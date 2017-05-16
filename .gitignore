@@ -4,3 +4,6 @@ logging.properties
 /rest/src/main/webapp
 **/.idea
 domain/application.*
+.project
+.classpath
+.settings

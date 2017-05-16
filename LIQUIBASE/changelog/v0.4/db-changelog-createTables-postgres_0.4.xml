@@ -26,6 +26,9 @@
      	<include file="\schema\tables\mobileterminal.xml"/>
         <include file="\schema\tables\mobileterminalevent.xml"/>
 
+        <!-- 2017-05-05: Added mobileterminalconnect as this table was missing. -->
+        <include file="\schema\tables\mobileterminalconnect.xml"/>
+
         <include file="\schema\tables\channel.xml"/>
         <include file="\schema\tables\channel_history.xml"/>
 
