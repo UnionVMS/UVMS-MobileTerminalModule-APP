@@ -77,7 +77,9 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
 
         Message message = null;
         try {
-            message = session.createMessage();
+            connectToQueue();
+
+            message = session.createTextMessage();
         } catch (JMSException e) {
             e.printStackTrace();
         }

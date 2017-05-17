@@ -1,5 +1,17 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.ejb.EJB;
+
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
@@ -12,15 +24,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import javax.ejb.EJB;
-import java.util.ArrayList;
-import java.util.List;
 
 @RunWith(Arquillian.class)
 public class ConfigServiceBeanIntTest extends TransactionalTests {

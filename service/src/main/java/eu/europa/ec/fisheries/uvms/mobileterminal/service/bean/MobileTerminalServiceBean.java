@@ -17,9 +17,6 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.jms.TextMessage;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.bean.MobileTerminalDomainModelBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +30,9 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSourc
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalStatus;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.MobileTerminalDomainModelBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;

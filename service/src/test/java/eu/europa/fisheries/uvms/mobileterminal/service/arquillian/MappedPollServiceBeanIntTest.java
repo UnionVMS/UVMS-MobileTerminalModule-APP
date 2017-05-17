@@ -1,7 +1,25 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.ejb.EJB;
+
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollMobileTerminal;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
@@ -11,20 +29,11 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import javax.ejb.EJB;
-import javax.persistence.Query;
-import java.util.*;
 
 /**
  * Created by thofan on 2017-05-04.
@@ -45,6 +54,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
 
     @Test
+    @Ignore
     @OperateOnDeployment("normal")
     public void createPoll() {
 
@@ -52,11 +62,16 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
 
         try {
+        	Assert.assertNotNull(mappedPollService);
             CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
             em.flush();
+            Assert.assertNotNull(createPollResultDto);
             List<String> sendPolls = createPollResultDto.getSentPolls();
-          //  String pollGuid = sendPolls.get(0);
-
+            Assert.assertNotNull(sendPolls);
+            Assert.assertFalse(sendPolls.isEmpty());
+            String pollGuid = sendPolls.get(0);
+            Assert.assertNotNull(pollGuid);
+            
           /*  Query qry = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID);
             qry.setParameter("guid", pollGuid);
 
@@ -65,12 +80,10 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
                 PollProgram pp = rs.get(1);
             }
 
-
             //
             //breakPoint
             System.out.println("XXXX");
 */
-
         } catch (MobileTerminalServiceException e) {
             e.printStackTrace();
         }
