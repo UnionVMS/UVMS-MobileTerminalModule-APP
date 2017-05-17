@@ -1,16 +1,39 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
+
+import javax.ejb.EJB;
+
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import javax.ejb.EJB;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollMobileTerminal;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 
 /**
  * Created by thofan on 2017-05-04.
@@ -23,21 +46,44 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     @EJB
     MappedPollService mappedPollService;
 
+    @EJB
+    private TerminalDao terminalDaoBean;
+
+    @EJB
+    MobileTerminalPluginDao testDaoBean;
 
 
     @Test
+    @Ignore
     @OperateOnDeployment("normal")
     public void createPoll() {
 
-        PollRequestType pollRequestType = createPollRequestTypeHelper();
+        PollRequestType pollRequestType = helper_createPollRequestType();
+
 
         try {
+        	Assert.assertNotNull(mappedPollService);
             CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
+            em.flush();
+            Assert.assertNotNull(createPollResultDto);
+            List<String> sendPolls = createPollResultDto.getSentPolls();
+            Assert.assertNotNull(sendPolls);
+            Assert.assertFalse(sendPolls.isEmpty());
+            String pollGuid = sendPolls.get(0);
+            Assert.assertNotNull(pollGuid);
+            
+          /*  Query qry = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID);
+            qry.setParameter("guid", pollGuid);
 
+            List<PollProgram> rs = qry.getResultList();
+            if (rs.size() > 0) {
+                PollProgram pp = rs.get(1);
+            }
 
-
-
-
+            //
+            //breakPoint
+            System.out.println("XXXX");
+*/
         } catch (MobileTerminalServiceException e) {
             e.printStackTrace();
         }
@@ -76,14 +122,104 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 */
 
 
-
-    private PollRequestType createPollRequestTypeHelper() {
+    private PollRequestType helper_createPollRequestType() {
 
         PollRequestType prt = new PollRequestType();
-        prt.setComment("a comment");
-        prt.setUserName("a username");
-        prt.setPollType(PollType.SAMPLING_POLL);
+        prt.setComment("aComment" + UUID.randomUUID().toString());
+        prt.setUserName("TEST");
+        prt.setPollType(PollType.MANUAL_POLL);
+        PollMobileTerminal pollMobileTerminal = helper_createPollMobileTerminal();
+        prt.getMobileTerminals().add(pollMobileTerminal);
+
+
+        PollAttribute pollAttribute = new PollAttribute();
+        pollAttribute.setKey(PollAttributeType.START_DATE);
+        String startDate = DateUtils.getUTCNow().toString();
+        pollAttribute.setValue(startDate);
+
+        prt.getAttributes().add(pollAttribute);
         return prt;
+    }
+
+    private PollMobileTerminal helper_createPollMobileTerminal() {
+
+        String connectId = UUID.randomUUID().toString();
+
+        MobileTerminal mobileTerminal = helper_createMobileTerminal(connectId);
+        PollMobileTerminal pmt = new PollMobileTerminal();
+        pmt.setConnectId(connectId);
+        pmt.setMobileTerminalId(mobileTerminal.getGuid());
+
+        String channelId = "";
+        Set<Channel> channels = mobileTerminal.getChannels();
+        for (Channel ch : channels) {
+            channelId = ch.getGuid();
+            break;
+        }
+        pmt.setComChannelId(channelId);
+        return pmt;
+    }
+
+    private MobileTerminal helper_createMobileTerminal(String connectId) {
+
+
+        String serialNo = UUID.randomUUID().toString();
+        MobileTerminal mt = new MobileTerminal();
+
+        MobileTerminalPlugin mtp = null;
+        List<MobileTerminalPlugin> plugs = null;
+        try {
+            plugs = testDaoBean.getPluginList();
+        } catch (ConfigDaoException e) {
+            e.printStackTrace();
+        }
+        mtp = plugs.get(0);
+        mt.setSerialNo(serialNo);
+        mt.setUpdateTime(new Date());
+        mt.setUpdatedBy("TEST");
+        mt.setSource(MobileTerminalSourceEnum.INTERNAL);
+        mt.setPlugin(mtp);
+        mt.setMobileTerminalType(MobileTerminalTypeEnum.INMARSAT_C);
+        mt.setArchived(false);
+        mt.setInactivated(false);
+
+
+        Set<MobileTerminalEvent> events = new HashSet<>();
+        MobileTerminalEvent event = new MobileTerminalEvent();
+        event.setConnectId(connectId);
+        event.setActive(true);
+        event.setMobileTerminal(mt);
+
+
+        String attributes = PollAttributeType.START_DATE.value() + "=" + DateUtils.getUTCNow().toString();
+        attributes = attributes + ";";
+        attributes = attributes + PollAttributeType.END_DATE.value() + "=" + DateUtils.getUTCNow().toString();
+        event.setAttributes(attributes);
+
+
+        events.add(event);
+        mt.setMobileTerminalEvents(events);
+
+
+        Set<Channel> channels = new HashSet<>();
+        Channel channel = new Channel();
+        channel.setArchived(false);
+        channel.setGuid(UUID.randomUUID().toString());
+        channel.setMobileTerminal(mt);
+        channel.getHistories();
+        channels.add(channel);
+        mt.setChannels(channels);
+
+        try {
+            terminalDaoBean.createMobileTerminal(mt);
+            em.flush();
+            return mt;
+        } catch (TerminalDaoException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+
     }
 
 

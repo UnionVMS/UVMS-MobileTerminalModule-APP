@@ -1,20 +1,11 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -25,11 +16,27 @@ import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
+import eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollToCommandRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalConfigHelper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PollServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
 @ArquillianSuiteDeployment
 public abstract class BuildMobileTerminalServiceDeployment {
@@ -69,27 +76,23 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(PollRequestType.class);
         testWar.addClass(CreatePollResultDto.class);
         testWar.addClass(MobileTerminalServiceException.class);
-        testWar.addClass(MappedPollServiceBeanIntTest.class);
         testWar.addClass(PollService.class);
         testWar.addClass(PollServiceBean.class);
         testWar.addClass(MobileTerminalService.class);
         testWar.addClass(MobileTerminalServiceBean.class);
         testWar.addClass(PollService.class);
         testWar.addClass(PollServiceBean.class);
-        //    testWar.addClass(ConfigModelBean.class);
-        //testWar.addClass(NoEntityFoundException.class);
-        //testWar.addClass(TerminalDaoException.class);
-        //testWar.addClass(MobileTerminalModelException.class);
-        //testWar.addClass(PollDaoException.class);
-/*
-        testWar.addClass(MobileTerminalService.class);
-        testWar.addClass(MobileTerminalServiceBean.class);
-        testWar.addClass(PluginService.class);
-        testWar.addClass(PluginServiceBean.class);
-        testWar.addClass(PollDto.class);
+        testWar.addClass(PollToCommandRequestMapper.class);
+        testWar.addClass(AuditModuleRequestMapper.class);
 
-        testWar.addClass(PollType.class);
-*/
+        testWar.addClass(PluginService.class);
+        testWar.addClass(MobileTerminalModelMapperException.class);
+        testWar.addClass(MobileTerminalModelException.class);
+        testWar.addClass(MobileTerminalException.class);
+        testWar.addClass(MobileTerminalUnmarshallException.class);
+        testWar.addClass(ConfigServiceException.class);
+
+
 
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
