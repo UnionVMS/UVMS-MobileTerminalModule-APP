@@ -24,7 +24,7 @@
         <audit.model.version>3.0.4</audit.model.version>
         <exchange.model.version>3.0.4</exchange.model.version>
 
-        <docker.dev.version>3.1.0</docker.dev.version>
+        <docker.dev.version>3.1.1</docker.dev.version>
         <docker.dev.start.phase>none</docker.dev.start.phase>
         <docker.dev.stop.phase>none</docker.dev.stop.phase>
         <docker.dev.prestop.phase>none</docker.dev.prestop.phase>        
