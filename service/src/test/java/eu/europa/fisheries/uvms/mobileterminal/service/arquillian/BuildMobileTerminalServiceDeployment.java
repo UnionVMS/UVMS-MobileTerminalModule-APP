@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
+
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
@@ -27,10 +28,18 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
+
+import eu.europa.ec.fisheries.uvms.config.message.ConfigMessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollTimerService;
+
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalConfigHelper;
@@ -68,6 +77,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(MobileTerminalMessageException.class);
         testWar.addClass(MobileTerminalConfigHelper.class);
 
+        testWar.addClass(ConfigMessageConsumer.class);
 
 
         // för Mapped PollServiceBean
@@ -82,8 +92,24 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(MobileTerminalServiceBean.class);
         testWar.addClass(PollService.class);
         testWar.addClass(PollServiceBean.class);
+
         testWar.addClass(PollToCommandRequestMapper.class);
         testWar.addClass(AuditModuleRequestMapper.class);
+
+
+        
+        //UVMS-3584:
+        //testWar.addClass(MobileTerminalPollTimerServiceBean.class);
+        testWar.addClass(PollTimerService.class);
+        
+        
+        //    testWar.addClass(ConfigModelBean.class);
+        //testWar.addClass(NoEntityFoundException.class);
+        //testWar.addClass(TerminalDaoException.class);
+        //testWar.addClass(MobileTerminalModelException.class);
+        //testWar.addClass(PollDaoException.class);
+        testWar.addClass(MobileTerminalService.class);
+        testWar.addClass(MobileTerminalServiceBean.class);
 
         testWar.addClass(PluginService.class);
         testWar.addClass(MobileTerminalModelMapperException.class);

@@ -67,7 +67,7 @@ public class PollEntityToModelMapper {
 
     private static List<PollAttribute> getProgramPollAttributes(PollProgram program) {
         List<PollAttribute> attributes = new ArrayList<PollAttribute>();
-        attributes.add(createPollAttribute(PollAttributeType.FREQUENCY, program.getFrequency().toString()));
+        attributes.add(createPollAttribute(PollAttributeType.FREQUENCY, program.getFrequency().toString())); //ToDo: Null check needed here !
         attributes.add(createPollAttribute(PollAttributeType.START_DATE, DateUtils.parseUTCDateTimeToString(program.getStartDate())));
         attributes.add(createPollAttribute(PollAttributeType.END_DATE, DateUtils.parseUTCDateTimeToString(program.getStopDate())));
 
