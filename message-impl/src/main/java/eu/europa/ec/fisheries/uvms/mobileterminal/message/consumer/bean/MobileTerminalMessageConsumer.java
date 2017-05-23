@@ -45,6 +45,7 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
 
     private Queue responseMobileTerminalQueue;
 
+    // TODO   why as instancevariables ???  since they are allocated and released per call ????
     private Connection connection = null;
     private Session session = null;
 

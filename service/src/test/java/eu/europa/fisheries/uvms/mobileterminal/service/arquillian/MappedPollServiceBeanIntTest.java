@@ -7,7 +7,11 @@ import java.util.Set;
 import java.util.UUID;
 
 import javax.ejb.EJB;
+import javax.persistence.Query;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
@@ -43,6 +47,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
 
+    private static final String FIND_BY_GUID = "Poll.findByPollGUID";
+
     @EJB
     MappedPollService mappedPollService;
 
@@ -54,41 +60,30 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
 
     @Test
-    @Ignore
     @OperateOnDeployment("normal")
     public void createPoll() {
 
         PollRequestType pollRequestType = helper_createPollRequestType();
-
-
         try {
-        	Assert.assertNotNull(mappedPollService);
             CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
             em.flush();
-            Assert.assertNotNull(createPollResultDto);
             List<String> sendPolls = createPollResultDto.getSentPolls();
-            Assert.assertNotNull(sendPolls);
-            Assert.assertFalse(sendPolls.isEmpty());
             String pollGuid = sendPolls.get(0);
-            Assert.assertNotNull(pollGuid);
-            
-          /*  Query qry = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID);
+
+           Query qry = em.createNamedQuery(FIND_BY_GUID);
             qry.setParameter("guid", pollGuid);
 
-            List<PollProgram> rs = qry.getResultList();
+            List<Poll> rs = qry.getResultList();
             if (rs.size() > 0) {
-                PollProgram pp = rs.get(1);
+                Poll fetchedPoll = rs.get(0);
+                String fetchedGUID = fetchedPoll.getGuid();
+                Assert.assertTrue(pollGuid.equals(fetchedGUID));
+            }else{
+                Assert.fail();
             }
-
-            //
-            //breakPoint
-            System.out.println("XXXX");
-*/
         } catch (MobileTerminalServiceException e) {
-            e.printStackTrace();
+            Assert.fail();
         }
-
-
     }
 
     /*
