@@ -10,6 +10,7 @@ import javax.ejb.EJB;
 import javax.persistence.Query;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -65,16 +66,20 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
         PollRequestType pollRequestType = helper_createPollRequestType();
         try {
+
+            // create a poll
             CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
             em.flush();
             List<String> sendPolls = createPollResultDto.getSentPolls();
             String pollGuid = sendPolls.get(0);
 
+            // try to find it
            Query qry = em.createNamedQuery(FIND_BY_GUID);
             qry.setParameter("guid", pollGuid);
 
             List<Poll> rs = qry.getResultList();
             if (rs.size() > 0) {
+                // verify that we got the correct one
                 Poll fetchedPoll = rs.get(0);
                 String fetchedGUID = fetchedPoll.getGuid();
                 Assert.assertTrue(pollGuid.equals(fetchedGUID));
@@ -86,11 +91,25 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         }
     }
 
-    /*
 
-    //@Test
+
+    @Test
+    @Ignore
     @OperateOnDeployment("normal")
-    public void getRunningProgramPolls() {}
+    public void getRunningProgramPolls() {
+
+
+        try {
+            List<PollDto> rs = mappedPollService.getRunningProgramPolls();
+        } catch (MobileTerminalServiceException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    /*
 
     //@Test
     @OperateOnDeployment("normal")
