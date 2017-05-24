@@ -1,10 +1,7 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.ejb.EJB;
 import javax.persistence.Query;
@@ -64,7 +61,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void createPoll() {
 
-        PollRequestType pollRequestType = helper_createPollRequestType();
+        PollRequestType pollRequestType = helper_createPollRequestType(PollType.MANUAL_POLL);
         try {
 
             // create a poll
@@ -74,7 +71,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
             String pollGuid = sendPolls.get(0);
 
             // try to find it
-           Query qry = em.createNamedQuery(FIND_BY_GUID);
+            Query qry = em.createNamedQuery(FIND_BY_GUID);
             qry.setParameter("guid", pollGuid);
 
             List<Poll> rs = qry.getResultList();
@@ -83,14 +80,13 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
                 Poll fetchedPoll = rs.get(0);
                 String fetchedGUID = fetchedPoll.getGuid();
                 Assert.assertTrue(pollGuid.equals(fetchedGUID));
-            }else{
+            } else {
                 Assert.fail();
             }
         } catch (MobileTerminalServiceException e) {
             Assert.fail();
         }
     }
-
 
 
     @Test
@@ -109,49 +105,90 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     }
 
 
-    /*
+    @Test
+    @OperateOnDeployment("normal")
+    public void startProgramPoll() {
+
+        // create a poll so we have something to start
+
+        PollRequestType pollRequestType = helper_createPollRequestType(PollType.PROGRAM_POLL);
+        try {
+
+            // create a poll
+            CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
+            em.flush();
+            List<String> sendPolls = createPollResultDto.getSentPolls();
+            String pollGuid = sendPolls.get(0);
+
+            mappedPollService.startProgramPoll(pollGuid, "TEST");
+
+
+
+        } catch (MobileTerminalServiceException e) {
+            Assert.fail();
+        }
+
+
+//
+
+    }
 
     //@Test
     @OperateOnDeployment("normal")
-    public void startProgramPoll()  {}
+    public void stopProgramPoll() {
+    }
 
     //@Test
     @OperateOnDeployment("normal")
-    public void stopProgramPoll()  {}
+    public void inactivateProgramPoll() {
+    }
 
     //@Test
     @OperateOnDeployment("normal")
-    public void inactivateProgramPoll() {}
+    public void getPollBySearchQuery() {
+    }
 
     //@Test
     @OperateOnDeployment("normal")
-    public void getPollBySearchQuery()  {}
-
-    //@Test
-    @OperateOnDeployment("normal")
-    public void getPollableChannels()  {}
+    public void getPollableChannels() {
+    }
 
 
+    private PollRequestType helper_createPollRequestType(PollType pollType) {
 
-*/
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2015);
+        SimpleDateFormat format = new SimpleDateFormat();
+        format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+        String startDate = format.format(cal.getTime());
+        cal.set(Calendar.YEAR, 2020);
+        String endDate = format.format(cal.getTime());
 
-
-    private PollRequestType helper_createPollRequestType() {
 
         PollRequestType prt = new PollRequestType();
         prt.setComment("aComment" + UUID.randomUUID().toString());
         prt.setUserName("TEST");
-        prt.setPollType(PollType.MANUAL_POLL);
+        prt.setPollType(pollType);
         PollMobileTerminal pollMobileTerminal = helper_createPollMobileTerminal();
         prt.getMobileTerminals().add(pollMobileTerminal);
 
 
-        PollAttribute pollAttribute = new PollAttribute();
-        pollAttribute.setKey(PollAttributeType.START_DATE);
-        String startDate = DateUtils.getUTCNow().toString();
-        pollAttribute.setValue(startDate);
+        PollAttribute psStart = new PollAttribute();
+        PollAttribute psEnd = new PollAttribute();
+        PollAttribute psFreq = new PollAttribute();
 
-        prt.getAttributes().add(pollAttribute);
+        psStart.setKey(PollAttributeType.START_DATE);
+        psStart.setValue(startDate);
+        prt.getAttributes().add(psStart);
+
+        psEnd.setKey(PollAttributeType.END_DATE);
+        psEnd.setValue(endDate);
+        prt.getAttributes().add(psEnd);
+
+        psFreq.setKey(PollAttributeType.FREQUENCY);
+        psFreq.setValue("300000");
+        prt.getAttributes().add(psFreq);
+
         return prt;
     }
 
