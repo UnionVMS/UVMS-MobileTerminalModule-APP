@@ -5,6 +5,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
@@ -46,11 +47,11 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    @Ignore
-    public void testGetRegisteredMobileTerminalPlugins() throws MobileTerminalException {
+    public void testGetRegisteredMobileTerminalPlugins_fail() {
+        //TODO: Rewrite the error handling of getRegisteredMobileTerminalPlugins and extend this test.
+        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "true");
         List<ServiceResponseType> registeredMobileTerminalPlugins =  configService.getRegisteredMobileTerminalPlugins();
-        Assert.assertNotNull(registeredMobileTerminalPlugins);
-        // TODO: How to test this properly
+        Assert.assertNull(registeredMobileTerminalPlugins);
     }
 
     @Test
@@ -98,7 +99,6 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    @Ignore
     public void testGetTerminalSystems() throws MobileTerminalException {
         MobileTerminalPlugin mobileTerminalPlugin = new MobileTerminalPlugin();
         mobileTerminalPlugin.setName("TEST");
