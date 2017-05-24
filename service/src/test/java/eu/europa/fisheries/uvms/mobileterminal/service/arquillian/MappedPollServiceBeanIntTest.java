@@ -6,10 +6,13 @@ import java.util.*;
 import javax.ejb.EJB;
 import javax.persistence.Query;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ListPagination;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelListDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
@@ -17,20 +20,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollMobileTerminal;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
@@ -39,6 +33,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 
 /**
  * Created by thofan on 2017-05-04.
+ *
+ * TODO Since presence of REQUIRES_NEW are very limitied in these classes, we dont test them right now, We will revisit
  */
 
 @RunWith(Arquillian.class)
@@ -93,24 +89,23 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     @Ignore
     @OperateOnDeployment("normal")
     public void getRunningProgramPolls() {
-
-
+        // THIS will be enhanced when i understand how to start a PollProgram
         try {
             List<PollDto> rs = mappedPollService.getRunningProgramPolls();
+            Assert.assertTrue(rs != null);
         } catch (MobileTerminalServiceException e) {
-            e.printStackTrace();
+            Assert.fail();
         }
-
-
     }
 
 
     @Test
+    @Ignore
     @OperateOnDeployment("normal")
     public void startProgramPoll() {
 
-        // create a poll so we have something to start
-
+        // TODO THIS will be enhanced when i understand how to start a PollProgram
+        // TODO create a poll so we have something to start
         PollRequestType pollRequestType = helper_createPollRequestType(PollType.PROGRAM_POLL);
         try {
 
@@ -127,30 +122,25 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         } catch (MobileTerminalServiceException e) {
             Assert.fail();
         }
-
-
-//
-
     }
 
-    //@Test
-    @OperateOnDeployment("normal")
-    public void stopProgramPoll() {
-    }
-
-    //@Test
-    @OperateOnDeployment("normal")
-    public void inactivateProgramPoll() {
-    }
-
-    //@Test
-    @OperateOnDeployment("normal")
-    public void getPollBySearchQuery() {
-    }
-
-    //@Test
+    @Test
     @OperateOnDeployment("normal")
     public void getPollableChannels() {
+
+        ListPagination listPagination = new ListPagination();
+
+        PollableQuery query = new PollableQuery();
+        query.setPagination(listPagination);
+
+        query.getConnectIdList().add("BOGUS_JUST_TO_TEST");
+        query.getPagination().setPage(1);
+        query.getPagination().setListSize(20);
+        try {
+            PollChannelListDto pollChannelListDto =  mappedPollService.getPollableChannels(query);
+        } catch (MobileTerminalException e) {
+            e.printStackTrace();
+        }
     }
 
 
@@ -253,11 +243,14 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
 
         Set<Channel> channels = new HashSet<>();
-        Channel channel = new Channel();
-        channel.setArchived(false);
-        channel.setGuid(UUID.randomUUID().toString());
-        channel.setMobileTerminal(mt);
-        channel.getHistories();
+        //Channel channel = new Channel();
+        Channel channel = helper_createChannel(mt);
+//        channel.setArchived(false);
+//        channel.setGuid(UUID.randomUUID().toString());
+//        channel.setMobileTerminal(mt);
+//        channel.getHistories();
+//        channel.getCurrentHistory();
+
         channels.add(channel);
         mt.setChannels(channels);
 
@@ -270,6 +263,32 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
             return null;
         }
 
+
+    }
+
+
+    private Channel helper_createChannel(MobileTerminal mt){
+
+        Channel channel = new Channel();
+
+        channel.setArchived(false);
+        channel.setMobileTerminal(mt);
+        channel.getHistories();
+        channel.getCurrentHistory();
+
+        em.persist(channel);
+        em.flush();
+
+
+        ChannelHistory channelHistory = new ChannelHistory();
+        channelHistory.setChannel(channel);
+        channelHistory.setActive(true);
+
+        em.persist(channelHistory);
+
+        em.flush();
+
+        return channel;
 
     }
 
