@@ -36,7 +36,7 @@ public class GetReceivedEventBean {
 
     final static Logger LOG = LoggerFactory.getLogger(GetReceivedEventBean.class);
 
-    @Resource(lookup = MessageConstants.CONNECTION_FACTORY_NEW)
+    @Resource(lookup = MessageConstants.JAVA_MESSAGE_CONNECTION_FACTORY)
     private ConnectionFactory connectionFactory;
 
     // TODO: NOOOOOOOOOO, Config Module is locally deployed in MobileTerminal...

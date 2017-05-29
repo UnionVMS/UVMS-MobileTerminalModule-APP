@@ -20,13 +20,13 @@ import javax.jms.TextMessage;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.GetReceivedEventBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ListReceivedEventBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PingReceivedEventBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleBaseRequest;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
@@ -42,16 +42,14 @@ public class MessageConsumerBean implements MessageListener {
 
     final static Logger LOG = LoggerFactory.getLogger(MessageConsumerBean.class);
 
-    @Inject
-    @PingReceivedEvent
-    Event<EventMessage> pingReceivedEvent;
-
     @EJB
     private GetReceivedEventBean getReceivedEventBean;
 
-
     @EJB
     private ListReceivedEventBean listReceivedEventBean;
+
+    @EJB
+    private PingReceivedEventBean pingReceivedEventBean;
 
     @Inject
     @ErrorEvent
@@ -76,7 +74,7 @@ public class MessageConsumerBean implements MessageListener {
                     listReceivedEventBean.list(new EventMessage(textMessage));
                     break;
                 case PING:
-                    pingReceivedEvent.fire(new EventMessage(textMessage));
+                    pingReceivedEventBean.ping(new EventMessage(textMessage));
                     break;
                 default:
                     LOG.error("[ Unsupported request: {} ]", request.getMethod());

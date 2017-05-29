@@ -12,19 +12,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
 import javax.ejb.Local;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.enterprise.event.Observes;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 
 @Local
 public interface EventService {
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    void ping(@Observes @PingReceivedEvent EventMessage message);
 
     void returnError(@Observes @ErrorEvent EventMessage message);
     
