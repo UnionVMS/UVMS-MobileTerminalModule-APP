@@ -19,6 +19,14 @@ import javax.jms.*;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
 
+import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeType;
+import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
+import eu.europa.ec.fisheries.schema.exchange.common.v1.CommandType;
+import eu.europa.ec.fisheries.schema.exchange.module.v1.SetCommandResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
+import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
+import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleResponseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +36,8 @@ import eu.europa.ec.fisheries.uvms.message.JMSUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+
+import static eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType.MANUAL_POLL;
 
 @Stateless
 public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMessageConsumer {
@@ -74,20 +84,34 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public <T> T getMessage(String correlationId, Class type) throws MobileTerminalMessageException {
 
-
         Message message = null;
         try {
             connectToQueue();
+            message = session.createTextMessage(createResponse());
+            message.setJMSCorrelationID(correlationId);
+            message.setJMSMessageID(correlationId);
 
-            message = session.createTextMessage();
-        } catch (JMSException e) {
+        } catch (JMSException   e) {
             e.printStackTrace();
+        } catch (ExchangeModelMarshallException e) {
+            e.printStackTrace();
+        } finally{
+            disconnectQueue();
         }
 
         return (T) message;
 
 
     }
+
+    private String createResponse() throws ExchangeModelMarshallException {
+
+        AcknowledgeType acknowledgeType = new AcknowledgeType();
+        acknowledgeType.setType(AcknowledgeTypeType.OK);
+        acknowledgeType.setMessage("MESSAGE");
+        return ExchangeModuleResponseMapper.mapSetCommandResponse(acknowledgeType);
+    }
+
 
     private void connectToQueue() throws JMSException {
         connection = connectionFactory.createConnection();
