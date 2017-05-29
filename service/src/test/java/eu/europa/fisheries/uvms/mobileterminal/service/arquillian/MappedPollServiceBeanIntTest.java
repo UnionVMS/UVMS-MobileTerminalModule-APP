@@ -84,66 +84,6 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         }
     }
 
-
-    @Test
-    @Ignore
-    @OperateOnDeployment("normal")
-    public void getRunningProgramPolls() {
-        // THIS will be enhanced when i understand how to start a PollProgram
-        try {
-            List<PollDto> rs = mappedPollService.getRunningProgramPolls();
-            Assert.assertTrue(rs != null);
-        } catch (MobileTerminalServiceException e) {
-            Assert.fail();
-        }
-    }
-
-
-    @Test
-    @Ignore
-    @OperateOnDeployment("normal")
-    public void startProgramPoll() {
-
-        // TODO THIS will be enhanced when i understand how to start a PollProgram
-        // TODO create a poll so we have something to start
-        PollRequestType pollRequestType = helper_createPollRequestType(PollType.PROGRAM_POLL);
-        try {
-
-            // create a poll
-            CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
-            em.flush();
-            List<String> sendPolls = createPollResultDto.getSentPolls();
-            String pollGuid = sendPolls.get(0);
-
-            mappedPollService.startProgramPoll(pollGuid, "TEST");
-
-
-
-        } catch (MobileTerminalServiceException e) {
-            Assert.fail();
-        }
-    }
-
-    @Test
-    @OperateOnDeployment("normal")
-    public void getPollableChannels() {
-
-        ListPagination listPagination = new ListPagination();
-
-        PollableQuery query = new PollableQuery();
-        query.setPagination(listPagination);
-
-        query.getConnectIdList().add("BOGUS_JUST_TO_TEST");
-        query.getPagination().setPage(1);
-        query.getPagination().setListSize(20);
-        try {
-            PollChannelListDto pollChannelListDto =  mappedPollService.getPollableChannels(query);
-        } catch (MobileTerminalException e) {
-            e.printStackTrace();
-        }
-    }
-
-
     private PollRequestType helper_createPollRequestType(PollType pollType) {
 
         Calendar cal = Calendar.getInstance();
@@ -243,13 +183,13 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
 
         Set<Channel> channels = new HashSet<>();
-        //Channel channel = new Channel();
-        Channel channel = helper_createChannel(mt);
-//        channel.setArchived(false);
-//        channel.setGuid(UUID.randomUUID().toString());
-//        channel.setMobileTerminal(mt);
-//        channel.getHistories();
-//        channel.getCurrentHistory();
+        Channel channel = new Channel();
+        //Channel channel = helper_createChannel(mt);
+        channel.setArchived(false);
+        channel.setGuid(UUID.randomUUID().toString());
+        channel.setMobileTerminal(mt);
+        channel.getHistories();
+        channel.getCurrentHistory();
 
         channels.add(channel);
         mt.setChannels(channels);
