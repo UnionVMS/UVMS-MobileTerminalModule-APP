@@ -46,8 +46,14 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
 @Entity
 @Table(name = "poll")
 @XmlRootElement
-@NamedQueries({ @NamedQuery(name = "Poll.findAll", query = "SELECT p FROM Poll p"), @NamedQuery(name = "Poll.findByPollId", query = "SELECT p FROM Poll p WHERE p.id = :pollId"), @NamedQuery(name = "Poll.findByPollComment", query = "SELECT p FROM Poll p WHERE p.pollBase.comment = :pollComment"), @NamedQuery(name = "Poll.findByPollCreated", query = "SELECT p FROM Poll p WHERE p.updateTime = :pollCreated"),
-    @NamedQuery(name = "Poll.findByPollUserCreator", query = "SELECT p FROM Poll p WHERE p.pollBase.creator = :pollUserCreator"), @NamedQuery(name = "Poll.findByPolltrackId", query = "SELECT p FROM Poll p WHERE p.guid = :polltrackId") })
+@NamedQueries({
+        @NamedQuery(name = "Poll.findAll", query = "SELECT p FROM Poll p"),
+        @NamedQuery(name = "Poll.findByPollId", query = "SELECT p FROM Poll p WHERE p.id = :pollId"),
+        @NamedQuery(name = "Poll.findByPollGUID", query = "SELECT p FROM Poll p WHERE p.guid = :guid"),
+        @NamedQuery(name = "Poll.findByPollComment", query = "SELECT p FROM Poll p WHERE p.pollBase.comment = :pollComment"),
+        @NamedQuery(name = "Poll.findByPollCreated", query = "SELECT p FROM Poll p WHERE p.updateTime = :pollCreated"),
+        @NamedQuery(name = "Poll.findByPollUserCreator", query = "SELECT p FROM Poll p WHERE p.pollBase.creator = :pollUserCreator"),
+        @NamedQuery(name = "Poll.findByPolltrackId", query = "SELECT p FROM Poll p WHERE p.guid = :polltrackId") })
 public class Poll implements Serializable {
     private static final long serialVersionUID = 1L;
 
