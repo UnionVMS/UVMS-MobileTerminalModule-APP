@@ -90,7 +90,6 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
             message = session.createTextMessage(createResponse());
             message.setJMSCorrelationID(correlationId);
             message.setJMSMessageID(correlationId);
-            message.acknowledge();
 
         } catch (JMSException   e) {
             e.printStackTrace();
