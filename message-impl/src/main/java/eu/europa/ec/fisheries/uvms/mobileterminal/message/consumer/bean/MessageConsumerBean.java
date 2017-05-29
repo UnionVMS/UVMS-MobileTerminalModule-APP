@@ -19,13 +19,13 @@ import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.GetReceivedEventBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ListReceivedEventBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleBaseRequest;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ListReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
@@ -49,10 +49,9 @@ public class MessageConsumerBean implements MessageListener {
     @EJB
     private GetReceivedEventBean getReceivedEventBean;
 
-    @Inject
-    @ListReceivedEvent
-    Event<EventMessage> listReceivedEvent;
 
+    @EJB
+    private ListReceivedEventBean listReceivedEventBean;
 
     @Inject
     @ErrorEvent
@@ -74,7 +73,7 @@ public class MessageConsumerBean implements MessageListener {
                     getReceivedEventBean.get(new EventMessage(textMessage));
                     break;
                 case LIST_MOBILE_TERMINALS:
-                    listReceivedEvent.fire(new EventMessage(textMessage));
+                    listReceivedEventBean.list(new EventMessage(textMessage));
                     break;
                 case PING:
                     pingReceivedEvent.fire(new EventMessage(textMessage));

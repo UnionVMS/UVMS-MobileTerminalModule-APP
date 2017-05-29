@@ -17,7 +17,6 @@ import javax.ejb.TransactionAttributeType;
 import javax.enterprise.event.Observes;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ListReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 
@@ -26,9 +25,6 @@ public interface EventService {
 
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     void ping(@Observes @PingReceivedEvent EventMessage message);
-
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    void list(@Observes @ListReceivedEvent EventMessage message);
 
     void returnError(@Observes @ErrorEvent EventMessage message);
     

@@ -34,25 +34,18 @@ import javax.naming.NamingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleBaseRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleMethod;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ListReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalModuleResponseMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.EventService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 
 @Stateless
 public class MobileTerminalEventServiceBean implements EventService {
@@ -67,38 +60,6 @@ public class MobileTerminalEventServiceBean implements EventService {
     @Inject
     @ErrorEvent
     Event<EventMessage> errorEvent;
-
-    @EJB
-    MobileTerminalService mobileTerminalService;
-
-    @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-    public void list(@Observes @ListReceivedEvent EventMessage message) {
-        LOG.info("List Mobile terminals");
-        TextMessage requestMessage = message.getJmsMessage();
-
-        try {
-            MobileTerminalModuleBaseRequest baseRequest = JAXBMarshaller.unmarshallTextMessage(requestMessage, MobileTerminalModuleBaseRequest.class);
-            if (baseRequest.getMethod() == MobileTerminalModuleMethod.LIST_MOBILE_TERMINALS) {
-                MobileTerminalListRequest request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), MobileTerminalListRequest.class);
-
-                MobileTerminalListResponse mobileTerminalListResponse = mobileTerminalService.getMobileTerminalList(request.getQuery());
-                List<MobileTerminalType> mobileTerminalTypes = mobileTerminalListResponse.getMobileTerminal();
-
-                connectToQueue();
-
-                String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);
-                TextMessage responseMessage = session.createTextMessage(response);
-                responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
-            }
-        } catch (MobileTerminalException | JMSException e) {
-            errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when trying to get list in MobileTerminal: " + e.getMessage()));
-        } finally {
-            disconnectQueue();
-        }
-
-    }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
