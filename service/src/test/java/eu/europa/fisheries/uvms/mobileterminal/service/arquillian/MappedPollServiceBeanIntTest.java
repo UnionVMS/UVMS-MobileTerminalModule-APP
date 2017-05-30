@@ -1,13 +1,19 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import javax.ejb.EJB;
+import javax.persistence.Query;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ListPagination;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelListDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
@@ -15,20 +21,11 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollMobileTerminal;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
@@ -37,11 +34,15 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 
 /**
  * Created by thofan on 2017-05-04.
+ *
+ * TODO Since presence of REQUIRES_NEW are very limitied in these classes, we dont test them right now, We will revisit
  */
 
 @RunWith(Arquillian.class)
 public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
+
+    private static final String FIND_BY_GUID = "Poll.findByPollGUID";
 
     @EJB
     MappedPollService mappedPollService;
@@ -54,90 +55,74 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
 
     @Test
-    @Ignore
     @OperateOnDeployment("normal")
     public void createPoll() {
 
-        PollRequestType pollRequestType = helper_createPollRequestType();
+        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
 
+        PollRequestType pollRequestType = helper_createPollRequestType(PollType.MANUAL_POLL);
         try {
-        	Assert.assertNotNull(mappedPollService);
+
+            // create a poll
             CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
             em.flush();
-            Assert.assertNotNull(createPollResultDto);
             List<String> sendPolls = createPollResultDto.getSentPolls();
-            Assert.assertNotNull(sendPolls);
-            Assert.assertFalse(sendPolls.isEmpty());
             String pollGuid = sendPolls.get(0);
-            Assert.assertNotNull(pollGuid);
-            
-          /*  Query qry = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID);
+
+            // try to find it
+            Query qry = em.createNamedQuery(FIND_BY_GUID);
             qry.setParameter("guid", pollGuid);
 
-            List<PollProgram> rs = qry.getResultList();
+            List<Poll> rs = qry.getResultList();
             if (rs.size() > 0) {
-                PollProgram pp = rs.get(1);
+                // verify that we got the correct one
+                Poll fetchedPoll = rs.get(0);
+                String fetchedGUID = fetchedPoll.getGuid();
+                Assert.assertTrue(pollGuid.equals(fetchedGUID));
+            } else {
+                Assert.fail();
             }
-
-            //
-            //breakPoint
-            System.out.println("XXXX");
-*/
         } catch (MobileTerminalServiceException e) {
-            e.printStackTrace();
+            Assert.fail();
         }
-
-
     }
 
-    /*
+    private PollRequestType helper_createPollRequestType(PollType pollType) {
 
-    //@Test
-    @OperateOnDeployment("normal")
-    public void getRunningProgramPolls() {}
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, 2015);
+        SimpleDateFormat format = new SimpleDateFormat();
+        format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+        String startDate = format.format(cal.getTime());
+        cal.set(Calendar.YEAR, 2020);
+        String endDate = format.format(cal.getTime());
 
-    //@Test
-    @OperateOnDeployment("normal")
-    public void startProgramPoll()  {}
-
-    //@Test
-    @OperateOnDeployment("normal")
-    public void stopProgramPoll()  {}
-
-    //@Test
-    @OperateOnDeployment("normal")
-    public void inactivateProgramPoll() {}
-
-    //@Test
-    @OperateOnDeployment("normal")
-    public void getPollBySearchQuery()  {}
-
-    //@Test
-    @OperateOnDeployment("normal")
-    public void getPollableChannels()  {}
-
-
-
-*/
-
-
-    private PollRequestType helper_createPollRequestType() {
 
         PollRequestType prt = new PollRequestType();
         prt.setComment("aComment" + UUID.randomUUID().toString());
         prt.setUserName("TEST");
-        prt.setPollType(PollType.MANUAL_POLL);
+        prt.setPollType(pollType);
         PollMobileTerminal pollMobileTerminal = helper_createPollMobileTerminal();
         prt.getMobileTerminals().add(pollMobileTerminal);
 
 
-        PollAttribute pollAttribute = new PollAttribute();
-        pollAttribute.setKey(PollAttributeType.START_DATE);
-        String startDate = DateUtils.getUTCNow().toString();
-        pollAttribute.setValue(startDate);
+        PollAttribute psStart = new PollAttribute();
+        PollAttribute psEnd = new PollAttribute();
+        PollAttribute psFreq = new PollAttribute();
 
-        prt.getAttributes().add(pollAttribute);
+        psStart.setKey(PollAttributeType.START_DATE);
+        psStart.setValue(startDate);
+        prt.getAttributes().add(psStart);
+
+        psEnd.setKey(PollAttributeType.END_DATE);
+        psEnd.setValue(endDate);
+        prt.getAttributes().add(psEnd);
+
+        psFreq.setKey(PollAttributeType.FREQUENCY);
+        psFreq.setValue("300000");
+        prt.getAttributes().add(psFreq);
+
         return prt;
     }
 
@@ -203,10 +188,13 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
         Set<Channel> channels = new HashSet<>();
         Channel channel = new Channel();
+        //Channel channel = helper_createChannel(mt);
         channel.setArchived(false);
         channel.setGuid(UUID.randomUUID().toString());
         channel.setMobileTerminal(mt);
         channel.getHistories();
+        channel.getCurrentHistory();
+
         channels.add(channel);
         mt.setChannels(channels);
 
@@ -219,6 +207,32 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
             return null;
         }
 
+
+    }
+
+
+    private Channel helper_createChannel(MobileTerminal mt){
+
+        Channel channel = new Channel();
+
+        channel.setArchived(false);
+        channel.setMobileTerminal(mt);
+        channel.getHistories();
+        channel.getCurrentHistory();
+
+        em.persist(channel);
+        em.flush();
+
+
+        ChannelHistory channelHistory = new ChannelHistory();
+        channelHistory.setChannel(channel);
+        channelHistory.setActive(true);
+
+        em.persist(channelHistory);
+
+        em.flush();
+
+        return channel;
 
     }
 

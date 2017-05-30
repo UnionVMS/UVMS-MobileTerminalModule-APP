@@ -36,6 +36,14 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 
     final static Logger LOG = LoggerFactory.getLogger(MessageProducerBean.class);
 
+    public static final String MESSAGE_PRODUCER_METHODS_FAIL = "MESSAGE_PRODUCER_METHODS_FAIL";
+
+    private void shouldIFail() throws MobileTerminalMessageException {
+        String fail = System.getProperty(MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        if(!"false".equals(fail.toLowerCase())) {
+            throw new MobileTerminalMessageException("MESSAGE_PRODUCER_METHODS_FAIL == true");
+        }
+    }
 
     @PostConstruct
     public void init() {
@@ -44,12 +52,14 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
+        shouldIFail();
         return UUID.randomUUID().toString();
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
+        shouldIFail();
         return UUID.randomUUID().toString();
     }
 

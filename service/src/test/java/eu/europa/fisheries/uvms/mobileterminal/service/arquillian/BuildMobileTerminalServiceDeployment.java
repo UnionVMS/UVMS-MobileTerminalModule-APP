@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollMapper;
+import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -72,6 +74,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
 
 
         testWar.addClass(TransactionalTests.class);
+        testWar.addClass(TestPollHelper.class);
         testWar.addClass(ConfigService.class);
         testWar.addClass(ConfigServiceBean.class);
         testWar.addClass(MobileTerminalMessageException.class);
@@ -94,6 +97,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(PollServiceBean.class);
 
         testWar.addClass(PollToCommandRequestMapper.class);
+        testWar.addClass(PollMapper.class);
         testWar.addClass(AuditModuleRequestMapper.class);
 
 
