@@ -11,33 +11,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean;
 
-import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
-import javax.jms.*;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
-import eu.europa.ec.fisheries.schema.exchange.common.v1.CommandType;
-import eu.europa.ec.fisheries.schema.exchange.module.v1.SetCommandResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
-import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
-import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMapper;
-import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleResponseMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.uvms.config.exception.ConfigMessageException;
 import eu.europa.ec.fisheries.uvms.config.message.ConfigMessageConsumer;
+import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
+import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleResponseMapper;
 import eu.europa.ec.fisheries.uvms.message.JMSUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType.MANUAL_POLL;
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
+import javax.jms.*;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 
 @Stateless
 public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMessageConsumer {
@@ -81,7 +72,6 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public <T> T getMessage(String correlationId, Class type) throws MobileTerminalMessageException {
 
         Message message = null;
@@ -120,7 +110,6 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public <T> T getConfigMessage(String correlationId, Class type) throws ConfigMessageException {
         try {
             return getMessage(correlationId, type);

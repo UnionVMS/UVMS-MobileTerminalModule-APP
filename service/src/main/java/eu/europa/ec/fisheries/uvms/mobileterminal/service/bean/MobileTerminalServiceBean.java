@@ -162,7 +162,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @throws MobileTerminalServiceException
      */
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public MobileTerminalType getMobileTerminalById(MobileTerminalId id, DataSourceQueue queue) throws MobileTerminalException {
         LOG.debug("GET MOBILE TERMINAL BY ID ( FROM SPECIFIC QUEUE ) INVOKED IN SERVICE LAYER, QUEUE = ", queue.name());
         if (id == null) {

@@ -40,9 +40,6 @@ public class MobileTerminalServiceIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void getMobileTerminalById() {
 
-
-        // TODO must be changed when REQUIRES_NEW is removed  until then tsi is failTest
-
         String createdMobileTerminalId = "";
         String fetchedMobileTerminalGuid  = "";
         try {
@@ -62,9 +59,7 @@ public class MobileTerminalServiceIntTest extends TransactionalTests {
             Assert.assertTrue(fetchedMobileTerminalGuid.equals(createdMobileTerminalId));
 
         } catch (MobileTerminalException e) {
-
-            // TODO CHANGE THIS TO FAIL WHEN servercode is corrected
-            Assert.assertTrue(true);
+            Assert.fail();
         }
 
     }
