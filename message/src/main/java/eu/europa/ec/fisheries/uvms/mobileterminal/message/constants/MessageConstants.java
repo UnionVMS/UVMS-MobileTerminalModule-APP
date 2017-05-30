@@ -14,7 +14,8 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.message.constants;
 public class MessageConstants {
 
     public static final String CONNECTION_FACTORY = "ConnectionFactory";
-    
+    public static final String JAVA_MESSAGE_CONNECTION_FACTORY = "java:/ConnectionFactory";
+
     public static final String CONNECTION_TYPE = "javax.jms.MessageListener";
     public static final String DESTINATION_TYPE_QUEUE = "javax.jms.Queue";
 
