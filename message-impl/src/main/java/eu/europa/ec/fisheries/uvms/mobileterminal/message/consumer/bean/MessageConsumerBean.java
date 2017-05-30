@@ -11,25 +11,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean;
 
-import javax.ejb.ActivationConfigProperty;
-import javax.ejb.MessageDriven;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
+import javax.ejb.*;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.GetReceivedEventBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ListReceivedEventBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PingReceivedEventBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleBaseRequest;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.GetReceivedEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ListReceivedEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.PingReceivedEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
@@ -45,25 +42,20 @@ public class MessageConsumerBean implements MessageListener {
 
     final static Logger LOG = LoggerFactory.getLogger(MessageConsumerBean.class);
 
-    @Inject
-    @PingReceivedEvent
-    Event<EventMessage> pingReceivedEvent;
+    @EJB
+    private GetReceivedEventBean getReceivedEventBean;
 
-    @Inject
-    @GetReceivedEvent
-    Event<EventMessage> getReceivedEvent;
+    @EJB
+    private ListReceivedEventBean listReceivedEventBean;
 
-    @Inject
-    @ListReceivedEvent
-    Event<EventMessage> listReceivedEvent;
-
+    @EJB
+    private PingReceivedEventBean pingReceivedEventBean;
 
     @Inject
     @ErrorEvent
     Event<EventMessage> errorEvent;
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public void onMessage(Message message) {
         
         TextMessage textMessage = (TextMessage) message;
@@ -75,13 +67,13 @@ public class MessageConsumerBean implements MessageListener {
 
             switch (request.getMethod()) {
                 case GET_MOBILE_TERMINAL:
-                    getReceivedEvent.fire(new EventMessage(textMessage));
+                    getReceivedEventBean.get(new EventMessage(textMessage));
                     break;
                 case LIST_MOBILE_TERMINALS:
-                    listReceivedEvent.fire(new EventMessage(textMessage));
+                    listReceivedEventBean.list(new EventMessage(textMessage));
                     break;
                 case PING:
-                    pingReceivedEvent.fire(new EventMessage(textMessage));
+                    pingReceivedEventBean.ping(new EventMessage(textMessage));
                     break;
                 default:
                     LOG.error("[ Unsupported request: {} ]", request.getMethod());
