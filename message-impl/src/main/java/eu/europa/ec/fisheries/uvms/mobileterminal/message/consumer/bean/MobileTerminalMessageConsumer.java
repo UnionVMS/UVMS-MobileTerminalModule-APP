@@ -77,7 +77,6 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public <T> T getMessage(String correlationId, Class type) throws MobileTerminalMessageException {
         try {
 
@@ -109,7 +108,6 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public <T> T getConfigMessage(String correlationId, Class type) throws ConfigMessageException {
         try {
             return getMessage(correlationId, type);

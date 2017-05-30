@@ -66,7 +66,6 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
         try {
             Session session = connector.getNewSession();
@@ -88,7 +87,6 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
     }
 
     @Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
         try {
             Session session = connector.getNewSession();
@@ -119,7 +117,6 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
     }
 
 	@Override
-    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendConfigMessage(String text) throws ConfigMessageException {
         try {
             return sendModuleMessage(text, ModuleQueue.CONFIG);
