@@ -32,6 +32,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollBase;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
@@ -62,6 +63,9 @@ public class MobileTerminalPollTimerServiceBeanIntTest extends TransactionalTest
 	@EJB
 	private TerminalDao terminalDaoBean;
 
+	@EJB
+	private MobileTerminalPluginDao mobileTerminalPluginDao;
+
     /*
 	@Test
     @OperateOnDeployment("normal")
@@ -71,12 +75,22 @@ public class MobileTerminalPollTimerServiceBeanIntTest extends TransactionalTest
 		
 	}
 	*/
-	
+	@EJB
+    TestPollHelper testPollHelper;
+
 	@Test
     @OperateOnDeployment("normal")
-	public void testTimerTimeout_pollProgramHasExpired() throws ParseException, PollDaoException {
+	public void testTimerTimeout_pollProgramHasNotExpired() throws ParseException, PollDaoException, ConfigDaoException, TerminalDaoException {
 
-		MobileTerminal mobileTerminal = helper_createMobileTerminal("test");
+		//MobileTerminal mobileTerminal = helper_createMobileTerminal("test");
+
+		String connectId = UUID.randomUUID().toString();
+		MobileTerminal mobileTerminal = testPollHelper.createMobileTerminal(connectId);
+
+
+		//List<MobileTerminalPlugin> plugs = mobileTerminalPluginDao.getPluginList();
+
+
 
 		String pollProgamGuid = UUID.randomUUID().toString();
 		String channelGuid = UUID.randomUUID().toString();
@@ -191,9 +205,18 @@ public class MobileTerminalPollTimerServiceBeanIntTest extends TransactionalTest
 	
 	@Test
     @OperateOnDeployment("normal")
-	public void testTimerTimeout_failPollProgramHasExpired() {
-		
-		
+	public void testTimerTimeout_failPollProgramHasExpired() throws ConfigDaoException, TerminalDaoException, ParseException {
+
+		String connectId = UUID.randomUUID().toString();
+		MobileTerminal mobileTerminal = testPollHelper.createMobileTerminal(connectId);
+
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy");
+
+		Date now = simpleDateFormat.parse("01/01/9999");
+		Date veryFarOut = DateUtils.getUTCNow();
+
+		pollTimerService.timerTimeout();
+
 		
 	}
 
