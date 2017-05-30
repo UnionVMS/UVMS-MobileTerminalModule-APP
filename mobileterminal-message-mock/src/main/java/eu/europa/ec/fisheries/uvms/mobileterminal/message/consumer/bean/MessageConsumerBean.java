@@ -17,6 +17,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
+import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
@@ -45,18 +46,7 @@ public class MessageConsumerBean implements MessageListener {
 
     final static Logger LOG = LoggerFactory.getLogger(MessageConsumerBean.class);
 
-    @Inject
-    @PingReceivedEvent
-    Event<EventMessage> pingReceivedEvent;
-
-    @Inject
-    @GetReceivedEvent
-    Event<EventMessage> getReceivedEvent;
-
-    @Inject
-    @ListReceivedEvent
-    Event<EventMessage> listReceivedEvent;
-
+ 
 
     @Inject
     @ErrorEvent
@@ -67,30 +57,11 @@ public class MessageConsumerBean implements MessageListener {
     public void onMessage(Message message) {
 
         TextMessage textMessage = (TextMessage) message;
-        LOG.info("Message received in mobileterminal");
-
         try {
-
-            MobileTerminalModuleBaseRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, MobileTerminalModuleBaseRequest.class);
-
-            switch (request.getMethod()) {
-                case GET_MOBILE_TERMINAL:
-                    getReceivedEvent.fire(new EventMessage(textMessage));
-                    break;
-                case LIST_MOBILE_TERMINALS:
-                    listReceivedEvent.fire(new EventMessage(textMessage));
-                    break;
-                case PING:
-                    pingReceivedEvent.fire(new EventMessage(textMessage));
-                    break;
-                default:
-                    LOG.error("[ Unsupported request: {} ]", request.getMethod());
-                    break;
-            }
-
-        } catch (NullPointerException | MobileTerminalUnmarshallException e) {
-            LOG.error("[ Error when receiving message in mobileterminal. ] {}", e.getMessage());
-            errorEvent.fire(new EventMessage(textMessage, "Error when receivning message in mobileterminal: " + e.getMessage()));
+            String txt = textMessage.getText();
+            LOG.info(txt);
+        } catch (JMSException e) {
+            LOG.error("onMessage: ", e);
         }
     }
 
