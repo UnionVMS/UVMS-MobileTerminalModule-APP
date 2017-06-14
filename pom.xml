@@ -16,7 +16,7 @@
 
     <properties>
     	<docker.dev.version>3.2.0</docker.dev.version>    	
-        <uvms.commons.version>2.0.17</uvms.commons.version>
+        <uvms.commons.version>2.0.20</uvms.commons.version>
         <mobileterminal.model.classifier>date</mobileterminal.model.classifier>
         <mobileterminal.model.version>3.0.7</mobileterminal.model.version>
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
