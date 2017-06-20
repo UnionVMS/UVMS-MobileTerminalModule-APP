@@ -14,6 +14,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto;
 import java.util.Objects;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
+import org.slf4j.MDC;
 
 /**
  ** @param <T>
@@ -22,6 +23,7 @@ public class ResponseDto<T> {
 
     private final T data;
     private final Integer code;
+    private String requestId = MDC.get("requestId");
 
     public ResponseDto(T data, ResponseCode code) {
         this.data = data;
@@ -40,6 +42,11 @@ public class ResponseDto<T> {
     public Integer getCode() {
         return code;
     }
+
+    public String getRequestId() {
+        return requestId ;
+    }
+
 
     @Override
     public int hashCode() {
