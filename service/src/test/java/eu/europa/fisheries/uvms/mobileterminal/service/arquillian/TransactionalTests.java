@@ -15,11 +15,12 @@ import org.junit.Before;
 
 public class TransactionalTests extends BuildMobileTerminalServiceDeployment {
 
-    @Inject
-    protected UserTransaction userTransaction;
-
     @PersistenceContext
     protected EntityManager em;
+
+
+    @Inject
+    protected UserTransaction userTransaction;
 
     @Before
     public void before() throws SystemException, NotSupportedException {

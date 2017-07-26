@@ -70,8 +70,12 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(ConfigServiceBean.class);
         testWar.addClass(MobileTerminalMessageException.class);
         testWar.addClass(MobileTerminalConfigHelper.class);
-
-
+//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.ParameterService.class);
+//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.ParameterServiceBean.class);
+//        testWar.addClass(eu.europa.ec.fisheries.schema.config.types.v1.SettingType.class);
+//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException.class);
+//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.model.exception.InputArgumentException.class);
+//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.entity.Parameter.class);
 
         // för Mapped PollServiceBean
         testWar.addClass(MappedPollService.class);
@@ -100,6 +104,8 @@ public abstract class BuildMobileTerminalServiceDeployment {
 
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
+
         testWar.addAsLibraries(files);
 
 

@@ -1,13 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
-  <persistence-unit name="mobileTerminal" transaction-type="JTA">
-    <provider>org.hibernate.ejb.HibernatePersistence</provider>
-    <jta-data-source>jdbc/uvms_mobterm</jta-data-source>
-    <exclude-unlisted-classes>false</exclude-unlisted-classes>
-    <properties>
-      <property name="hibernate.dialect" value="${hibernate.dialect}"/>
-      <property name="hibernate.show_sql" value="false"/>
-      <property name="hibernate.format_sql" value="false"/>
-    </properties>
-  </persistence-unit>
+    <persistence-unit name="mobileTerminal" transaction-type="JTA">
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <jta-data-source>jdbc/uvms_mobterm</jta-data-source>
+        
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.ChannelHistory</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent</class>
+     
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.inmarsatc.InmarsatCHistoryOceanRegion</class>
+        
+        
+        <class>eu.europa.ec.fisheries.uvms.config.service.entity.Parameter</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollBase</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollPayload</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram</class>
+        
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+      		<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
+        </properties>
+    </persistence-unit>
 </persistence>

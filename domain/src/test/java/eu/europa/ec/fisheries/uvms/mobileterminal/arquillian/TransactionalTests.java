@@ -19,7 +19,7 @@ public class TransactionalTests extends BuildMobileTerminalDeployment {
     @Inject
     protected UserTransaction userTransaction;
 
-    @PersistenceContext
+    @PersistenceContext(unitName = "mobileTerminalPU")
     protected EntityManager em;
 
     @Before
