@@ -20,7 +20,7 @@
         <mobileterminal.model.classifier>date</mobileterminal.model.classifier>
         <mobileterminal.model.version>3.0.7</mobileterminal.model.version>
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
-        <uvms.config.version>3.0.4</uvms.config.version>
+        <uvms.config.version>3.0.4.1-SNAPSHOT</uvms.config.version>
         <usm4uvms.version>3.0.4</usm4uvms.version>
         <audit.model.version>3.0.4</audit.model.version>
         <exchange.model.version>3.0.4</exchange.model.version>
