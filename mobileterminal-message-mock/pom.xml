@@ -42,7 +42,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms</groupId>
             <artifactId>uvms-commons</artifactId>
-            <version>${uvms.commons.version}</version>
+            <version>${uvms.common.version}</version>
         </dependency>
         <dependency>
             <groupId>fish.focus.uvms.maven</groupId>
