@@ -21,7 +21,7 @@
         <mobileterminal.model.version>3.0.7</mobileterminal.model.version>
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
         <uvms.config.version>3.0.4.1</uvms.config.version>
-        <usm4uvms.version>3.0.4</usm4uvms.version>
+        <usm4uvms.version>3.0.5</usm4uvms.version>
         <audit.model.version>3.0.4</audit.model.version>
         <exchange.model.version>3.0.4</exchange.model.version>
     </properties>
