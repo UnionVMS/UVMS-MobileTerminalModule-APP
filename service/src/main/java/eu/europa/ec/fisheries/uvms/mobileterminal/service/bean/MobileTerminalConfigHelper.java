@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 import eu.europa.ec.fisheries.uvms.config.constants.ConfigHelper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
@@ -22,6 +24,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
 
 @Stateless
 public class MobileTerminalConfigHelper implements ConfigHelper {
+
+    @PersistenceContext(unitName = ServiceConstants.MOBILE_TERMINAL_CONFIG_NAME)
+    protected EntityManager em;
 
     @Override
     public List<String> getAllParameterKeys() {
@@ -37,5 +42,10 @@ public class MobileTerminalConfigHelper implements ConfigHelper {
     public String getModuleName() {
         return ServiceConstants.MOBILE_TERMINAL_CONFIG_NAME;
     }
+    
+	@Override
+	public EntityManager getEntityManager() {
+		return em;
+	}
 
 }
