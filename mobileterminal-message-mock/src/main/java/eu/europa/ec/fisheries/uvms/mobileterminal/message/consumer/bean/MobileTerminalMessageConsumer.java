@@ -11,6 +11,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean;
 
+import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.Session;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.uvms.config.exception.ConfigMessageException;
@@ -21,72 +33,40 @@ import eu.europa.ec.fisheries.uvms.message.JMSUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
-import javax.jms.*;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
 
 @Stateless
 public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMessageConsumer {
 
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMessageConsumer.class);
 
-    private final static long TIMEOUT = 30000; //TODO timeout
-
     private ConnectionFactory connectionFactory;
 
     private Queue responseMobileTerminalQueue;
 
-    private Connection connection = null;
-    private Session session = null;
-
     @PostConstruct
     private void init() {
-        LOG.debug("Open connection to JMS broker");
-        InitialContext ctx;
-        try {
-            ctx = new InitialContext();
-        } catch (Exception e) {
-            LOG.error("Failed to get InitialContext",e);
-            throw new RuntimeException(e);
-        }
-        try {
-            connectionFactory = (QueueConnectionFactory) ctx.lookup(MessageConstants.CONNECTION_FACTORY);
-        } catch (NamingException ne) {
-            //if we did not find the connection factory we might need to add java:/ at the start
-            LOG.debug("Connection Factory lookup failed for " + MessageConstants.CONNECTION_FACTORY);
-            String wfName = "java:/" + MessageConstants.CONNECTION_FACTORY;
-            try {
-                LOG.debug("trying "+wfName);
-                connectionFactory = (QueueConnectionFactory) ctx.lookup(wfName);
-            } catch (Exception e) {
-                LOG.error("Connection Factory lookup failed for both "+MessageConstants.CONNECTION_FACTORY + " and " + wfName);
-                throw new RuntimeException(e);
-            }
-        }
-        responseMobileTerminalQueue = JMSUtils.lookupQueue(ctx, MessageConstants.COMPONENT_RESPONSE_QUEUE);
+        connectionFactory = JMSUtils.lookupConnectionFactory();
+        responseMobileTerminalQueue = JMSUtils.lookupQueue(MessageConstants.COMPONENT_RESPONSE_QUEUE);
     }
 
     @Override
     public <T> T getMessage(String correlationId, Class type) throws MobileTerminalMessageException {
 
         Message message = null;
+    	Connection connection=null;
+
         try {
-            connectToQueue();
+            connection = connectionFactory.createConnection();
+            final Session session = JMSUtils.connectToQueue(connection);
+            
             message = session.createTextMessage(createResponse());
             message.setJMSCorrelationID(correlationId);
             message.setJMSMessageID(correlationId);
 
-        } catch (JMSException   e) {
-            e.printStackTrace();
-        } catch (ExchangeModelMarshallException e) {
-            e.printStackTrace();
+        } catch (ExchangeModelMarshallException | JMSException   e) {
+        	LOG.warn("Problem getMessage",e);
         } finally{
-            disconnectQueue();
+        	JMSUtils.disconnectQueue(connection);
         }
 
         return (T) message;
@@ -102,13 +82,6 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
         return ExchangeModuleResponseMapper.mapSetCommandResponse(acknowledgeType);
     }
 
-
-    private void connectToQueue() throws JMSException {
-        connection = connectionFactory.createConnection();
-        session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-        connection.start();
-    }
-
     @Override
     public <T> T getConfigMessage(String correlationId, Class type) throws ConfigMessageException {
         try {
@@ -117,16 +90,6 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
         catch (MobileTerminalMessageException e) {
             LOG.error("[ Error when getting config message. ] {}", e.getMessage());
             throw new ConfigMessageException(e.getMessage());
-        }
-    }
-
-    private void disconnectQueue() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (JMSException e) {
-            LOG.error("[ Error when closing JMS connection ] {}", e.getMessage());
         }
     }
 
