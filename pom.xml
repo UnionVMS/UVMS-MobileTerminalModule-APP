@@ -109,6 +109,7 @@
     </build>
 
     <modules>
+    	<module>LIQUIBASE</module>            	
         <module>rest</module>
         <module>service</module>
         <module>message</module>
