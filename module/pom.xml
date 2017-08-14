@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    
+
     <modelVersion>4.0.0</modelVersion>
     <artifactId>mobileterminal-module</artifactId>
     <name>${project.parent.artifactId}-module</name>
@@ -11,7 +11,7 @@
         <artifactId>mobileterminal</artifactId>
         <version>3.0.12-SNAPSHOT</version>
     </parent>
-        
+
     <build>
         <finalName>${project.name}</finalName>
         <plugins>
@@ -22,15 +22,15 @@
                 <configuration>
                     <modules>
                         <ejbModule>
-                            <groupId>${project.groupId}</groupId>   
+                            <groupId>${project.groupId}</groupId>
                             <artifactId>mobileterminal-message</artifactId>
                         </ejbModule>
                         <ejbModule>
-                            <groupId>${project.groupId}</groupId>   
+                            <groupId>${project.groupId}</groupId>
                             <artifactId>mobileterminal-message-impl</artifactId>
-                        </ejbModule>                       
+                        </ejbModule>
                         <ejbModule>
-                            <groupId>${project.groupId}</groupId>  
+                            <groupId>${project.groupId}</groupId>
                             <artifactId>mobileterminal-service</artifactId>
                         </ejbModule>
                         <jarModule>
@@ -40,13 +40,12 @@
                         </jarModule>
                         <webModule>
                             <groupId>${project.groupId}</groupId>
-                            <context-root>${project.parent.artifactId}</context-root>  
+                            <context-root>${project.parent.artifactId}</context-root>
                             <artifactId>mobileterminal-rest</artifactId>
                         </webModule>
                     </modules>
                     <skinnyWars>true</skinnyWars>
                     <defaultLibBundleDir>APP-INF/lib</defaultLibBundleDir>
-                    <version>7</version>
                 </configuration>
             </plugin>
         </plugins>
@@ -54,19 +53,19 @@
 
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>     
+            <groupId>${project.groupId}</groupId>
             <artifactId>mobileterminal-message</artifactId>
             <version>${project.version}</version>
             <type>ejb</type>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>     
+            <groupId>${project.groupId}</groupId>
             <artifactId>mobileterminal-message-impl</artifactId>
             <version>${project.version}</version>
             <type>ejb</type>
-        </dependency>        
+        </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>  
+            <groupId>${project.groupId}</groupId>
             <artifactId>mobileterminal-service</artifactId>
             <version>${project.version}</version>
             <type>ejb</type>
@@ -79,7 +78,7 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>  
+            <groupId>${project.groupId}</groupId>
             <artifactId>mobileterminal-rest</artifactId>
             <version>${project.version}</version>
             <type>war</type>
@@ -99,15 +98,15 @@
 			<artifactId>uvms-pom-arquillian-deps</artifactId>
 			<type>pom</type>
 			<scope>test</scope>
-		</dependency>				        
-        
+		</dependency>
+
     </dependencies>
-    
+
     <profiles>
         <profile>
             <id>wildfly-deploy</id>
             <build>
-                <plugins>	
+                <plugins>
                     <plugin>
                         <groupId>org.wildfly.plugins</groupId>
                         <artifactId>wildfly-maven-plugin</artifactId>
