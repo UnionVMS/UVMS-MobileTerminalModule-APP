@@ -15,7 +15,7 @@
 	</parent>
 
     <properties>
-    	<docker.dev.version>3.4.0</docker.dev.version>
+    	<docker.dev.version>3.6.0</docker.dev.version>
         <mobileterminal.model.classifier>date</mobileterminal.model.classifier>
         <mobileterminal.model.version>3.0.7</mobileterminal.model.version>
 		<usm4uvms.version>3.0.5</usm4uvms.version>
