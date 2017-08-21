@@ -48,6 +48,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 
 	@PostConstruct
 	public void init() {
+    	connectionFactory = JMSUtils.lookupConnectionFactory();
 		responseQueue = JMSUtils.lookupQueue(MessageConstants.COMPONENT_RESPONSE_QUEUE);
 		auditQueue = JMSUtils.lookupQueue(MessageConstants.AUDIT_MODULE_QUEUE);
 		exchangeQueue = JMSUtils.lookupQueue(MessageConstants.EXCHANGE_MODULE_QUEUE);
