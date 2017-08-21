@@ -12,8 +12,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
 import javax.jms.DeliveryMode;
 import javax.jms.Destination;
 import javax.jms.JMSException;
@@ -37,89 +38,96 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProduc
 @Stateless
 public class MessageProducerBean implements MessageProducer, ConfigMessageProducer {
 
-    private Queue responseQueue;
-    private Queue auditQueue;
-    private Queue exchangeQueue;
-    private Queue configQueue;
+	private Queue responseQueue;
+	private Queue auditQueue;
+	private Queue exchangeQueue;
+	private Queue configQueue;
+	private ConnectionFactory connectionFactory;
 
-    final static Logger LOG = LoggerFactory.getLogger(MessageProducerBean.class);
+	final static Logger LOG = LoggerFactory.getLogger(MessageProducerBean.class);
 
-    @EJB
-    JMSConnectorBean connector;
-
-    @PostConstruct
-    public void init() {
-        responseQueue = JMSUtils.lookupQueue(MessageConstants.COMPONENT_RESPONSE_QUEUE);
-        auditQueue = JMSUtils.lookupQueue(MessageConstants.AUDIT_MODULE_QUEUE);
-        exchangeQueue = JMSUtils.lookupQueue(MessageConstants.EXCHANGE_MODULE_QUEUE);
-        configQueue = JMSUtils.lookupQueue(ConfigConstants.CONFIG_MESSAGE_IN_QUEUE);
-    }
-
-    @Override
-    public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
-        try {
-            Session session = connector.getNewSession();
-
-            TextMessage message = session.createTextMessage();
-            message.setJMSReplyTo(responseQueue);
-            message.setText(text);
-
-            switch (queue) {
-            case INTEGRATION:
-                break;
-            }
-
-            return message.getJMSMessageID();
-        } catch (Exception e) {
-            LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
-            throw new MobileTerminalMessageException(e.getMessage());
-        }
-    }
-
-    @Override
-    public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
-        try {
-            Session session = connector.getNewSession();
-
-            TextMessage message = session.createTextMessage();
-            message.setJMSReplyTo(responseQueue);
-            message.setText(text);
-
-            switch (queue) {
-            case AUDIT:
-                getProducer(session, auditQueue).send(message);
-                break;
-            case EXCHANGE:
-                getProducer(session, exchangeQueue).send(message);
-                break;
-            case CONFIG:
-                getProducer(session, configQueue).send(message);
-            	break;
-            default:
-                break;
-            }
-
-            return message.getJMSMessageID();
-        } catch (Exception e) {
-            LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
-            throw new MobileTerminalMessageException(e.getMessage());
-        }
-    }
+	@PostConstruct
+	public void init() {
+		responseQueue = JMSUtils.lookupQueue(MessageConstants.COMPONENT_RESPONSE_QUEUE);
+		auditQueue = JMSUtils.lookupQueue(MessageConstants.AUDIT_MODULE_QUEUE);
+		exchangeQueue = JMSUtils.lookupQueue(MessageConstants.EXCHANGE_MODULE_QUEUE);
+		configQueue = JMSUtils.lookupQueue(ConfigConstants.CONFIG_MESSAGE_IN_QUEUE);
+	}
 
 	@Override
-    public String sendConfigMessage(String text) throws ConfigMessageException {
-        try {
-            return sendModuleMessage(text, ModuleQueue.CONFIG);
-        } catch (MobileTerminalMessageException e) {
-            LOG.error("[ Error when sending config message. ] {}", e.getMessage());
-            throw new ConfigMessageException(e.getMessage());
-        }
-    }
+	public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
 
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        producer.setTimeToLive(60000L);
-        return producer;
-    }
+		Connection connection = null;
+		try {
+			connection = connectionFactory.createConnection();
+			final Session session = JMSUtils.connectToQueue(connection);
+
+			TextMessage message = session.createTextMessage();
+			message.setJMSReplyTo(responseQueue);
+			message.setText(text);
+
+			switch (queue) {
+			case INTEGRATION:
+				break;
+			}
+
+			return message.getJMSMessageID();
+		} catch (Exception e) {
+			LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
+			throw new MobileTerminalMessageException(e.getMessage());
+		} finally {
+			JMSUtils.disconnectQueue(connection);
+		}
+	}
+
+	@Override
+	public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
+		Connection connection = null;
+		try {
+			connection = connectionFactory.createConnection();
+			final Session session = JMSUtils.connectToQueue(connection);
+
+			TextMessage message = session.createTextMessage();
+			message.setJMSReplyTo(responseQueue);
+			message.setText(text);
+
+			switch (queue) {
+			case AUDIT:
+				getProducer(session, auditQueue).send(message);
+				break;
+			case EXCHANGE:
+				getProducer(session, exchangeQueue).send(message);
+				break;
+			case CONFIG:
+				getProducer(session, configQueue).send(message);
+				break;
+			default:
+				break;
+			}
+
+			return message.getJMSMessageID();
+		} catch (Exception e) {
+			LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
+			throw new MobileTerminalMessageException(e.getMessage());
+		} finally {
+			JMSUtils.disconnectQueue(connection);
+		}
+	}
+
+	@Override
+	public String sendConfigMessage(String text) throws ConfigMessageException {
+		try {
+			return sendModuleMessage(text, ModuleQueue.CONFIG);
+		} catch (MobileTerminalMessageException e) {
+			LOG.error("[ Error when sending config message. ] {}", e.getMessage());
+			throw new ConfigMessageException(e.getMessage());
+		}
+	}
+
+	private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
+		javax.jms.MessageProducer producer = session.createProducer(destination);
+		producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+		producer.setTimeToLive(60000L);
+		return producer;
+	}
 }
