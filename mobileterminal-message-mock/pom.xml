@@ -7,7 +7,7 @@
     <parent>
         <artifactId>mobileterminal</artifactId>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-        <version>3.0.14</version>
+        <version>3.0.15-SNAPSHOT</version>
     </parent>
 
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-message</artifactId>
-            <version>3.0.14</version>
+            <version>3.0.15-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-dbaccess-domain</artifactId>
-            <version>3.0.14</version>
+            <version>3.0.15-SNAPSHOT</version>
         </dependency>
         <!--dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
