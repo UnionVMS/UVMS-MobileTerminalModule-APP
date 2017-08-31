@@ -66,8 +66,6 @@ public class MobileTerminalDomainModelBean  {
     }
     
     public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, String username) throws MobileTerminalModelException {
-        LOG.info("Create mobileterminal.");
-
         try {
             assertTerminalNotExists(mobileTerminal);
             String serialNumber = assertTerminalHasNeededData(mobileTerminal);
@@ -127,8 +125,6 @@ public class MobileTerminalDomainModelBean  {
     }
 
     public MobileTerminalType getMobileTerminalById(MobileTerminalId id) throws MobileTerminalModelException {
-        LOG.info("Get mobileterminal");
-
         if (id == null) {
             throw new InputArgumentException("No id to fetch");
         }
@@ -138,8 +134,6 @@ public class MobileTerminalDomainModelBean  {
     }
     
     public MobileTerminalType updateMobileTerminal(MobileTerminalType model, String comment, String username) throws MobileTerminalModelException {
-        LOG.info("Update mobileterminal");
-
         if (model == null) {
             throw new InputArgumentException("No terminal to update");
         }
@@ -174,7 +168,6 @@ public class MobileTerminalDomainModelBean  {
     }
 
     public MobileTerminalType assignMobileTerminalToCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
-        LOG.info("Assign mobile terminal to carrier");
         if (query == null) {
             throw new InputArgumentException("RequestQuery is null");
         }
@@ -215,7 +208,6 @@ public class MobileTerminalDomainModelBean  {
     }
 
     public MobileTerminalType unAssignMobileTerminalFromCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
-        LOG.info("Unassign mobile terminal to carrier");
         if (query == null) {
             throw new InputArgumentException("RequestQuery is null");
         }
@@ -278,8 +270,6 @@ public class MobileTerminalDomainModelBean  {
     }
 
     public MobileTerminalType setStatusMobileTerminal(MobileTerminalId id, String comment, MobileTerminalStatus status, String username) throws MobileTerminalModelException {
-        LOG.info("Setting mobile terminal status.");
-
         if (id == null) {
             throw new InputArgumentException("No Mobile Terminal");
         }
@@ -328,7 +318,6 @@ public class MobileTerminalDomainModelBean  {
     }
 
     public MobileTerminalHistory getMobileTerminalHistoryList(MobileTerminalId id) throws MobileTerminalModelException {
-        LOG.info("Mobile terminal history.");
         if (id == null) {
             throw new InputArgumentException("No Mobile Terminal");
         }
@@ -339,8 +328,6 @@ public class MobileTerminalDomainModelBean  {
     }
 
     public ListResponseDto getTerminalListByQuery(MobileTerminalListQuery query) throws MobileTerminalModelException {
-        LOG.info("Get list of InmarsatC terminal from query.");
-
         if (query == null) {
             throw new InputArgumentException("No list query");
         }

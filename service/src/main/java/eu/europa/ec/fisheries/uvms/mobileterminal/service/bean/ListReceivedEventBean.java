@@ -40,7 +40,7 @@ public class ListReceivedEventBean {
     Event<EventMessage> errorEvent;
 
     public void list(EventMessage message) {
-        LOG.info("List Mobile terminals");
+        LOG.info("List Mobile terminals:{}",message);
         try {
             MobileTerminalListRequest request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), MobileTerminalListRequest.class);
 

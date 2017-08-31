@@ -100,8 +100,6 @@ public class PollDomainModelBean  {
     }
     
     public List<PollResponseType> createPolls(PollRequestType pollRequest, String username) throws MobileTerminalModelException {
-        LOG.info("Create polls.");
-
         if (pollRequest == null || pollRequest.getPollType() == null) {
             throw new InputArgumentException("No polls to create");
         }
@@ -240,8 +238,6 @@ public class PollDomainModelBean  {
     }
 
     public PollListResponse getPollList(PollListQuery query) throws MobileTerminalModelException {
-        LOG.info("Get poll list from query");
-
         if (query == null) {
         	throw new InputArgumentException("Cannot get poll list because no query.");
         }
@@ -290,7 +286,6 @@ public class PollDomainModelBean  {
     }
     
     public List<PollResponseType> getPollProgramList(boolean onlyAlivePrograms) throws MobileTerminalModelException {
-        LOG.info("Get poll program list");
         List<PollProgram> pollPrograms = pollProgramDao.getProgramPollsAlive();
         
         List<PollResponseType> responseList = new ArrayList<>();
@@ -308,7 +303,6 @@ public class PollDomainModelBean  {
     }
 
     public List<PollResponseType> getPollProgramRunningAndStarted() throws MobileTerminalModelException {
-        LOG.info("Get running and started poll program list");
         List<PollProgram> pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
 
         List<PollResponseType> responseList = new ArrayList<>();
@@ -326,8 +320,6 @@ public class PollDomainModelBean  {
     }
 
     public PollResponseType setStatusPollProgram(PollId id, PollStatus state) throws MobileTerminalModelException {
-        LOG.info("Set status of poll");
-
         if (id == null || id.getGuid() == null || id.getGuid().isEmpty()) {
             throw new InputArgumentException("No poll id given");
         }
@@ -363,8 +355,6 @@ public class PollDomainModelBean  {
     }
 
     public ListResponseDto getMobileTerminalPollableList(PollableQuery query) throws MobileTerminalModelException {
-        LOG.info("Get list of pollable InmarsatC terminals.");
-
         if (query == null) {
             throw new InputArgumentException("No query");
         }

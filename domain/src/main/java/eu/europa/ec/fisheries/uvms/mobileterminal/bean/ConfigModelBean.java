@@ -63,8 +63,6 @@ public class ConfigModelBean  {
 	ChannelDao channelDao;
     
     public List<TerminalSystemType> getAllTerminalSystems() throws MobileTerminalModelException {
-        LOG.info("Get all terminal systems");
-
         Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> pluginsByType = getPlugins();
 		List<TerminalSystemType> terminalSystemList = new ArrayList<>();
 
@@ -89,7 +87,6 @@ public class ConfigModelBean  {
     }
 
 	public List<ConfigList> getConfigValues() throws MobileTerminalModelException {
-		LOG.info("Get config list values");
 		List<ConfigList> configValues = new ArrayList<>();
 		for(MobileTerminalConfigType config : MobileTerminalConfigType.values()) {
 			ConfigList list = new ConfigList();
@@ -152,7 +149,6 @@ public class ConfigModelBean  {
 	}
 	
 	public List<Plugin> upsertPlugins(List<PluginService> pluginList) throws MobileTerminalModelException {
-		LOG.debug("Start upsert plugin list");
 		if(pluginList == null) {
 			throw new InputArgumentException("No pluginList to upsert");
 		}
@@ -282,7 +278,7 @@ public class ConfigModelBean  {
 				return true;
 			}
 		} catch (ConfigDaoException e) {
-			LOG.error("Couldn't use DNID List");
+			LOG.error("Couldn't use DNID List {} {}",pluginName,e);
 		}
 		return false;
 	}

@@ -121,9 +121,9 @@ public class PluginServiceBean implements PluginService {
             String request = ExchangeModuleRequestMapper.createUpdatePluginSettingRequest(pluginName, settingKey, settingValue);
             String messageId = messageProducer.sendModuleMessage(request, ModuleQueue.EXCHANGE);
             TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-            LOG.info("UpdatedDNIDList sent to exchange module");
+            LOG.info("UpdatedDNIDList sent to exchange module {} {}",pluginName,settingKey);
         } catch (ExchangeModelMarshallException | MobileTerminalMessageException e) {
-            LOG.error("Failed to send updated DNID list");
+            LOG.error("Failed to send updated DNID list {} {} {}",pluginName,settingKey,e);
         }
     }
 

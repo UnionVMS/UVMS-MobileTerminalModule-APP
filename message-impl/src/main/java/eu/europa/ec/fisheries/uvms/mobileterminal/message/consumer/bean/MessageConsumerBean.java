@@ -59,7 +59,7 @@ public class MessageConsumerBean implements MessageListener {
     public void onMessage(Message message) {
         
         TextMessage textMessage = (TextMessage) message;
-        LOG.info("Message received in mobileterminal");
+        LOG.info("Message received in mobileterminal:{}",message);
         
         try {
             
