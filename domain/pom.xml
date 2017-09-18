@@ -26,7 +26,6 @@
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-model</artifactId>
             <version>${project.version}</version>
-            <classifier>${mobileterminal.model.classifier}</classifier>
             <type>jar</type>
         </dependency>
         <dependency>
