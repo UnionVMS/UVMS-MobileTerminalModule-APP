@@ -70,7 +70,7 @@ public class OceanRegion implements Serializable {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -78,7 +78,7 @@ public class OceanRegion implements Serializable {
         return this.code;
     }
 
-    public void setCode(Integer code) {
+    public void setCode(final Integer code) {
         this.code = code;
     }
 
@@ -86,7 +86,7 @@ public class OceanRegion implements Serializable {
         return this.description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -94,7 +94,7 @@ public class OceanRegion implements Serializable {
         return this.updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -102,7 +102,7 @@ public class OceanRegion implements Serializable {
         return this.updatedBy;
     }
 
-    public void setUpdateUser(String user) {
+    public void setUpdateUser(final String user) {
         this.updatedBy = user;
     }
 
@@ -110,7 +110,7 @@ public class OceanRegion implements Serializable {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 

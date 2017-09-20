@@ -25,32 +25,32 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttri
  */
 public class AttributeMapper {
 
-    public static List<Map<String, String>> mapAttributeStrings(List<String> attributeStrings) {
-        List<Map<String, String>> attributes = new ArrayList<>();
-        for (String attributeString : attributeStrings) {
+    public static List<Map<String, String>> mapAttributeStrings(final List<String> attributeStrings) {
+        final List<Map<String, String>> attributes = new ArrayList<>();
+        for (final String attributeString : attributeStrings) {
             attributes.add(mapAttributeString(attributeString));
         }
 
         return attributes;
     }
 
-    public static Map<String, String> mapAttributeString(String attributeString) {
-        Map<String, String> attributes = new HashMap<>();
+    public static Map<String, String> mapAttributeString(final String attributeString) {
+        final Map<String, String> attributes = new HashMap<>();
 
-        String[] parts = attributeString.split(";");
-        for (String attribute : parts) {
-            String[] pair =attribute.split("=");
+        final String[] parts = attributeString.split(";");
+        for (final String attribute : parts) {
+            final String[] pair =attribute.split("=");
             attributes.put(pair[0], pair[1]);
         }
 
         return attributes;
     }
 
-    public static List<ComChannelAttribute> mapAttributeStringToComChannelAttribute(String attributeString) {
-        List<ComChannelAttribute> attributeList = new ArrayList<>();
-        Map<String, String> attributes = mapAttributeString(attributeString);
-        for (String key : attributes.keySet()) {
-            ComChannelAttribute attribute = new ComChannelAttribute();
+    public static List<ComChannelAttribute> mapAttributeStringToComChannelAttribute(final String attributeString) {
+        final List<ComChannelAttribute> attributeList = new ArrayList<>();
+        final Map<String, String> attributes = mapAttributeString(attributeString);
+        for (final String key : attributes.keySet()) {
+            final ComChannelAttribute attribute = new ComChannelAttribute();
             attribute.setType(key);
             attribute.setValue(attributes.get(key));
             attributeList.add(attribute);
@@ -59,11 +59,11 @@ public class AttributeMapper {
         return attributeList;
     }
 
-    public static List<MobileTerminalAttribute> mapAttributeStringToTerminalAttribute(String attributeString) {
-        List<MobileTerminalAttribute> attributeList = new ArrayList<>();
-        Map<String, String> attributes = mapAttributeString(attributeString);
-        for (String key : attributes.keySet()) {
-            MobileTerminalAttribute attribute = new MobileTerminalAttribute();
+    public static List<MobileTerminalAttribute> mapAttributeStringToTerminalAttribute(final String attributeString) {
+        final List<MobileTerminalAttribute> attributeList = new ArrayList<>();
+        final Map<String, String> attributes = mapAttributeString(attributeString);
+        for (final String key : attributes.keySet()) {
+            final MobileTerminalAttribute attribute = new MobileTerminalAttribute();
             attribute.setType(key);
             attribute.setValue(attributes.get(key));
             attributeList.add(attribute);

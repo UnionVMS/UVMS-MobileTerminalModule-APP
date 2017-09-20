@@ -64,33 +64,33 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         // we want to be able totamper with the dates for proper testcoverage
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
+        final Date startDate = cal.getTime();
 
 
         cal.set(Calendar.DAY_OF_MONTH, 20);
         cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
+        final Date latestRun = cal.getTime();
 
 
         cal.set(Calendar.DAY_OF_MONTH, 28);
         cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        final Date stopDate = cal.getTime();
 
 
-        String mobileTerminalSerialNumber = createSerialNumber();
-        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
+        final String mobileTerminalSerialNumber = createSerialNumber();
+        final PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
         try {
             pollProgramDao.createPollProgram(pollProgram);
-            String guid = pollProgram.getGuid();
-            PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
+            final String guid = pollProgram.getGuid();
+            final PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
 
 //@formatter:off
-            boolean ok = ((fetchedPollProgram != null) &&
+            final boolean ok = ((fetchedPollProgram != null) &&
                     (fetchedPollProgram.getGuid() != null) &&
                     (fetchedPollProgram.getGuid().equals(guid)));
 // @formatter:on
             Assert.assertTrue(ok);
-        } catch (PollDaoException e) {
+        } catch (final PollDaoException e) {
             Assert.fail();
         }
     }
@@ -102,36 +102,36 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         // we want to be able to tamper with the dates for proper testcoverage
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
+        final Date startDate = cal.getTime();
 
 
         cal.set(Calendar.DAY_OF_MONTH, 20);
         cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
+        final Date latestRun = cal.getTime();
 
 
         cal.set(Calendar.DAY_OF_MONTH, 28);
         cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        final Date stopDate = cal.getTime();
 
-        String mobileTerminalSerialNumber = createSerialNumber();
-        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
+        final String mobileTerminalSerialNumber = createSerialNumber();
+        final PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
         try {
             pollProgramDao.createPollProgram(pollProgram);
             em.flush();
 
             // change the GUID
-            String guid = UUID.randomUUID().toString();
+            final String guid = UUID.randomUUID().toString();
             pollProgram.setGuid(guid);
             pollProgram.setUpdatedBy("update");
             // store
             pollProgramDao.updatePollProgram(pollProgram);
             em.flush();
 
-            PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
+            final PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
 
 // @formatter:off
-            boolean ok = ((fetchedPollProgram != null) &&
+            final boolean ok = ((fetchedPollProgram != null) &&
                     (fetchedPollProgram.getGuid() != null) &&
                     (fetchedPollProgram.getGuid().equals(guid)) &&
                     (fetchedPollProgram.getUpdatedBy() != null) &&
@@ -140,7 +140,7 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
             Assert.assertTrue(ok);
 
 
-        } catch (PollDaoException e) {
+        } catch (final PollDaoException e) {
             e.printStackTrace();
             Assert.fail();
         }
@@ -153,35 +153,35 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         // we want to be able to tamper with the dates for proper testcoverage
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
+        final Date startDate = cal.getTime();
 
 
         cal.set(Calendar.DAY_OF_MONTH, 20);
         cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
+        final Date latestRun = cal.getTime();
 
 
         cal.set(Calendar.DAY_OF_MONTH, 28);
         cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        final Date stopDate = cal.getTime();
 
-        String mobileTerminalSerialNumber = createSerialNumber();
-        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
+        final String mobileTerminalSerialNumber = createSerialNumber();
+        final PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
 
         try {
             pollProgramDao.createPollProgram(pollProgram);
             em.flush();
-            List<PollProgram> rs = pollProgramDao.getProgramPollsAlive();
+            final List<PollProgram> rs = pollProgramDao.getProgramPollsAlive();
             boolean found = false;
-            for (PollProgram pp : rs) {
-                String tmpGuid = pp.getGuid();
+            for (final PollProgram pp : rs) {
+                final String tmpGuid = pp.getGuid();
                 if (tmpGuid.equals(pollProgram.getGuid())) {
                     found = true;
                     break;
                 }
             }
             Assert.assertTrue(found);
-        } catch (PollDaoException e) {
+        } catch (final PollDaoException e) {
             e.printStackTrace();
             Assert.fail();
         }
@@ -191,37 +191,37 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void getPollProgramRunningAndStarted() {
 
-        Date now = DateUtils.getUTCNow();
+        final Date now = DateUtils.getUTCNow();
         cal.setTime(now);
 
         // we want to be able to tamper with the dates for proper testcoverage
         cal.set(Calendar.DAY_OF_MONTH, 1);
         cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
+        final Date startDate = cal.getTime();
 
 
         cal.set(Calendar.DAY_OF_MONTH, 20);
         cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
+        final Date latestRun = cal.getTime();
 
 
         cal.set(Calendar.DAY_OF_MONTH, 28);
         cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        final Date stopDate = cal.getTime();
 
-        String mobileTerminalSerialNumber = createSerialNumber();
-        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
+        final String mobileTerminalSerialNumber = createSerialNumber();
+        final PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
 
         try {
             pollProgramDao.createPollProgram(pollProgram);
             em.flush();
 
 
-            boolean useInlineQuery = true;
+            final boolean useInlineQuery = true;
             List<PollProgram> rs = null;
             if (useInlineQuery) {
                 // this works  OBS nessesserary since date formatting is unclear
-                Query qry = em.createQuery("SELECT p FROM PollProgram p  WHERE p.startDate < :prm AND  p.pollState = eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum.STARTED");
+                final Query qry = em.createQuery("SELECT p FROM PollProgram p  WHERE p.startDate < :prm AND  p.pollState = eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum.STARTED");
                 qry.setParameter("prm", now);
                 rs = qry.getResultList();
 
@@ -231,8 +231,8 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
             }
 
             boolean found = false;
-            for (PollProgram pp : rs) {
-                String tmpGuid = pp.getGuid();
+            for (final PollProgram pp : rs) {
+                final String tmpGuid = pp.getGuid();
                 if (tmpGuid.equals(pollProgram.getGuid())) {
                     found = true;
                     break;
@@ -240,7 +240,7 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
             }
             Assert.assertTrue(found);
             Assert.assertTrue(rs.size() > 0);
-        } catch (PollDaoException e) {
+        } catch (final PollDaoException e) {
             e.printStackTrace();
             Assert.fail();
         }
@@ -256,15 +256,15 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     }
 
 
-    private PollProgram createPollProgramHelper(String mobileTerminalSerialNo, Date startDate, Date stopDate, Date latestRun) {
+    private PollProgram createPollProgramHelper(final String mobileTerminalSerialNo, final Date startDate, final Date stopDate, final Date latestRun) {
 
-        PollProgram pp = new PollProgram();
+        final PollProgram pp = new PollProgram();
         // create a valid mobileTerminal
-        MobileTerminal mobileTerminal = createMobileTerminalHelper(mobileTerminalSerialNo);
+        final MobileTerminal mobileTerminal = createMobileTerminalHelper(mobileTerminalSerialNo);
 
-        PollBase pb = new PollBase();
-        String channelGuid = UUID.randomUUID().toString();
-        String terminalConnect = UUID.randomUUID().toString();
+        final PollBase pb = new PollBase();
+        final String channelGuid = UUID.randomUUID().toString();
+        final String terminalConnect = UUID.randomUUID().toString();
         pb.setChannelGuid(channelGuid);
         pb.setMobileTerminal(mobileTerminal);
         pb.setTerminalConnect(terminalConnect);
@@ -281,16 +281,16 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     }
 
 
-    private MobileTerminal createMobileTerminalHelper(String serialNo) {
+    private MobileTerminal createMobileTerminalHelper(final String serialNo) {
 
-        MobileTerminal mt = new MobileTerminal();
+        final MobileTerminal mt = new MobileTerminal();
 
         MobileTerminalPlugin mtp = null;
 
         List<MobileTerminalPlugin> plugs = null;
         try {
             plugs = testDaoBean.getPluginList();
-        } catch (ConfigDaoException e) {
+        } catch (final ConfigDaoException e) {
             e.printStackTrace();
         }
 
@@ -309,7 +309,7 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         try {
             terminalDaoBean.createMobileTerminal(mt);
             return mt;
-        } catch (TerminalDaoException e) {
+        } catch (final TerminalDaoException e) {
             e.printStackTrace();
             return null;
         }

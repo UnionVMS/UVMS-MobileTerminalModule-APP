@@ -22,7 +22,7 @@ public class ExchangeModuleResponseMapper {
 
 	private static Logger LOG = LoggerFactory.getLogger(ExchangeModuleResponseMapper.class);
 	
-    public static void validateResponse(TextMessage response, String correlationId) throws JMSException, ExchangeValidationException {
+    public static void validateResponse(final TextMessage response, final String correlationId) throws JMSException, ExchangeValidationException {
 
         if (response == null) {
             throw new ExchangeValidationException("Error when validating response in ResponseMapper: Response is Null");
@@ -38,71 +38,71 @@ public class ExchangeModuleResponseMapper {
         }
 
         try {
-			ExchangeFault fault = JAXBMarshaller.unmarshallTextMessage(response, ExchangeFault.class);
+			final ExchangeFault fault = JAXBMarshaller.unmarshallTextMessage(response, ExchangeFault.class);
 	        //TODO use fault
 			throw new ExchangeValidationException(fault.getCode() + " - " + fault.getMessage());
-		} catch (ExchangeModelMarshallException e) {
+		} catch (final ExchangeModelMarshallException e) {
 			//everything went well
 		}        
     }
 
     public static AcknowledgeType mapAcknowledgeTypeOK() {
-    	AcknowledgeType ackType = new AcknowledgeType();
+    	final AcknowledgeType ackType = new AcknowledgeType();
     	ackType.setType(AcknowledgeTypeType.OK);
     	return ackType;
     }
     
-    public static AcknowledgeType mapAcknowledgeTypeOK(String messageId, String message) {
-        AcknowledgeType ackType = new AcknowledgeType();
+    public static AcknowledgeType mapAcknowledgeTypeOK(final String messageId, final String message) {
+        final AcknowledgeType ackType = new AcknowledgeType();
         ackType.setType(AcknowledgeTypeType.OK);
         ackType.setMessage(message);
         ackType.setMessageId(messageId);
         return ackType;
     }
 
-    public static AcknowledgeType mapAcknowledgeTypeNOK(String messageId, String errorMessage) {
-    	AcknowledgeType ackType = new AcknowledgeType();
+    public static AcknowledgeType mapAcknowledgeTypeNOK(final String messageId, final String errorMessage) {
+    	final AcknowledgeType ackType = new AcknowledgeType();
     	ackType.setMessage(errorMessage);
     	ackType.setMessageId(messageId);
     	ackType.setType(AcknowledgeTypeType.NOK);
     	return ackType;
     }
     
-    public static String mapSetCommandResponse(AcknowledgeType ackType) throws ExchangeModelMarshallException {
-        SetCommandResponse response = new SetCommandResponse();
+    public static String mapSetCommandResponse(final AcknowledgeType ackType) throws ExchangeModelMarshallException {
+        final SetCommandResponse response = new SetCommandResponse();
         response.setResponse(ackType);
         return JAXBMarshaller.marshallJaxBObjectToString(response);
     }
     
-    public static String mapSendMovementToPluginResponse(AcknowledgeType ackType) throws ExchangeModelMarshallException {
-    	SendMovementToPluginResponse response = new SendMovementToPluginResponse();
+    public static String mapSendMovementToPluginResponse(final AcknowledgeType ackType) throws ExchangeModelMarshallException {
+    	final SendMovementToPluginResponse response = new SendMovementToPluginResponse();
     	response.setResponse(ackType);
     	return JAXBMarshaller.marshallJaxBObjectToString(response);
 	}
     
-    public static String mapUpdateSettingResponse(AcknowledgeType ackType) throws ExchangeModelMarshallException {
-    	UpdatePluginSettingResponse response = new UpdatePluginSettingResponse();
+    public static String mapUpdateSettingResponse(final AcknowledgeType ackType) throws ExchangeModelMarshallException {
+    	final UpdatePluginSettingResponse response = new UpdatePluginSettingResponse();
     	response.setResponse(ackType);
     	return JAXBMarshaller.marshallJaxBObjectToString(response);
     }
     
-    public static ExchangeFault createFaultMessage(FaultCode code, String message) {
-    	ExchangeFault fault = new ExchangeFault();
+    public static ExchangeFault createFaultMessage(final FaultCode code, final String message) {
+    	final ExchangeFault fault = new ExchangeFault();
     	fault.setCode(code.getCode());
     	fault.setMessage(message);
     	return fault;
     }
 
-	public static String mapServiceListResponse(List<ServiceResponseType> serviceList) throws ExchangeModelMarshallException {
-		GetServiceListResponse response = new GetServiceListResponse();
+	public static String mapServiceListResponse(final List<ServiceResponseType> serviceList) throws ExchangeModelMarshallException {
+		final GetServiceListResponse response = new GetServiceListResponse();
 		response.getService().addAll(serviceList);
 		return JAXBMarshaller.marshallJaxBObjectToString(response);
 	}
 	
-	public static List<ServiceResponseType> mapServiceListResponse(TextMessage response, String correlationId) throws ExchangeModelMapperException {
+	public static List<ServiceResponseType> mapServiceListResponse(final TextMessage response, final String correlationId) throws ExchangeModelMapperException {
 		try {
 			validateResponse(response, correlationId);
-			GetServiceListResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, GetServiceListResponse.class);
+			final GetServiceListResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, GetServiceListResponse.class);
 			return unmarshalledResponse.getService();
 		} catch(JMSException | ExchangeValidationException e) {
 			LOG.error("[ Error when mapping response to service types ]");
@@ -110,10 +110,10 @@ public class ExchangeModuleResponseMapper {
 		}
 	}
 
-	public static AcknowledgeType mapSetCommandResponse(TextMessage response, String correlationId) throws ExchangeModelMapperException {
+	public static AcknowledgeType mapSetCommandResponse(final TextMessage response, final String correlationId) throws ExchangeModelMapperException {
 		try {
 			validateResponse(response, correlationId);
-			SetCommandResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, SetCommandResponse.class);
+			final SetCommandResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, SetCommandResponse.class);
 			return unmarshalledResponse.getResponse();
 			//TODO handle ExchangeValidationException - extract fault...
 		} catch(JMSException | ExchangeModelMarshallException e) {

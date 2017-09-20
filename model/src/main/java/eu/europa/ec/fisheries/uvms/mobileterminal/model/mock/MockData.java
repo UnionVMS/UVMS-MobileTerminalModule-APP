@@ -11,7 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.mock;
 
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -31,7 +30,6 @@ import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.EventCode;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalHistory;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
@@ -45,27 +43,27 @@ public class MockData {
 
     private static Logger LOG = LoggerFactory.getLogger(MockData.class);
 
-    public static MobileTerminalType createMobileTerminalDto(Integer id) {
-        MobileTerminalType dto = new MobileTerminalType();
-        MobileTerminalId mobId = new MobileTerminalId();
+    public static MobileTerminalType createMobileTerminalDto(final Integer id) {
+        final MobileTerminalType dto = new MobileTerminalType();
+        final MobileTerminalId mobId = new MobileTerminalId();
         mobId.setGuid(String.valueOf(id));
         dto.getChannels().addAll(createMobileTerminalChannels(2));
         dto.setMobileTerminalId(mobId);
         return dto;
     }
 
-    public static MobileTerminalType createMobileTerminalDtoWithoutId(Integer id, String terminalType) {
-        MobileTerminalType dto = new MobileTerminalType();
-        MobileTerminalId mobId = new MobileTerminalId();
+    public static MobileTerminalType createMobileTerminalDtoWithoutId(final Integer id, final String terminalType) {
+        final MobileTerminalType dto = new MobileTerminalType();
+        final MobileTerminalId mobId = new MobileTerminalId();
         dto.setType(terminalType);
         dto.getChannels().addAll(createMobileTerminalChannels(2));
         dto.setMobileTerminalId(mobId);
         return dto;
     }
 
-    public static MobileTerminalType createMobileTerminalDto(Integer id, String terminalType) {
-        MobileTerminalType dto = new MobileTerminalType();
-        MobileTerminalId mobId = new MobileTerminalId();
+    public static MobileTerminalType createMobileTerminalDto(final Integer id, final String terminalType) {
+        final MobileTerminalType dto = new MobileTerminalType();
+        final MobileTerminalId mobId = new MobileTerminalId();
         mobId.setGuid(String.valueOf(id));
         dto.setType(terminalType);
         dto.getChannels().addAll(createMobileTerminalChannels(2));
@@ -73,35 +71,35 @@ public class MockData {
         return dto;
     }
 
-    public static ComChannelAttribute createComChannelAttribute(String type, String value) {
-        ComChannelAttribute channelID = new ComChannelAttribute();
+    public static ComChannelAttribute createComChannelAttribute(final String type, final String value) {
+        final ComChannelAttribute channelID = new ComChannelAttribute();
         channelID.setType(type);
         channelID.setValue(value);
         return channelID;
     }
 
-    public static ComChannelType createComChannel(Integer id) {
-        ComChannelType channeltype = new ComChannelType();
+    public static ComChannelType createComChannel(final Integer id) {
+        final ComChannelType channeltype = new ComChannelType();
         channeltype.setName("VMS");
 
-        ComChannelAttribute memberId = createComChannelAttribute("MEMBER_NUMBER", id.toString());
-        ComChannelAttribute dnId = createComChannelAttribute("DNID", id.toString());
+        final ComChannelAttribute memberId = createComChannelAttribute("MEMBER_NUMBER", id.toString());
+        final ComChannelAttribute dnId = createComChannelAttribute("DNID", id.toString());
 
         channeltype.getAttributes().add(memberId);
         channeltype.getAttributes().add(dnId);
         return channeltype;
     }
 
-    public static List<ComChannelType> createMobileTerminalChannels(Integer amount) {
-        List<ComChannelType> dtoList = new ArrayList<>();
+    public static List<ComChannelType> createMobileTerminalChannels(final Integer amount) {
+        final List<ComChannelType> dtoList = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             dtoList.add(createComChannel(i));
         }
         return dtoList;
     }
 
-    public static List<MobileTerminalType> createMobileTerminalDtoList(Integer amount) {
-        List<MobileTerminalType> dtoList = new ArrayList<>();
+    public static List<MobileTerminalType> createMobileTerminalDtoList(final Integer amount) {
+        final List<MobileTerminalType> dtoList = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             dtoList.add(createMobileTerminalDto(i));
         }
@@ -109,37 +107,37 @@ public class MockData {
     }
 
     public static MobileTerminalListResponse createMobileTerminalListResponse() {
-        MobileTerminalListResponse response = new MobileTerminalListResponse();
+        final MobileTerminalListResponse response = new MobileTerminalListResponse();
         response.setCurrentPage(1);
         response.setTotalNumberOfPages(1);
         response.getMobileTerminal().addAll(createMobileTerminalDtoList(1));
         return response;
     }
 
-    public static MobileTerminalAttribute createMobileTerminalAttribute(String type, String value) {
-        MobileTerminalAttribute response = new MobileTerminalAttribute();
+    public static MobileTerminalAttribute createMobileTerminalAttribute(final String type, final String value) {
+        final MobileTerminalAttribute response = new MobileTerminalAttribute();
         response.setType(type);
         response.setValue(value);
         return response;
     }
 
-    private static XMLGregorianCalendar getXMLGregorianCalendar(Date date) {
+    private static XMLGregorianCalendar getXMLGregorianCalendar(final Date date) {
         if (date != null) {
-            GregorianCalendar calendar = new GregorianCalendar();
+            final GregorianCalendar calendar = new GregorianCalendar();
             calendar.setTime(date);
             try {
                 return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-            } catch (DatatypeConfigurationException e) {
+            } catch (final DatatypeConfigurationException e) {
                 LOG.error("[ Error when getting XML calendar. ] {} {}", e.getMessage(), e.getStackTrace());
             }
         }
         return null;
     }
 
-    public static MobileTerminalType setStatusMobileTerminal(MobileTerminalId terminalId, MobileTerminalStatus status) {
-        MobileTerminalType type = new MobileTerminalType();
+    public static MobileTerminalType setStatusMobileTerminal(final MobileTerminalId terminalId, final MobileTerminalStatus status) {
+        final MobileTerminalType type = new MobileTerminalType();
 
-        MobileTerminalAttribute attribute = new MobileTerminalAttribute();
+        final MobileTerminalAttribute attribute = new MobileTerminalAttribute();
         attribute.setType("SOFTWARE_VERSION");
         attribute.setValue("MOCK!");
         type.getAttributes().add(attribute);
@@ -160,23 +158,23 @@ public class MockData {
         return type;
     }
 
-    public static List<MobileTerminalHistory> getMobileTerminalHistory(MobileTerminalId terminalId) {
-        List<MobileTerminalHistory> list = new ArrayList<>();
-        MobileTerminalHistory history = new MobileTerminalHistory();
+    public static List<MobileTerminalHistory> getMobileTerminalHistory(final MobileTerminalId terminalId) {
+        final List<MobileTerminalHistory> list = new ArrayList<>();
+        final MobileTerminalHistory history = new MobileTerminalHistory();
         list.add(history);
         return list;
     }
 
-    public static List<PollResponseType> createProgramPollTypeList(Integer amount) {
-        List<PollResponseType> responseList = new ArrayList<>();
+    public static List<PollResponseType> createProgramPollTypeList(final Integer amount) {
+        final List<PollResponseType> responseList = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             responseList.add(createProgramPollType(i));
         }
         return responseList;
     }
 
-    public static PollResponseType createProgramPollType(Integer id) {
-        PollResponseType response = new PollResponseType();
+    public static PollResponseType createProgramPollType(final Integer id) {
+        final PollResponseType response = new PollResponseType();
         response.setMobileTerminal(createMobileTerminalDto(id));
         response.setPollType(PollType.PROGRAM_POLL);
         response.setUserName("backend");
@@ -191,8 +189,8 @@ public class MockData {
         return response;
     }
 
-    public static PollAttribute createPollAttribute(PollAttributeType type, String value) {
-        PollAttribute attribute = new PollAttribute();
+    public static PollAttribute createPollAttribute(final PollAttributeType type, final String value) {
+        final PollAttribute attribute = new PollAttribute();
         attribute.setKey(type);
         attribute.setValue(value);
         return attribute;

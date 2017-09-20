@@ -43,7 +43,7 @@ public class PollDataSourceResponseMapper {
      * @throws JMSException
      * @throws MobileTerminalValidationException
      */
-    private static void validateResponse(TextMessage response, String correlationId) throws JMSException, MobileTerminalValidationException {
+    private static void validateResponse(final TextMessage response, final String correlationId) throws JMSException, MobileTerminalValidationException {
 
         if (response == null) {
             throw new MobileTerminalValidationException("Error when validating response in ResponseMapper: Response is Null");
@@ -59,17 +59,17 @@ public class PollDataSourceResponseMapper {
         }
 
         try {
-            MobileTerminalFault fault = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalFault.class);
+            final MobileTerminalFault fault = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalFault.class);
             throw new MobileTerminalValidationException(fault.getCode() + " : " + fault.getMessage());
-        } catch (MobileTerminalUnmarshallException e) {
+        } catch (final MobileTerminalUnmarshallException e) {
             // everything is well
         }
     }
 
-    public static List<PollResponseType> mapCreatePollResponse(TextMessage response, String messageId) throws MobileTerminalModelMapperException {
+    public static List<PollResponseType> mapCreatePollResponse(final TextMessage response, final String messageId) throws MobileTerminalModelMapperException {
         try {
             validateResponse(response, messageId);
-            CreatePollResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, CreatePollResponse.class);
+            final CreatePollResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, CreatePollResponse.class);
             return unmarshalledResponse.getPollList();
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
             LOG.error("[ Error when unmarshalling poll create responses. ] {}", e.getMessage());
@@ -77,10 +77,10 @@ public class PollDataSourceResponseMapper {
         }
     }
 
-    public static List<PollResponseType> mapToPollList(TextMessage response, String messageId) throws MobileTerminalModelMapperException {
+    public static List<PollResponseType> mapToPollList(final TextMessage response, final String messageId) throws MobileTerminalModelMapperException {
         try {
             validateResponse(response, messageId);
-            PollListResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, PollListResponse.class);
+            final PollListResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, PollListResponse.class);
             return unmarshalledResponse.getPollList();
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
             LOG.error("[ Error when unmarshalling poll list responses. ] {}", e.getMessage());
@@ -88,7 +88,7 @@ public class PollDataSourceResponseMapper {
         }
     }
 
-    public static PollListResponse mapPollListResponse(TextMessage response, String messageId) throws MobileTerminalModelMapperException {
+    public static PollListResponse mapPollListResponse(final TextMessage response, final String messageId) throws MobileTerminalModelMapperException {
         try {
             validateResponse(response, messageId);
             return JAXBMarshaller.unmarshallTextMessage(response, PollListResponse.class);
@@ -98,10 +98,10 @@ public class PollDataSourceResponseMapper {
         }
 	}
     
-    public static PollResponseType mapPollResponse(TextMessage response, String messageId) throws MobileTerminalModelMapperException {
+    public static PollResponseType mapPollResponse(final TextMessage response, final String messageId) throws MobileTerminalModelMapperException {
         try {
             validateResponse(response, messageId);
-            SinglePollResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, SinglePollResponse.class);
+            final SinglePollResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, SinglePollResponse.class);
             return unmarshalledResponse.getPoll();
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
             LOG.error("[ Error when unmarshalling single poll responses. ] {}", e.getMessage());

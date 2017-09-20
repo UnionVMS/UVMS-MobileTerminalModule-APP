@@ -44,7 +44,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.TerminalCapabilit
 public class PluginMapper {
 	final static Logger LOG = LoggerFactory.getLogger(PluginMapper.class);
 	
-	private static Plugin mapEntityToModel(Plugin model, MobileTerminalPlugin entity) {
+	private static Plugin mapEntityToModel(final Plugin model, final MobileTerminalPlugin entity) {
 	    model.setSatelliteType(entity.getPluginSatelliteType());
 		model.setInactive(entity.getPluginInactive());
 		model.setLabelName(entity.getName());
@@ -52,12 +52,12 @@ public class PluginMapper {
 		return model;
 	}
 	
-	public static Plugin mapEntityToModel(MobileTerminalPlugin entity) {
-		Plugin plugin = new Plugin();
+	public static Plugin mapEntityToModel(final MobileTerminalPlugin entity) {
+		final Plugin plugin = new Plugin();
 		return mapEntityToModel(plugin, entity);
 	}
 	
-	public static MobileTerminalPlugin mapModelToEntity(MobileTerminalPlugin entity, PluginService model) {
+	public static MobileTerminalPlugin mapModelToEntity(final MobileTerminalPlugin entity, final PluginService model) {
 		entity.setDescription(model.getLabelName());
 		entity.setPluginServiceName(model.getServiceName());
 		entity.setPluginSatelliteType(model.getSatelliteType());
@@ -72,10 +72,10 @@ public class PluginMapper {
 		return entity;
 	}
 	
-	private static List<MobileTerminalPluginCapability> mapCapabilityModelToEntity(MobileTerminalPlugin parent, List<PluginCapability> capabilities) {
-		List<MobileTerminalPluginCapability> capabilityList = new ArrayList<>();
-		for(PluginCapability capability : capabilities) {
-			MobileTerminalPluginCapability entity = new MobileTerminalPluginCapability();
+	private static List<MobileTerminalPluginCapability> mapCapabilityModelToEntity(final MobileTerminalPlugin parent, final List<PluginCapability> capabilities) {
+		final List<MobileTerminalPluginCapability> capabilityList = new ArrayList<>();
+		for(final PluginCapability capability : capabilities) {
+			final MobileTerminalPluginCapability entity = new MobileTerminalPluginCapability();
 			entity.setPlugin(parent);
 			entity.setName(capability.getName().name());
 			entity.setValue(capability.getValue());
@@ -86,12 +86,12 @@ public class PluginMapper {
 		return capabilityList;
 	}
 	
-	public static MobileTerminalPlugin mapModelToEntity(PluginService model) {
-		MobileTerminalPlugin plugin = new MobileTerminalPlugin();
+	public static MobileTerminalPlugin mapModelToEntity(final PluginService model) {
+		final MobileTerminalPlugin plugin = new MobileTerminalPlugin();
 		return mapModelToEntity(plugin, model);
 	}
 
-	public static boolean equals(MobileTerminalPlugin entity, PluginService plugin) {
+	public static boolean equals(final MobileTerminalPlugin entity, final PluginService plugin) {
 		if(!entity.getName().equalsIgnoreCase(plugin.getLabelName())) {
 			return false;
 		}
@@ -105,8 +105,8 @@ public class PluginMapper {
 			if(plugin.getCapability().size() != entity.getCapabilities().size()) {
 				return false;
 			}
-			for(PluginCapability capability : plugin.getCapability()) {
-				for(MobileTerminalPluginCapability entityCapability : entity.getCapabilities()) {
+			for(final PluginCapability capability : plugin.getCapability()) {
+				for(final MobileTerminalPluginCapability entityCapability : entity.getCapabilities()) {
 					if(entityCapability.getName().equalsIgnoreCase(capability.getName().name())) {
 						if(!entityCapability.getValue().equalsIgnoreCase(capability.getValue())) {
 							return false;
@@ -122,18 +122,18 @@ public class PluginMapper {
 		return true;
 	}
 
-	public static TerminalSystemConfiguration mapTerminalFieldConfiguration(MobileTerminalTypeEnum type) {
-		TerminalSystemConfiguration configuration = new TerminalSystemConfiguration();
+	public static TerminalSystemConfiguration mapTerminalFieldConfiguration(final MobileTerminalTypeEnum type) {
+		final TerminalSystemConfiguration configuration = new TerminalSystemConfiguration();
 
 		switch (type) {
 			default:
 			case INMARSAT_C:
-				for (AttributeInmarsatC attribute : AttributeInmarsatC.values()) {
+				for (final AttributeInmarsatC attribute : AttributeInmarsatC.values()) {
 					configuration.getAttribute().add(attribute.toString());
 				}
 				break;
 			case IRIDIUM:
-				for (AttributeIridium attribute : AttributeIridium.values()) {
+				for (final AttributeIridium attribute : AttributeIridium.values()) {
 					configuration.getAttribute().add(attribute.toString());
 				}
 				break;
@@ -143,18 +143,18 @@ public class PluginMapper {
 		return configuration;
 	}
 
-	public static TerminalSystemConfiguration mapComchannelFieldConfiguration(MobileTerminalTypeEnum type) {
-		TerminalSystemConfiguration configuration = new TerminalSystemConfiguration();
+	public static TerminalSystemConfiguration mapComchannelFieldConfiguration(final MobileTerminalTypeEnum type) {
+		final TerminalSystemConfiguration configuration = new TerminalSystemConfiguration();
 
 		switch (type) {
 			default:
 			case INMARSAT_C:
-				for (ChannelFieldInmarsatC attribute : ChannelFieldInmarsatC.values()) {
+				for (final ChannelFieldInmarsatC attribute : ChannelFieldInmarsatC.values()) {
 					configuration.getAttribute().add(attribute.toString());
 				}
 				break;
 			case IRIDIUM:
-				for (ChannelFieldIridium attribute : ChannelFieldIridium.values()) {
+				for (final ChannelFieldIridium attribute : ChannelFieldIridium.values()) {
 					configuration.getAttribute().add(attribute.toString());
 				}
 				break;
@@ -164,10 +164,10 @@ public class PluginMapper {
 		return configuration;
 	}
 
-	public static CapabilityConfiguration mapCapabilityConfiguration(MobileTerminalTypeEnum type, List<MobileTerminalPlugin> plugins, List<OceanRegion> oceanRegionList) {
-		CapabilityConfiguration capabilityConfiguration = new CapabilityConfiguration();
-		List<Capability> capabilities = new ArrayList<>();
-		for(TerminalCapability capabilityType : TerminalCapability.values()) {
+	public static CapabilityConfiguration mapCapabilityConfiguration(final MobileTerminalTypeEnum type, final List<MobileTerminalPlugin> plugins, List<OceanRegion> oceanRegionList) {
+		final CapabilityConfiguration capabilityConfiguration = new CapabilityConfiguration();
+		final List<Capability> capabilities = new ArrayList<>();
+		for(final TerminalCapability capabilityType : TerminalCapability.values()) {
 			boolean hasCapability = false;
 			switch (type) {
 				default:
@@ -180,9 +180,9 @@ public class PluginMapper {
 					break;
 			}
 			if(hasCapability) {
-				Capability capability = new Capability();
+				final Capability capability = new Capability();
 				capability.setName(capabilityType.name());
-				List<? extends CapabilityOption> options = mapCapabilityOption(capabilityType, oceanRegionList, plugins);
+				final List<? extends CapabilityOption> options = mapCapabilityOption(capabilityType, oceanRegionList, plugins);
 				if(options != null) {
 					capability.getOptions().addAll(options);
 				}
@@ -193,7 +193,7 @@ public class PluginMapper {
 		return capabilityConfiguration;
 	}
 
-	public static List<? extends CapabilityOption> mapCapabilityOption(TerminalCapability capabilityValue, List<OceanRegion> oceanRegionList, List<MobileTerminalPlugin> lesList) {
+	public static List<? extends CapabilityOption> mapCapabilityOption(final TerminalCapability capabilityValue, final List<OceanRegion> oceanRegionList, final List<MobileTerminalPlugin> lesList) {
 		switch(capabilityValue) {
 			case SUPPORT_SINGLE_OCEAN:
 				return mapOceanRegions(oceanRegionList);
@@ -205,11 +205,11 @@ public class PluginMapper {
 				return null;
 		}
 	}
-	private static List<? extends CapabilityOption> mapLandearthstation(List<MobileTerminalPlugin> lesList) {
-		List<LandEarthStationType> landEarthStations = new ArrayList<>();
+	private static List<? extends CapabilityOption> mapLandearthstation(final List<MobileTerminalPlugin> lesList) {
+		final List<LandEarthStationType> landEarthStations = new ArrayList<>();
 		if(lesList != null) {
-			for(MobileTerminalPlugin les : lesList) {
-				LandEarthStationType type = new LandEarthStationType();
+			for(final MobileTerminalPlugin les : lesList) {
+				final LandEarthStationType type = new LandEarthStationType();
 				type.setLabelName(les.getName());
 				type.setServiceName(les.getPluginServiceName());
 				landEarthStations.add(type);
@@ -218,11 +218,11 @@ public class PluginMapper {
 		return landEarthStations;
 	}
 
-	private static List<? extends CapabilityOption> mapOceanRegions(List<OceanRegion> oceanRegionList) {
-		List<OceanRegionType> oceanRegions = new ArrayList<>();
+	private static List<? extends CapabilityOption> mapOceanRegions(final List<OceanRegion> oceanRegionList) {
+		final List<OceanRegionType> oceanRegions = new ArrayList<>();
 		if(oceanRegionList != null) {
-			for(OceanRegion oceanRegion : oceanRegionList) {
-				OceanRegionType type = new OceanRegionType();
+			for(final OceanRegion oceanRegion : oceanRegionList) {
+				final OceanRegionType type = new OceanRegionType();
 				type.setCode(oceanRegion.getCode());
 				type.setName(oceanRegion.getName());
 				oceanRegions.add(type);

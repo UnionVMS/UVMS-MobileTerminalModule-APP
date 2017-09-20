@@ -14,7 +14,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception;
 public class EnumException extends Exception {
 	private static final long serialVersionUID = 1L;
 
-	public EnumException(String message) {
+	public EnumException(final String message) {
 		super(message);
 	}
 }

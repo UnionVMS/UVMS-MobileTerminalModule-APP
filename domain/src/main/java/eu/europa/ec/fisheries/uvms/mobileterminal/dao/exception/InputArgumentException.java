@@ -17,7 +17,7 @@ public class InputArgumentException extends MobileTerminalModelException {
 
     private static final long serialVersionUID = -3643668874281583774L;
 
-    public InputArgumentException(String message) {
+    public InputArgumentException(final String message) {
         super(message);
     }
 }

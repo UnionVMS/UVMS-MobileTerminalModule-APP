@@ -12,9 +12,9 @@ public class MobileTerminalExistsException extends MobileTerminalModelException 
 
     private static final long serialVersionUID = 1L;
 
-    private MobileTerminalType mobileTerminal;
+    private final MobileTerminalType mobileTerminal;
 
-    public MobileTerminalExistsException(String message, MobileTerminalType mobileTerminal) {
+    public MobileTerminalExistsException(final String message, final MobileTerminalType mobileTerminal) {
         super(message);
         this.mobileTerminal = mobileTerminal;
     }

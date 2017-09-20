@@ -38,7 +38,7 @@ public class PollDaoBean extends Dao implements PollDao {
     final static Logger LOG = LoggerFactory.getLogger(PollDaoBean.class);
 
     @Override
-    public void createPoll(Poll poll) throws PollDaoException {
+    public void createPoll(final Poll poll) throws PollDaoException {
         try {
             em.persist(poll);
         } catch (EntityExistsException | IllegalArgumentException e) {
@@ -48,14 +48,14 @@ public class PollDaoBean extends Dao implements PollDao {
     }
 
     @Override
-    public Poll getPoll(String pollId) throws PollDaoException {
+    public Poll getPoll(final String pollId) throws PollDaoException {
         try {
         	//ToDo: The query string POLL_FIND_BY_ID is not implemented anywhere causing this method to always throw an exception.
 			//ToDo: Either it needs to be implemented in e.g. a named query in the Poll entity or this query needs to use a different query string.
-            TypedQuery<Poll> query = em.createNamedQuery(MobileTerminalConstants.POLL_FIND_BY_ID, Poll.class);
+            final TypedQuery<Poll> query = em.createNamedQuery(MobileTerminalConstants.POLL_FIND_BY_ID, Poll.class);
             query.setParameter("polltrackId", pollId);
             return query.getSingleResult();
-        } catch (NoResultException e) {
+        } catch (final NoResultException e) {
             LOG.error("[ Error when getting poll. ] {}", e.getMessage());
             throw new PollDaoException("No Poll entity found with TrackId " + pollId);
         }
@@ -63,12 +63,12 @@ public class PollDaoBean extends Dao implements PollDao {
 
     @Override
 	//ToDo: This method is not implemented. Need to evaluate if the functionality is required or not.
-    public List<Poll> getPollListByProgramPoll(Integer pollProgramId) throws PollDaoException {
+    public List<Poll> getPollListByProgramPoll(final Integer pollProgramId) throws PollDaoException {
         throw new PollDaoException("Not yet implemented");
     }
 
     @Override
-    public void createPollProgram(PollProgram pollProgram) throws PollDaoException {
+    public void createPollProgram(final PollProgram pollProgram) throws PollDaoException {
         try {
             em.persist(pollProgram);
         } catch (EntityExistsException | IllegalArgumentException e) {
@@ -78,22 +78,22 @@ public class PollDaoBean extends Dao implements PollDao {
     }
 
 	@Override
-	public Long getPollListSearchCount(String sql, List<PollSearchKeyValue> searchKeyValues, boolean isDynamic) {
-		TypedQuery<Long> query = em.createQuery(sql, Long.class);
+	public Long getPollListSearchCount(final String sql, final List<PollSearchKeyValue> searchKeyValues, final boolean isDynamic) {
+		final TypedQuery<Long> query = em.createQuery(sql, Long.class);
 		
-		for(PollSearchKeyValue keyValue : searchKeyValues) {
-			String sqlReplaceToken = keyValue.getSearchField().getSqlReplaceToken();
+		for(final PollSearchKeyValue keyValue : searchKeyValues) {
+			final String sqlReplaceToken = keyValue.getSearchField().getSqlReplaceToken();
 			if(keyValue.getSearchField().getClazz().isAssignableFrom(MobileTerminalTypeEnum.class)){
-				List<MobileTerminalTypeEnum> types = new ArrayList<>();
-				for (String value : keyValue.getValues()) {
-					MobileTerminalTypeEnum type = MobileTerminalTypeEnum.valueOf(value);
+				final List<MobileTerminalTypeEnum> types = new ArrayList<>();
+				for (final String value : keyValue.getValues()) {
+					final MobileTerminalTypeEnum type = MobileTerminalTypeEnum.valueOf(value);
 					types.add(type);
 				}
 				query.setParameter(sqlReplaceToken, types);
 			} else if(keyValue.getSearchField().getClazz().isAssignableFrom(PollTypeEnum.class)){
-				List<PollTypeEnum> types = new ArrayList<>();
-				for (String value : keyValue.getValues()) {
-					PollTypeEnum type = PollTypeEnum.valueOf(value);
+				final List<PollTypeEnum> types = new ArrayList<>();
+				for (final String value : keyValue.getValues()) {
+					final PollTypeEnum type = PollTypeEnum.valueOf(value);
 					types.add(type);
 				}
 				query.setParameter(sqlReplaceToken, types);
@@ -106,22 +106,22 @@ public class PollDaoBean extends Dao implements PollDao {
 	}
 
 	@Override
-	public List<Poll> getPollListSearchPaginated(Integer page, Integer listSize, String sql, List<PollSearchKeyValue> searchKeyValues, boolean isDynamic) throws PollDaoException {
-		TypedQuery<Poll> query = em.createQuery(sql, Poll.class);
+	public List<Poll> getPollListSearchPaginated(final Integer page, final Integer listSize, final String sql, final List<PollSearchKeyValue> searchKeyValues, final boolean isDynamic) throws PollDaoException {
+		final TypedQuery<Poll> query = em.createQuery(sql, Poll.class);
 		
-		for(PollSearchKeyValue keyValue : searchKeyValues) {
-			String sqlReplaceToken = keyValue.getSearchField().getSqlReplaceToken();
+		for(final PollSearchKeyValue keyValue : searchKeyValues) {
+			final String sqlReplaceToken = keyValue.getSearchField().getSqlReplaceToken();
 			if(keyValue.getSearchField().getClazz().isAssignableFrom(MobileTerminalTypeEnum.class)){
-				List<MobileTerminalTypeEnum> types = new ArrayList<>();
-				for (String value : keyValue.getValues()) {
-					MobileTerminalTypeEnum type = MobileTerminalTypeEnum.valueOf(value);
+				final List<MobileTerminalTypeEnum> types = new ArrayList<>();
+				for (final String value : keyValue.getValues()) {
+					final MobileTerminalTypeEnum type = MobileTerminalTypeEnum.valueOf(value);
 					types.add(type);
 				}
 				query.setParameter(sqlReplaceToken, types);
 			} else if(keyValue.getSearchField().getClazz().isAssignableFrom(PollTypeEnum.class)){
-				List<PollTypeEnum> types = new ArrayList<>();
-				for (String value : keyValue.getValues()) {
-					PollTypeEnum type = PollTypeEnum.valueOf(value);
+				final List<PollTypeEnum> types = new ArrayList<>();
+				for (final String value : keyValue.getValues()) {
+					final PollTypeEnum type = PollTypeEnum.valueOf(value);
 					types.add(type);
 				}
 				query.setParameter(sqlReplaceToken, types);

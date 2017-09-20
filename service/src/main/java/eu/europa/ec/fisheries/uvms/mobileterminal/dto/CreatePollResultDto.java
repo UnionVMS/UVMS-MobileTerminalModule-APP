@@ -27,7 +27,7 @@ public class CreatePollResultDto {
 		return sentPolls;
 	}
 
-	public void setSentPolls(List<String> sentPolls) {
+	public void setSentPolls(final List<String> sentPolls) {
 		this.sentPolls = sentPolls;
 	}
 
@@ -35,7 +35,7 @@ public class CreatePollResultDto {
 		return unsentPolls;
 	}
 
-	public void setUnsentPolls(List<String> unsentPolls) {
+	public void setUnsentPolls(final List<String> unsentPolls) {
 		this.unsentPolls = unsentPolls;
 	}
 
@@ -43,7 +43,7 @@ public class CreatePollResultDto {
 		return unsentPoll;
 	}
 
-	public void setUnsentPoll(boolean unsentPoll) {
+	public void setUnsentPoll(final boolean unsentPoll) {
 		this.unsentPoll = unsentPoll;
 	}	
 }

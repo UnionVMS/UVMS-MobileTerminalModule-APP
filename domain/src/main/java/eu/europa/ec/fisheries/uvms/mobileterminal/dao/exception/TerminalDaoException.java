@@ -17,7 +17,7 @@ public class TerminalDaoException extends MobileTerminalModelException {
 
     private static final long serialVersionUID = 2869522947805820298L;
 
-    public TerminalDaoException(String message) {
+    public TerminalDaoException(final String message) {
         super(message);
     }
 }

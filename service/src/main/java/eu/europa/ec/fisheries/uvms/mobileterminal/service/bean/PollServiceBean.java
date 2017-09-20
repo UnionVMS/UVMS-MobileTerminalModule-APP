@@ -64,18 +64,18 @@ public class PollServiceBean implements PollService {
     PollDomainModelBean pollModel;
 
     @Override
-    public CreatePollResultDto createPoll(PollRequestType poll, String username) throws MobileTerminalServiceException {
+    public CreatePollResultDto createPoll(final PollRequestType poll, final String username) throws MobileTerminalServiceException {
         LOG.debug("CREATE POLL INVOKED IN SERVICE LAYER");
         try {
-            List<PollResponseType> createdPolls = pollModel.createPolls(poll, username);
+            final List<PollResponseType> createdPolls = pollModel.createPolls(poll, username);
 
             boolean triggerTimer = false;
-            List<String> unsentPolls = new ArrayList<>();
-            List<String> sentPolls = new ArrayList<>();
-            for (PollResponseType createdPoll : createdPolls) {
+            final List<String> unsentPolls = new ArrayList<>();
+            final List<String> sentPolls = new ArrayList<>();
+            for (final PollResponseType createdPoll : createdPolls) {
                 triggerTimer = PollType.PROGRAM_POLL.equals(createdPoll.getPollType());
                 try {
-                    AcknowledgeTypeType ack = sendPollService.sendPoll(createdPoll, username);
+                    final AcknowledgeTypeType ack = sendPollService.sendPoll(createdPoll, username);
                     switch (ack) {
                         case NOK:
                             unsentPolls.add(createdPoll.getPollId().getGuid());
@@ -84,14 +84,14 @@ public class PollServiceBean implements PollService {
                             sentPolls.add(createdPoll.getPollId().getGuid());
                             break;
                     }
-                } catch (MobileTerminalServiceException e) {
+                } catch (final MobileTerminalServiceException e) {
                     LOG.error(e.getMessage());
                 }
 
                 try {
-                    String auditData = AuditModuleRequestMapper.mapAuditLogPollCreated(createdPoll.getPollType(), createdPoll.getPollId().getGuid(), createdPoll.getComment(), username);
+                    final String auditData = AuditModuleRequestMapper.mapAuditLogPollCreated(createdPoll.getPollType(), createdPoll.getPollId().getGuid(), createdPoll.getComment(), username);
                     messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-                } catch (AuditModelMarshallException e) {
+                } catch (final AuditModelMarshallException e) {
                     LOG.error("Failed to send audit log message! Poll with guid {} was created", createdPoll.getPollId().getGuid());
                 }
             }
@@ -100,7 +100,7 @@ public class PollServiceBean implements PollService {
                 timerService.timerTimeout();
             }
 
-            CreatePollResultDto result = new CreatePollResultDto();
+            final CreatePollResultDto result = new CreatePollResultDto();
             result.setSentPolls(sentPolls);
             result.setUnsentPolls(unsentPolls);
             result.setUnsentPoll(!unsentPolls.isEmpty());
@@ -115,24 +115,24 @@ public class PollServiceBean implements PollService {
     public List<PollResponseType> getRunningProgramPolls() throws MobileTerminalServiceException {
         LOG.debug("GET RUNNING PROGRAM POLLS INVOKED IN SERVICE LAYER");
         try {
-            List<PollResponseType> pollProgramList = pollModel.getPollProgramList(true);
+            final List<PollResponseType> pollProgramList = pollModel.getPollProgramList(true);
             return pollProgramList;
-        } catch (MobileTerminalModelException e) {
+        } catch (final MobileTerminalModelException e) {
             throw new MobileTerminalServiceException(e.getMessage());
         }
     }
 
     @Override
-    public PollResponseType startProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+    public PollResponseType startProgramPoll(final String pollId, final String username) throws MobileTerminalServiceException {
         LOG.debug("START POLLING INVOKED IN SERVICE LAYER");
         try {
-            PollId pollIdType = new PollId();
+            final PollId pollIdType = new PollId();
             pollIdType.setGuid(pollId);
-            PollResponseType startedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.STARTED);
+            final PollResponseType startedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.STARTED);
             try {
-                String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStarted(startedPoll.getPollId().getGuid(), username);
+                final String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStarted(startedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-            } catch (AuditModelMarshallException e) {
+            } catch (final AuditModelMarshallException e) {
                 LOG.error("Failed to send audit log message! Poll with guid {} was started", startedPoll.getPollId().getGuid());
             }
 
@@ -143,16 +143,16 @@ public class PollServiceBean implements PollService {
     }
 
     @Override
-    public PollResponseType stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+    public PollResponseType stopProgramPoll(final String pollId, final String username) throws MobileTerminalServiceException {
         LOG.debug("STOP POLLING INVOKED IN SERVICE LAYER");
         try {
-            PollId pollIdType = new PollId();
+            final PollId pollIdType = new PollId();
             pollIdType.setGuid(pollId);
-            PollResponseType stoppedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.STOPPED);
+            final PollResponseType stoppedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.STOPPED);
             try {
-                String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStopped(stoppedPoll.getPollId().getGuid(), username);
+                final String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStopped(stoppedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-            } catch (AuditModelMarshallException e) {
+            } catch (final AuditModelMarshallException e) {
                 LOG.error("Failed to send audit log message! Poll with guid {} was stopped", stoppedPoll.getPollId().getGuid());
             }
 
@@ -163,16 +163,16 @@ public class PollServiceBean implements PollService {
     }
 
     @Override
-    public PollResponseType inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
+    public PollResponseType inactivateProgramPoll(final String pollId, final String username) throws MobileTerminalServiceException {
         LOG.debug("INACTIVATE PROGRAM POLL INVOKED IN SERVICE LAYER");
         try {
-            PollId pollIdType = new PollId();
+            final PollId pollIdType = new PollId();
             pollIdType.setGuid(pollId);
-            PollResponseType inactivatedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.ARCHIVED);
+            final PollResponseType inactivatedPoll = pollModel.setStatusPollProgram(pollIdType, PollStatus.ARCHIVED);
             try {
-                String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollInactivated(inactivatedPoll.getPollId().getGuid(), username);
+                final String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollInactivated(inactivatedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-            } catch (AuditModelMarshallException e) {
+            } catch (final AuditModelMarshallException e) {
                 LOG.error("Failed to send audit log message! Poll with guid {} was inactivated", inactivatedPoll.getPollId().getGuid());
             }
 
@@ -183,12 +183,12 @@ public class PollServiceBean implements PollService {
     }
 
     @Override
-    public PollListResponse getPollBySearchCriteria(PollListQuery query) throws MobileTerminalServiceException {
+    public PollListResponse getPollBySearchCriteria(final PollListQuery query) throws MobileTerminalServiceException {
         LOG.debug("GET POLL BY SEARCHCRITERIA INVOKED IN SERVICE LAYER");
         try {
-            PollListResponse pollResponse = pollModel.getPollList(query);
+            final PollListResponse pollResponse = pollModel.getPollList(query);
             return pollResponse;
-        } catch (MobileTerminalModelException e) {
+        } catch (final MobileTerminalModelException e) {
             throw new MobileTerminalServiceException(e.getMessage());
         }
     }
@@ -197,7 +197,7 @@ public class PollServiceBean implements PollService {
     public List<PollResponseType> timer() throws MobileTerminalException {
         LOG.debug("TIMER TRIGGERED IN SERVICE LAYER");
 
-        List<PollResponseType> pollTimerProgramList = pollModel.getPollProgramRunningAndStarted();
+        final List<PollResponseType> pollTimerProgramList = pollModel.getPollProgramRunningAndStarted();
 
         return pollTimerProgramList;
     }

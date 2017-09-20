@@ -68,7 +68,7 @@ public class DNIDList implements Serializable {
         return this.id;
     }
 
-    public void setId(Integer id) {
+    public void setId(final Integer id) {
         this.id = id;
     }
 
@@ -76,7 +76,7 @@ public class DNIDList implements Serializable {
         return this.pluginName;
     }
 
-    public void setPluginName(String pluginName) {
+    public void setPluginName(final String pluginName) {
         this.pluginName = pluginName;
     }
 
@@ -84,7 +84,7 @@ public class DNIDList implements Serializable {
         return this.updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -92,7 +92,7 @@ public class DNIDList implements Serializable {
         return this.updatedBy;
     }
 
-    public void setUpdateUser(String user) {
+    public void setUpdateUser(final String user) {
         this.updatedBy = user;
     }
 
@@ -100,7 +100,7 @@ public class DNIDList implements Serializable {
         return dnid;
     }
 
-    public void setDNID(String dnid) {
+    public void setDNID(final String dnid) {
         this.dnid = dnid;
     }
 

@@ -32,9 +32,9 @@ public class TestSearchMapper {
         searchKeyValueWildcard = getSearchKeyValue(Arrays.asList("someValue*", "someOtherValue"));
     }
 
-    private SearchKeyValue getSearchKeyValue(List<String> values) {
-        SearchKeyValue skv = new SearchKeyValue();
-        SearchFieldHolder sfh = new SearchFieldHolder(SearchTable.IRIDIUM, SearchField.SATELLITE_NUMBER);
+    private SearchKeyValue getSearchKeyValue(final List<String> values) {
+        final SearchKeyValue skv = new SearchKeyValue();
+        final SearchFieldHolder sfh = new SearchFieldHolder(SearchTable.IRIDIUM, SearchField.SATELLITE_NUMBER);
         skv.setSearchFieldHolder(sfh);
         skv.setValues(values);
         return skv;

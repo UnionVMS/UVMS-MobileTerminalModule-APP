@@ -26,14 +26,14 @@ public enum PollSearchField {
     private final String sqlReplaceToken;
     private final Class clazz;
     
-    private PollSearchField(SearchTable table, String sqlColumnName, String sqlReplaceToken) {
+    private PollSearchField(final SearchTable table, final String sqlColumnName, final String sqlReplaceToken) {
     	this.table = table;
         this.sqlColumnName = sqlColumnName;
         this.sqlReplaceToken = sqlReplaceToken;
         this.clazz = String.class;
     }
     
-    private PollSearchField(SearchTable table, String sqlColumnName, String sqlReplaceToken, Class clazz) {
+    private PollSearchField(final SearchTable table, final String sqlColumnName, final String sqlReplaceToken, final Class clazz) {
     	this.table = table;
         this.sqlColumnName = sqlColumnName;
         this.sqlReplaceToken = sqlReplaceToken;

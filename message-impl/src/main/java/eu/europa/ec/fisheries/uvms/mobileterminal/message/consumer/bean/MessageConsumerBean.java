@@ -56,14 +56,14 @@ public class MessageConsumerBean implements MessageListener {
     Event<EventMessage> errorEvent;
 
     @Override
-    public void onMessage(Message message) {
+    public void onMessage(final Message message) {
         
-        TextMessage textMessage = (TextMessage) message;
+        final TextMessage textMessage = (TextMessage) message;
         LOG.info("Message received in mobileterminal:{}",message);
         
         try {
             
-            MobileTerminalModuleBaseRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, MobileTerminalModuleBaseRequest.class);
+            final MobileTerminalModuleBaseRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, MobileTerminalModuleBaseRequest.class);
 
             switch (request.getMethod()) {
                 case GET_MOBILE_TERMINAL:

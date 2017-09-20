@@ -22,7 +22,7 @@ public class ConfigOption<T> {
 		return data;
 	}
 
-	public void setData(List<T> data) {
+	public void setData(final List<T> data) {
 		this.data = data;
 	}
 
@@ -30,7 +30,7 @@ public class ConfigOption<T> {
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 }

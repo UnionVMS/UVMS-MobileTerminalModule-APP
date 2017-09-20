@@ -26,12 +26,12 @@ public class PollDto extends GenericDto<PollKey> {
         return values;
     }
 
-    public void setValue(List<PollValue> value) {
+    public void setValue(final List<PollValue> value) {
         this.values = value;
     }
 
     @Override
-    public void addValue(PollKey key, String value) {
+    public void addValue(final PollKey key, final String value) {
         values.add(new PollValue(key, value));
     }
 

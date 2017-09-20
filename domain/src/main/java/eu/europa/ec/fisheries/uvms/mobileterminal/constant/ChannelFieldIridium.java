@@ -23,8 +23,8 @@ public enum ChannelFieldIridium {
     INSTALLED_ON,
     INSTALLED_BY;
 
-    public static ChannelFieldIridium getAttribute(String type) throws EnumException {
-        for(ChannelFieldIridium attr : ChannelFieldIridium.values()) {
+    public static ChannelFieldIridium getAttribute(final String type) throws EnumException {
+        for(final ChannelFieldIridium attr : ChannelFieldIridium.values()) {
             if(attr.name().equalsIgnoreCase(type)) {
                 return attr;
             }

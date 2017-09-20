@@ -23,14 +23,14 @@ public class ResponseDto<T> {
 
     private final T data;
     private final Integer code;
-    private String requestId = MDC.get("requestId");
+    private final String requestId = MDC.get("requestId");
 
-    public ResponseDto(T data, ResponseCode code) {
+    public ResponseDto(final T data, final ResponseCode code) {
         this.data = data;
         this.code = code.getCode();
     }
     
-    public ResponseDto(T data, Integer code) {
+    public ResponseDto(final T data, final Integer code) {
     	this.data = data;
     	this.code = code;
     }
@@ -57,7 +57,7 @@ public class ResponseDto<T> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj == null) {
             return false;
         }

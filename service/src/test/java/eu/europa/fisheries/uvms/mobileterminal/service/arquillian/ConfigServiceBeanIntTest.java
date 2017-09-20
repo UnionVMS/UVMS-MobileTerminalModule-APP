@@ -9,7 +9,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageP
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Assert;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -38,7 +37,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testGetConfig() throws MobileTerminalException {
-        List<ConfigList> rs =  configService.getConfig();
+        final List<ConfigList> rs =  configService.getConfig();
         Assert.assertNotNull(rs);
         Assert.assertTrue(configListContains(rs, MobileTerminalConfigType.POLL_TIME_SPAN.toString()));
         Assert.assertTrue(configListContains(rs, MobileTerminalConfigType.POLL_TYPE.toString()));
@@ -50,17 +49,17 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     public void testGetRegisteredMobileTerminalPlugins_fail() {
         //TODO: Rewrite the error handling of getRegisteredMobileTerminalPlugins and extend this test.
         System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "true");
-        List<ServiceResponseType> registeredMobileTerminalPlugins =  configService.getRegisteredMobileTerminalPlugins();
+        final List<ServiceResponseType> registeredMobileTerminalPlugins =  configService.getRegisteredMobileTerminalPlugins();
         Assert.assertNull(registeredMobileTerminalPlugins);
     }
 
     @Test
     @OperateOnDeployment("normal")
     public void testUpsertPlugins() throws MobileTerminalException {
-        List<PluginService> pluginList = new ArrayList<>();
-        PluginService pluginService = createPluginService();
+        final List<PluginService> pluginList = new ArrayList<>();
+        final PluginService pluginService = createPluginService();
         pluginList.add(pluginService);
-        List<Plugin> plugins = configService.upsertPlugins(pluginList, "TEST");
+        final List<Plugin> plugins = configService.upsertPlugins(pluginList, "TEST");
         Assert.assertNotNull(plugins);
         Assert.assertTrue(pluginsContains(pluginList, "TEST_SERVICE"));
     }
@@ -68,13 +67,13 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testUpsertPluginsBadServiceName() {
-        List<PluginService> pluginList = new ArrayList<>();
-        PluginService pluginService = createPluginService();
+        final List<PluginService> pluginList = new ArrayList<>();
+        final PluginService pluginService = createPluginService();
         pluginService.setServiceName("");
         pluginList.add(pluginService);
         try {
             configService.upsertPlugins(pluginList, "TEST");
-        } catch (MobileTerminalException e) {
+        } catch (final MobileTerminalException e) {
             if(!(e instanceof InputArgumentException)) {
                 Assert.fail("Should be InputArgumentException");
             }
@@ -84,13 +83,13 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testUpsertPluginsBadLabelName() {
-        List<PluginService> pluginList = new ArrayList<>();
-        PluginService pluginService = createPluginService();
+        final List<PluginService> pluginList = new ArrayList<>();
+        final PluginService pluginService = createPluginService();
         pluginService.setLabelName("");
         pluginList.add(pluginService);
         try {
             configService.upsertPlugins(pluginList, "TEST");
-        } catch (MobileTerminalException e) {
+        } catch (final MobileTerminalException e) {
             if(!(e instanceof InputArgumentException)) {
                 Assert.fail("Should be InputArgumentException");
             }
@@ -100,7 +99,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testGetTerminalSystems() throws MobileTerminalException {
-        MobileTerminalPlugin mobileTerminalPlugin = new MobileTerminalPlugin();
+        final MobileTerminalPlugin mobileTerminalPlugin = new MobileTerminalPlugin();
         mobileTerminalPlugin.setName("TEST");
         mobileTerminalPlugin.setPluginSatelliteType("TEST");
         mobileTerminalPlugin.setDescription("TEST");
@@ -108,14 +107,14 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         mobileTerminalPlugin.setPluginInactive(false);
         mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
 
-        List<TerminalSystemType> rs =  configService.getTerminalSystems();
+        final List<TerminalSystemType> rs =  configService.getTerminalSystems();
         Assert.assertNotNull(rs);
         Assert.assertTrue(rs.size() > 0);
         Assert.assertTrue(terminalSystemsContains(rs, MobileTerminalTypeEnum.INMARSAT_C.toString()));
     }
 
     private PluginService createPluginService() {
-        PluginService pluginService = new PluginService();
+        final PluginService pluginService = new PluginService();
         pluginService.setInactive(false);
         pluginService.setLabelName("IRIDIUM_TEST_SERVICE");
         pluginService.setSatelliteType("IRIDIUM");
@@ -124,8 +123,8 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     }
 
 
-    private boolean terminalSystemsContains(List<TerminalSystemType> list, String type) {
-        for(TerminalSystemType each : list) {
+    private boolean terminalSystemsContains(final List<TerminalSystemType> list, final String type) {
+        for(final TerminalSystemType each : list) {
             if(each.getType().equals(type)) {
                 return true;
             }
@@ -133,8 +132,8 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         return false;
     }
 
-    private boolean configListContains(List<ConfigList> configLists, String value) {
-        for(ConfigList each : configLists) {
+    private boolean configListContains(final List<ConfigList> configLists, final String value) {
+        for(final ConfigList each : configLists) {
             if(value.equals(each.getName())) {
                 return true;
             }
@@ -143,9 +142,9 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         return false;
     }
 
-    private boolean pluginsContains(List<PluginService> pluginList, String name) {
+    private boolean pluginsContains(final List<PluginService> pluginList, final String name) {
 
-        for(PluginService each : pluginList) {
+        for(final PluginService each : pluginList) {
             if(each.getServiceName().equals(name)) {
                 return true;
             }

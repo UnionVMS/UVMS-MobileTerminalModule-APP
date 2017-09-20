@@ -63,14 +63,14 @@ public class PluginServiceBean implements PluginService {
     ConfigModelBean configModel;
 
     @Override
-    public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException {
+    public AcknowledgeTypeType sendPoll(final PollResponseType poll, final String username) throws MobileTerminalServiceException {
         try {
-            PollType pollType = PollToCommandRequestMapper.mapToPollType(poll);
-            String pluginServiceName = poll.getMobileTerminal().getPlugin().getServiceName();
-            String exchangeData = ExchangeModuleRequestMapper.createSetCommandSendPollRequest(pluginServiceName, pollType, username, null);
-            String messageId = messageProducer.sendModuleMessage(exchangeData, ModuleQueue.EXCHANGE);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
-            AcknowledgeType ack = ExchangeModuleResponseMapper.mapSetCommandResponse(response, messageId);
+            final PollType pollType = PollToCommandRequestMapper.mapToPollType(poll);
+            final String pluginServiceName = poll.getMobileTerminal().getPlugin().getServiceName();
+            final String exchangeData = ExchangeModuleRequestMapper.createSetCommandSendPollRequest(pluginServiceName, pollType, username, null);
+            final String messageId = messageProducer.sendModuleMessage(exchangeData, ModuleQueue.EXCHANGE);
+            final TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+            final AcknowledgeType ack = ExchangeModuleResponseMapper.mapSetCommandResponse(response, messageId);
             LOG.debug("Poll: " + poll.getPollId().getGuid() + " sent to exchange. Response: " + ack.getType());
             return ack.getType();
         } catch (ExchangeModelMapperException | MobileTerminalMessageException | MobileTerminalModelMapperException e) {
@@ -82,16 +82,16 @@ public class PluginServiceBean implements PluginService {
     
 
     @Override
-    public void processUpdatedDNIDList(String pluginName) {
+    public void processUpdatedDNIDList(final String pluginName) {
         try {
-            List<String> dnidList = configModel.updatedDNIDList(pluginName);
+            final List<String> dnidList = configModel.updatedDNIDList(pluginName);
 
-            String settingKey = pluginName + DELIMETER + SETTING_KEY_DNID_LIST;
-            StringBuffer buffer = new StringBuffer();
-            for (String dnid : dnidList) {
+            final String settingKey = pluginName + DELIMETER + SETTING_KEY_DNID_LIST;
+            final StringBuffer buffer = new StringBuffer();
+            for (final String dnid : dnidList) {
                 buffer.append(dnid + INTERNAL_DELIMETER);
             }
-            String settingValue = buffer.toString();
+            final String settingValue = buffer.toString();
 
             try {
                 sendUpdatedDNIDListToConfig(pluginName, settingKey, settingValue);
@@ -99,30 +99,30 @@ public class PluginServiceBean implements PluginService {
                 LOG.debug("Couldn't send to config module. Sending to exchange module.");
                 sendUpdatedDNIDListToExchange(pluginName, SETTING_KEY_DNID_LIST, settingValue);
             }
-        } catch (MobileTerminalModelException ex) {
+        } catch (final MobileTerminalModelException ex) {
             LOG.error("Couldn't get updated DNID List");
         }
     }
 
-    private void sendUpdatedDNIDListToConfig(String pluginName, String settingKey, String settingValue) throws ModelMarshallException, MobileTerminalMessageException {
-        SettingType setting = new SettingType();
+    private void sendUpdatedDNIDListToConfig(final String pluginName, final String settingKey, final String settingValue) throws ModelMarshallException, MobileTerminalMessageException {
+        final SettingType setting = new SettingType();
         setting.setKey(settingKey);
         setting.setModule(EXCHANGE_MODULE_NAME);
         setting.setDescription("DNID list for all active mobile terminals. Plugin use it to know which channels it should be listening to");
         setting.setGlobal(false);
         setting.setValue(settingValue);
 
-        String setSettingRequest = ModuleRequestMapper.toSetSettingRequest(EXCHANGE_MODULE_NAME, setting, "UVMS");
-        String messageId = messageProducer.sendModuleMessage(setSettingRequest, ModuleQueue.CONFIG);
-        TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+        final String setSettingRequest = ModuleRequestMapper.toSetSettingRequest(EXCHANGE_MODULE_NAME, setting, "UVMS");
+        final String messageId = messageProducer.sendModuleMessage(setSettingRequest, ModuleQueue.CONFIG);
+        final TextMessage response = reciever.getMessage(messageId, TextMessage.class);
         LOG.info("UpdatedDNIDList sent to config module");
     }
 
-    private void sendUpdatedDNIDListToExchange(String pluginName, String settingKey, String settingValue) {
+    private void sendUpdatedDNIDListToExchange(final String pluginName, final String settingKey, final String settingValue) {
         try {
-            String request = ExchangeModuleRequestMapper.createUpdatePluginSettingRequest(pluginName, settingKey, settingValue);
-            String messageId = messageProducer.sendModuleMessage(request, ModuleQueue.EXCHANGE);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+            final String request = ExchangeModuleRequestMapper.createUpdatePluginSettingRequest(pluginName, settingKey, settingValue);
+            final String messageId = messageProducer.sendModuleMessage(request, ModuleQueue.EXCHANGE);
+            final TextMessage response = reciever.getMessage(messageId, TextMessage.class);
             LOG.info("UpdatedDNIDList sent to exchange module {} {}",pluginName,settingKey);
         } catch (ExchangeModelMarshallException | MobileTerminalMessageException e) {
             LOG.error("Failed to send updated DNID list {} {} {}",pluginName,settingKey,e);

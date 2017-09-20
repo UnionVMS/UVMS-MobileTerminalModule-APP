@@ -20,7 +20,7 @@ public enum PollTypeEnum {
 
     private Integer id;
 
-    private PollTypeEnum(int id) {
+    private PollTypeEnum(final int id) {
         this.id = id;
     }
 

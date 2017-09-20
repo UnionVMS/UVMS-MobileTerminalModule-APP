@@ -46,7 +46,7 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     }
 
     @Override
-    public <T> T getMessage(String correlationId, Class type) throws MobileTerminalMessageException {
+    public <T> T getMessage(final String correlationId, final Class type) throws MobileTerminalMessageException {
     	if (correlationId == null || correlationId.isEmpty()) {
     		throw new MobileTerminalMessageException("No CorrelationID provided!");
     	}
@@ -57,14 +57,14 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
             connection = connectionFactory.createConnection();
             final Session session = JMSUtils.connectToQueue(connection);
 
-            T response = (T) session.createConsumer(responseMobileTerminalQueue, "JMSCorrelationID='" + correlationId + "'").receive(TIMEOUT);
+            final T response = (T) session.createConsumer(responseMobileTerminalQueue, "JMSCorrelationID='" + correlationId + "'").receive(TIMEOUT);
             
             if (response == null) {
                 throw new MobileTerminalMessageException("[ Timeout reached or message null in MobileTerminalMessageConsumer. ]");
             }
 
             return response;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("[ Error when consuming message. ] {}", e.getMessage());
             throw new MobileTerminalMessageException("Error when retrieving message: " + e.getMessage());
         } finally {
@@ -73,11 +73,11 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     }
 
     @Override
-    public <T> T getConfigMessage(String correlationId, Class type) throws ConfigMessageException {
+    public <T> T getConfigMessage(final String correlationId, final Class type) throws ConfigMessageException {
         try {
             return getMessage(correlationId, type);
         }
-        catch (MobileTerminalMessageException e) {
+        catch (final MobileTerminalMessageException e) {
             LOG.error("[ Error when getting config message. ] {}", e.getMessage());
             throw new ConfigMessageException(e.getMessage());
         }

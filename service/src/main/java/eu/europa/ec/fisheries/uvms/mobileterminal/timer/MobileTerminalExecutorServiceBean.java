@@ -43,7 +43,7 @@ public class MobileTerminalExecutorServiceBean {
             }
             LOG.info("PluginTimerTask initialized.");
             pluginTimerTask.run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("[ Error when initializing PluginTimerTask. ] {}", e.getMessage());
         }
 
@@ -57,7 +57,7 @@ public class MobileTerminalExecutorServiceBean {
             }
             LOG.info("PollTimerTask initialized.");
             pollTimerTask.run();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("[ Error when initializing PollTimerTask. ] {}", e.getMessage());
         }
     }

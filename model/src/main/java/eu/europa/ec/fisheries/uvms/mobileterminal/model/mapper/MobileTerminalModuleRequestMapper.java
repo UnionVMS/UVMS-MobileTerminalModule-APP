@@ -21,27 +21,27 @@ import java.util.List;
 
 public class MobileTerminalModuleRequestMapper {
 
-    public static String createMobileTerminalResponse(MobileTerminalType mobTerm) throws MobileTerminalModelMapperException {
-        MobileTerminalResponse response = new MobileTerminalResponse();
+    public static String createMobileTerminalResponse(final MobileTerminalType mobTerm) throws MobileTerminalModelMapperException {
+        final MobileTerminalResponse response = new MobileTerminalResponse();
         response.setMobilTerminal(mobTerm);
         return JAXBMarshaller.marshallJaxBObjectToString(response);
     }
 
-    public static String createGetMobileTerminalRequest(MobileTerminalId mobileTerminalId) throws MobileTerminalModelMapperException {
-        GetMobileTerminalRequest request = new GetMobileTerminalRequest();
+    public static String createGetMobileTerminalRequest(final MobileTerminalId mobileTerminalId) throws MobileTerminalModelMapperException {
+        final GetMobileTerminalRequest request = new GetMobileTerminalRequest();
         request.setMethod(MobileTerminalModuleMethod.GET_MOBILE_TERMINAL);
         request.setId(mobileTerminalId);
         return JAXBMarshaller.marshallJaxBObjectToString(request);
     }
 
-    public static String mapGetMobileTerminalList(List<MobileTerminalType> mobileTerminalTypes) throws MobileTerminalModelMapperException {
-        MobileTerminalListResponse response = new MobileTerminalListResponse();
+    public static String mapGetMobileTerminalList(final List<MobileTerminalType> mobileTerminalTypes) throws MobileTerminalModelMapperException {
+        final MobileTerminalListResponse response = new MobileTerminalListResponse();
         response.getMobileTerminal().addAll(mobileTerminalTypes);
         return JAXBMarshaller.marshallJaxBObjectToString(response);
     }
 
-    public static String createMobileTerminalListRequest(MobileTerminalListQuery query) throws MobileTerminalModelMapperException {
-        MobileTerminalListRequest request = new MobileTerminalListRequest();
+    public static String createMobileTerminalListRequest(final MobileTerminalListQuery query) throws MobileTerminalModelMapperException {
+        final MobileTerminalListRequest request = new MobileTerminalListRequest();
         request.setMethod(MobileTerminalModuleMethod.LIST_MOBILE_TERMINALS);
         request.setQuery(query);
         return JAXBMarshaller.marshallJaxBObjectToString(request);

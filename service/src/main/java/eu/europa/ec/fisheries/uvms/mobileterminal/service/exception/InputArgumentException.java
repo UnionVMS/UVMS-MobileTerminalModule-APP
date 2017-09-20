@@ -14,7 +14,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.service.exception;
 public class InputArgumentException extends MobileTerminalServiceException {
 	private static final long serialVersionUID = 5448376193527302278L;
 
-	public InputArgumentException(String message) {
+	public InputArgumentException(final String message) {
 		super(message);
 	}
 }

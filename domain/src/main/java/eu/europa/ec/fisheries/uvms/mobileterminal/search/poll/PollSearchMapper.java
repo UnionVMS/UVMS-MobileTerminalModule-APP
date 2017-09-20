@@ -24,26 +24,26 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 
 public class PollSearchMapper {
 
-	public static List<PollSearchKeyValue> createSearchFields(List<ListCriteria> criterias) throws SearchMapperException {
-		Map<PollSearchField, PollSearchKeyValue> searchKeyValues = new HashMap<>();
-        for (ListCriteria criteria : criterias) {
-        	PollSearchKeyValue keyValue = mapSearchKey(criteria, searchKeyValues);
+	public static List<PollSearchKeyValue> createSearchFields(final List<ListCriteria> criterias) throws SearchMapperException {
+		final Map<PollSearchField, PollSearchKeyValue> searchKeyValues = new HashMap<>();
+        for (final ListCriteria criteria : criterias) {
+        	final PollSearchKeyValue keyValue = mapSearchKey(criteria, searchKeyValues);
             searchKeyValues.put(keyValue.getSearchField(), keyValue);
         }
         return new ArrayList<PollSearchKeyValue>(searchKeyValues.values());
 	}
 	
-    private static PollSearchKeyValue mapSearchKey(ListCriteria criteria, Map<PollSearchField, PollSearchKeyValue> searchKeys) throws SearchMapperException {
+    private static PollSearchKeyValue mapSearchKey(final ListCriteria criteria, final Map<PollSearchField, PollSearchKeyValue> searchKeys) throws SearchMapperException {
         if (criteria == null || criteria.getKey() == null || criteria.getValue() == null) {
             throw new SearchMapperException("Non valid search criteria");
         }
 
-        PollSearchKeyValue searchKeyValue = getSearchKeyValue(getSearchField(criteria.getKey()), searchKeys);
+        final PollSearchKeyValue searchKeyValue = getSearchKeyValue(getSearchField(criteria.getKey()), searchKeys);
         searchKeyValue.getValues().add(criteria.getValue());
         return searchKeyValue;
     }
 	
-    private static PollSearchKeyValue getSearchKeyValue(PollSearchField field, Map<PollSearchField, PollSearchKeyValue> searchKeys) {
+    private static PollSearchKeyValue getSearchKeyValue(final PollSearchField field, final Map<PollSearchField, PollSearchKeyValue> searchKeys) {
     	PollSearchKeyValue searchKeyValue = searchKeys.get(field);
         if (searchKeyValue == null) {
             searchKeyValue = new PollSearchKeyValue();
@@ -52,7 +52,7 @@ public class PollSearchMapper {
         return searchKeyValue;
     }
     
-	private static PollSearchField getSearchField(SearchKey key) throws SearchMapperException {
+	private static PollSearchField getSearchField(final SearchKey key) throws SearchMapperException {
 		switch(key) {
 		case CONNECT_ID:
 			return PollSearchField.CONNECT_ID;
@@ -76,8 +76,8 @@ public class PollSearchMapper {
 	 * ToDo: as it expects a Long return value but it gets an object of type Poll.
 	 */
 
-	private static String createSearchSql(List<PollSearchKeyValue> searchKeys, boolean isDynamic) {
-		StringBuilder builder = new StringBuilder();
+	private static String createSearchSql(final List<PollSearchKeyValue> searchKeys, final boolean isDynamic) {
+		final StringBuilder builder = new StringBuilder();
 		String OPERATOR = " OR ";
 		if(isDynamic) {
 			OPERATOR = " AND ";
@@ -89,7 +89,7 @@ public class PollSearchMapper {
 		if(!searchKeys.isEmpty()) {
 			builder.append(" WHERE ");
 			boolean first = true;
-			for(PollSearchKeyValue keyValue : searchKeys) {
+			for(final PollSearchKeyValue keyValue : searchKeys) {
 				if(first) {
 					first = false;
 				} else {
@@ -103,22 +103,22 @@ public class PollSearchMapper {
 		return builder.toString();
 	}
 	
-	public static String createCountSearchSql(List<PollSearchKeyValue> searchKeys, boolean isDynamic) {
-		StringBuilder builder = new StringBuilder();
+	public static String createCountSearchSql(final List<PollSearchKeyValue> searchKeys, final boolean isDynamic) {
+		final StringBuilder builder = new StringBuilder();
 		builder.append("SELECT COUNT (DISTINCT p) FROM Poll p ");
 		builder.append(createSearchSql(searchKeys, isDynamic));
 		return builder.toString();
 	}
 
-	public static String createSelectSearchSql(List<PollSearchKeyValue> searchKeys, boolean isDynamic) {
-		StringBuilder builder = new StringBuilder();
+	public static String createSelectSearchSql(final List<PollSearchKeyValue> searchKeys, final boolean isDynamic) {
+		final StringBuilder builder = new StringBuilder();
 		builder.append("SELECT DISTINCT p FROM Poll p ");
 		builder.append(createSearchSql(searchKeys, isDynamic));
 		return builder.toString();
 	}
 	
-	public static String createPollableSearchSql(List<String> idList) {
-		StringBuilder builder = new StringBuilder();
+	public static String createPollableSearchSql(final List<String> idList) {
+		final StringBuilder builder = new StringBuilder();
 		builder.append("SELECT DISTINCT c FROM Channel c");
 		builder.append(" INNER JOIN FETCH c.mobileTerminal mt");
 		builder.append(" INNER JOIN FETCH mt.mobileTerminalEvents me");

@@ -33,40 +33,40 @@ public class DNIDListDaoBean extends Dao implements DNIDListDao {
 	@Override
 	public List<DNIDList> getAllDNIDList() throws ConfigDaoException {
 		try {
-            TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST, DNIDList.class);
+            final TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST, DNIDList.class);
             return query.getResultList();
-        } catch (NoResultException e) {
+        } catch (final NoResultException e) {
             LOG.error("[ Error when getting dnid list. ] {}", e.getMessage());
             throw new ConfigDaoException("No entities found when retrieving dnid list");
         }
 	}
 
 	@Override
-	public List<DNIDList> getDNIDList(String pluginName) throws ConfigDaoException {
+	public List<DNIDList> getDNIDList(final String pluginName) throws ConfigDaoException {
 		try {
-            TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST_BY_PLUGIN, DNIDList.class);
+            final TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST_BY_PLUGIN, DNIDList.class);
             query.setParameter("pluginName", pluginName);
             return query.getResultList();
-        } catch (NoResultException e) {
+        } catch (final NoResultException e) {
             LOG.error("[ Error when getting dnid list by plugin. ] {}", e.getMessage());
             throw new ConfigDaoException("No entities found when retrieving dnid list by plugin");
         }
 	}
 
 	@Override
-	public void removeByPluginName(String pluginName) throws ConfigDaoException {
-		List<DNIDList> dnidList = getDNIDList(pluginName);
-		for(DNIDList entity : dnidList) {
+	public void removeByPluginName(final String pluginName) throws ConfigDaoException {
+		final List<DNIDList> dnidList = getDNIDList(pluginName);
+		for(final DNIDList entity : dnidList) {
 			em.remove(entity);
 		}
 	}
 
 	@Override
-	public DNIDList create(DNIDList entity) throws ConfigDaoException {
+	public DNIDList create(final DNIDList entity) throws ConfigDaoException {
 		try {
             em.persist(entity);
             return entity;
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("[ Error when creating dnid list entity. ]", e.getMessage());
             throw new ConfigDaoException("[ dnid list entity ] " + e.getMessage());
         }

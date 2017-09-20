@@ -64,17 +64,17 @@ public class PollDomainModelBean  {
     @EJB
     ChannelDao channelDao;
     
-    private MobileTerminalType mapPollableTerminalType(MobileTerminalTypeEnum type, String guid) throws MobileTerminalModelException {
-        MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);
+    private MobileTerminalType mapPollableTerminalType(final MobileTerminalTypeEnum type, final String guid) throws MobileTerminalModelException {
+        final MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);
         return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
 	}
 
-    private MobileTerminalType getPollableTerminalType(String guid, String channelGuid) throws MobileTerminalModelException {
-        MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);
+    private MobileTerminalType getPollableTerminalType(final String guid, final String channelGuid) throws MobileTerminalModelException {
+        final MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);
         checkPollable(terminal);
 
         if(channelGuid != null && !channelGuid.isEmpty()) {
-            for (Channel channel : terminal.getChannels()) {
+            for (final Channel channel : terminal.getChannels()) {
                 if (channel.getGuid().equalsIgnoreCase(channelGuid)) {
                     if (!channel.getMobileTerminal().getGuid().equalsIgnoreCase(guid)) {
                         throw new MobileTerminalModelException("Channel " + channel.getGuid() + " can not be polled, because it is not part of terminal " + terminal.getGuid());
@@ -87,7 +87,7 @@ public class PollDomainModelBean  {
 		throw new MobileTerminalModelException("Could not find channel " + channelGuid + " based on");
     }
     
-    private void checkPollable(MobileTerminal terminal) throws MobileTerminalModelException {
+    private void checkPollable(final MobileTerminal terminal) throws MobileTerminalModelException {
     	if(terminal.getArchived()) {
     		throw new MobileTerminalModelException("Terminal is archived");
     	}
@@ -99,7 +99,7 @@ public class PollDomainModelBean  {
     	}
     }
     
-    public List<PollResponseType> createPolls(PollRequestType pollRequest, String username) throws MobileTerminalModelException {
+    public List<PollResponseType> createPolls(final PollRequestType pollRequest, final String username) throws MobileTerminalModelException {
         if (pollRequest == null || pollRequest.getPollType() == null) {
             throw new InputArgumentException("No polls to create");
         }
@@ -116,7 +116,7 @@ public class PollDomainModelBean  {
         Map<Poll, MobileTerminalType> pollMobileTerminalTypeMap;
         switch (pollRequest.getPollType()) {
             case PROGRAM_POLL:
-                Map<PollProgram, MobileTerminalType> pollProgramMobileTerminalTypeMap = validateAndMapToProgramPolls(pollRequest, username);
+                final Map<PollProgram, MobileTerminalType> pollProgramMobileTerminalTypeMap = validateAndMapToProgramPolls(pollRequest, username);
                 responseList = createPollPrograms(pollProgramMobileTerminalTypeMap, username);
                 break;
             case CONFIGURATION_POLL:
@@ -132,28 +132,28 @@ public class PollDomainModelBean  {
         return responseList;
     }
 
-    private Map<PollProgram, MobileTerminalType> validateAndMapToProgramPolls(PollRequestType pollRequest, String username) throws MobileTerminalModelException {
-        Map<PollProgram, MobileTerminalType> map = new HashMap<>();
+    private Map<PollProgram, MobileTerminalType> validateAndMapToProgramPolls(final PollRequestType pollRequest, final String username) throws MobileTerminalModelException {
+        final Map<PollProgram, MobileTerminalType> map = new HashMap<>();
 
-        for(PollMobileTerminal pollTerminal : pollRequest.getMobileTerminals()) {
-            MobileTerminal mobileTerminalEntity = terminalDao.getMobileTerminalByGuid(pollTerminal.getMobileTerminalId());
-            String connectId = mobileTerminalEntity.getCurrentEvent().getConnectId();
+        for(final PollMobileTerminal pollTerminal : pollRequest.getMobileTerminals()) {
+            final MobileTerminal mobileTerminalEntity = terminalDao.getMobileTerminalByGuid(pollTerminal.getMobileTerminalId());
+            final String connectId = mobileTerminalEntity.getCurrentEvent().getConnectId();
             if (!pollTerminal.getConnectId().equals(connectId)) {
                 throw new MobileTerminalModelException("Terminal " + mobileTerminalEntity.getGuid() + " can not be polled, because it is not linked to asset " + connectId);
             }
-            MobileTerminalType terminalType = getPollableTerminalType(pollTerminal.getMobileTerminalId(), pollTerminal.getComChannelId());
-            PollProgram pollProgram = PollModelToEntityMapper.mapToProgramPoll(mobileTerminalEntity, connectId, pollTerminal.getComChannelId(), pollRequest, username);
+            final MobileTerminalType terminalType = getPollableTerminalType(pollTerminal.getMobileTerminalId(), pollTerminal.getComChannelId());
+            final PollProgram pollProgram = PollModelToEntityMapper.mapToProgramPoll(mobileTerminalEntity, connectId, pollTerminal.getComChannelId(), pollRequest, username);
             map.put(pollProgram, terminalType);
         }
         return map;
     }
 
-    private Map<Poll, MobileTerminalType> validateAndMapToPolls(PollRequestType pollRequest, String username) throws MobileTerminalModelException {
-        Map<Poll, MobileTerminalType> map = new HashMap<>();
+    private Map<Poll, MobileTerminalType> validateAndMapToPolls(final PollRequestType pollRequest, final String username) throws MobileTerminalModelException {
+        final Map<Poll, MobileTerminalType> map = new HashMap<>();
 
-        for(PollMobileTerminal pollTerminal : pollRequest.getMobileTerminals()) {
-            MobileTerminal mobileTerminalEntity = terminalDao.getMobileTerminalByGuid(pollTerminal.getMobileTerminalId());
-            String connectId = mobileTerminalEntity.getCurrentEvent().getConnectId();
+        for(final PollMobileTerminal pollTerminal : pollRequest.getMobileTerminals()) {
+            final MobileTerminal mobileTerminalEntity = terminalDao.getMobileTerminalByGuid(pollTerminal.getMobileTerminalId());
+            final String connectId = mobileTerminalEntity.getCurrentEvent().getConnectId();
             if (!pollTerminal.getConnectId().equals(connectId)) {
                 throw new MobileTerminalModelException("Terminal " + mobileTerminalEntity.getGuid() + " can not be polled, because it is not linked to asset " + connectId);
             }
@@ -161,14 +161,14 @@ public class PollDomainModelBean  {
             if(pollRequest.getPollType() != PollType.MANUAL_POLL){
                 validateMobileTerminalPluginCapability(mobileTerminalEntity.getPlugin().getCapabilities(), pollRequest.getPollType(), mobileTerminalEntity.getPlugin().getPluginServiceName());
             }
-            MobileTerminalType terminalType = getPollableTerminalType(pollTerminal.getMobileTerminalId(), pollTerminal.getComChannelId());
-            Poll poll = PollModelToEntityMapper.mapToPoll(mobileTerminalEntity, connectId, pollTerminal.getComChannelId(), pollRequest, username);
+            final MobileTerminalType terminalType = getPollableTerminalType(pollTerminal.getMobileTerminalId(), pollTerminal.getComChannelId());
+            final Poll poll = PollModelToEntityMapper.mapToPoll(mobileTerminalEntity, connectId, pollTerminal.getComChannelId(), pollRequest, username);
             map.put(poll, terminalType);
         }
         return map;
     }
 
-    private void validateMobileTerminalPluginCapability(Set<MobileTerminalPluginCapability> capabilities, PollType pollType, String pluginServiceName) throws MobileTerminalModelException {
+    private void validateMobileTerminalPluginCapability(final Set<MobileTerminalPluginCapability> capabilities, final PollType pollType, final String pluginServiceName) throws MobileTerminalModelException {
         PluginCapabilityType pluginCapabilityType = PluginCapabilityType.CONFIGURABLE;
         switch (pollType){
             case CONFIGURATION_POLL:
@@ -185,8 +185,8 @@ public class PollDomainModelBean  {
         }
     }
 
-    private boolean validatePluginHasCapabilityConfigurable(Set<MobileTerminalPluginCapability> capabilities, PluginCapabilityType pluginCapability) {
-        for (MobileTerminalPluginCapability pluginCap : capabilities){
+    private boolean validatePluginHasCapabilityConfigurable(final Set<MobileTerminalPluginCapability> capabilities, final PluginCapabilityType pluginCapability) {
+        for (final MobileTerminalPluginCapability pluginCap : capabilities){
             if(pluginCapability.name().equalsIgnoreCase(pluginCap.getName())){
                 return true;
             }
@@ -194,20 +194,20 @@ public class PollDomainModelBean  {
         return false;
     }
 
-    private List<PollResponseType> createPollPrograms(Map<PollProgram, MobileTerminalType> map, String username) throws MobileTerminalModelException {
-        List<PollResponseType> responseList = new ArrayList<>();
-        Iterator<Map.Entry<PollProgram, MobileTerminalType>> iterator = map.entrySet().iterator();
+    private List<PollResponseType> createPollPrograms(final Map<PollProgram, MobileTerminalType> map, final String username) throws MobileTerminalModelException {
+        final List<PollResponseType> responseList = new ArrayList<>();
+        final Iterator<Map.Entry<PollProgram, MobileTerminalType>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()){
-            Map.Entry<PollProgram, MobileTerminalType> next = iterator.next();
-            PollProgram pollProgram = next.getKey();
-            MobileTerminalType mobileTerminalType = next.getValue();
+            final Map.Entry<PollProgram, MobileTerminalType> next = iterator.next();
+            final PollProgram pollProgram = next.getKey();
+            final MobileTerminalType mobileTerminalType = next.getValue();
             try {
                 pollDao.createPollProgram(pollProgram);
                 responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, mobileTerminalType));
-            } catch (PollDaoException e) {
+            } catch (final PollDaoException e) {
                 LOG.error("[ Could not persist PollProgram ]");
                 throw new MobileTerminalModelException("Could not persist PollProgam");
-            } catch (MobileTerminalModelMapperException e) {
+            } catch (final MobileTerminalModelMapperException e) {
                 LOG.error("Could not map PollProgram to PollResponseType");
                 throw e;
             }
@@ -215,20 +215,20 @@ public class PollDomainModelBean  {
         return responseList;
     }
 
-    private List<PollResponseType> createPolls(Map<Poll, MobileTerminalType> map, PollType pollType) throws MobileTerminalModelException {
-        List<PollResponseType> responseList = new ArrayList<>();
-        Iterator<Map.Entry<Poll, MobileTerminalType>> iterator = map.entrySet().iterator();
+    private List<PollResponseType> createPolls(final Map<Poll, MobileTerminalType> map, final PollType pollType) throws MobileTerminalModelException {
+        final List<PollResponseType> responseList = new ArrayList<>();
+        final Iterator<Map.Entry<Poll, MobileTerminalType>> iterator = map.entrySet().iterator();
         while (iterator.hasNext()){
-            Map.Entry<Poll, MobileTerminalType> next = iterator.next();
-            Poll poll = next.getKey();
-            MobileTerminalType mobileTerminalType = next.getValue();
+            final Map.Entry<Poll, MobileTerminalType> next = iterator.next();
+            final Poll poll = next.getKey();
+            final MobileTerminalType mobileTerminalType = next.getValue();
             try {
                 pollDao.createPoll(poll);
                 responseList.add(PollEntityToModelMapper.mapToPollResponseType(poll, mobileTerminalType, pollType));
-            } catch (PollDaoException e) {
+            } catch (final PollDaoException e) {
                 LOG.error("[ Could not persist Poll ]");
                 throw new MobileTerminalModelException("Could not persist Poll");
-            } catch (MobileTerminalModelMapperException e) {
+            } catch (final MobileTerminalModelMapperException e) {
                 LOG.error("Could not map Poll to PollResponseType");
                 throw e;
             }
@@ -237,7 +237,7 @@ public class PollDomainModelBean  {
 
     }
 
-    public PollListResponse getPollList(PollListQuery query) throws MobileTerminalModelException {
+    public PollListResponse getPollList(final PollListQuery query) throws MobileTerminalModelException {
         if (query == null) {
         	throw new InputArgumentException("Cannot get poll list because no query.");
         }
@@ -249,27 +249,27 @@ public class PollDomainModelBean  {
         if(query.getPollSearchCriteria() == null || query.getPollSearchCriteria().getCriterias() == null) {
         	throw new InputArgumentException("Cannot get poll list because criteria are null.");
         }
-        PollListResponse response = new PollListResponse();
-        List<PollResponseType> pollResponseList = new ArrayList<>();
+        final PollListResponse response = new PollListResponse();
+        final List<PollResponseType> pollResponseList = new ArrayList<>();
 
-        Integer page = query.getPagination().getPage();
-        Integer listSize = query.getPagination().getListSize();
-        boolean isDynamic = query.getPollSearchCriteria().isIsDynamic();
-        List<PollSearchKeyValue> searchKeys = PollSearchMapper.createSearchFields(query.getPollSearchCriteria().getCriterias());
+        final Integer page = query.getPagination().getPage();
+        final Integer listSize = query.getPagination().getListSize();
+        final boolean isDynamic = query.getPollSearchCriteria().isIsDynamic();
+        final List<PollSearchKeyValue> searchKeys = PollSearchMapper.createSearchFields(query.getPollSearchCriteria().getCriterias());
         
-        String countSql = PollSearchMapper.createCountSearchSql(searchKeys, isDynamic);
-        String sql = PollSearchMapper.createSelectSearchSql(searchKeys, isDynamic);
+        final String countSql = PollSearchMapper.createCountSearchSql(searchKeys, isDynamic);
+        final String sql = PollSearchMapper.createSelectSearchSql(searchKeys, isDynamic);
 
-        Long numberMatches = pollDao.getPollListSearchCount(countSql, searchKeys, isDynamic);
-        List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, searchKeys, isDynamic);
+        final Long numberMatches = pollDao.getPollListSearchCount(countSql, searchKeys, isDynamic);
+        final List<Poll> pollList = pollDao.getPollListSearchPaginated(page, listSize, sql, searchKeys, isDynamic);
         
-        for (Poll poll : pollList) {
+        for (final Poll poll : pollList) {
         	try {
-        		MobileTerminal mobileTerminalEntity = poll.getPollBase().getMobileTerminal();
-        		MobileTerminalType mobileTerminalType = mapPollableTerminalType(mobileTerminalEntity.getMobileTerminalType(), mobileTerminalEntity.getGuid());
-        		PollResponseType pollType = PollEntityToModelMapper.mapToPollResponseType(poll, mobileTerminalType, EnumMapper.getPollModelFromType(poll.getPollType()));
+        		final MobileTerminal mobileTerminalEntity = poll.getPollBase().getMobileTerminal();
+        		final MobileTerminalType mobileTerminalType = mapPollableTerminalType(mobileTerminalEntity.getMobileTerminalType(), mobileTerminalEntity.getGuid());
+        		final PollResponseType pollType = PollEntityToModelMapper.mapToPollResponseType(poll, mobileTerminalType, EnumMapper.getPollModelFromType(poll.getPollType()));
         		pollResponseList.add(pollType);
-        	} catch (EnumException e) {
+        	} catch (final EnumException e) {
         		LOG.error("[ Poll " + poll.getGuid() + "  couldn't map type ]");
         	}
         }
@@ -285,16 +285,16 @@ public class PollDomainModelBean  {
         return response;
     }
     
-    public List<PollResponseType> getPollProgramList(boolean onlyAlivePrograms) throws MobileTerminalModelException {
-        List<PollProgram> pollPrograms = pollProgramDao.getProgramPollsAlive();
+    public List<PollResponseType> getPollProgramList(final boolean onlyAlivePrograms) throws MobileTerminalModelException {
+        final List<PollProgram> pollPrograms = pollProgramDao.getProgramPollsAlive();
         
-        List<PollResponseType> responseList = new ArrayList<>();
-        for(PollProgram pollProgram : pollPrograms) {
+        final List<PollResponseType> responseList = new ArrayList<>();
+        for(final PollProgram pollProgram : pollPrograms) {
         	try {
-        		MobileTerminal terminal = pollProgram.getPollBase().getMobileTerminal();
-        		MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
+        		final MobileTerminal terminal = pollProgram.getPollBase().getMobileTerminal();
+        		final MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
         		responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, terminalType));
-        	} catch (NoEntityFoundException e) {
+        	} catch (final NoEntityFoundException e) {
         		LOG.error("[ Unvalid mobile terminal connected to poll program " + pollProgram.getGuid() + " ]");
         	    throw new MobileTerminalModelException("[ Unvalid mobile terminal connected to poll program " + pollProgram.getGuid() + " ]");
         	}
@@ -303,15 +303,15 @@ public class PollDomainModelBean  {
     }
 
     public List<PollResponseType> getPollProgramRunningAndStarted() throws MobileTerminalModelException {
-        List<PollProgram> pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
+        final List<PollProgram> pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
 
-        List<PollResponseType> responseList = new ArrayList<>();
-        for(PollProgram pollProgram : pollPrograms) {
+        final List<PollResponseType> responseList = new ArrayList<>();
+        for(final PollProgram pollProgram : pollPrograms) {
         	try {
-        		MobileTerminal terminal = pollProgram.getPollBase().getMobileTerminal();
-        		MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
+        		final MobileTerminal terminal = pollProgram.getPollBase().getMobileTerminal();
+        		final MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
         		responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, terminalType));
-        	} catch (NoEntityFoundException e) {
+        	} catch (final NoEntityFoundException e) {
         		LOG.error("[ Unvalid mobile terminal connected to poll program " + pollProgram.getGuid() + " ]");
         	    throw new MobileTerminalModelException("[ Unvalid mobile terminal connected to poll program " + pollProgram.getGuid() + " ]");
         	}
@@ -319,7 +319,7 @@ public class PollDomainModelBean  {
         return responseList;
     }
 
-    public PollResponseType setStatusPollProgram(PollId id, PollStatus state) throws MobileTerminalModelException {
+    public PollResponseType setStatusPollProgram(final PollId id, final PollStatus state) throws MobileTerminalModelException {
         if (id == null || id.getGuid() == null || id.getGuid().isEmpty()) {
             throw new InputArgumentException("No poll id given");
         }
@@ -328,9 +328,9 @@ public class PollDomainModelBean  {
         }
         
         try {
-            PollProgram program = pollProgramDao.getPollProgramByGuid(id.getGuid());
-            MobileTerminal terminal = program.getPollBase().getMobileTerminal();
-            MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
+            final PollProgram program = pollProgramDao.getPollProgramByGuid(id.getGuid());
+            final MobileTerminal terminal = program.getPollBase().getMobileTerminal();
+            final MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
             
             switch (program.getPollState()) {
             case ARCHIVED:
@@ -345,16 +345,16 @@ public class PollDomainModelBean  {
             program.setPollState(EnumMapper.getPollStateTypeFromModel(state));
 
             return PollEntityToModelMapper.mapToPollResponseType(program, terminalType);
-        } catch (EnumException e) {
+        } catch (final EnumException e) {
             LOG.error("[ Error when setting poll program status. ] {}", e.getMessage());
             throw new MobileTerminalModelException(e.getMessage());
-        } catch (NoEntityFoundException e) {
+        } catch (final NoEntityFoundException e) {
         	LOG.error("[ Unvalid mobile terminal connected to poll program ]");
         	throw new MobileTerminalModelException("[ Unvalid mobile terminal connected to poll program ]");
         }
     }
 
-    public ListResponseDto getMobileTerminalPollableList(PollableQuery query) throws MobileTerminalModelException {
+    public ListResponseDto getMobileTerminalPollableList(final PollableQuery query) throws MobileTerminalModelException {
         if (query == null) {
             throw new InputArgumentException("No query");
         }
@@ -363,30 +363,30 @@ public class PollDomainModelBean  {
             throw new InputArgumentException("No list pagination");
         }
 
-        ListResponseDto response = new ListResponseDto();
-        List<MobileTerminalType> mobileTerminalList = new ArrayList<MobileTerminalType>();
+        final ListResponseDto response = new ListResponseDto();
+        final List<MobileTerminalType> mobileTerminalList = new ArrayList<MobileTerminalType>();
 
-        Integer page = query.getPagination().getPage();
-        Integer listSize = query.getPagination().getListSize();
-        int startIndex = (page-1)*listSize;
+        final Integer page = query.getPagination().getPage();
+        final Integer listSize = query.getPagination().getListSize();
+        final int startIndex = (page-1)*listSize;
         int stopIndex = startIndex+listSize;
         LOG.debug("page: " + page + ", listSize: " + listSize + ", startIndex: " + startIndex);
         
-        List<String> idList = query.getConnectIdList();
-        long in = System.currentTimeMillis();
+        final List<String> idList = query.getConnectIdList();
+        final long in = System.currentTimeMillis();
 
         //Long numberMatches = channelInmarsatCDao.getPollableListSearchCount(countSql, idList);
-        List<Channel> channels = channelDao.getPollableListSearch(idList);
+        final List<Channel> channels = channelDao.getPollableListSearch(idList);
         
-        for (Channel comchannel : channels) {
+        for (final Channel comchannel : channels) {
         	//TODO slim response from Pollable
-        	MobileTerminalType terminal = MobileTerminalEntityToModelMapper.mapToMobileTerminalType(comchannel.getMobileTerminal(), comchannel);
+        	final MobileTerminalType terminal = MobileTerminalEntityToModelMapper.mapToMobileTerminalType(comchannel.getMobileTerminal(), comchannel);
             mobileTerminalList.add(terminal);
         }
         
-        int numberMatches = mobileTerminalList.size();
+        final int numberMatches = mobileTerminalList.size();
         
-        int numberOfPages = (int) (numberMatches / listSize);
+        int numberOfPages = numberMatches / listSize;
         if (numberMatches % listSize != 0) {
             numberOfPages += 1;
         }
@@ -398,7 +398,7 @@ public class PollDomainModelBean  {
             	stopIndex = numberMatches;
             }
         	LOG.debug("stopIndex: " + stopIndex);
-            List<MobileTerminalType> newList = new ArrayList<>(mobileTerminalList.subList(startIndex, stopIndex));
+            final List<MobileTerminalType> newList = new ArrayList<>(mobileTerminalList.subList(startIndex, stopIndex));
         	response.setMobileTerminalList(newList);
         }
         
@@ -406,7 +406,7 @@ public class PollDomainModelBean  {
         response.setTotalNumberOfPages(numberOfPages);
         response.setCurrentPage(query.getPagination().getPage());
         
-        long out = System.currentTimeMillis();
+        final long out = System.currentTimeMillis();
         LOG.debug("Get pollable channels " + (out-in) + " ms");
         return response;
 

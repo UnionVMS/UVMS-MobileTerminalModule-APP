@@ -18,8 +18,8 @@ public enum AttributeIridium {
     //ATTRIBUTE_VALUE,
     SERIAL_NUMBER;
 
-    public static AttributeIridium getAttribute(String type) throws EnumException {
-        for(AttributeIridium attr : AttributeIridium.values()) {
+    public static AttributeIridium getAttribute(final String type) throws EnumException {
+        for(final AttributeIridium attr : AttributeIridium.values()) {
             if(attr.name().equalsIgnoreCase(type)) {
                 return attr;
             }

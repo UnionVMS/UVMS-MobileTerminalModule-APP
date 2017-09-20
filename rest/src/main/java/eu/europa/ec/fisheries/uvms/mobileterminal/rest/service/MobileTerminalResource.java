@@ -68,11 +68,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/")
     @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
-    public ResponseDto createMobileTerminal(MobileTerminalType mobileterminal) {
+    public ResponseDto createMobileTerminal(final MobileTerminalType mobileterminal) {
         LOG.info("Create mobile terminal invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.createMobileTerminal(mobileterminal, MobileTerminalSource.INTERNAL, request.getRemoteUser()), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when creating mobile terminal ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -91,11 +91,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/{id}")
     @RequiresFeature(UnionVMSFeature.viewVesselsAndMobileTerminals)
-    public ResponseDto getMobileTerminalById(@PathParam("id") String mobileterminalId) {
+    public ResponseDto getMobileTerminalById(@PathParam("id") final String mobileterminalId) {
         LOG.info("Get mobile terminal by id invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.getMobileTerminalById(mobileterminalId), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when creating mobile terminal ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -114,12 +114,12 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/")
     @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
-    public ResponseDto updateMobileTerminal(@QueryParam("comment") String comment, MobileTerminalType mobileterminal) {
+    public ResponseDto updateMobileTerminal(@QueryParam("comment") final String comment, final MobileTerminalType mobileterminal) {
         LOG.info("Update mobile terminal by id invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.updateMobileTerminal(mobileterminal, comment, MobileTerminalSource.INTERNAL, request.getRemoteUser()),
                     ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when updating mobile terminal ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -138,11 +138,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/list")
     @RequiresFeature(UnionVMSFeature.viewVesselsAndMobileTerminals)
-    public ResponseDto getMobileTerminalList(MobileTerminalListQuery query) {
+    public ResponseDto getMobileTerminalList(final MobileTerminalListQuery query) {
         LOG.info("Get mobile terminal list invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.getMobileTerminalList(query), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when getting mobile terminal list ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -163,11 +163,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/assign")
     @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
-    public ResponseDto assignMobileTerminal(@QueryParam("comment") String comment, MobileTerminalAssignQuery query) {
+    public ResponseDto assignMobileTerminal(@QueryParam("comment") final String comment, final MobileTerminalAssignQuery query) {
         LOG.info("Assign mobile terminal invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.assignMobileTerminal(query, comment, request.getRemoteUser()), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when assigning mobile terminal ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -187,11 +187,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/unassign")
     @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
-    public ResponseDto unAssignMobileTerminal(@QueryParam("comment") String comment, MobileTerminalAssignQuery query) {
+    public ResponseDto unAssignMobileTerminal(@QueryParam("comment") final String comment, final MobileTerminalAssignQuery query) {
         LOG.info("Unassign mobile terminal invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.unAssignMobileTerminal(query, comment, request.getRemoteUser()), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when unassigning mobile terminal ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -210,11 +210,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/status/activate")
     @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
-    public ResponseDto setStatusActive(@QueryParam("comment") String comment, MobileTerminalId terminalId) {
+    public ResponseDto setStatusActive(@QueryParam("comment") final String comment, final MobileTerminalId terminalId) {
         LOG.info("Set mobile terminal status active invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.ACTIVE, request.getRemoteUser()), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when activating mobile terminal ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -233,11 +233,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/status/inactivate")
     @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
-    public ResponseDto setStatusInactive(@QueryParam("comment") String comment, MobileTerminalId terminalId) {
+    public ResponseDto setStatusInactive(@QueryParam("comment") final String comment, final MobileTerminalId terminalId) {
         LOG.info("Set mobile terminal status inactive invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.INACTIVE, request.getRemoteUser()), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when inactivating mobile terminal ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -256,11 +256,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/status/remove")
     @RequiresFeature(UnionVMSFeature.manageMobileTerminals)
-    public ResponseDto setStatusRemoved(@QueryParam("comment") String comment, MobileTerminalId terminalId) {
+    public ResponseDto setStatusRemoved(@QueryParam("comment") final String comment, final MobileTerminalId terminalId) {
         LOG.info("Set mobile terminal status removed invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.ARCHIVE, request.getRemoteUser()), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when removing mobile terminal ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
@@ -280,11 +280,11 @@ public class MobileTerminalResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/history/{id}")
     @RequiresFeature(UnionVMSFeature.viewVesselsAndMobileTerminals)
-    public ResponseDto getMobileTerminalHistoryListByMobileTerminalId(@PathParam("id") String guid) {
+    public ResponseDto getMobileTerminalHistoryListByMobileTerminalId(@PathParam("id") final String guid) {
         LOG.info("Get mobile terminal history by mobile terminal id invoked in rest layer.");
         try {
             return new ResponseDto(mobileTerminalService.getMobileTerminalHistoryList(guid), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             LOG.error("[ Error when getting mobile terminal history by terminalId ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }

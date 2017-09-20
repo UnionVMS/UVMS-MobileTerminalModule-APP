@@ -28,7 +28,7 @@ public class ListResponseDto implements Serializable {
         return mobileTerminalList;
     }
 
-    public void setMobileTerminalList(List<MobileTerminalType> mobileTerminalList) {
+    public void setMobileTerminalList(final List<MobileTerminalType> mobileTerminalList) {
         this.mobileTerminalList = mobileTerminalList;
     }
 
@@ -36,7 +36,7 @@ public class ListResponseDto implements Serializable {
         return totalNumberOfPages;
     }
 
-    public void setTotalNumberOfPages(Integer totalNumberOfPages) {
+    public void setTotalNumberOfPages(final Integer totalNumberOfPages) {
         this.totalNumberOfPages = totalNumberOfPages;
     }
 
@@ -44,7 +44,7 @@ public class ListResponseDto implements Serializable {
         return currentPage;
     }
 
-    public void setCurrentPage(Integer currentPage) {
+    public void setCurrentPage(final Integer currentPage) {
         this.currentPage = currentPage;
     }
 }

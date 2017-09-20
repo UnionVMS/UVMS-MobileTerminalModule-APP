@@ -74,7 +74,7 @@ public class MobileTerminalPluginCapability implements Serializable {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -82,7 +82,7 @@ public class MobileTerminalPluginCapability implements Serializable {
         return this.value;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 
@@ -90,7 +90,7 @@ public class MobileTerminalPluginCapability implements Serializable {
         return this.name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -98,7 +98,7 @@ public class MobileTerminalPluginCapability implements Serializable {
         return this.updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -106,7 +106,7 @@ public class MobileTerminalPluginCapability implements Serializable {
         return this.updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -114,7 +114,7 @@ public class MobileTerminalPluginCapability implements Serializable {
 		return plugin;
 	}
 
-	public void setPlugin(MobileTerminalPlugin plugin) {
+	public void setPlugin(final MobileTerminalPlugin plugin) {
 		this.plugin = plugin;
 	}
 }

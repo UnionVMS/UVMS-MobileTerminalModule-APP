@@ -106,7 +106,7 @@ public class PollProgram implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -119,7 +119,7 @@ public class PollProgram implements Serializable {
         return frequency;
     }
 
-    public void setFrequency(Integer frequency) {
+    public void setFrequency(final Integer frequency) {
         this.frequency = frequency;
     }
 
@@ -127,7 +127,7 @@ public class PollProgram implements Serializable {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(final Date startDate) {
         this.startDate = startDate;
     }
 
@@ -135,7 +135,7 @@ public class PollProgram implements Serializable {
         return stopDate;
     }
 
-    public void setStopDate(Date stopDate) {
+    public void setStopDate(final Date stopDate) {
         this.stopDate = stopDate;
     }
 
@@ -143,7 +143,7 @@ public class PollProgram implements Serializable {
         return latestRun;
     }
 
-    public void setLatestRun(Date latestRun) {
+    public void setLatestRun(final Date latestRun) {
         this.latestRun = latestRun;
     }
 
@@ -151,7 +151,7 @@ public class PollProgram implements Serializable {
         return updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -159,7 +159,7 @@ public class PollProgram implements Serializable {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -167,7 +167,7 @@ public class PollProgram implements Serializable {
         return pollState;
     }
 
-    public void setPollState(PollStateEnum pollState) {
+    public void setPollState(final PollStateEnum pollState) {
         this.pollState = pollState;
     }
 
@@ -175,7 +175,7 @@ public class PollProgram implements Serializable {
         return pollBase;
     }
 
-    public void setPollBase(PollBase pollBase) {
+    public void setPollBase(final PollBase pollBase) {
         this.pollBase = pollBase;
     }
 
@@ -183,7 +183,7 @@ public class PollProgram implements Serializable {
         return guid;
     }
 
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 }

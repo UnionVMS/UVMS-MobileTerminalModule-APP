@@ -50,13 +50,13 @@ public abstract class BuildMobileTerminalServiceDeployment {
     public static Archive<?> createDeployment() {
 
         // Import Maven runtime dependencies
-        File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")
+        final File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")
                 .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
         printFiles(files);
 
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
-        WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
+        final WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
         testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
         testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service");
         testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.service");
@@ -113,22 +113,22 @@ public abstract class BuildMobileTerminalServiceDeployment {
         return testWar;
     }
 
-    private static void printFiles(File[] files) {
+    private static void printFiles(final File[] files) {
 
-        List<File> filesSorted = new ArrayList<>();
-        for(File f : files){
+        final List<File> filesSorted = new ArrayList<>();
+        for(final File f : files){
             filesSorted.add(f);
         }
 
         Collections.sort(filesSorted, new Comparator<File>() {
             @Override
-            public int compare(File o1, File o2) {
+            public int compare(final File o1, final File o2) {
                 return o1.getName().compareTo(o2.getName());
             }
         });
 
         LOG.info("FROM POM - begin");
-        for(File f : filesSorted){
+        for(final File f : filesSorted){
             LOG.info("       --->>>   "   +   f.getName());
         }
         LOG.info("FROM POM - end");

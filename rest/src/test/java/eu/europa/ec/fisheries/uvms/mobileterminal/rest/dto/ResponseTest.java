@@ -76,7 +76,7 @@ public class ResponseTest {
     @Test
     public void testGetMobileTerminalById() throws MobileTerminalException {
         doReturn(MOBILE_TERMINAL_DTO).when(mobileTerminalService).getMobileTerminalById(MOBILE_TERMINAL_ID);
-        ResponseDto result = mobileTerminalResource.getMobileTerminalById(MOBILE_TERMINAL_ID);
+        final ResponseDto result = mobileTerminalResource.getMobileTerminalById(MOBILE_TERMINAL_ID);
         Mockito.verify(mobileTerminalService).getMobileTerminalById(MOBILE_TERMINAL_ID);
         assertEquals(SUCCESS_RESULT_GET_BY_ID.toString(), result.toString());
     }
@@ -84,7 +84,7 @@ public class ResponseTest {
     @Test
     public void testGetMobileTerminalList() throws MobileTerminalException {
         doReturn(MOBILE_TERMINAL_LIST_RESPONSE).when(mobileTerminalService).getMobileTerminalList(null);
-        ResponseDto result = mobileTerminalResource.getMobileTerminalList(null);
+        final ResponseDto result = mobileTerminalResource.getMobileTerminalList(null);
         Mockito.verify(mobileTerminalService).getMobileTerminalList(null);
         assertEquals(SUCCESS_RESULT_LIST_RESPONSE.toString(), result.toString());
     }
@@ -93,7 +93,7 @@ public class ResponseTest {
     public void testUpdateMobileTeriminal() throws MobileTerminalException {
         doReturn(MOBILE_TERMINAL_DTO).when(mobileTerminalService).updateMobileTerminal(MOBILE_TERMINAL_DTO, "", MobileTerminalSource.INTERNAL, "TEST");
         doReturn("TEST").when(request).getRemoteUser();
-        ResponseDto result = mobileTerminalResource.updateMobileTerminal("", MOBILE_TERMINAL_DTO);
+        final ResponseDto result = mobileTerminalResource.updateMobileTerminal("", MOBILE_TERMINAL_DTO);
         Mockito.verify(mobileTerminalService).updateMobileTerminal(MOBILE_TERMINAL_DTO, "", MobileTerminalSource.INTERNAL, "TEST");
         assertEquals(SUCCESS_RESULT_UPDATE.toString(), result.toString());
     }
@@ -102,7 +102,7 @@ public class ResponseTest {
     public void testCreateMobileTeriminal() throws MobileTerminalException {
         doReturn(MOBILE_TERMINAL_DTO).when(mobileTerminalService).createMobileTerminal(MOBILE_TERMINAL_DTO, MobileTerminalSource.INTERNAL, "TEST");
         doReturn("TEST").when(request).getRemoteUser();
-        ResponseDto result = mobileTerminalResource.createMobileTerminal(MOBILE_TERMINAL_DTO);
+        final ResponseDto result = mobileTerminalResource.createMobileTerminal(MOBILE_TERMINAL_DTO);
         Mockito.verify(mobileTerminalService).createMobileTerminal(MOBILE_TERMINAL_DTO, MobileTerminalSource.INTERNAL, "TEST");
         assertEquals(SUCCESS_RESULT_UPDATE.toString(), result.toString());
     }
@@ -110,7 +110,7 @@ public class ResponseTest {
     @Test
     public void checkDtoReturnsValid() {
 
-        String VALUE = "HELLO_DTO";
+        final String VALUE = "HELLO_DTO";
         ResponseDto dto = new ResponseDto(VALUE, ResponseCode.OK);
         Assert.assertEquals(dto.getCode().intValue(), ResponseCode.OK.getCode());
         Assert.assertEquals(dto.getData(), VALUE);

@@ -16,7 +16,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 public class SearchMapperException extends MobileTerminalModelException {
 	private static final long serialVersionUID = 1L;
 
-	public SearchMapperException(String message) {
+	public SearchMapperException(final String message) {
 		super(message);
 	}
 }

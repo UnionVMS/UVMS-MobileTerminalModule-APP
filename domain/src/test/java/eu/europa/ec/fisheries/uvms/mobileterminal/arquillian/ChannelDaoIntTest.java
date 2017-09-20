@@ -32,13 +32,13 @@ public class ChannelDaoIntTest extends TransactionalTests {
     public void testGetPollableListSearch() {
 
         //Given - need a string list of id's.
-        String id1 = "test_id1";
-        String id2 = "test_id2";
+        final String id1 = "test_id1";
+        final String id2 = "test_id2";
 
-        List<String> idList = Arrays.asList(id1, id2);
+        final List<String> idList = Arrays.asList(id1, id2);
 
         //When
-        List<Channel> channels = channelDao.getPollableListSearch(idList);
+        final List<Channel> channels = channelDao.getPollableListSearch(idList);
 
         //Then
         assertNotNull(channels);
@@ -49,10 +49,10 @@ public class ChannelDaoIntTest extends TransactionalTests {
     public void testGetPollableListSearch_emptyList() {
 
         //Given - empty id list
-        List<String> emptyList = new ArrayList<>();
+        final List<String> emptyList = new ArrayList<>();
 
         //When
-        List<Channel> channels = channelDao.getPollableListSearch(emptyList);
+        final List<Channel> channels = channelDao.getPollableListSearch(emptyList);
 
         //Then
         assertThat(channels.size(), is(0));
@@ -63,10 +63,10 @@ public class ChannelDaoIntTest extends TransactionalTests {
     public void testGetActiveDNID() {
 
         //Given
-        String pluginName = "test_getActiveDNID";
+        final String pluginName = "test_getActiveDNID";
 
         //When
-        List<String> dnidList = channelDao.getActiveDNID(pluginName);
+        final List<String> dnidList = channelDao.getActiveDNID(pluginName);
 
         //Then
         assertNotNull(dnidList);
@@ -77,10 +77,10 @@ public class ChannelDaoIntTest extends TransactionalTests {
     public void testGetActiveDNID_emptyList() {
 
         //Given
-        String pluginName = null;
+        final String pluginName = null;
 
         //When
-        List<String> dnidList = channelDao.getActiveDNID(pluginName);
+        final List<String> dnidList = channelDao.getActiveDNID(pluginName);
 
         //Then
         assertThat(dnidList.size(), is(0));

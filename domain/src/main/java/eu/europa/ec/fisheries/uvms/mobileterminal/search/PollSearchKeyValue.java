@@ -23,7 +23,7 @@ public class PollSearchKeyValue {
 		return searchField;
 	}
 
-	public void setSearchField(PollSearchField searchField) {
+	public void setSearchField(final PollSearchField searchField) {
 		this.searchField = searchField;
 	}
 
@@ -32,7 +32,7 @@ public class PollSearchKeyValue {
 		return values;
 	}
 
-	public void setValues(List<String> values) {
+	public void setValues(final List<String> values) {
 		this.values = values;
 	}
 }

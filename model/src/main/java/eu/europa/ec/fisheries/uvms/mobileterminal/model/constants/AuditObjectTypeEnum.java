@@ -15,7 +15,7 @@ public enum AuditObjectTypeEnum {
     MOBILE_TERMINAL("Mobile Terminal"), POLL("Poll"), PROGRAM_POLL("Program poll");
     private String value;
 
-    private AuditObjectTypeEnum(String value) {
+    private AuditObjectTypeEnum(final String value) {
         this.value = value;
     }
 

@@ -37,14 +37,14 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 public class MobileTerminalEntityToModelMapper {
     private static Logger LOG = LoggerFactory.getLogger(MobileTerminalEntityToModelMapper.class);
 
-    public static MobileTerminalType mapToMobileTerminalType(MobileTerminal entity, Channel channel) throws MobileTerminalModelMapperException {
-        Set<Channel> channels = new HashSet<>();
+    public static MobileTerminalType mapToMobileTerminalType(final MobileTerminal entity, final Channel channel) throws MobileTerminalModelMapperException {
+        final Set<Channel> channels = new HashSet<>();
         channels.add(channel);
         return mapToMobileTerminalType(entity, channels);
     }
 
-    public static MobileTerminalType mapToMobileTerminalType(MobileTerminal entity, Set<Channel> channels) throws MobileTerminalModelMapperException {
-        MobileTerminalType type = mapToMobileTerminalType(entity);
+    public static MobileTerminalType mapToMobileTerminalType(final MobileTerminal entity, final Set<Channel> channels) throws MobileTerminalModelMapperException {
+        final MobileTerminalType type = mapToMobileTerminalType(entity);
 
         type.getChannels().clear();
         type.getChannels().addAll(mapChannels(entity.getChannels(), entity.getCurrentEvent()));
@@ -52,25 +52,25 @@ public class MobileTerminalEntityToModelMapper {
         return type;
     }
 
-    public static MobileTerminalType mapToMobileTerminalType(MobileTerminal entity) throws MobileTerminalModelMapperException {
+    public static MobileTerminalType mapToMobileTerminalType(final MobileTerminal entity) throws MobileTerminalModelMapperException {
         if (entity == null) {
             throw new MobileTerminalModelMapperException("No mobile terminal entity to map");
         }
 
-        MobileTerminalEvent currentEvent = entity.getCurrentEvent();
+        final MobileTerminalEvent currentEvent = entity.getCurrentEvent();
         if (currentEvent == null) {
             throw new MobileTerminalModelMapperException("No mobile terminal event entity to map");
         }
 
-        MobileTerminalType model = new MobileTerminalType();
+        final MobileTerminalType model = new MobileTerminalType();
         model.setMobileTerminalId(mapToMobileTerminalId(entity.getGuid()));
 
-        Plugin plugin = PluginMapper.mapEntityToModel(entity.getPlugin());
+        final Plugin plugin = PluginMapper.mapEntityToModel(entity.getPlugin());
         model.setPlugin(plugin);
 
         try {
             model.setSource(mapToMobileTerminalSource(entity.getSource()));
-        } catch (EnumException e) {
+        } catch (final EnumException e) {
             LOG.error("[ Error when setting mobile terminal source. ] {}", e.getMessage());
         }
 
@@ -88,27 +88,27 @@ public class MobileTerminalEntityToModelMapper {
         return model;
     }
 
-    private static List<ComChannelType> mapChannels(Set<Channel> channels, MobileTerminalEvent currentEvent) {
+    private static List<ComChannelType> mapChannels(final Set<Channel> channels, final MobileTerminalEvent currentEvent) {
         if (channels == null || channels.isEmpty()) {
             return new ArrayList<>();
         }
-        List<ComChannelType> channelList = new ArrayList<>();
-        for (Channel channel : channels) {
+        final List<ComChannelType> channelList = new ArrayList<>();
+        for (final Channel channel : channels) {
             if (channel.getArchived() != null && channel.getArchived()) {
                 continue;
             }
-            ChannelHistory current = channel.getCurrentHistory();
+            final ChannelHistory current = channel.getCurrentHistory();
             if (current != null) {
-                ComChannelType comChannel = new ComChannelType();
+                final ComChannelType comChannel = new ComChannelType();
                 comChannel.setName(current.getName());
                 comChannel.setGuid(channel.getGuid());
 
                 comChannel.getAttributes().addAll(AttributeMapper.mapAttributeStringToComChannelAttribute(current.getAttributes()));
 
-                ComChannelCapability pollCapability = new ComChannelCapability();
+                final ComChannelCapability pollCapability = new ComChannelCapability();
                 pollCapability.setType(MobileTerminalConstants.CAPABILITY_POLLABLE);
 
-                Channel wrkPollChannel = currentEvent.getPollChannel();
+                final Channel wrkPollChannel = currentEvent.getPollChannel();
                 if(wrkPollChannel != null) {
                     pollCapability.setValue(currentEvent.getPollChannel().equals(channel));
                 }
@@ -117,10 +117,10 @@ public class MobileTerminalEntityToModelMapper {
                 }
                 comChannel.getCapabilities().add(pollCapability);
 
-                ComChannelCapability configCapability = new ComChannelCapability();
+                final ComChannelCapability configCapability = new ComChannelCapability();
                 configCapability.setType(MobileTerminalConstants.CAPABILITY_CONFIGURABLE);
 
-                Channel wrkConfigChannel = currentEvent.getConfigChannel();
+                final Channel wrkConfigChannel = currentEvent.getConfigChannel();
                 if (wrkConfigChannel != null) {
                     configCapability.setValue(currentEvent.getConfigChannel().equals(channel));
                 } else {
@@ -129,10 +129,10 @@ public class MobileTerminalEntityToModelMapper {
 
                 comChannel.getCapabilities().add(configCapability);
 
-                ComChannelCapability defaultCapability = new ComChannelCapability();
+                final ComChannelCapability defaultCapability = new ComChannelCapability();
                 defaultCapability.setType(MobileTerminalConstants.CAPABILITY_DEFAULT_REPORTING);
 
-                Channel wrkDefaultChannel = currentEvent.getDefaultChannel();
+                final Channel wrkDefaultChannel = currentEvent.getDefaultChannel();
                 if(wrkDefaultChannel != null) {
                     defaultCapability.setValue(currentEvent.getDefaultChannel().equals(channel));
                 }
@@ -148,7 +148,7 @@ public class MobileTerminalEntityToModelMapper {
         return channelList;
     }
 
-    private static MobileTerminalSource mapToMobileTerminalSource(MobileTerminalSourceEnum mobtermSourceId) throws EnumException {
+    private static MobileTerminalSource mapToMobileTerminalSource(final MobileTerminalSourceEnum mobtermSourceId) throws EnumException {
         if (mobtermSourceId != null) {
             switch (mobtermSourceId) {
                 case INTERNAL:
@@ -160,11 +160,11 @@ public class MobileTerminalEntityToModelMapper {
         throw new EnumException("Couldn't map enum");
     }
 
-    private static MobileTerminalId mapToMobileTerminalId(String mobtermGuid) throws MobileTerminalModelMapperException {
+    private static MobileTerminalId mapToMobileTerminalId(final String mobtermGuid) throws MobileTerminalModelMapperException {
         if (mobtermGuid == null || mobtermGuid.isEmpty()) {
             throw new MobileTerminalModelMapperException("No GUID found");
         }
-        MobileTerminalId terminalId = new MobileTerminalId();
+        final MobileTerminalId terminalId = new MobileTerminalId();
         terminalId.setGuid(mobtermGuid);
         return terminalId;
     }

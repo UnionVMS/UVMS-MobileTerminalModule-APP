@@ -55,37 +55,37 @@ public class MobileTerminalDomainModelBean  {
     @EJB
     MobileTerminalPluginDao pluginDao;
     
-    public MobileTerminal getMobileTerminalEntityById(MobileTerminalId id) throws InputArgumentException, NoEntityFoundException {
+    public MobileTerminal getMobileTerminalEntityById(final MobileTerminalId id) throws InputArgumentException, NoEntityFoundException {
     	if(id == null || id.getGuid() == null || id.getGuid().isEmpty()) throw new InputArgumentException("Non valid id");
     	return terminalDao.getMobileTerminalByGuid(id.getGuid());
     }
 
-    public MobileTerminal getMobileTerminalEntityBySerialNo(String serialNo) throws InputArgumentException, NoEntityFoundException {
+    public MobileTerminal getMobileTerminalEntityBySerialNo(final String serialNo) throws InputArgumentException, NoEntityFoundException {
         if(serialNo == null || serialNo.isEmpty()) throw new InputArgumentException("Non valid serial no");
         return terminalDao.getMobileTerminalBySerialNo(serialNo);
     }
     
-    public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, String username) throws MobileTerminalModelException {
+    public MobileTerminalType createMobileTerminal(final MobileTerminalType mobileTerminal, final String username) throws MobileTerminalModelException {
         try {
             assertTerminalNotExists(mobileTerminal);
-            String serialNumber = assertTerminalHasNeededData(mobileTerminal);
+            final String serialNumber = assertTerminalHasNeededData(mobileTerminal);
 
-            MobileTerminalPlugin plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
+            final MobileTerminalPlugin plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
 
-            MobileTerminal terminal = MobileTerminalModelToEntityMapper.mapNewMobileTerminalEntity(mobileTerminal, serialNumber, plugin, username);
+            final MobileTerminal terminal = MobileTerminalModelToEntityMapper.mapNewMobileTerminalEntity(mobileTerminal, serialNumber, plugin, username);
             terminalDao.createMobileTerminal(terminal);
             return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
-        } catch (TerminalDaoException e) {
+        } catch (final TerminalDaoException e) {
             throw new MobileTerminalModelException("Error when persisting terminal " + mobileTerminal.getMobileTerminalId());
-        } catch (MobileTerminalModelException e) {
+        } catch (final MobileTerminalModelException e) {
             LOG.error("Error in model when creating mobile terminal: {}", e.getMessage());
             throw e;
         }
     }
 
-    private String assertTerminalHasNeededData(MobileTerminalType mobileTerminal) throws MobileTerminalModelException {
+    private String assertTerminalHasNeededData(final MobileTerminalType mobileTerminal) throws MobileTerminalModelException {
         String serialNumber = null;
-        for (MobileTerminalAttribute attribute : mobileTerminal.getAttributes()) {
+        for (final MobileTerminalAttribute attribute : mobileTerminal.getAttributes()) {
             if (MobileTerminalConstants.SERIAL_NUMBER.equalsIgnoreCase(attribute.getType()) &&
                     attribute.getValue() != null && !attribute.getValue().isEmpty()) {
                 serialNumber = attribute.getValue();
@@ -103,17 +103,17 @@ public class MobileTerminalDomainModelBean  {
         return serialNumber;
     }
 
-    private void assertTerminalNotExists(MobileTerminalType mobileTerminal) throws MobileTerminalModelException {
+    private void assertTerminalNotExists(final MobileTerminalType mobileTerminal) throws MobileTerminalModelException {
         try {
-        	MobileTerminal terminal = getMobileTerminalEntityById(mobileTerminal.getMobileTerminalId());
+        	final MobileTerminal terminal = getMobileTerminalEntityById(mobileTerminal.getMobileTerminalId());
             throw new MobileTerminalModelException("Mobile terminal already exists in database for id: " + mobileTerminal.getMobileTerminalId());
         } catch (InputArgumentException | NoEntityFoundException e) {
             //Terminal does not exist, ok to create a new one
         }
         try {
-            for (MobileTerminalAttribute attribute : mobileTerminal.getAttributes()) {
+            for (final MobileTerminalAttribute attribute : mobileTerminal.getAttributes()) {
                 if (MobileTerminalConstants.SERIAL_NUMBER.equalsIgnoreCase(attribute.getType())) {
-                    MobileTerminal terminal = getMobileTerminalEntityBySerialNo(attribute.getValue());
+                    final MobileTerminal terminal = getMobileTerminalEntityBySerialNo(attribute.getValue());
                     if (!terminal.getArchived()) {
                         throw new MobileTerminalModelException("Mobile terminal already exists in database for serial number: " + attribute.getValue());
                     }
@@ -124,16 +124,16 @@ public class MobileTerminalDomainModelBean  {
         }
     }
 
-    public MobileTerminalType getMobileTerminalById(MobileTerminalId id) throws MobileTerminalModelException {
+    public MobileTerminalType getMobileTerminalById(final MobileTerminalId id) throws MobileTerminalModelException {
         if (id == null) {
             throw new InputArgumentException("No id to fetch");
         }
 
-        MobileTerminal terminal = getMobileTerminalEntityById(id);
+        final MobileTerminal terminal = getMobileTerminalEntityById(id);
         return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
     }
     
-    public MobileTerminalType updateMobileTerminal(MobileTerminalType model, String comment, String username) throws MobileTerminalModelException {
+    public MobileTerminalType updateMobileTerminal(final MobileTerminalType model, final String comment, final String username) throws MobileTerminalModelException {
         if (model == null) {
             throw new InputArgumentException("No terminal to update");
         }
@@ -141,7 +141,7 @@ public class MobileTerminalDomainModelBean  {
             throw new InputArgumentException("Non valid id of terminal to update");
         }
 
-        MobileTerminal terminal = getMobileTerminalEntityById(model.getMobileTerminalId());
+        final MobileTerminal terminal = getMobileTerminalEntityById(model.getMobileTerminalId());
         MobileTerminalPlugin updatedPlugin = null;
 
         if(model.getPlugin() != null && model.getPlugin().getLabelName() != null && terminal.getPlugin() != null) {
@@ -155,11 +155,11 @@ public class MobileTerminalDomainModelBean  {
             updatedPlugin = terminal.getPlugin();
         }
 
-        String serialNumber = assertTerminalHasNeededData(model);
+        final String serialNumber = assertTerminalHasNeededData(model);
 
         //TODO check type
         if(terminal.getMobileTerminalType() != null) {
-            MobileTerminal updatedTerminal = MobileTerminalModelToEntityMapper.mapMobileTerminalEntity(terminal, model, serialNumber, updatedPlugin, username, comment, EventCodeEnum.MODIFY);
+            final MobileTerminal updatedTerminal = MobileTerminalModelToEntityMapper.mapMobileTerminalEntity(terminal, model, serialNumber, updatedPlugin, username, comment, EventCodeEnum.MODIFY);
             terminalDao.updateMobileTerminal(updatedTerminal);
             return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(updatedTerminal);
 
@@ -167,7 +167,7 @@ public class MobileTerminalDomainModelBean  {
         throw new MobileTerminalModelException("Update - Not supported mobile terminal type");
     }
 
-    public MobileTerminalType assignMobileTerminalToCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
+    public MobileTerminalType assignMobileTerminalToCarrier(final MobileTerminalAssignQuery query, final String comment,final String username) throws MobileTerminalModelException {
         if (query == null) {
             throw new InputArgumentException("RequestQuery is null");
         }
@@ -178,15 +178,15 @@ public class MobileTerminalDomainModelBean  {
             throw new InputArgumentException("No connect id in requesst");
         }
 
-        MobileTerminalId mobTermId = query.getMobileTerminalId();
-        String connectId = query.getConnectId();
+        final MobileTerminalId mobTermId = query.getMobileTerminalId();
+        final String connectId = query.getConnectId();
         
-        MobileTerminal terminal = getMobileTerminalEntityById(mobTermId);
-        String currentConnectId = terminal.getCurrentEvent().getConnectId();
+        final MobileTerminal terminal = getMobileTerminalEntityById(mobTermId);
+        final String currentConnectId = terminal.getCurrentEvent().getConnectId();
         if (currentConnectId == null || currentConnectId.isEmpty()) {
-            MobileTerminalEvent current = terminal.getCurrentEvent();
+            final MobileTerminalEvent current = terminal.getCurrentEvent();
             current.setActive(false);
-            MobileTerminalEvent event = new MobileTerminalEvent();
+            final MobileTerminalEvent event = new MobileTerminalEvent();
             event.setActive(true);
             event.setPollChannel(current.getPollChannel());
             event.setDefaultChannel(current.getDefaultChannel());
@@ -207,7 +207,7 @@ public class MobileTerminalDomainModelBean  {
         throw new MobileTerminalModelException("Terminal " + mobTermId + " is already linked to an asset with guid " + currentConnectId);
     }
 
-    public MobileTerminalType unAssignMobileTerminalFromCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
+    public MobileTerminalType unAssignMobileTerminalFromCarrier(final MobileTerminalAssignQuery query, final String comment,final String username) throws MobileTerminalModelException {
         if (query == null) {
             throw new InputArgumentException("RequestQuery is null");
         }
@@ -218,15 +218,15 @@ public class MobileTerminalDomainModelBean  {
             throw new InputArgumentException("No connect id in requesst");
         }
 
-        MobileTerminalId mobTermId = query.getMobileTerminalId();
-        String connectId = query.getConnectId();
+        final MobileTerminalId mobTermId = query.getMobileTerminalId();
+        final String connectId = query.getConnectId();
 
-        MobileTerminal terminal = getMobileTerminalEntityById(mobTermId);
-        String currentConnectId = terminal.getCurrentEvent().getConnectId();
+        final MobileTerminal terminal = getMobileTerminalEntityById(mobTermId);
+        final String currentConnectId = terminal.getCurrentEvent().getConnectId();
         if (currentConnectId != null && currentConnectId.equals(connectId)) {
-            MobileTerminalEvent current = terminal.getCurrentEvent();
+            final MobileTerminalEvent current = terminal.getCurrentEvent();
             current.setActive(false);
-            MobileTerminalEvent event = new MobileTerminalEvent();
+            final MobileTerminalEvent event = new MobileTerminalEvent();
             event.setActive(true);
             event.setPollChannel(current.getPollChannel());
             event.setDefaultChannel(current.getDefaultChannel());
@@ -247,7 +247,7 @@ public class MobileTerminalDomainModelBean  {
         throw new MobileTerminalModelException("Terminal " + mobTermId + " is not linked to an asset with guid " + connectId);
     }
 
-    public MobileTerminalType upsertMobileTerminal(MobileTerminalType mobileTerminal,String username) throws InputArgumentException, MobileTerminalModelException {
+    public MobileTerminalType upsertMobileTerminal(final MobileTerminalType mobileTerminal,final String username) throws InputArgumentException, MobileTerminalModelException {
 
         if (mobileTerminal == null) {
             throw new InputArgumentException("RequestQuery is null");
@@ -257,7 +257,7 @@ public class MobileTerminalDomainModelBean  {
         }
 
         try {
-            MobileTerminalType terminal = updateMobileTerminal(mobileTerminal, "Upserted by external module", username); //TODO comment?
+            final MobileTerminalType terminal = updateMobileTerminal(mobileTerminal, "Upserted by external module", username); //TODO comment?
             return terminal;
         } catch (NumberFormatException | MobileTerminalModelException e) {
             LOG.error("[ Error when upserting mobile terminal: Mobile terminal update failed trying to insert. ] {} {}", e.getMessage(), e.getStackTrace());
@@ -269,7 +269,7 @@ public class MobileTerminalDomainModelBean  {
         return createMobileTerminal(mobileTerminal, username);
     }
 
-    public MobileTerminalType setStatusMobileTerminal(MobileTerminalId id, String comment, MobileTerminalStatus status, String username) throws MobileTerminalModelException {
+    public MobileTerminalType setStatusMobileTerminal(final MobileTerminalId id, final String comment, final MobileTerminalStatus status, final String username) throws MobileTerminalModelException {
         if (id == null) {
             throw new InputArgumentException("No Mobile Terminal");
         }
@@ -277,12 +277,12 @@ public class MobileTerminalDomainModelBean  {
             throw new InputArgumentException("No terminal status to set");
         }
 
-        MobileTerminal terminal = getMobileTerminalEntityById(id);
+        final MobileTerminal terminal = getMobileTerminalEntityById(id);
 
-        MobileTerminalEvent current = terminal.getCurrentEvent();
+        final MobileTerminalEvent current = terminal.getCurrentEvent();
         current.setActive(false);
 
-        MobileTerminalEvent event = new MobileTerminalEvent();
+        final MobileTerminalEvent event = new MobileTerminalEvent();
         event.setActive(true);
         event.setPollChannel(current.getPollChannel());
         event.setDefaultChannel(current.getDefaultChannel());
@@ -317,17 +317,17 @@ public class MobileTerminalDomainModelBean  {
         return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
     }
 
-    public MobileTerminalHistory getMobileTerminalHistoryList(MobileTerminalId id) throws MobileTerminalModelException {
+    public MobileTerminalHistory getMobileTerminalHistoryList(final MobileTerminalId id) throws MobileTerminalModelException {
         if (id == null) {
             throw new InputArgumentException("No Mobile Terminal");
         }
 
-        MobileTerminal terminal = getMobileTerminalEntityById(id);
+        final MobileTerminal terminal = getMobileTerminalEntityById(id);
 
         return HistoryMapper.getHistory(terminal);
     }
 
-    public ListResponseDto getTerminalListByQuery(MobileTerminalListQuery query) throws MobileTerminalModelException {
+    public ListResponseDto getTerminalListByQuery(final MobileTerminalListQuery query) throws MobileTerminalModelException {
         if (query == null) {
             throw new InputArgumentException("No list query");
         }
@@ -342,30 +342,30 @@ public class MobileTerminalDomainModelBean  {
         }
 
 
-        ListResponseDto response = new ListResponseDto();
-        List<MobileTerminalType> mobileTerminalList = new ArrayList<MobileTerminalType>();
+        final ListResponseDto response = new ListResponseDto();
+        final List<MobileTerminalType> mobileTerminalList = new ArrayList<MobileTerminalType>();
 
-        Integer page = query.getPagination().getPage();
-        Integer listSize = query.getPagination().getListSize();
-        int startIndex = (page-1)*listSize;
+        final Integer page = query.getPagination().getPage();
+        final Integer listSize = query.getPagination().getListSize();
+        final int startIndex = (page-1)*listSize;
         int stopIndex = startIndex+listSize;
         LOG.debug("page: " + page + ", listSize: " + listSize + ", startIndex: " + startIndex);
         
-        boolean isDynamic = query.getMobileTerminalSearchCriteria().isIsDynamic() == null ? true : query.getMobileTerminalSearchCriteria().isIsDynamic();
+        final boolean isDynamic = query.getMobileTerminalSearchCriteria().isIsDynamic() == null ? true : query.getMobileTerminalSearchCriteria().isIsDynamic();
 
-        List<ListCriteria> criterias = query.getMobileTerminalSearchCriteria().getCriterias();
+        final List<ListCriteria> criterias = query.getMobileTerminalSearchCriteria().getCriterias();
 
-        String searchSql = SearchMapper.createSelectSearchSql(criterias, isDynamic);
+        final String searchSql = SearchMapper.createSelectSearchSql(criterias, isDynamic);
 
-        List<MobileTerminal> terminals = terminalDao.getMobileTerminalsByQuery(searchSql);
+        final List<MobileTerminal> terminals = terminalDao.getMobileTerminalsByQuery(searchSql);
 
-        for (MobileTerminal terminal : terminals) {
-            MobileTerminalType terminalType = MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
+        for (final MobileTerminal terminal : terminals) {
+            final MobileTerminalType terminalType = MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
             mobileTerminalList.add(terminalType);
         }
 
         Collections.sort(mobileTerminalList, new MobileTerminalTypeComparator());
-        int totalMatches = mobileTerminalList.size();
+        final int totalMatches = mobileTerminalList.size();
         LOG.debug("totalMatches: " + totalMatches);
 
         int numberOfPages =  totalMatches / listSize;

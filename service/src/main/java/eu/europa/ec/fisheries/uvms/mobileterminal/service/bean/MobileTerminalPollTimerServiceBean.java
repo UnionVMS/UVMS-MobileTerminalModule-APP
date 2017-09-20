@@ -39,14 +39,14 @@ public class MobileTerminalPollTimerServiceBean implements PollTimerService {
 
     @Override
     public void timerTimeout() {
-        Date now = DateUtils.getUTCNow();
+        final Date now = DateUtils.getUTCNow();
         LOG.debug("PollProgram collected from DB at " + now.toString());
         try {
-            List<PollResponseType> pollPrograms = pollService.timer();
+            final List<PollResponseType> pollPrograms = pollService.timer();
 
-            for (PollResponseType pollProgram : pollPrograms) {
-                String guid = pollProgram.getPollId().getGuid();
-                Date endDate = DateUtils.parseToUTCDateTime(MobileTerminalGenericMapper.getPollAttributeTypeValue(
+            for (final PollResponseType pollProgram : pollPrograms) {
+                final String guid = pollProgram.getPollId().getGuid();
+                final Date endDate = DateUtils.parseToUTCDateTime(MobileTerminalGenericMapper.getPollAttributeTypeValue(
                         pollProgram.getAttributes(), PollAttributeType.END_DATE));
 
                 // If the program has expired, archive it
@@ -58,7 +58,7 @@ public class MobileTerminalPollTimerServiceBean implements PollTimerService {
                     LOG.info("Poll created by poll program {}", guid);
                 }
             }
-        } catch (MobileTerminalException e) {
+        } catch (final MobileTerminalException e) {
             LOG.error("[ Poll scheduler failed. ] " + e.getMessage());
         }
     }

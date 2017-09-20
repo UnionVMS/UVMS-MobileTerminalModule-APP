@@ -27,19 +27,19 @@ public class PollServiceBeanIntTest extends TransactionalTests {
     @Test
     public void createPoll() throws MobileTerminalServiceException, ConfigDaoException, TerminalDaoException {
         System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
-        PollRequestType pollRequestType = testPollHelper.createPollRequestType();
-        CreatePollResultDto createPollResultDto = pollService.createPoll(pollRequestType, "TEST");
+        final PollRequestType pollRequestType = testPollHelper.createPollRequestType();
+        final CreatePollResultDto createPollResultDto = pollService.createPoll(pollRequestType, "TEST");
         Assert.assertNotNull(createPollResultDto);
     }
 
     @Test
     public void createPollWithBrokenJMS() throws MobileTerminalServiceException, ConfigDaoException, TerminalDaoException {
         System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "true");
-        PollRequestType pollRequestType = testPollHelper.createPollRequestType();
+        final PollRequestType pollRequestType = testPollHelper.createPollRequestType();
         try {
             pollService.createPoll(pollRequestType, "TEST");
             Assert.fail();
-        } catch (MobileTerminalServiceException ignore) {
+        } catch (final MobileTerminalServiceException ignore) {
         }
     }
 

@@ -35,54 +35,54 @@ public class PollMapper {
 
     final static Logger LOG = LoggerFactory.getLogger(PollMapper.class);
 
-    public static List<PollDto> mapPolls(List<PollResponseType> pollResponses) throws MobileTerminalServiceMapperException {
-        List<PollDto> dtoList = new ArrayList<>();
-        for (PollResponseType response : pollResponses) {
+    public static List<PollDto> mapPolls(final List<PollResponseType> pollResponses) throws MobileTerminalServiceMapperException {
+        final List<PollDto> dtoList = new ArrayList<>();
+        for (final PollResponseType response : pollResponses) {
             dtoList.add(mapPoll(response));
         }
         return dtoList;
     }
     
-    public static PollDto mapPoll(PollResponseType response) throws MobileTerminalServiceMapperException {
+    public static PollDto mapPoll(final PollResponseType response) throws MobileTerminalServiceMapperException {
         checkInputParams(response.getMobileTerminal());
         return createPollDto(response);
     }
 
-    private static void checkInputParams(MobileTerminalType terminal) throws MobileTerminalServiceMapperException {
+    private static void checkInputParams(final MobileTerminalType terminal) throws MobileTerminalServiceMapperException {
         if (terminal == null) {
             throw new MobileTerminalServiceMapperException("MobileTerminal is null");
         }
     }
 
-    private static PollDto createPollDto(PollResponseType response) {
-        MobileTerminalType terminal = response.getMobileTerminal();
-        List<PollAttribute> attributes = response.getAttributes();
+    private static PollDto createPollDto(final PollResponseType response) {
+        final MobileTerminalType terminal = response.getMobileTerminal();
+        final List<PollAttribute> attributes = response.getAttributes();
 
-        PollDto dto = new PollDto();
+        final PollDto dto = new PollDto();
         dto.addValue(PollKey.CONNECTION_ID, response.getMobileTerminal().getConnectId());
         dto.addValue(PollKey.TRANSPONDER, terminal.getType());
         dto.addValue(PollKey.POLL_ID, response.getPollId().getGuid());
         dto.addValue(PollKey.POLL_TYPE, response.getPollType().name());
         dto.addValue(PollKey.POLL_COMMENT, response.getComment());
         
-        String startDate = getPollAttribute(PollAttributeType.START_DATE, attributes);
+        final String startDate = getPollAttribute(PollAttributeType.START_DATE, attributes);
         if (startDate != null) {
             dto.addValue(PollKey.START_DATE, startDate);
         }
-        String endDate = getPollAttribute(PollAttributeType.END_DATE, attributes);
+        final String endDate = getPollAttribute(PollAttributeType.END_DATE, attributes);
         if (endDate != null) {
             dto.addValue(PollKey.END_DATE, endDate);
         }
-        String frequency = getPollAttribute(PollAttributeType.FREQUENCY, attributes);
+        final String frequency = getPollAttribute(PollAttributeType.FREQUENCY, attributes);
         if (frequency != null) {
             dto.addValue(PollKey.FREQUENCY, frequency);
         }
-        String programRunning = getPollAttribute(PollAttributeType.PROGRAM_RUNNING, attributes);
+        final String programRunning = getPollAttribute(PollAttributeType.PROGRAM_RUNNING, attributes);
         if (programRunning != null) {
             dto.addValue(PollKey.PROGRAM_RUNNING, programRunning);
         }
 
-        String creator = getPollAttribute(PollAttributeType.USER, attributes);
+        final String creator = getPollAttribute(PollAttributeType.USER, attributes);
         if(creator != null) {
         	dto.addValue(PollKey.USER, creator);
         }
@@ -90,8 +90,8 @@ public class PollMapper {
         return dto;
     }
 
-    public static String getPollAttribute(PollAttributeType type, List<PollAttribute> attributes) {
-        for (PollAttribute attribute : attributes) {
+    public static String getPollAttribute(final PollAttributeType type, final List<PollAttribute> attributes) {
+        for (final PollAttribute attribute : attributes) {
             if (attribute.getKey().equals(type)) {
                 return attribute.getValue();
             }
@@ -99,10 +99,10 @@ public class PollMapper {
         return null;
     }
 
-    public static PollChannelDto mapPollChannel(MobileTerminalType mobileTerminal) throws MobileTerminalServiceMapperException {
+    public static PollChannelDto mapPollChannel(final MobileTerminalType mobileTerminal) throws MobileTerminalServiceMapperException {
     	checkInputParams(mobileTerminal);
     	
-        PollChannelDto pollChannel = new PollChannelDto();
+        final PollChannelDto pollChannel = new PollChannelDto();
         
         // TODO exception handling
         pollChannel.setComChannelId(mobileTerminal.getChannels().get(0).getGuid());
@@ -110,9 +110,9 @@ public class PollMapper {
         pollChannel.setMobileTerminalType(mobileTerminal.getType());
         pollChannel.setConnectId(mobileTerminal.getConnectId());
         
-        List<AttributeDto> attributes = new ArrayList<>();
-        for(MobileTerminalAttribute attr : mobileTerminal.getAttributes()) {
-        	AttributeDto dto = new AttributeDto();
+        final List<AttributeDto> attributes = new ArrayList<>();
+        for(final MobileTerminalAttribute attr : mobileTerminal.getAttributes()) {
+        	final AttributeDto dto = new AttributeDto();
         	dto.setType(attr.getType());
         	dto.setValue(attr.getValue());
         	attributes.add(dto);
@@ -120,8 +120,8 @@ public class PollMapper {
         
         //Only first channel
         if(mobileTerminal.getChannels().get(0) != null) {
-        	for(ComChannelAttribute channel : mobileTerminal.getChannels().get(0).getAttributes()) {
-        		AttributeDto cDto = new AttributeDto();
+        	for(final ComChannelAttribute channel : mobileTerminal.getChannels().get(0).getAttributes()) {
+        		final AttributeDto cDto = new AttributeDto();
         		cDto.setType(channel.getType());
         		cDto.setValue(channel.getValue());
         		attributes.add(cDto);

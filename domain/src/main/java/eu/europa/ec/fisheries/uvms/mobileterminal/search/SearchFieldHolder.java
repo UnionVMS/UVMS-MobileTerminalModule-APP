@@ -13,10 +13,10 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.search;
 
 public class SearchFieldHolder {
 
-	private SearchTable table;
-	private SearchField field;
+	private final SearchTable table;
+	private final SearchField field;
 	
-	public SearchFieldHolder(SearchTable table, SearchField field) {
+	public SearchFieldHolder(final SearchTable table, final SearchField field) {
 		this.table = table;
 		this.field = field;
 	}

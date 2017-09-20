@@ -46,20 +46,20 @@ public class MobileTerminalServiceIntTest extends TransactionalTests {
         try {
 
             System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
-            String connectId = UUID.randomUUID().toString();
-            MobileTerminal createdMobileTerminal = testPollHelper.createMobileTerminal(connectId);
+            final String connectId = UUID.randomUUID().toString();
+            final MobileTerminal createdMobileTerminal = testPollHelper.createMobileTerminal(connectId);
             //em.flush();
             createdMobileTerminalId = createdMobileTerminal.getGuid();
-            MobileTerminalId mobileTerminalId = new MobileTerminalId();
+            final MobileTerminalId mobileTerminalId = new MobileTerminalId();
             mobileTerminalId.setGuid(createdMobileTerminalId);
 
-            MobileTerminalType fetchedMobileTerminalType = mobileTerminalService.getMobileTerminalById(mobileTerminalId, DataSourceQueue.INTERNAL);
+            final MobileTerminalType fetchedMobileTerminalType = mobileTerminalService.getMobileTerminalById(mobileTerminalId, DataSourceQueue.INTERNAL);
             Assert.assertTrue(fetchedMobileTerminalType != null);
 
             fetchedMobileTerminalGuid = fetchedMobileTerminalType.getMobileTerminalId().getGuid();
             Assert.assertTrue(fetchedMobileTerminalGuid.equals(createdMobileTerminalId));
 
-        } catch (MobileTerminalException e) {
+        } catch (final MobileTerminalException e) {
             Assert.fail();
         }
 

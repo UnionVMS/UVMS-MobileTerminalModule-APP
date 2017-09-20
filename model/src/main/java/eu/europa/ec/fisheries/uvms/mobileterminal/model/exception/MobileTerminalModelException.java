@@ -16,7 +16,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.model.exception;
 public class MobileTerminalModelException extends MobileTerminalException {
 	private static final long serialVersionUID = 1L;
 
-	public MobileTerminalModelException(String message) {
+	public MobileTerminalModelException(final String message) {
         super(message);
     }
 

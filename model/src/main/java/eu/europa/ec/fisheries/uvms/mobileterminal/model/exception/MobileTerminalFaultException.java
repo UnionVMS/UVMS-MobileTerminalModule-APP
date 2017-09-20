@@ -15,9 +15,9 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault
 
 public class MobileTerminalFaultException extends MobileTerminalModelException {
 	private static final long serialVersionUID = 1L;
-	private MobileTerminalFault fault;
+	private final MobileTerminalFault fault;
 
-	public MobileTerminalFaultException(String message, MobileTerminalFault fault) {
+	public MobileTerminalFaultException(final String message, final MobileTerminalFault fault) {
 		super(message);
 		this.fault = fault;
 	}

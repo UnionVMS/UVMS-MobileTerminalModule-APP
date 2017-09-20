@@ -26,12 +26,12 @@ public class MobileTerminalConfig {
     private MobileTerminalConfig() {
     }
 
-    public static List<MobileTerminalDeviceConfig> mapConfigTransponders(List<TerminalSystemType> list) {
-        List<MobileTerminalDeviceConfig> transponders = new ArrayList<MobileTerminalDeviceConfig>();
+    public static List<MobileTerminalDeviceConfig> mapConfigTransponders(final List<TerminalSystemType> list) {
+        final List<MobileTerminalDeviceConfig> transponders = new ArrayList<MobileTerminalDeviceConfig>();
       
-        for (TerminalSystemType system : list) {
+        for (final TerminalSystemType system : list) {
 
-            MobileTerminalDeviceConfig transponder = new MobileTerminalDeviceConfig();
+            final MobileTerminalDeviceConfig transponder = new MobileTerminalDeviceConfig();
             transponder.setTerminalSystemType(system.getType());
 
             if (system.getTerminalConfiguration() != null) {
@@ -42,11 +42,11 @@ public class MobileTerminalConfig {
             }
 
             if (system.getCapabilityConfiguration() != null) {
-                CapabilityConfiguration configuration = system.getCapabilityConfiguration();
+                final CapabilityConfiguration configuration = system.getCapabilityConfiguration();
                 if (configuration != null && configuration.getCapability() != null) {
-                    List<CapabilityDto> capabilityList = new ArrayList<>();
-                    for (Capability capability : configuration.getCapability()) {
-                        CapabilityDto dto = new CapabilityDto();
+                    final List<CapabilityDto> capabilityList = new ArrayList<>();
+                    for (final Capability capability : configuration.getCapability()) {
+                        final CapabilityDto dto = new CapabilityDto();
                         dto.setName(capability.getName());
                         if (capability.getOptions() != null) {
                             dto.setOptionList(capability.getOptions());
@@ -61,9 +61,9 @@ public class MobileTerminalConfig {
         return transponders;
     }
 
-    public static Map<String, List<String>> mapConfigList(List<ConfigList> config) {
-        Map<String, List<String>> configValues = new HashMap<>();
-        for (ConfigList list : config) {
+    public static Map<String, List<String>> mapConfigList(final List<ConfigList> config) {
+        final Map<String, List<String>> configValues = new HashMap<>();
+        for (final ConfigList list : config) {
             configValues.put(list.getName(), list.getValue());
         }
         return configValues;
