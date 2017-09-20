@@ -32,7 +32,7 @@ public class MobileTerminalDataSourceRequestValidator {
     private static Logger LOG = LoggerFactory.getLogger(MobileTerminalDataSourceRequestValidator.class);
     private static String IRIDIUM = "IRIDIUM";
 
-    public static void validateCreateMobileTerminalType(MobileTerminalType mobTermType) throws MobileTerminalModelValidationException {
+    public static void validateCreateMobileTerminalType(final MobileTerminalType mobTermType) throws MobileTerminalModelValidationException {
         if(mobTermType.isInactive()){
             throw new MobileTerminalModelValidationException("Cannot create a Mobile Terminal with status set to inactive");
         }
@@ -42,7 +42,7 @@ public class MobileTerminalDataSourceRequestValidator {
         }
     }
 	
-    public static void validateMobileTerminalType(MobileTerminalType mobTermType) throws MobileTerminalModelValidationException {
+    public static void validateMobileTerminalType(final MobileTerminalType mobTermType) throws MobileTerminalModelValidationException {
         validateMobileTerminalId(mobTermType.getMobileTerminalId());
         validateMobileTerminalAttributes(mobTermType.getAttributes());
         if(!IRIDIUM.equalsIgnoreCase(mobTermType.getType())) {
@@ -50,15 +50,15 @@ public class MobileTerminalDataSourceRequestValidator {
         }
     }
 
-    public static void validateMobileTerminalId(MobileTerminalId id) throws MobileTerminalModelValidationException {
+    public static void validateMobileTerminalId(final MobileTerminalId id) throws MobileTerminalModelValidationException {
     	if(id == null || id.getGuid() == null || id.getGuid().isEmpty()) {
     		throw new MobileTerminalModelValidationException("Non valid mobile terminal id");
     	}
     }
 
-    public static void validateMobileTerminalAttributes(List<MobileTerminalAttribute> attributes) throws MobileTerminalModelValidationException {
-        Set<String> uniqueFields = new HashSet<String>();
-        for (MobileTerminalAttribute attr : attributes) {
+    public static void validateMobileTerminalAttributes(final List<MobileTerminalAttribute> attributes) throws MobileTerminalModelValidationException {
+        final Set<String> uniqueFields = new HashSet<String>();
+        for (final MobileTerminalAttribute attr : attributes) {
         	if(!"MULTIPLE_OCEAN".equalsIgnoreCase(attr.getType())) {
         		if (!uniqueFields.add(attr.getType())) {
                     throw new MobileTerminalModelValidationException("Non unique attribute field " + attr.getType());
@@ -67,9 +67,9 @@ public class MobileTerminalDataSourceRequestValidator {
         }
     }
 
-    public static void validateComChannels(MobileTerminalType type) throws MobileTerminalModelValidationException {
+    public static void validateComChannels(final MobileTerminalType type) throws MobileTerminalModelValidationException {
     	//TODO terminaltype -> comchannelvaluetype instead of channeltype when validate
-        for (ComChannelType channel : type.getChannels()) {
+        for (final ComChannelType channel : type.getChannels()) {
         	if("VMS".equalsIgnoreCase(channel.getName())) {
         		validateVMS(channel);
         	}
@@ -80,15 +80,15 @@ public class MobileTerminalDataSourceRequestValidator {
         }
     }
 
-    private static void validateVMS(ComChannelType channel) throws MobileTerminalModelValidationException {
-        Set<String> fields = new HashSet<>();
+    private static void validateVMS(final ComChannelType channel) throws MobileTerminalModelValidationException {
+        final Set<String> fields = new HashSet<>();
 
-        for (ComChannelAttribute attribute : channel.getAttributes()) {
+        for (final ComChannelAttribute attribute : channel.getAttributes()) {
             fields.add(attribute.getType());
         }
 
-        boolean dnid = fields.contains("DNID");
-        boolean memberId = fields.contains("MEMBER_NUMBER");
+        final boolean dnid = fields.contains("DNID");
+        final boolean memberId = fields.contains("MEMBER_NUMBER");
 
         if (!dnid || !memberId) {
             throw new MobileTerminalModelValidationException("A Com channel with channelType " + channel.getName() + " must contain DNID and Member Number");

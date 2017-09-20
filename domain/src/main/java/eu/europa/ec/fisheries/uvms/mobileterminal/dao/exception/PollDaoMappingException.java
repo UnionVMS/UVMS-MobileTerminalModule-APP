@@ -18,7 +18,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 public class PollDaoMappingException extends MobileTerminalModelException {
 	private static final long serialVersionUID = 1L;
 
-    public PollDaoMappingException(String message) {
+    public PollDaoMappingException(final String message) {
         super(message);
     }
 

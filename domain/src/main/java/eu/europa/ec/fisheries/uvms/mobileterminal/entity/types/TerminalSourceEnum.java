@@ -18,7 +18,7 @@ public enum TerminalSourceEnum {
 
     private Integer id;
 
-    private TerminalSourceEnum(int id) {
+    private TerminalSourceEnum(final int id) {
         this.id = id;
     }
 	

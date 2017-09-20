@@ -88,7 +88,7 @@ public class ChannelHistory {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -96,7 +96,7 @@ public class ChannelHistory {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -104,7 +104,7 @@ public class ChannelHistory {
         return attributes;
     }
 
-    public void setAttributes(String attributes) {
+    public void setAttributes(final String attributes) {
         this.attributes = attributes;
     }
 
@@ -112,7 +112,7 @@ public class ChannelHistory {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -120,7 +120,7 @@ public class ChannelHistory {
         return updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -128,7 +128,7 @@ public class ChannelHistory {
         return active;
     }
 
-    public void setActive(boolean active) {
+    public void setActive(final boolean active) {
         this.active = active;
     }
 
@@ -136,7 +136,7 @@ public class ChannelHistory {
         return channel;
     }
 
-    public void setChannel(Channel channel) {
+    public void setChannel(final Channel channel) {
         this.channel = channel;
     }
 
@@ -144,11 +144,11 @@ public class ChannelHistory {
         return eventCodeType;
     }
 
-    public void setEventCodeType(EventCodeEnum eventCodeType) {
+    public void setEventCodeType(final EventCodeEnum eventCodeType) {
         this.eventCodeType = eventCodeType;
     }
 
-    public void setMobileTerminalEvent(MobileTerminalEvent mobileTerminalEvent) {
+    public void setMobileTerminalEvent(final MobileTerminalEvent mobileTerminalEvent) {
         this.mobileTerminalEvent = mobileTerminalEvent;
     }
 
@@ -168,30 +168,30 @@ public class ChannelHistory {
         return pollChannel;
     }
 
-    public void setConfigChannel(boolean configChannel) {
+    public void setConfigChannel(final boolean configChannel) {
         this.configChannel = configChannel;
     }
 
-    public void setDefaultChannel(boolean defaultChannel) {
+    public void setDefaultChannel(final boolean defaultChannel) {
         this.defaultChannel = defaultChannel;
     }
 
-    public void setPollChannel(boolean pollChannel) {
+    public void setPollChannel(final boolean pollChannel) {
         this.pollChannel = pollChannel;
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(final Object obj) {
         if (obj instanceof ChannelHistory) {
-            ChannelHistory other = (ChannelHistory) obj;
+            final ChannelHistory other = (ChannelHistory) obj;
             if (!name.equalsIgnoreCase(other.getName())) {
                 return false;
             }
            // if (!id.equals(other.getId())) {
            //     return false;
            // }
-            Map<String, String> attr = AttributeMapper.mapAttributeString(attributes);
-            Map<String, String> otherAttr = AttributeMapper.mapAttributeString(other.getAttributes());
+            final Map<String, String> attr = AttributeMapper.mapAttributeString(attributes);
+            final Map<String, String> otherAttr = AttributeMapper.mapAttributeString(other.getAttributes());
 
             if((attr == null) && (otherAttr == null)) return true;
             if((attr == null) && (otherAttr != null)) return false;
@@ -199,7 +199,7 @@ public class ChannelHistory {
 
             if(attr.size() != otherAttr.size()) return false;
 
-            for (String key : attr.keySet()) {
+            for (final String key : attr.keySet()) {
                 if (!otherAttr.containsKey(key)) {
                     return false;
                 } else if (attr.get(key) != null && !attr.get(key).equalsIgnoreCase(otherAttr.get(key))) {

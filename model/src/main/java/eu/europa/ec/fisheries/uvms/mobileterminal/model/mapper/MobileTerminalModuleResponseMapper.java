@@ -31,7 +31,7 @@ import java.util.List;
 public class MobileTerminalModuleResponseMapper {
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalModuleResponseMapper.class);
 
-    private static void validateResponse(TextMessage response, String correlationId) throws MobileTerminalValidationException, JMSException {
+    private static void validateResponse(final TextMessage response, final String correlationId) throws MobileTerminalValidationException, JMSException {
 
         if (response == null) {
             throw new MobileTerminalValidationException("Error when validating response in ResponseMapper: Response is Null");
@@ -46,34 +46,34 @@ public class MobileTerminalModuleResponseMapper {
         }
 
         try {
-            MobileTerminalFault fault = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalFault.class);
+            final MobileTerminalFault fault = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalFault.class);
             throw new MobileTerminalValidationException(fault.getCode() + " : " + fault.getMessage());
-        } catch (MobileTerminalUnmarshallException e) {
+        } catch (final MobileTerminalUnmarshallException e) {
             //everything is well
         }
     }
 
-    private static String createMobileTerminalResponse(MobileTerminalType data) throws MobileTerminalModelMapperException {
-        MobileTerminalResponse response = new MobileTerminalResponse();
+    private static String createMobileTerminalResponse(final MobileTerminalType data) throws MobileTerminalModelMapperException {
+        final MobileTerminalResponse response = new MobileTerminalResponse();
         response.setMobilTerminal(data);
         return JAXBMarshaller.marshallJaxBObjectToString(data);
     }
 
-    public static String createPingResponse(String responseMessage) throws MobileTerminalModelMapperException {
-		PingResponse pingResponse = new PingResponse();
+    public static String createPingResponse(final String responseMessage) throws MobileTerminalModelMapperException {
+		final PingResponse pingResponse = new PingResponse();
 		pingResponse.setResponse(responseMessage);
 		return JAXBMarshaller.marshallJaxBObjectToString(pingResponse);
     }
 
-    public static MobileTerminalType mapToMobileTerminalResponse(TextMessage message) throws MobileTerminalModelMapperException, JMSException, MobileTerminalUnmarshallException {
+    public static MobileTerminalType mapToMobileTerminalResponse(final TextMessage message) throws MobileTerminalModelMapperException, JMSException, MobileTerminalUnmarshallException {
         validateResponse(message, message.getJMSCorrelationID());
-        MobileTerminalResponse response = JAXBMarshaller.unmarshallTextMessage(message, MobileTerminalResponse.class);
+        final MobileTerminalResponse response = JAXBMarshaller.unmarshallTextMessage(message, MobileTerminalResponse.class);
         return response.getMobilTerminal();
     }
 
-    public static List<MobileTerminalType> mapToMobileTerminalListResponse(TextMessage message) throws MobileTerminalModelMapperException, JMSException, MobileTerminalUnmarshallException {
+    public static List<MobileTerminalType> mapToMobileTerminalListResponse(final TextMessage message) throws MobileTerminalModelMapperException, JMSException, MobileTerminalUnmarshallException {
         validateResponse(message, message.getJMSCorrelationID());
-        MobileTerminalListResponse response = JAXBMarshaller.unmarshallTextMessage(message, MobileTerminalListResponse.class);
+        final MobileTerminalListResponse response = JAXBMarshaller.unmarshallTextMessage(message, MobileTerminalListResponse.class);
         return response.getMobileTerminal();
     }
 

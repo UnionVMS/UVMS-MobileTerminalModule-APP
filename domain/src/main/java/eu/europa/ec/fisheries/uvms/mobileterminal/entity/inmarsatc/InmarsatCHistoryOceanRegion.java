@@ -76,7 +76,7 @@ public class InmarsatCHistoryOceanRegion implements Serializable {
 		return this.id;
 	}
 
-	public void setId(Long oceanregId) {
+	public void setId(final Long oceanregId) {
 		this.id = oceanregId;
 	}
 
@@ -84,7 +84,7 @@ public class InmarsatCHistoryOceanRegion implements Serializable {
 		return this.code;
 	}
 
-	public void setCode(Integer oceanregCode) {
+	public void setCode(final Integer oceanregCode) {
 		this.code = oceanregCode;
 	}
 
@@ -92,7 +92,7 @@ public class InmarsatCHistoryOceanRegion implements Serializable {
 		return this.event;
 	}
 
-	public void setHistory(MobileTerminalEvent history) {
+	public void setHistory(final MobileTerminalEvent history) {
 		this.event = history;
 	}
 
@@ -100,7 +100,7 @@ public class InmarsatCHistoryOceanRegion implements Serializable {
 		return this.name;
 	}
 
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -108,7 +108,7 @@ public class InmarsatCHistoryOceanRegion implements Serializable {
 		return this.updatetime;
 	}
 
-	public void setUpdateTime(Date updatetime) {
+	public void setUpdateTime(final Date updatetime) {
 		this.updatetime = updatetime;
 	}
 
@@ -116,14 +116,14 @@ public class InmarsatCHistoryOceanRegion implements Serializable {
 		return this.updateuser;
 	}
 
-	public void setUpdatedBy(String updateuser) {
+	public void setUpdatedBy(final String updateuser) {
 		this.updateuser = updateuser;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if(obj instanceof InmarsatCHistoryOceanRegion) {
-			InmarsatCHistoryOceanRegion other = (InmarsatCHistoryOceanRegion)obj;
+			final InmarsatCHistoryOceanRegion other = (InmarsatCHistoryOceanRegion)obj;
 			if(!EqualsUtil.compare(code, other.code)) return false;
 			if(!EqualsUtil.compare(name, other.name)) return false;
 			return true;

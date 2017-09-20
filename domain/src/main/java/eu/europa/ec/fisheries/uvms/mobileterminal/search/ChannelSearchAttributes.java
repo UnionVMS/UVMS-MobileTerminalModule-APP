@@ -19,11 +19,11 @@ public enum ChannelSearchAttributes {
     DNID,
     MEMBER_NUMBER;
 
-    public static boolean isAttribute(String attribute) {
+    public static boolean isAttribute(final String attribute) {
         try {
             ChannelSearchAttributes.valueOf(attribute);
             return true;
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             return false;
         }
     }

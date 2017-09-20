@@ -25,19 +25,19 @@ public class PollChannelListDto implements Serializable {
 	public Integer getCurrentPage() {
 		return currentPage;
 	}
-	public void setCurrentPage(Integer currentPage) {
+	public void setCurrentPage(final Integer currentPage) {
 		this.currentPage = currentPage;
 	}
 	public Integer getTotalNumberOfPages() {
 		return totalNumberOfPages;
 	}
-	public void setTotalNumberOfPages(Integer totalNumberOfPages) {
+	public void setTotalNumberOfPages(final Integer totalNumberOfPages) {
 		this.totalNumberOfPages = totalNumberOfPages;
 	}
 	public List<PollChannelDto> getPollableChannels() {
 		return pollableChannels;
 	}
-	public void setPollableChannels(ArrayList<PollChannelDto> pollableChannels) {
+	public void setPollableChannels(final ArrayList<PollChannelDto> pollableChannels) {
 		this.pollableChannels = pollableChannels;
 	}
 }

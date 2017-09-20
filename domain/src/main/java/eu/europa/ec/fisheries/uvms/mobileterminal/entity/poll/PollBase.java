@@ -80,7 +80,7 @@ public class PollBase implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -88,7 +88,7 @@ public class PollBase implements Serializable {
         return comment;
     }
 
-    public void setComment(String comment) {
+    public void setComment(final String comment) {
         this.comment = comment;
     }
 
@@ -96,7 +96,7 @@ public class PollBase implements Serializable {
         return creator;
     }
 
-    public void setUser(String user) {
+    public void setUser(final String user) {
         this.creator = user;
     }
 
@@ -104,7 +104,7 @@ public class PollBase implements Serializable {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -112,7 +112,7 @@ public class PollBase implements Serializable {
         return mobileterminal;
     }
 
-    public void setMobileTerminal(MobileTerminal mobileterminal) {
+    public void setMobileTerminal(final MobileTerminal mobileterminal) {
         this.mobileterminal = mobileterminal;
     }
 
@@ -120,7 +120,7 @@ public class PollBase implements Serializable {
         return updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -128,7 +128,7 @@ public class PollBase implements Serializable {
         return terminalConnect;
     }
 
-    public void setTerminalConnect(String terminalConnect) {
+    public void setTerminalConnect(final String terminalConnect) {
         this.terminalConnect = terminalConnect;
     }
 
@@ -136,7 +136,7 @@ public class PollBase implements Serializable {
 		return channelGuid;
 	}
 
-	public void setChannelGuid(String channelGuid) {
+	public void setChannelGuid(final String channelGuid) {
 		this.channelGuid = channelGuid;
 	}
 }

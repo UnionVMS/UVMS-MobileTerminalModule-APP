@@ -13,8 +13,6 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.jms.TextMessage;
 
 import org.slf4j.Logger;
@@ -74,16 +72,16 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @throws MobileTerminalServiceException
      */
     @Override
-    public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, MobileTerminalSource source, String username) throws MobileTerminalException {
+    public MobileTerminalType createMobileTerminal(final MobileTerminalType mobileTerminal, final MobileTerminalSource source, final String username) throws MobileTerminalException {
         LOG.debug("CREATE MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         mobileTerminal.setSource(source);
-        MobileTerminalType createdMobileTerminal = mobileTerminalModel.createMobileTerminal(mobileTerminal, username);
-        boolean dnidUpdated = configModel.checkDNIDListChange(createdMobileTerminal.getPlugin().getServiceName());
+        final MobileTerminalType createdMobileTerminal = mobileTerminalModel.createMobileTerminal(mobileTerminal, username);
+        final boolean dnidUpdated = configModel.checkDNIDListChange(createdMobileTerminal.getPlugin().getServiceName());
         
         try {
-            String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalCreated(createdMobileTerminal.getMobileTerminalId().getGuid(), username);
+            final String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalCreated(createdMobileTerminal.getMobileTerminalId().getGuid(), username);
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-        } catch (AuditModelMarshallException e) {
+        } catch (final AuditModelMarshallException e) {
             LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was created", createdMobileTerminal.getMobileTerminalId()
                     .getGuid());
         }
@@ -101,10 +99,10 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @throws MobileTerminalServiceException
      */
     @Override
-    public MobileTerminalListResponse getMobileTerminalList(MobileTerminalListQuery query) throws MobileTerminalException {
+    public MobileTerminalListResponse getMobileTerminalList(final MobileTerminalListQuery query) throws MobileTerminalException {
         LOG.debug("GET MOBILE TERMINAL LIST INVOKED IN SERVICE LAYER");
-        ListResponseDto listResponse = mobileTerminalModel.getTerminalListByQuery(query);
-        MobileTerminalListResponse response = new MobileTerminalListResponse();
+        final ListResponseDto listResponse = mobileTerminalModel.getTerminalListByQuery(query);
+        final MobileTerminalListResponse response = new MobileTerminalListResponse();
         response.setCurrentPage(listResponse.getCurrentPage());
         response.setTotalNumberOfPages(listResponse.getTotalNumberOfPages());
         response.getMobileTerminal().addAll(listResponse.getMobileTerminalList());
@@ -119,14 +117,14 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @throws MobileTerminalServiceException
      */
     @Override
-    public MobileTerminalType getMobileTerminalById(String guid) throws MobileTerminalException {
+    public MobileTerminalType getMobileTerminalById(final String guid) throws MobileTerminalException {
         LOG.debug("GET MOBILE TERMINAL BY ID INVOKED IN SERVICE LAYER");
         if (guid == null) {
             throw new InputArgumentException("No id");
         }
-        MobileTerminalId id = new MobileTerminalId();
+        final MobileTerminalId id = new MobileTerminalId();
         id.setGuid(guid);
-        MobileTerminalType terminalGet = mobileTerminalModel.getMobileTerminalById(id);
+        final MobileTerminalType terminalGet = mobileTerminalModel.getMobileTerminalById(id);
         return terminalGet;
     }
 
@@ -139,15 +137,15 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @throws MobileTerminalServiceException
      */
     @Override
-    public MobileTerminalType upsertMobileTerminal(MobileTerminalType data, MobileTerminalSource source, String username) throws MobileTerminalException {
+    public MobileTerminalType upsertMobileTerminal(final MobileTerminalType data, final MobileTerminalSource source, final String username) throws MobileTerminalException {
         LOG.debug("UPSERT MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         if (data == null) {
             throw new InputArgumentException("No Mobile terminal to update [ NULL ]");
         }
         data.setSource(source);
-        MobileTerminalType terminalUpserted = mobileTerminalModel.upsertMobileTerminal(data, username);
+        final MobileTerminalType terminalUpserted = mobileTerminalModel.upsertMobileTerminal(data, username);
         
-        boolean dnidUpdated = configModel.checkDNIDListChange(terminalUpserted.getPlugin().getServiceName());
+        final boolean dnidUpdated = configModel.checkDNIDListChange(terminalUpserted.getPlugin().getServiceName());
         if(dnidUpdated) {
         	pluginService.processUpdatedDNIDList(data.getPlugin().getServiceName());
         }
@@ -162,7 +160,7 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @throws MobileTerminalServiceException
      */
     @Override
-    public MobileTerminalType getMobileTerminalById(MobileTerminalId id, DataSourceQueue queue) throws MobileTerminalException {
+    public MobileTerminalType getMobileTerminalById(final MobileTerminalId id, final DataSourceQueue queue) throws MobileTerminalException {
         LOG.debug("GET MOBILE TERMINAL BY ID ( FROM SPECIFIC QUEUE ) INVOKED IN SERVICE LAYER, QUEUE = ", queue.name());
         if (id == null) {
             throw new InputArgumentException("No id");
@@ -170,9 +168,9 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         if (queue != null && queue.equals(DataSourceQueue.INTERNAL)) {
             return getMobileTerminalById(id.getGuid());
         }
-        String data = MobileTerminalDataSourceRequestMapper.mapGetMobileTerminal(id);
-        String messageId = messageProducer.sendDataSourceMessage(data, queue);
-        TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+        final String data = MobileTerminalDataSourceRequestMapper.mapGetMobileTerminal(id);
+        final String messageId = messageProducer.sendDataSourceMessage(data, queue);
+        final TextMessage response = reciever.getMessage(messageId, TextMessage.class);
         return MobileTerminalDataSourceResponseMapper.mapToMobileTerminalFromResponse(response, messageId);
     }
 
@@ -183,20 +181,20 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @param source
      */
     @Override
-    public MobileTerminalType updateMobileTerminal(MobileTerminalType mobileTerminal, String comment, MobileTerminalSource source, String username)
+    public MobileTerminalType updateMobileTerminal(final MobileTerminalType mobileTerminal, final String comment, final MobileTerminalSource source, final String username)
             throws MobileTerminalException {
         LOG.debug("UPDATE MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         mobileTerminal.setSource(source);
-        MobileTerminalType terminalUpdate = mobileTerminalModel.updateMobileTerminal(mobileTerminal, comment, username);
+        final MobileTerminalType terminalUpdate = mobileTerminalModel.updateMobileTerminal(mobileTerminal, comment, username);
         try {
-            String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUpdated(terminalUpdate.getMobileTerminalId().getGuid(), comment, username);
+            final String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUpdated(terminalUpdate.getMobileTerminalId().getGuid(), comment, username);
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-        } catch (AuditModelMarshallException e) {
+        } catch (final AuditModelMarshallException e) {
             LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was updated", terminalUpdate.getMobileTerminalId()
                     .getGuid());
         }
         
-        boolean dnidUpdated = configModel.checkDNIDListChange(terminalUpdate.getPlugin().getServiceName());
+        final boolean dnidUpdated = configModel.checkDNIDListChange(terminalUpdate.getPlugin().getServiceName());
         if(dnidUpdated) {
         	pluginService.processUpdatedDNIDList(terminalUpdate.getPlugin().getServiceName());
         }
@@ -205,13 +203,13 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     }
 
     @Override
-    public MobileTerminalType assignMobileTerminal(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalException {
+    public MobileTerminalType assignMobileTerminal(final MobileTerminalAssignQuery query, final String comment, final String username) throws MobileTerminalException {
         LOG.debug("ASSIGN MOBILE TERMINAL INVOKED IN SERVICE LAYER");
-        MobileTerminalType terminalAssign = mobileTerminalModel.assignMobileTerminalToCarrier(query, comment, username);
+        final MobileTerminalType terminalAssign = mobileTerminalModel.assignMobileTerminalToCarrier(query, comment, username);
         try {
-            String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalAssigned(terminalAssign.getMobileTerminalId().getGuid(), comment, username);
+            final String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalAssigned(terminalAssign.getMobileTerminalId().getGuid(), comment, username);
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-        } catch (AuditModelMarshallException e) {
+        } catch (final AuditModelMarshallException e) {
             LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was assigned", terminalAssign.getMobileTerminalId()
                     .getGuid());
         }
@@ -220,13 +218,13 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     }
 
     @Override
-    public MobileTerminalType unAssignMobileTerminal(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalException {
+    public MobileTerminalType unAssignMobileTerminal(final MobileTerminalAssignQuery query, final String comment, final String username) throws MobileTerminalException {
         LOG.debug("UNASSIGN MOBILE TERMINAL INVOKED IN SERVICE LAYER");
-        MobileTerminalType terminalUnAssign = mobileTerminalModel.unAssignMobileTerminalFromCarrier(query, comment, username);
+        final MobileTerminalType terminalUnAssign = mobileTerminalModel.unAssignMobileTerminalFromCarrier(query, comment, username);
         try {
-            String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUnassigned(terminalUnAssign.getMobileTerminalId().getGuid(), comment, username);
+            final String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUnassigned(terminalUnAssign.getMobileTerminalId().getGuid(), comment, username);
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-        } catch (AuditModelMarshallException e) {
+        } catch (final AuditModelMarshallException e) {
             LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was unassigned", terminalUnAssign.getMobileTerminalId()
                     .getGuid());
         }
@@ -235,10 +233,10 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     }
 
     @Override
-    public MobileTerminalType setStatusMobileTerminal(MobileTerminalId terminalId, String comment, MobileTerminalStatus status, String username)
+    public MobileTerminalType setStatusMobileTerminal(final MobileTerminalId terminalId, final String comment, final MobileTerminalStatus status, final String username)
             throws MobileTerminalException {
         LOG.debug("SET STATUS OF MOBILE TERMINAL INVOKED IN SERVICE LAYER");
-        MobileTerminalType terminalStatus = mobileTerminalModel.setStatusMobileTerminal(terminalId, comment, status, username);
+        final MobileTerminalType terminalStatus = mobileTerminalModel.setStatusMobileTerminal(terminalId, comment, status, username);
         try {
             String auditData = null;
             switch (status) {
@@ -256,12 +254,12 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
                 break;
             }
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
-        } catch (AuditModelMarshallException e) {
+        } catch (final AuditModelMarshallException e) {
             LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was set to status {}", terminalStatus
                     .getMobileTerminalId().getGuid(), status);
         }
 
-        boolean dnidUpdated = configModel.checkDNIDListChange(terminalStatus.getPlugin().getServiceName());
+        final boolean dnidUpdated = configModel.checkDNIDListChange(terminalStatus.getPlugin().getServiceName());
         if(dnidUpdated) {
         	pluginService.processUpdatedDNIDList(terminalStatus.getPlugin().getServiceName());
         }
@@ -270,19 +268,19 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     }
 
     @Override
-    public MobileTerminalHistory getMobileTerminalHistoryList(String guid) throws MobileTerminalException {
+    public MobileTerminalHistory getMobileTerminalHistoryList(final String guid) throws MobileTerminalException {
         LOG.debug("GET HISTORY OF MOBILE TERMINAL INVOKED IN SERVICE LAYER");
-        MobileTerminalId terminalId = new MobileTerminalId();
+        final MobileTerminalId terminalId = new MobileTerminalId();
         terminalId.setGuid(guid);
-        MobileTerminalHistory historyList = mobileTerminalModel.getMobileTerminalHistoryList(terminalId);
+        final MobileTerminalHistory historyList = mobileTerminalModel.getMobileTerminalHistoryList(terminalId);
         return historyList;
     }
 
     @Override
-    public MobileTerminalListResponse getPollableMobileTerminal(PollableQuery query) throws MobileTerminalException {
+    public MobileTerminalListResponse getPollableMobileTerminal(final PollableQuery query) throws MobileTerminalException {
         LOG.debug("Get pollable mobile terminals");
-        ListResponseDto listResponse = pollModel.getMobileTerminalPollableList(query);
-        MobileTerminalListResponse response = new MobileTerminalListResponse();
+        final ListResponseDto listResponse = pollModel.getMobileTerminalPollableList(query);
+        final MobileTerminalListResponse response = new MobileTerminalListResponse();
         response.setCurrentPage(listResponse.getCurrentPage());
         response.setTotalNumberOfPages(listResponse.getTotalNumberOfPages());
         response.getMobileTerminal().addAll(listResponse.getMobileTerminalList());

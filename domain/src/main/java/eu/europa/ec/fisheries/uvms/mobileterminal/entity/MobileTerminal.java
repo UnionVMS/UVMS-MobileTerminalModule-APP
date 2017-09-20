@@ -123,7 +123,7 @@ public class MobileTerminal implements Serializable {
 		return this.id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -131,7 +131,7 @@ public class MobileTerminal implements Serializable {
 		return this.archived;
 	}
 
-	public void setArchived(Boolean archived) {
+	public void setArchived(final Boolean archived) {
 		this.archived = archived;
 	}
 
@@ -139,7 +139,7 @@ public class MobileTerminal implements Serializable {
 		return this.inactivated;
 	}
 
-	public void setInactivated(Boolean inactivated) {
+	public void setInactivated(final Boolean inactivated) {
 		this.inactivated = inactivated;
 	}
 
@@ -147,7 +147,7 @@ public class MobileTerminal implements Serializable {
 		return this.source;
 	}
 
-	public void setSource(MobileTerminalSourceEnum source) {
+	public void setSource(final MobileTerminalSourceEnum source) {
 		this.source = source;
 	}
 
@@ -155,7 +155,7 @@ public class MobileTerminal implements Serializable {
 		return this.mobileTerminalType;
 	}
 
-	public void setMobileTerminalType(MobileTerminalTypeEnum mobileTerminalType) {
+	public void setMobileTerminalType(final MobileTerminalTypeEnum mobileTerminalType) {
 		this.mobileTerminalType = mobileTerminalType;
 	}
 
@@ -163,7 +163,7 @@ public class MobileTerminal implements Serializable {
 		return this.updatetime;
 	}
 
-	public void setUpdateTime(Date updatetime) {
+	public void setUpdateTime(final Date updatetime) {
 		this.updatetime = updatetime;
 	}
 
@@ -171,7 +171,7 @@ public class MobileTerminal implements Serializable {
 		return this.updateuser;
 	}
 
-	public void setUpdatedBy(String updateuser) {
+	public void setUpdatedBy(final String updateuser) {
 		this.updateuser = updateuser;
 	}
 
@@ -182,7 +182,7 @@ public class MobileTerminal implements Serializable {
 		return this.mobileTerminalEvents;
 	}
 
-	public void setMobileTerminalEvents(Set<MobileTerminalEvent> mobileTerminalEvents) {
+	public void setMobileTerminalEvents(final Set<MobileTerminalEvent> mobileTerminalEvents) {
 		this.mobileTerminalEvents = mobileTerminalEvents;
 	}
 
@@ -190,7 +190,7 @@ public class MobileTerminal implements Serializable {
 		return guid;
 	}
 
-	public void setGuid(String guid) {
+	public void setGuid(final String guid) {
 		this.guid = guid;
 	}
 
@@ -201,7 +201,7 @@ public class MobileTerminal implements Serializable {
 		return channels;
 	}
 
-	public void setChannels(Set<Channel> channels) {
+	public void setChannels(final Set<Channel> channels) {
 		this.channels = channels;
 	}
 
@@ -209,14 +209,14 @@ public class MobileTerminal implements Serializable {
 		return serialNo;
 	}
 
-	public void setSerialNo(String serialNo) {
+	public void setSerialNo(final String serialNo) {
 		this.serialNo = serialNo;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if(obj instanceof MobileTerminal) {
-			MobileTerminal other = (MobileTerminal)obj;
+			final MobileTerminal other = (MobileTerminal)obj;
 			if(!EqualsUtil.compare(guid, other.guid)) return false;
 			return true;
 		}
@@ -232,12 +232,12 @@ public class MobileTerminal implements Serializable {
 		return plugin;
 	}
 
-	public void setPlugin(MobileTerminalPlugin plugin) {
+	public void setPlugin(final MobileTerminalPlugin plugin) {
 		this.plugin = plugin;
 	}
 
 	public MobileTerminalEvent getCurrentEvent() {
-		for (MobileTerminalEvent event : getMobileTerminalEvents()) {
+		for (final MobileTerminalEvent event : getMobileTerminalEvents()) {
 			if (event.isActive()) {
 				return event;
 			}

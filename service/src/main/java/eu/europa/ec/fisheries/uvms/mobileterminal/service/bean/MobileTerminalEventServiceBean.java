@@ -46,19 +46,19 @@ public class MobileTerminalEventServiceBean implements EventService {
     Event<EventMessage> errorEvent;
 
     @Override
-    public void returnError(@Observes @ErrorEvent EventMessage message) {
+    public void returnError(@Observes @ErrorEvent final EventMessage message) {
         try {
-            Connection connection = connectionFactory.createConnection();
+            final Connection connection = connectionFactory.createConnection();
             try {
                 //TODO: Transacted false??
                 LOG.debug("Sending error message back from Mobile Terminal module to recipient om JMS Queue with correlationID: {} ", message.getJmsMessage().getJMSMessageID());
-                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-                MobileTerminalFault request = new MobileTerminalFault();
+                final MobileTerminalFault request = new MobileTerminalFault();
                 request.setMessage(message.getErrorMessage());
-                String data = JAXBMarshaller.marshallJaxBObjectToString(request);
+                final String data = JAXBMarshaller.marshallJaxBObjectToString(request);
 
-                TextMessage response = session.createTextMessage(data);
+                final TextMessage response = session.createTextMessage(data);
                 response.setJMSCorrelationID(message.getJmsMessage().getJMSCorrelationID());
                 getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(response);
             } finally {
@@ -71,8 +71,8 @@ public class MobileTerminalEventServiceBean implements EventService {
     }
 
     // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
+    private javax.jms.MessageProducer getProducer(final Session session, final Destination destination) throws JMSException {
+        final javax.jms.MessageProducer producer = session.createProducer(destination);
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
         producer.setTimeToLive(60000L);
         return producer;

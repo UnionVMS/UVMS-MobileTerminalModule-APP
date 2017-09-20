@@ -20,11 +20,11 @@ public class EventMessage {
     private TextMessage jmsMessage;
     private String errorMessage;
 
-    public EventMessage(TextMessage jmsMessage) {
+    public EventMessage(final TextMessage jmsMessage) {
         this.jmsMessage = jmsMessage;
     }
 
-    public EventMessage(TextMessage jmsMessage, String errorMessage) {
+    public EventMessage(final TextMessage jmsMessage, final String errorMessage) {
         this.jmsMessage = jmsMessage;
         this.errorMessage = errorMessage;
     }
@@ -33,7 +33,7 @@ public class EventMessage {
         return errorMessage;
     }
 
-    public void setErrorMessage(String errorMessage) {
+    public void setErrorMessage(final String errorMessage) {
         this.errorMessage = errorMessage;
     }
 
@@ -41,7 +41,7 @@ public class EventMessage {
         return jmsMessage;
     }
 
-    public void setJmsMessage(TextMessage jmsMessage) {
+    public void setJmsMessage(final TextMessage jmsMessage) {
         this.jmsMessage = jmsMessage;
     }
 

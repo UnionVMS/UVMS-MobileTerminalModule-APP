@@ -34,61 +34,61 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
 	final static Logger LOG = LoggerFactory.getLogger(TerminalDaoBean.class);
 
 	@Override
-	public MobileTerminal getMobileTerminalByGuid(String guid) throws NoEntityFoundException {
+	public MobileTerminal getMobileTerminalByGuid(final String guid) throws NoEntityFoundException {
 		try {
-            TypedQuery<MobileTerminal> query = em.createNamedQuery(MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_GUID, MobileTerminal.class);
+            final TypedQuery<MobileTerminal> query = em.createNamedQuery(MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_GUID, MobileTerminal.class);
             query.setParameter("guid", guid);
             return query.getSingleResult();
-        } catch (NoResultException e) {
+        } catch (final NoResultException e) {
             LOG.error("[ Error when getting terminal by GUID. ] {}", e.getMessage());
             throw new NoEntityFoundException("No entity found with guid " + guid);
         }
 	}
 
     @Override
-    public MobileTerminal getMobileTerminalBySerialNo(String serialNo) throws NoEntityFoundException {
+    public MobileTerminal getMobileTerminalBySerialNo(final String serialNo) throws NoEntityFoundException {
         try {
-            TypedQuery<MobileTerminal> query = em.createNamedQuery(MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_SERIAL_NO, MobileTerminal.class);
+            final TypedQuery<MobileTerminal> query = em.createNamedQuery(MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_SERIAL_NO, MobileTerminal.class);
             query.setParameter("serialNo", serialNo);
             return query.getSingleResult();
-        } catch (NoResultException e) {
+        } catch (final NoResultException e) {
             LOG.error("[ Error when getting terminal by GUID. ] {}", e.getMessage());
             throw new NoEntityFoundException("No entity found with serial no " + serialNo);
         }
     }
 
     @Override
-    public void createMobileTerminal(MobileTerminal terminal) throws TerminalDaoException {
+    public void createMobileTerminal(final MobileTerminal terminal) throws TerminalDaoException {
         try {
             em.persist(terminal);
             em.flush();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("[ Error when creating. ] {}", e.getMessage());
             throw new TerminalDaoException("[ Error when creating. ]");
         }
     }
 
     @Override
-    public void updateMobileTerminal(MobileTerminal terminal) throws TerminalDaoException {
+    public void updateMobileTerminal(final MobileTerminal terminal) throws TerminalDaoException {
         try {
             em.merge(terminal);
             em.flush();
-        } catch (RuntimeException e) {
+        } catch (final RuntimeException e) {
             LOG.error("[ Error when updating. ] {}", e.getMessage());
             throw new TerminalDaoException("[ Error when updating. ]");
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("[ Error when updating. ] {}", e.getMessage());
             throw new TerminalDaoException("[ Error when updating. ]");
-        } catch (Throwable e) {
+        } catch (final Throwable e) {
             LOG.error("[ Error when updating. ] {}", e.getMessage());
             throw new TerminalDaoException("[ Error when updating. ]");
         }
     }
 
     @Override
-    public List<MobileTerminal> getMobileTerminalsByQuery(String sql) throws NoEntityFoundException {
-        Session session = em.unwrap(Session.class);
-        Query query = session.createQuery(sql);
+    public List<MobileTerminal> getMobileTerminalsByQuery(final String sql) throws NoEntityFoundException {
+        final Session session = em.unwrap(Session.class);
+        final Query query = session.createQuery(sql);
         return query.list();
     }
 }

@@ -28,7 +28,7 @@ public class HistoryMapperTest {
 
     @Before
     public void init() {
-        Calendar cal = Calendar.getInstance();
+        final Calendar cal = Calendar.getInstance();
         cal.set(2015, 05, 18, 12, 00);
         createDate = cal.getTime();
         cal.set(2015, 05, 19, 12, 00);

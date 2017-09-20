@@ -56,7 +56,7 @@ public class MobileTerminalDataSourceResponseMapper {
      * @throws MobileTerminalValidationException
      * @throws MobileTerminalFaultException 
      */
-    private static void validateResponse(TextMessage response, String correlationId) throws JMSException, MobileTerminalValidationException, MobileTerminalFaultException {
+    private static void validateResponse(final TextMessage response, final String correlationId) throws JMSException, MobileTerminalValidationException, MobileTerminalFaultException {
 
         if (response == null) {
             throw new MobileTerminalValidationException("Error when validating response in ResponseMapper: Response is Null");
@@ -71,9 +71,9 @@ public class MobileTerminalDataSourceResponseMapper {
         }
 
         try {
-            MobileTerminalFault fault = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalFault.class);
+            final MobileTerminalFault fault = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalFault.class);
             throw new MobileTerminalFaultException("Fault found when validate response", fault);
-        } catch (MobileTerminalUnmarshallException e) {
+        } catch (final MobileTerminalUnmarshallException e) {
             //everything is well
         }
     }
@@ -85,10 +85,10 @@ public class MobileTerminalDataSourceResponseMapper {
      * @return
      * @throws MobileTerminalModelMapperException
      */
-    public static MobileTerminalType mapToMobileTerminalFromResponse(TextMessage response, String messageId) throws MobileTerminalModelException {
+    public static MobileTerminalType mapToMobileTerminalFromResponse(final TextMessage response, final String messageId) throws MobileTerminalModelException {
         try {
             validateResponse(response, messageId);
-            MobileTerminalResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalResponse.class);
+            final MobileTerminalResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalResponse.class);
             return unmarshalledResponse.getMobilTerminal();
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
             LOG.error("[ Error when mapping response to mobile terminal. ] " + e.getMessage());
@@ -97,10 +97,10 @@ public class MobileTerminalDataSourceResponseMapper {
 
     }
 
-    public static boolean mapDNIDUpdatedMobileTerminalResponse(TextMessage response, String messageId) throws MobileTerminalModelException {
+    public static boolean mapDNIDUpdatedMobileTerminalResponse(final TextMessage response, final String messageId) throws MobileTerminalModelException {
     	try {
             validateResponse(response, messageId);
-            MobileTerminalResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalResponse.class);
+            final MobileTerminalResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalResponse.class);
             return unmarshalledResponse.isDnidListUpdated();
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
             LOG.error("[ Error when mapping response to mobile terminal. DNIDList updated] " + e.getMessage());
@@ -115,10 +115,10 @@ public class MobileTerminalDataSourceResponseMapper {
      * @return
      * @throws MobileTerminalModelMapperException
      */
-    public static MobileTerminalListResponse mapToMobileTerminalListFromResponse(TextMessage response, String correlationId) throws MobileTerminalModelException {
+    public static MobileTerminalListResponse mapToMobileTerminalListFromResponse(final TextMessage response, final String correlationId) throws MobileTerminalModelException {
         try {
             validateResponse(response, correlationId);
-            MobileTerminalListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalListResponse.class);
+            final MobileTerminalListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalListResponse.class);
             return mappedResponse;
         } catch (MobileTerminalUnmarshallException | JMSException e) {
             LOG.error("[ Error when mapping response to mobile terminal list. ] {}", e.getMessage());
@@ -133,10 +133,10 @@ public class MobileTerminalDataSourceResponseMapper {
      * @return
      * @throws MobileTerminalModelMapperException
      */
-    public static List<TerminalSystemType> mapToTerminalSystemList(TextMessage response, String correlationId) throws MobileTerminalModelException {
+    public static List<TerminalSystemType> mapToTerminalSystemList(final TextMessage response, final String correlationId) throws MobileTerminalModelException {
         try {
             validateResponse(response, correlationId);
-            TerminalSystemListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, TerminalSystemListResponse.class);
+            final TerminalSystemListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, TerminalSystemListResponse.class);
             return mappedResponse.getTerminalSystem();
         } catch (MobileTerminalUnmarshallException | JMSException e) {
             LOG.error("[ Error when mapping response to terminal system list. ] {}", e.getMessage());
@@ -144,10 +144,10 @@ public class MobileTerminalDataSourceResponseMapper {
         }
     }
 
-	public static List<String> mapToChannelNames(TextMessage response, String correlationId) throws MobileTerminalModelException {
+	public static List<String> mapToChannelNames(final TextMessage response, final String correlationId) throws MobileTerminalModelException {
 		try {
             validateResponse(response, correlationId);
-            ComchannelNameResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, ComchannelNameResponse.class);
+            final ComchannelNameResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, ComchannelNameResponse.class);
             return mappedResponse.getComchannelName();
         } catch (MobileTerminalUnmarshallException | JMSException e) {
             LOG.error("[ Error when mapping response to comchannel list. ] {}", e.getMessage());
@@ -162,10 +162,10 @@ public class MobileTerminalDataSourceResponseMapper {
      * @return
      * @throws MobileTerminalModelMapperException
      */
-    public static List<MobileTerminalHistory> mapToHistoryList(TextMessage response, String correlationId) throws MobileTerminalModelException {
+    public static List<MobileTerminalHistory> mapToHistoryList(final TextMessage response, final String correlationId) throws MobileTerminalModelException {
         try {
             validateResponse(response, correlationId);
-            HistoryMobileTerminalListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, HistoryMobileTerminalListResponse.class);
+            final HistoryMobileTerminalListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, HistoryMobileTerminalListResponse.class);
             return mappedResponse.getHistory();
         } catch (MobileTerminalUnmarshallException | JMSException e) {
             LOG.error("[ Error when mapping response to mobile terminal history. ] {}", e.getMessage());
@@ -173,10 +173,10 @@ public class MobileTerminalDataSourceResponseMapper {
         }
     }
 
-    public static List<ConfigList> mapToConfigList(TextMessage response, String correlationId) throws MobileTerminalModelException {
+    public static List<ConfigList> mapToConfigList(final TextMessage response, final String correlationId) throws MobileTerminalModelException {
     	try {
     		validateResponse(response, correlationId);
-    		ConfigResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, ConfigResponse.class);
+    		final ConfigResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, ConfigResponse.class);
     		return mappedResponse.getConfig();
     	} catch (MobileTerminalUnmarshallException | JMSException e) {
     		LOG.error("[ Error when mapping response to config list. ] {}", e.getMessage());
@@ -184,10 +184,10 @@ public class MobileTerminalDataSourceResponseMapper {
     	}
 	}
     
-    public static List<Plugin> mapToPluginList(TextMessage response, String correlationId) throws MobileTerminalModelException {
+    public static List<Plugin> mapToPluginList(final TextMessage response, final String correlationId) throws MobileTerminalModelException {
     	try {
             validateResponse(response, correlationId);
-            UpsertPluginListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, UpsertPluginListResponse.class);
+            final UpsertPluginListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, UpsertPluginListResponse.class);
             return mappedResponse.getPlugin();
         } catch (MobileTerminalUnmarshallException | JMSException e) {
             LOG.error("[ Error when mapping response to plugin list. ] ");
@@ -195,10 +195,10 @@ public class MobileTerminalDataSourceResponseMapper {
         }
 	}
     
-    public static UpdatedDNIDListResponse mapToUpdatedDNIDList(TextMessage response, String correlationId) throws MobileTerminalModelException {
+    public static UpdatedDNIDListResponse mapToUpdatedDNIDList(final TextMessage response, final String correlationId) throws MobileTerminalModelException {
     	try {
             validateResponse(response, correlationId);
-            UpdatedDNIDListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, UpdatedDNIDListResponse.class);
+            final UpdatedDNIDListResponse mappedResponse = JAXBMarshaller.unmarshallTextMessage(response, UpdatedDNIDListResponse.class);
             return mappedResponse;
         } catch (MobileTerminalUnmarshallException | JMSException e) {
             LOG.error("[ Error when mapping response to updated DNID list response. ] ");
@@ -211,8 +211,8 @@ public class MobileTerminalDataSourceResponseMapper {
      * @return
      * @throws MobileTerminalModelMapperException
      */
-    public static String createTerminalSystemListResponse(List<TerminalSystemType> systemList) throws MobileTerminalModelException {
-        TerminalSystemListResponse response = new TerminalSystemListResponse();
+    public static String createTerminalSystemListResponse(final List<TerminalSystemType> systemList) throws MobileTerminalModelException {
+        final TerminalSystemListResponse response = new TerminalSystemListResponse();
         response.getTerminalSystem().addAll(systemList);
         return JAXBMarshaller.marshallJaxBObjectToString(response);
     }
@@ -222,8 +222,8 @@ public class MobileTerminalDataSourceResponseMapper {
      * @param message
      * @return
      */
-    public static MobileTerminalFault createFaultMessage(int code, String message) {
-        MobileTerminalFault fault = new MobileTerminalFault();
+    public static MobileTerminalFault createFaultMessage(final int code, final String message) {
+        final MobileTerminalFault fault = new MobileTerminalFault();
         fault.setCode(code);
         fault.setMessage(message);
         return fault;
@@ -235,14 +235,14 @@ public class MobileTerminalDataSourceResponseMapper {
      * @return
      * @throws MobileTerminalModelMapperException
      */
-    public static String createMobileTerminalResponse(MobileTerminalType terminal) throws MobileTerminalModelException {
-        MobileTerminalResponse response = new MobileTerminalResponse();
+    public static String createMobileTerminalResponse(final MobileTerminalType terminal) throws MobileTerminalModelException {
+        final MobileTerminalResponse response = new MobileTerminalResponse();
         response.setMobilTerminal(terminal);
         return JAXBMarshaller.marshallJaxBObjectToString(response);
     }
 
-    public static String createPingResponse(String responseMessage) throws MobileTerminalModelMapperException {
-		PingResponse pingResponse = new PingResponse();
+    public static String createPingResponse(final String responseMessage) throws MobileTerminalModelMapperException {
+		final PingResponse pingResponse = new PingResponse();
 		pingResponse.setResponse(responseMessage);
 		return JAXBMarshaller.marshallJaxBObjectToString(pingResponse);
     }

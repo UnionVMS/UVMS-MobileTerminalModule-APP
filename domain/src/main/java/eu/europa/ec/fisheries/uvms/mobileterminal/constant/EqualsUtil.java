@@ -21,36 +21,36 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 
 public class EqualsUtil {
 
-	public static boolean compare(String one, String two) {
+	public static boolean compare(final String one, final String two) {
 		if(one == null && two == null) return true;
 		if(one == null) return false;
 		return one.equalsIgnoreCase(two);
 	}
 	
-	public static boolean compare(Date one, Date two) {
+	public static boolean compare(final Date one, final Date two) {
 		return DateUtils.equalsDate(one, two);
 	}
 	
-	public static boolean compare(Integer one, Integer two) {
+	public static boolean compare(final Integer one, final Integer two) {
 		if(one == null && two == null) return true;
 		if(one == null) return false;
 		return one.equals(two);
 	}
 	
-	public static boolean compare(Boolean one, Boolean two) {
+	public static boolean compare(final Boolean one, final Boolean two) {
 		if(one == null && two == null) return true;
 		if(one == null) return false;
 		return one.equals(two);
 	}
 	
-	public static int getHashCode(Object obj) {
+	public static int getHashCode(final Object obj) {
 		if(obj == null) return 0;
 		return obj.hashCode();
 	}
 
-	public static boolean equalsOceanRegions(Set<InmarsatCHistoryOceanRegion> oceanRegionsOne, Set<InmarsatCHistoryOceanRegion> oceanRegionsTwo) {
-	    boolean hasOceanRegionsOne = !CollectionUtils.isEmpty(oceanRegionsOne);
-	    boolean hasOceanRegionsTwo = !CollectionUtils.isEmpty(oceanRegionsTwo);
+	public static boolean equalsOceanRegions(final Set<InmarsatCHistoryOceanRegion> oceanRegionsOne, final Set<InmarsatCHistoryOceanRegion> oceanRegionsTwo) {
+	    final boolean hasOceanRegionsOne = !CollectionUtils.isEmpty(oceanRegionsOne);
+	    final boolean hasOceanRegionsTwo = !CollectionUtils.isEmpty(oceanRegionsTwo);
 
 	    if (!hasOceanRegionsOne && !hasOceanRegionsTwo) {
 	        // Neither has ocean regions

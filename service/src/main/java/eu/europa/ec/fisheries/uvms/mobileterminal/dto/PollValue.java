@@ -18,7 +18,7 @@ public class PollValue {
     private PollKey key;
     private String value;
 
-    public PollValue(PollKey key, String value) {
+    public PollValue(final PollKey key, final String value) {
         this.key = key;
         this.value = value;
     }
@@ -27,7 +27,7 @@ public class PollValue {
         return key;
     }
 
-    public void setKey(PollKey key) {
+    public void setKey(final PollKey key) {
         this.key = key;
     }
 
@@ -35,7 +35,7 @@ public class PollValue {
         return value;
     }
 
-    public void setValue(String value) {
+    public void setValue(final String value) {
         this.value = value;
     }
 

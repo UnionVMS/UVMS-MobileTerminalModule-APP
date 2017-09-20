@@ -25,7 +25,7 @@ public class CreatedPollListDto {
         return type;
     }
 
-    public void setType(PollType type) {
+    public void setType(final PollType type) {
         this.type = type;
     }
 
@@ -33,7 +33,7 @@ public class CreatedPollListDto {
         return pollList;
     }
 
-    public void setPollList(List<PollResponseType> pollList) {
+    public void setPollList(final List<PollResponseType> pollList) {
         this.pollList = pollList;
     }
 }

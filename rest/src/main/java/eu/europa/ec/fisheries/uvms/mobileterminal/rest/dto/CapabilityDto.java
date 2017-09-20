@@ -23,7 +23,7 @@ public class CapabilityDto<T> {
 		return name;
 	}
 	
-	public void setName(String name) {
+	public void setName(final String name) {
 		this.name = name;
 	}
 
@@ -31,7 +31,7 @@ public class CapabilityDto<T> {
 		return optionList;
 	}
 
-	public void setOptionList(List<T> optionList) {
+	public void setOptionList(final List<T> optionList) {
 		this.optionList = optionList;
 	}
 }

@@ -20,11 +20,11 @@ public enum MobileTerminalSearchAttributes {
     SATELLITE_NUMBER,
     CONNECT_ID;
 
-    public static boolean isAttribute(String attribute) {
+    public static boolean isAttribute(final String attribute) {
         try {
             MobileTerminalSearchAttributes.valueOf(attribute);
             return true;
-        } catch (IllegalArgumentException e) {
+        } catch (final IllegalArgumentException e) {
             return false;
         }
     }

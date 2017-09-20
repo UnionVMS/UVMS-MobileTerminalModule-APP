@@ -27,7 +27,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTermin
  **/
 public class ErrorHandler {
     
-    public static ResponseDto getFault(Exception ex) {
+    public static ResponseDto getFault(final Exception ex) {
     	if(ex instanceof MobileTerminalServiceException) {
     		if(ex instanceof InputArgumentException) {
     			return new ResponseDto<String>(ex.getMessage(), ResponseCode.INPUT_ERROR);
@@ -64,13 +64,13 @@ public class ErrorHandler {
         return new ResponseDto<String>(ex.getMessage(), ResponseCode.UNDEFINED_ERROR);
     }
 
-    private static ResponseDto extractFault(MobileTerminalFaultException ex) {
-        MobileTerminalFault fault = ex.getMobileTerminalFault();
+    private static ResponseDto extractFault(final MobileTerminalFaultException ex) {
+        final MobileTerminalFault fault = ex.getMobileTerminalFault();
         if (fault == null) {
             return new ResponseDto<String>(ex.getMessage(), ResponseCode.DOMAIN_ERROR);
         }
 
-        MobileTerminalType terminal = fault.getTerminal();
+        final MobileTerminalType terminal = fault.getTerminal();
         if (terminal == null) {
             return new ResponseDto<String>(fault.getMessage(), fault.getCode());
         }

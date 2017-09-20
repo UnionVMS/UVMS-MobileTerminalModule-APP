@@ -43,7 +43,7 @@ public class PollToCommandRequestMapper {
         SERIAL_NUMBER;
     }
 
-    private static PollTypeType mapToPollType(eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType pollType) throws MobileTerminalModelMapperException {
+    private static PollTypeType mapToPollType(final eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType pollType) throws MobileTerminalModelMapperException {
         switch (pollType) {
             case CONFIGURATION_POLL:
                 return PollTypeType.CONFIG;
@@ -57,29 +57,29 @@ public class PollToCommandRequestMapper {
         }
     }
 
-    public static PollType mapToPollType(PollResponseType pollResponse) throws MobileTerminalModelMapperException {
-        PollType pollType = new PollType();
+    public static PollType mapToPollType(final PollResponseType pollResponse) throws MobileTerminalModelMapperException {
+        final PollType pollType = new PollType();
 
-        String pollId = pollResponse.getPollId() == null ? null : pollResponse.getPollId().getGuid();
-        List<PollAttribute> pollAttributes = pollResponse.getAttributes() == null ? new ArrayList<PollAttribute>() : pollResponse.getAttributes();
+        final String pollId = pollResponse.getPollId() == null ? null : pollResponse.getPollId().getGuid();
+        final List<PollAttribute> pollAttributes = pollResponse.getAttributes() == null ? new ArrayList<PollAttribute>() : pollResponse.getAttributes();
 
         pollType.setPollTypeType(mapToPollType(pollResponse.getPollType()));
         pollType.setPollId(pollId);
         pollType.setMessage(pollResponse.getUserName() + " : " + pollResponse.getComment());
 
-        for (PollAttribute attr : pollAttributes) {
+        for (final PollAttribute attr : pollAttributes) {
             pollType.getPollPayload().add(mapPollAttributeToKeyValue(attr.getKey(), attr.getValue()));
         }
 
         if (pollResponse.getMobileTerminal() != null) {
 
-            MobileTerminalType mobTerm = pollResponse.getMobileTerminal();
-            String mobileTerminalType = mobTerm.getType();
+            final MobileTerminalType mobTerm = pollResponse.getMobileTerminal();
+            final String mobileTerminalType = mobTerm.getType();
 
             if ("INMARSAT_C".equalsIgnoreCase(mobileTerminalType)) {
-                String connectId = mobTerm.getConnectId();
-                String mobileTerminalId = mobTerm.getMobileTerminalId() == null ? null : mobTerm.getMobileTerminalId().getGuid();
-                Plugin plugin = mobTerm.getPlugin();
+                final String connectId = mobTerm.getConnectId();
+                final String mobileTerminalId = mobTerm.getMobileTerminalId() == null ? null : mobTerm.getMobileTerminalId().getGuid();
+                final Plugin plugin = mobTerm.getPlugin();
                 if (plugin != null) {
                     pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.LES_NAME, plugin.getLabelName()));
                     pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.LES_SERVICE_NAME, plugin.getServiceName()));
@@ -87,8 +87,8 @@ public class PollToCommandRequestMapper {
                 pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.CONNECT_ID, connectId));
                 pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.MOBILE_TERMINAL_ID, mobileTerminalId));
 
-                List<MobileTerminalAttribute> attributes = mobTerm.getAttributes();
-                for (MobileTerminalAttribute attr : attributes) {
+                final List<MobileTerminalAttribute> attributes = mobTerm.getAttributes();
+                for (final MobileTerminalAttribute attr : attributes) {
                     if (PollReceiverInmarsatC.SERIAL_NUMBER.name().equalsIgnoreCase(attr.getType())) {
                         pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.SERIAL_NUMBER, attr.getValue()));
                     }
@@ -97,8 +97,8 @@ public class PollToCommandRequestMapper {
                     }
                 }
 
-                for (ComChannelType channel : mobTerm.getChannels()) {
-                    for (ComChannelAttribute attr : channel.getAttributes()) {
+                for (final ComChannelType channel : mobTerm.getChannels()) {
+                    for (final ComChannelAttribute attr : channel.getAttributes()) {
                         if (PollReceiverInmarsatC.DNID.name().equalsIgnoreCase(attr.getType())) {
                             pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverInmarsatC.DNID, attr.getValue()));
                         }
@@ -108,14 +108,14 @@ public class PollToCommandRequestMapper {
                     }
                 }
             } else if ("IRIDIUM".equalsIgnoreCase(mobileTerminalType)) {
-                String connectId = mobTerm.getConnectId();
-                String mobileTerminalId = mobTerm.getMobileTerminalId() == null ? null : mobTerm.getMobileTerminalId().getGuid();
+                final String connectId = mobTerm.getConnectId();
+                final String mobileTerminalId = mobTerm.getMobileTerminalId() == null ? null : mobTerm.getMobileTerminalId().getGuid();
 
                 pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverIridium.CONNECT_ID, connectId));
                 pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverIridium.MOBILE_TERMINAL_ID, mobileTerminalId));
 
-                List<MobileTerminalAttribute> attributes = mobTerm.getAttributes();
-                for (MobileTerminalAttribute attr : attributes) {
+                final List<MobileTerminalAttribute> attributes = mobTerm.getAttributes();
+                for (final MobileTerminalAttribute attr : attributes) {
                     if (PollReceiverIridium.SERIAL_NUMBER.name().equalsIgnoreCase(attr.getType())) {
                         pollType.getPollReceiver().add(mapReceiverToKeyValue(PollReceiverIridium.SERIAL_NUMBER, attr.getValue()));
                     }
@@ -126,22 +126,22 @@ public class PollToCommandRequestMapper {
         return pollType;
     }
 
-    private static KeyValueType mapPollAttributeToKeyValue(PollAttributeType key, String value) {
-        KeyValueType keyValue = new KeyValueType();
+    private static KeyValueType mapPollAttributeToKeyValue(final PollAttributeType key, final String value) {
+        final KeyValueType keyValue = new KeyValueType();
         keyValue.setKey(key.name());
         keyValue.setValue(value);
         return keyValue;
     }
 
-    private static KeyValueType mapReceiverToKeyValue(PollReceiverInmarsatC key, String value) {
-        KeyValueType keyValue = new KeyValueType();
+    private static KeyValueType mapReceiverToKeyValue(final PollReceiverInmarsatC key, final String value) {
+        final KeyValueType keyValue = new KeyValueType();
         keyValue.setKey(key.name());
         keyValue.setValue(value);
         return keyValue;
     }
 
-    private static KeyValueType mapReceiverToKeyValue(PollReceiverIridium key, String value) {
-        KeyValueType keyValue = new KeyValueType();
+    private static KeyValueType mapReceiverToKeyValue(final PollReceiverIridium key, final String value) {
+        final KeyValueType keyValue = new KeyValueType();
         keyValue.setKey(key.name());
         keyValue.setValue(value);
         return keyValue;

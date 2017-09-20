@@ -35,31 +35,31 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
 	@Override
 	public List<MobileTerminalPlugin> getPluginList() throws ConfigDaoException {
 		try {
-            TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_ALL, MobileTerminalPlugin.class);
+            final TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_ALL, MobileTerminalPlugin.class);
             return query.getResultList();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             LOG.error("[ Error when getting plugin list. ] " + e.getMessage());
             throw new ConfigDaoException("No entities found when retrieving all plugins");
         }
 	}
 	
 	@Override
-	public MobileTerminalPlugin createMobileTerminalPlugin(MobileTerminalPlugin plugin) throws TerminalDaoException {
+	public MobileTerminalPlugin createMobileTerminalPlugin(final MobileTerminalPlugin plugin) throws TerminalDaoException {
 		try {
 			em.persist(plugin);
 			return plugin;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new TerminalDaoException("[ create mobile terminal plugin ] ");
 		}
 	}
 
 	@Override
-	public MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException {
+	public MobileTerminalPlugin getPluginByServiceName(final String serviceName) throws NoEntityFoundException {
 		try {
-            TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, MobileTerminalPlugin.class);
+            final TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, MobileTerminalPlugin.class);
             query.setParameter("serviceName", serviceName);
             return query.getSingleResult();
-        } catch (NoResultException e) {
+        } catch (final NoResultException e) {
             LOG.error("[ Error when getting plugin by service name. ] {}", e.getMessage());
             throw new NoEntityFoundException("No entities found when retrieving mobile terminal plugin by service name");
         }
@@ -67,12 +67,12 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
 
 	//ToDo: Look at if a null check is needed on an incoming MobileTerminalPlugin entity before allowing a merge.
 	@Override
-	public MobileTerminalPlugin updatePlugin(MobileTerminalPlugin entity) throws TerminalDaoException {
+	public MobileTerminalPlugin updatePlugin(final MobileTerminalPlugin entity) throws TerminalDaoException {
 		try {
 			em.merge(entity);
 			em.flush();
 			return entity;
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			throw new TerminalDaoException("  [ update mobile terminal plugin ]");
 		}
 	}

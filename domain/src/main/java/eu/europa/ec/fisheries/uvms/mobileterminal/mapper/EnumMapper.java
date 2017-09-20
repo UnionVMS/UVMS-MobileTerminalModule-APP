@@ -25,9 +25,9 @@ public class EnumMapper {
 
     // Terminalsource
     // TerminalSourceEnum, MobileTerminalSource, Terminalsource
-    public static TerminalSourceEnum getSourceTypeFromId(Integer id) throws EnumException {
+    public static TerminalSourceEnum getSourceTypeFromId(final Integer id) throws EnumException {
         if (id != null) {
-            for (TerminalSourceEnum source : TerminalSourceEnum.values()) {
+            for (final TerminalSourceEnum source : TerminalSourceEnum.values()) {
                 if (id.equals(source.getId())) {
                     return source;
                 }
@@ -36,7 +36,7 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from id) in " + TerminalSourceEnum.class.getName());
     }
 
-    public static MobileTerminalSource getSourceModelFromType(TerminalSourceEnum type) throws EnumException {
+    public static MobileTerminalSource getSourceModelFromType(final TerminalSourceEnum type) throws EnumException {
         if (type != null) {
             switch (type) {
             case INTERNAL:
@@ -48,7 +48,7 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from type) in " + TerminalSourceEnum.class.getName());
     }
 
-    public static TerminalSourceEnum getSourceTypeFromModel(MobileTerminalSource model) throws EnumException {
+    public static TerminalSourceEnum getSourceTypeFromModel(final MobileTerminalSource model) throws EnumException {
         if (model != null) {
             switch (model) {
             case INTERNAL:
@@ -61,9 +61,9 @@ public class EnumMapper {
     }
 
     // Terminaleventtype
-    public static EventCodeEnum getEventTypeFromId(Integer id) throws EnumException {
+    public static EventCodeEnum getEventTypeFromId(final Integer id) throws EnumException {
         if (id != null) {
-            for (EventCodeEnum channel : EventCodeEnum.values()) {
+            for (final EventCodeEnum channel : EventCodeEnum.values()) {
                 if (id.equals(channel.getId())) {
                     return channel;
                 }
@@ -72,7 +72,7 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from id) in " + EventCodeEnum.class.getName());
     }
 
-    public static EventCode getEventModelFromType(EventCodeEnum type) throws EnumException {
+    public static EventCode getEventModelFromType(final EventCodeEnum type) throws EnumException {
         if (type != null) {
             switch (type) {
             case CREATE:
@@ -94,7 +94,7 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from type) in " + EventCodeEnum.class.getName());
     }
 
-    public static EventCodeEnum getEventTypeFromModel(EventCode model) throws EnumException {
+    public static EventCodeEnum getEventTypeFromModel(final EventCode model) throws EnumException {
         if (model != null) {
             switch (model) {
             case CREATE:
@@ -116,9 +116,9 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from model) in " + EventCodeEnum.class.getName());
     }
 
-    public static PollTypeEnum getPollTypeFromId(Integer id) throws EnumException {
+    public static PollTypeEnum getPollTypeFromId(final Integer id) throws EnumException {
         if (id != null) {
-            for (PollTypeEnum polltype : PollTypeEnum.values()) {
+            for (final PollTypeEnum polltype : PollTypeEnum.values()) {
                 if (id.equals(polltype.getId())) {
                     return polltype;
                 }
@@ -127,7 +127,7 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from id) in " + PollTypeEnum.class.getName());
     }
 
-    public static PollType getPollModelFromType(PollTypeEnum type) throws EnumException {
+    public static PollType getPollModelFromType(final PollTypeEnum type) throws EnumException {
         if (type != null) {
             switch (type) {
             case MANUAL_POLL:
@@ -143,7 +143,7 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from type) in " + PollTypeEnum.class.getName());
     }
 
-    public static PollTypeEnum getPollTypeFromModel(PollType model) throws EnumException {
+    public static PollTypeEnum getPollTypeFromModel(final PollType model) throws EnumException {
         if (model != null) {
             switch (model) {
             case MANUAL_POLL:
@@ -166,9 +166,9 @@ public class EnumMapper {
      * @return
      * @throws EnumException
      */
-    public static PollStateEnum getPollStateTypeFromId(Integer id) throws EnumException {
+    public static PollStateEnum getPollStateTypeFromId(final Integer id) throws EnumException {
         if (id != null) {
-            for (PollStateEnum polltype : PollStateEnum.values()) {
+            for (final PollStateEnum polltype : PollStateEnum.values()) {
                 if (id.equals(polltype.getId())) {
                     return polltype;
                 }
@@ -177,7 +177,7 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from id) in " + PollStateEnum.class.getName());
     }
 
-    public static PollStatus getPollStateModelFromType(PollStateEnum type) throws EnumException {
+    public static PollStatus getPollStateModelFromType(final PollStateEnum type) throws EnumException {
         if (type != null) {
             switch (type) {
             case STARTED:
@@ -191,7 +191,7 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from type) in " + PollTypeEnum.class.getName());
     }
 
-    public static PollStateEnum getPollStateTypeFromModel(PollStatus model) throws EnumException {
+    public static PollStateEnum getPollStateTypeFromModel(final PollStatus model) throws EnumException {
         if (model != null) {
             switch (model) {
             case STARTED:

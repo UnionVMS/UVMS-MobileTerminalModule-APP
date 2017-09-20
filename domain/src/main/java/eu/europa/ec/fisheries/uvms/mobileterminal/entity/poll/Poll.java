@@ -99,7 +99,7 @@ public class Poll implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -107,7 +107,7 @@ public class Poll implements Serializable {
         return pollType;
     }
 
-    public void setPollType(PollTypeEnum pollType) {
+    public void setPollType(final PollTypeEnum pollType) {
         this.pollType = pollType;
     }
 
@@ -115,7 +115,7 @@ public class Poll implements Serializable {
         return payloads;
     }
 
-    public void setPayloads(List<PollPayload> payloads) {
+    public void setPayloads(final List<PollPayload> payloads) {
         this.payloads = payloads;
     }
 
@@ -123,7 +123,7 @@ public class Poll implements Serializable {
         return pollBase;
     }
 
-    public void setPollBase(PollBase pollBase) {
+    public void setPollBase(final PollBase pollBase) {
         this.pollBase = pollBase;
     }
 
@@ -131,7 +131,7 @@ public class Poll implements Serializable {
         return updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -139,7 +139,7 @@ public class Poll implements Serializable {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -147,7 +147,7 @@ public class Poll implements Serializable {
         return guid;
     }
 
-    public void setGuid(String guid) {
+    public void setGuid(final String guid) {
         this.guid = guid;
     }
 }

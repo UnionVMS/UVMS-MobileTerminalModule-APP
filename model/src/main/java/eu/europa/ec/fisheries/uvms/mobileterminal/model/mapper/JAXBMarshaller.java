@@ -46,25 +46,25 @@ public class JAXBMarshaller {
      * @return
      * @throws MobileTerminalModelMapperException
      */
-    public static <T> String marshallJaxBObjectToString(T data) throws MobileTerminalModelMapperException {
+    public static <T> String marshallJaxBObjectToString(final T data) throws MobileTerminalModelMapperException {
         try {
             JAXBContext jaxbContext = contexts.get(data.getClass().getName());
             if (jaxbContext == null) {
-                long before = System.currentTimeMillis();
+                final long before = System.currentTimeMillis();
                 jaxbContext = JAXBContext.newInstance(data.getClass());
                 contexts.put(data.getClass().getName(), jaxbContext);
                 LOG.debug("Stored contexts: {}", contexts.size());
                 LOG.debug("JAXBContext creation time: {}", (System.currentTimeMillis() - before));
             }
-            Marshaller marshaller = jaxbContext.createMarshaller();
+            final Marshaller marshaller = jaxbContext.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            StringWriter sw = new StringWriter();
+            final StringWriter sw = new StringWriter();
             marshaller.marshal(data, sw);
-            long before = System.currentTimeMillis();
-            String marshalled = sw.toString();
+            final long before = System.currentTimeMillis();
+            final String marshalled = sw.toString();
             LOG.debug("StringWriter time: {}", (System.currentTimeMillis() - before));
             return marshalled;
-        } catch (JAXBException e) {
+        } catch (final JAXBException e) {
             LOG.error("[ Error when marshalling data. ] {}", e.getMessage());
             throw new MobileTerminalModelMapperException("Error when marshalling " + data.getClass().getName() + " to String");
         }
@@ -81,21 +81,21 @@ public class JAXBMarshaller {
      * @throws
      * eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException
      */
-    public static <R> R unmarshallTextMessage(TextMessage textMessage, Class clazz) throws MobileTerminalUnmarshallException {
+    public static <R> R unmarshallTextMessage(final TextMessage textMessage, final Class clazz) throws MobileTerminalUnmarshallException {
         try {
             JAXBContext jc = contexts.get(clazz.getName());
             if (jc == null) {
-                long before = System.currentTimeMillis();
+                final long before = System.currentTimeMillis();
                 jc = JAXBContext.newInstance(clazz);
                 contexts.put(clazz.getName(), jc);
                 LOG.debug("Stored contexts: {}", contexts.size());
                 LOG.debug("JAXBContext creation time: {}", (System.currentTimeMillis() - before));
             }
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
-            StringReader sr = new StringReader(textMessage.getText());
-            StreamSource source = new StreamSource(sr);
-            long before = System.currentTimeMillis();
-            R object = (R) unmarshaller.unmarshal(source);
+            final Unmarshaller unmarshaller = jc.createUnmarshaller();
+            final StringReader sr = new StringReader(textMessage.getText());
+            final StreamSource source = new StreamSource(sr);
+            final long before = System.currentTimeMillis();
+            final R object = (R) unmarshaller.unmarshal(source);
             LOG.debug("Unmarshalling time: {}", (System.currentTimeMillis() - before));
             return object;
         } catch (JMSException | JAXBException e) {

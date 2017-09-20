@@ -24,8 +24,8 @@ public enum AttributeInmarsatC {
     SERIAL_NUMBER,
     TRANSCEIVER_TYPE;
 
-    public static AttributeInmarsatC getAttribute(String type) throws EnumException {
-        for(AttributeInmarsatC attr : AttributeInmarsatC.values()) {
+    public static AttributeInmarsatC getAttribute(final String type) throws EnumException {
+        for(final AttributeInmarsatC attr : AttributeInmarsatC.values()) {
             if(attr.name().equalsIgnoreCase(type)) {
                 return attr;
             }

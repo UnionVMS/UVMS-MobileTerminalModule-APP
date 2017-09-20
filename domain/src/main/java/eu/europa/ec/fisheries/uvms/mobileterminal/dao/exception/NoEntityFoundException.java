@@ -15,7 +15,7 @@ public class NoEntityFoundException extends TerminalDaoException {
 
     private static final long serialVersionUID = -3643668874281583774L;
 
-    public NoEntityFoundException(String message) {
+    public NoEntityFoundException(final String message) {
         super(message);
     }
 

@@ -14,8 +14,8 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.entity.types;
 public enum MobileTerminalTypeEnum {
 	INMARSAT_C, IRIDIUM;
 	
-	public static MobileTerminalTypeEnum getType(String name) {
-		for(MobileTerminalTypeEnum type : MobileTerminalTypeEnum.values()) {
+	public static MobileTerminalTypeEnum getType(final String name) {
+		for(final MobileTerminalTypeEnum type : MobileTerminalTypeEnum.values()) {
 			if(type.name().equalsIgnoreCase(name)) {
 				return type;
 			}

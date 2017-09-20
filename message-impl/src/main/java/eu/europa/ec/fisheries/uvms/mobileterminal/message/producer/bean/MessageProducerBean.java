@@ -59,14 +59,14 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 
 	@Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
+	public String sendDataSourceMessage(final String text, final DataSourceQueue queue) throws MobileTerminalMessageException {
 
 		Connection connection = null;
 		try {
 			connection = connectionFactory.createConnection();
 			final Session session = JMSUtils.connectToQueue(connection);
 
-			TextMessage message = session.createTextMessage();
+			final TextMessage message = session.createTextMessage();
 			message.setJMSReplyTo(responseQueue);
 			message.setText(text);
 
@@ -76,7 +76,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 			}
 
 			return message.getJMSMessageID();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
 			throw new MobileTerminalMessageException(e.getMessage());
 		} finally {
@@ -86,13 +86,13 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 
 	@Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
+	public String sendModuleMessage(final String text, final ModuleQueue queue) throws MobileTerminalMessageException {
 		Connection connection = null;
 		try {
 			connection = connectionFactory.createConnection();
 			final Session session = JMSUtils.connectToQueue(connection);
 
-			TextMessage message = session.createTextMessage();
+			final TextMessage message = session.createTextMessage();
 			message.setJMSReplyTo(responseQueue);
 			message.setText(text);
 
@@ -111,7 +111,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 			}
 
 			return message.getJMSMessageID();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
 			throw new MobileTerminalMessageException(e.getMessage());
 		} finally {
@@ -121,17 +121,17 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 
 	@Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
-	public String sendConfigMessage(String text) throws ConfigMessageException {
+	public String sendConfigMessage(final String text) throws ConfigMessageException {
 		try {
 			return sendModuleMessage(text, ModuleQueue.CONFIG);
-		} catch (MobileTerminalMessageException e) {
+		} catch (final MobileTerminalMessageException e) {
 			LOG.error("[ Error when sending config message. ] {}", e.getMessage());
 			throw new ConfigMessageException(e.getMessage());
 		}
 	}
 
-	private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-		javax.jms.MessageProducer producer = session.createProducer(destination);
+	private javax.jms.MessageProducer getProducer(final Session session, final Destination destination) throws JMSException {
+		final javax.jms.MessageProducer producer = session.createProducer(destination);
 		producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
 		producer.setTimeToLive(60000L);
 		return producer;

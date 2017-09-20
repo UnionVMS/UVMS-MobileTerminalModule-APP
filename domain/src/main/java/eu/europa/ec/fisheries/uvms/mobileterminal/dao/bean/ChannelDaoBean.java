@@ -31,9 +31,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
 @Stateless
 public class ChannelDaoBean extends Dao implements ChannelDao {
     @Override
-    public List<Channel> getPollableListSearch(List<String> idList) {
-        String sql = PollSearchMapper.createPollableSearchSql(idList);
-        TypedQuery<Channel> query = em.createQuery(sql, Channel.class);
+    public List<Channel> getPollableListSearch(final List<String> idList) {
+        final String sql = PollSearchMapper.createPollableSearchSql(idList);
+        final TypedQuery<Channel> query = em.createQuery(sql, Channel.class);
         if(idList != null && !idList.isEmpty()) {
             query.setParameter("idList", idList);
         }
@@ -42,14 +42,14 @@ public class ChannelDaoBean extends Dao implements ChannelDao {
     }
 
     @Override
-    public List<String> getActiveDNID(String pluginName) {
-        String sql = getSQLActiveDNID(pluginName);
-        TypedQuery<String> query = em.createQuery(sql, String.class);
-        List<Map<String, String>> attributes = AttributeMapper.mapAttributeStrings(query.getResultList());
+    public List<String> getActiveDNID(final String pluginName) {
+        final String sql = getSQLActiveDNID(pluginName);
+        final TypedQuery<String> query = em.createQuery(sql, String.class);
+        final List<Map<String, String>> attributes = AttributeMapper.mapAttributeStrings(query.getResultList());
 
-        List<String> dnidList = new ArrayList<>();
-        for (Map<String, String> attribute : attributes) {
-            for (String key : attribute.keySet()) {
+        final List<String> dnidList = new ArrayList<>();
+        for (final Map<String, String> attribute : attributes) {
+            for (final String key : attribute.keySet()) {
                 if (key.equalsIgnoreCase("DNID")) {
                     dnidList.add(attribute.get(key));
                 }
@@ -59,8 +59,8 @@ public class ChannelDaoBean extends Dao implements ChannelDao {
         return dnidList;
     }
 
-    private String getSQLActiveDNID(String pluginName) {
-        StringBuilder builder = new StringBuilder();
+    private String getSQLActiveDNID(final String pluginName) {
+        final StringBuilder builder = new StringBuilder();
         builder.append("SELECT DISTINCT ch_hist.attributes FROM ChannelHistory ch_hist ");
         builder.append("INNER JOIN ch_hist.channel ch "); // channel
         builder.append("INNER JOIN ch.mobileTerminal mobTerm "); //Mobileterminal

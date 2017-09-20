@@ -31,17 +31,17 @@ import java.util.GregorianCalendar;
  * Created by osdjup on 2016-09-01.
  */
 public class XsdDateTimeConverter {
-    public static Date unmarshal(String dateTime) {
+    public static Date unmarshal(final String dateTime) {
         return DatatypeConverter.parseDate(dateTime).getTime();
     }
 
-    public static String marshalDate(Date date) {
+    public static String marshalDate(final Date date) {
         final GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(date);
         return DatatypeConverter.printDate(calendar);
     }
 
-    public static String marshalDateTime(Date dateTime) {
+    public static String marshalDateTime(final Date dateTime) {
         final GregorianCalendar calendar = new GregorianCalendar();
         calendar.setTime(dateTime);
         return DatatypeConverter.printDateTime(calendar);

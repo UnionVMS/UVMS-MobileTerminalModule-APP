@@ -76,7 +76,7 @@ public class PollPayload implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -84,7 +84,7 @@ public class PollPayload implements Serializable {
         return reportingFrequency;
     }
 
-    public void setReportingFrequency(Integer reportingFrequency) {
+    public void setReportingFrequency(final Integer reportingFrequency) {
         this.reportingFrequency = reportingFrequency;
     }
 
@@ -92,7 +92,7 @@ public class PollPayload implements Serializable {
         return gracePeriod;
     }
 
-    public void setGracePeriod(Integer gracePeriod) {
+    public void setGracePeriod(final Integer gracePeriod) {
         this.gracePeriod = gracePeriod;
     }
 
@@ -100,7 +100,7 @@ public class PollPayload implements Serializable {
         return inPortGrace;
     }
 
-    public void setInPortGrace(Integer inPortGrace) {
+    public void setInPortGrace(final Integer inPortGrace) {
         this.inPortGrace = inPortGrace;
     }
 
@@ -108,7 +108,7 @@ public class PollPayload implements Serializable {
         return newDnid;
     }
 
-    public void setNewDnid(String newDnid) {
+    public void setNewDnid(final String newDnid) {
         this.newDnid = newDnid;
     }
 
@@ -116,7 +116,7 @@ public class PollPayload implements Serializable {
         return newMemberNumber;
     }
 
-    public void setNewMemberNumber(String newMemberNumber) {
+    public void setNewMemberNumber(final String newMemberNumber) {
         this.newMemberNumber = newMemberNumber;
     }
 
@@ -124,7 +124,7 @@ public class PollPayload implements Serializable {
         return startDate;
     }
 
-    public void setStartDate(Date startDate) {
+    public void setStartDate(final Date startDate) {
         this.startDate = startDate;
     }
 
@@ -132,7 +132,7 @@ public class PollPayload implements Serializable {
         return stopDate;
     }
 
-    public void setStopDate(Date stopDate) {
+    public void setStopDate(final Date stopDate) {
         this.stopDate = stopDate;
     }
 
@@ -140,7 +140,7 @@ public class PollPayload implements Serializable {
         return poll;
     }
 
-    public void setPoll(Poll poll) {
+    public void setPoll(final Poll poll) {
         this.poll = poll;
     }
 }

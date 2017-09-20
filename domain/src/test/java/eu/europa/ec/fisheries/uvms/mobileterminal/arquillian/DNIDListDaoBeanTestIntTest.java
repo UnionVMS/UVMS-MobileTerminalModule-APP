@@ -30,7 +30,7 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testGetDNIDListEmptyList() throws ConfigDaoException {
-        List<DNIDList> plugins = dnidListDao.getDNIDList(PLUGIN_NAME + Calendar.getInstance().getTimeInMillis());
+        final List<DNIDList> plugins = dnidListDao.getDNIDList(PLUGIN_NAME + Calendar.getInstance().getTimeInMillis());
         Assert.assertNotNull(plugins);
         Assert.assertTrue(plugins.size() == 0);
     }
@@ -38,11 +38,11 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testGetDNIDList() throws ConfigDaoException {
-        DNIDList dnidList = createDnidList();
+        final DNIDList dnidList = createDnidList();
         dnidListDao.create(dnidList);
         em.flush();
 
-        List<DNIDList> plugins = dnidListDao.getDNIDList(PLUGIN_NAME);
+        final List<DNIDList> plugins = dnidListDao.getDNIDList(PLUGIN_NAME);
         Assert.assertNotNull(plugins);
         Assert.assertTrue(plugins.size() > 0);
         Assert.assertTrue(plugins.size() < 2);
@@ -52,7 +52,7 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testCreate() throws ConfigDaoException {
-        DNIDList dnidList = createDnidList();
+        final DNIDList dnidList = createDnidList();
         dnidListDao.create(dnidList);
         em.flush();
     }
@@ -60,25 +60,25 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testCreateWithBadDNID() throws ConfigDaoException {
-        DNIDList dnidList = createDnidList();
-        char[] dnId = new char[101];
+        final DNIDList dnidList = createDnidList();
+        final char[] dnId = new char[101];
         dnidList.setDNID(new String(dnId));
         try {
             dnidListDao.create(dnidList);
             em.flush();
-        } catch(ConstraintViolationException ignore) {}
+        } catch(final ConstraintViolationException ignore) {}
     }
 
     @Test
     @OperateOnDeployment("normal")
     public void testCreateWithBadPluginName() throws ConfigDaoException {
-        DNIDList dnidList = createDnidList();
-        char[] pluginName = new char[501];
+        final DNIDList dnidList = createDnidList();
+        final char[] pluginName = new char[501];
         dnidList.setPluginName(new String(pluginName));
         try {
             dnidListDao.create(dnidList);
             em.flush();
-        } catch(ConstraintViolationException ignore) {}
+        } catch(final ConstraintViolationException ignore) {}
     }
 
     //TODO: Implement negative tests when there exists constraints to actually test
@@ -86,12 +86,12 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testRemoveByPluginName() throws ConfigDaoException {
-        DNIDList dnidList = createDnidList();
+        final DNIDList dnidList = createDnidList();
         dnidListDao.create(dnidList);
         em.flush();
 
         dnidListDao.removeByPluginName(PLUGIN_NAME);
-        List<DNIDList> plugins = dnidListDao.getDNIDList(PLUGIN_NAME);
+        final List<DNIDList> plugins = dnidListDao.getDNIDList(PLUGIN_NAME);
         Assert.assertNotNull(plugins);
         Assert.assertTrue(plugins.size() == 0);
     }
@@ -99,14 +99,14 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testGetAllDNIDList() throws ConfigDaoException {
-        List<DNIDList> before = dnidListDao.getAllDNIDList();
+        final List<DNIDList> before = dnidListDao.getAllDNIDList();
         Assert.assertNotNull(before);
 
-        DNIDList dnidList = createDnidList();
+        final DNIDList dnidList = createDnidList();
         dnidListDao.create(dnidList);
         em.flush();
 
-        List<DNIDList> after = dnidListDao.getAllDNIDList();
+        final List<DNIDList> after = dnidListDao.getAllDNIDList();
         Assert.assertNotNull(after);
 
         Assert.assertTrue(before.size() == (after.size() - 1));
@@ -114,7 +114,7 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
     }
 
     private DNIDList createDnidList() {
-        DNIDList dnidList = new DNIDList();
+        final DNIDList dnidList = new DNIDList();
         dnidList.setDNID(DN_ID);
         dnidList.setPluginName(PLUGIN_NAME);
         dnidList.setUpdateTime(Calendar.getInstance().getTime());

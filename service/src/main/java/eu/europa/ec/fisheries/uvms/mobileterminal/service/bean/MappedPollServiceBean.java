@@ -49,10 +49,10 @@ public class MappedPollServiceBean implements MappedPollService {
     MobileTerminalService mobileTerminalService;
 
     @Override
-    public CreatePollResultDto createPoll(PollRequestType pollRequest, String username) throws MobileTerminalServiceException {
+    public CreatePollResultDto createPoll(final PollRequestType pollRequest, final String username) throws MobileTerminalServiceException {
         LOG.debug("Create poll");
 
-        CreatePollResultDto pollResponse = pollService.createPoll(pollRequest, username);
+        final CreatePollResultDto pollResponse = pollService.createPoll(pollRequest, username);
         return pollResponse;
     }
 
@@ -60,39 +60,39 @@ public class MappedPollServiceBean implements MappedPollService {
     public List<PollDto> getRunningProgramPolls() throws MobileTerminalServiceException {
         LOG.debug("Get running program polls");
 
-        List<PollResponseType> pollResponse = pollService.getRunningProgramPolls();
+        final List<PollResponseType> pollResponse = pollService.getRunningProgramPolls();
         return PollMapper.mapPolls(pollResponse);
     }
 
     @Override
-    public PollDto startProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
-        PollResponseType pollResponse = pollService.startProgramPoll(pollId, username);
+    public PollDto startProgramPoll(final String pollId, final String username) throws MobileTerminalServiceException {
+        final PollResponseType pollResponse = pollService.startProgramPoll(pollId, username);
         return PollMapper.mapPoll(pollResponse);
     }
 
     @Override
-    public PollDto stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
-        PollResponseType pollResponse = pollService.stopProgramPoll(pollId, username);
+    public PollDto stopProgramPoll(final String pollId, final String username) throws MobileTerminalServiceException {
+        final PollResponseType pollResponse = pollService.stopProgramPoll(pollId, username);
         return PollMapper.mapPoll(pollResponse);
     }
 
     @Override
-    public PollDto inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
-        PollResponseType pollResponse = pollService.inactivateProgramPoll(pollId, username);
+    public PollDto inactivateProgramPoll(final String pollId, final String username) throws MobileTerminalServiceException {
+        final PollResponseType pollResponse = pollService.inactivateProgramPoll(pollId, username);
         return PollMapper.mapPoll(pollResponse);
     }
 
     @Override
-    public PollChannelListDto getPollBySearchQuery(PollListQuery query) throws MobileTerminalServiceException {
-    	PollChannelListDto channelListDto = new PollChannelListDto();
+    public PollChannelListDto getPollBySearchQuery(final PollListQuery query) throws MobileTerminalServiceException {
+    	final PollChannelListDto channelListDto = new PollChannelListDto();
     	
-    	PollListResponse pollResponse = pollService.getPollBySearchCriteria(query);
+    	final PollListResponse pollResponse = pollService.getPollBySearchCriteria(query);
         channelListDto.setCurrentPage(pollResponse.getCurrentPage());
         channelListDto.setTotalNumberOfPages(pollResponse.getTotalNumberOfPages());
     	
-        ArrayList<PollChannelDto> pollChannelList = new ArrayList<>();
-        for(PollResponseType responseType : pollResponse.getPollList()) {
-        	PollChannelDto terminal = PollMapper.mapPollChannel(responseType.getMobileTerminal());
+        final ArrayList<PollChannelDto> pollChannelList = new ArrayList<>();
+        for(final PollResponseType responseType : pollResponse.getPollList()) {
+        	final PollChannelDto terminal = PollMapper.mapPollChannel(responseType.getMobileTerminal());
         	terminal.setPoll(PollMapper.mapPoll(responseType));
         	pollChannelList.add(terminal);
         }
@@ -101,16 +101,16 @@ public class MappedPollServiceBean implements MappedPollService {
     }
 
     @Override
-    public PollChannelListDto getPollableChannels(PollableQuery query) throws MobileTerminalException {
-        PollChannelListDto channelListDto = new PollChannelListDto();
+    public PollChannelListDto getPollableChannels(final PollableQuery query) throws MobileTerminalException {
+        final PollChannelListDto channelListDto = new PollChannelListDto();
 
-        MobileTerminalListResponse response = mobileTerminalService.getPollableMobileTerminal(query);
+        final MobileTerminalListResponse response = mobileTerminalService.getPollableMobileTerminal(query);
         channelListDto.setCurrentPage(response.getCurrentPage());
         channelListDto.setTotalNumberOfPages(response.getTotalNumberOfPages());
 
-        ArrayList<PollChannelDto> pollChannelList = new ArrayList<>();
-        for(MobileTerminalType terminalType : response.getMobileTerminal()) {
-        	PollChannelDto terminal = PollMapper.mapPollChannel(terminalType);
+        final ArrayList<PollChannelDto> pollChannelList = new ArrayList<>();
+        for(final MobileTerminalType terminalType : response.getMobileTerminal()) {
+        	final PollChannelDto terminal = PollMapper.mapPollChannel(terminalType);
         	pollChannelList.add(terminal);
         }
         channelListDto.setPollableChannels(pollChannelList);

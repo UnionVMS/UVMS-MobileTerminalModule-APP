@@ -44,17 +44,17 @@ public class PollDataSourceRequestValidatorTest {
     
     @Test
     public void testCheckSamplingPollParams() throws MobileTerminalModelValidationException {
-    	List<PollAttribute> attrList = new ArrayList<>();
+    	final List<PollAttribute> attrList = new ArrayList<>();
     	when(requestType.getAttributes()).thenReturn(attrList);
     	try {
     		PollDataSourceRequestValidator.checkSamplingPollParams(requestType);
     		fail("Sampling poll.");
-    	} catch (MobileTerminalModelValidationException e) {
+    	} catch (final MobileTerminalModelValidationException e) {
     	}
     	
-    	PollAttribute startDate = new PollAttribute();
+    	final PollAttribute startDate = new PollAttribute();
     	startDate.setKey(PollAttributeType.START_DATE);
-    	PollAttribute stopDate = new PollAttribute();
+    	final PollAttribute stopDate = new PollAttribute();
     	stopDate.setKey(PollAttributeType.END_DATE);
     	attrList.add(startDate);
     	attrList.add(stopDate);
@@ -64,20 +64,20 @@ public class PollDataSourceRequestValidatorTest {
     
     @Test
     public void testCheckProgramPollParams() throws MobileTerminalModelValidationException {
-    	List<PollAttribute> attrList = new ArrayList<>();
+    	final List<PollAttribute> attrList = new ArrayList<>();
     	when(requestType.getAttributes()).thenReturn(attrList);
     	
     	try {
     		PollDataSourceRequestValidator.checkProgramPollParams(requestType);
     		fail("ProgramPoll poll.");
-    	} catch (MobileTerminalModelValidationException e) {
+    	} catch (final MobileTerminalModelValidationException e) {
     	}
     	
-    	PollAttribute startDate = new PollAttribute();
+    	final PollAttribute startDate = new PollAttribute();
     	startDate.setKey(PollAttributeType.START_DATE);
-    	PollAttribute stopDate = new PollAttribute();
+    	final PollAttribute stopDate = new PollAttribute();
     	stopDate.setKey(PollAttributeType.END_DATE);
-    	PollAttribute frequency = new PollAttribute();
+    	final PollAttribute frequency = new PollAttribute();
     	frequency.setKey(PollAttributeType.FREQUENCY);
     	attrList.add(startDate);
     	attrList.add(stopDate);
@@ -88,24 +88,24 @@ public class PollDataSourceRequestValidatorTest {
     
     @Test
     public void testCheckConfigurationPollParams() throws MobileTerminalModelValidationException {
-    	List<PollAttribute> attrList = new ArrayList<>();
+    	final List<PollAttribute> attrList = new ArrayList<>();
     	when(requestType.getAttributes()).thenReturn(attrList);
     	
     	try {
     		PollDataSourceRequestValidator.checkConfigurationPollParams(requestType);
     		fail("Configuration poll.");
-    	} catch (MobileTerminalModelValidationException e) {
+    	} catch (final MobileTerminalModelValidationException e) {
     	}
     	
-    	PollAttribute reportFrequency = new PollAttribute();
+    	final PollAttribute reportFrequency = new PollAttribute();
     	reportFrequency.setKey(PollAttributeType.REPORT_FREQUENCY);
-    	PollAttribute gracePeriod = new PollAttribute();
+    	final PollAttribute gracePeriod = new PollAttribute();
     	gracePeriod.setKey(PollAttributeType.GRACE_PERIOD);
-    	PollAttribute inPortGrace = new PollAttribute();
+    	final PollAttribute inPortGrace = new PollAttribute();
     	inPortGrace.setKey(PollAttributeType.IN_PORT_GRACE);
-    	PollAttribute dnid = new PollAttribute();
+    	final PollAttribute dnid = new PollAttribute();
     	dnid.setKey(PollAttributeType.DNID);
-    	PollAttribute memberNumber = new PollAttribute();
+    	final PollAttribute memberNumber = new PollAttribute();
     	memberNumber.setKey(PollAttributeType.MEMBER_NUMBER);
     	attrList.add(reportFrequency);
     	attrList.add(gracePeriod);
@@ -118,16 +118,16 @@ public class PollDataSourceRequestValidatorTest {
     
     @Test
     public void testMobileTerminal() {
-    	List<PollMobileTerminal> mobTermList = new ArrayList<>();
+    	final List<PollMobileTerminal> mobTermList = new ArrayList<>();
 		when(requestType.getMobileTerminals()).thenReturn(mobTermList);
 		try {
 			PollDataSourceRequestValidator.validateMobileTerminals(requestType);
 			fail("No mobterminals to poll");
-		} catch (MobileTerminalModelValidationException e) {
+		} catch (final MobileTerminalModelValidationException e) {
 		}
 		
-		PollMobileTerminal pollMobTerm = new PollMobileTerminal();
-		PollMobileTerminal extraPollMobTerm = new PollMobileTerminal();
+		final PollMobileTerminal pollMobTerm = new PollMobileTerminal();
+		final PollMobileTerminal extraPollMobTerm = new PollMobileTerminal();
 		when(requestType.getPollType()).thenReturn(PollType.SAMPLING_POLL);
 		
 		mobTermList.add(pollMobTerm);
@@ -136,46 +136,46 @@ public class PollDataSourceRequestValidatorTest {
 		try {
 			PollDataSourceRequestValidator.validateMobileTerminals(requestType);
 			fail("Sampling poll too many");
-		} catch (MobileTerminalModelValidationException e) {
+		} catch (final MobileTerminalModelValidationException e) {
 		}
     }
     
     @Test
     public void testMobileTerminalConfigurationPoll() {
-    	List<PollMobileTerminal> mobTermList = new ArrayList<>();
+    	final List<PollMobileTerminal> mobTermList = new ArrayList<>();
 		when(requestType.getMobileTerminals()).thenReturn(mobTermList);
 		
-		PollMobileTerminal pollMobTerm = new PollMobileTerminal();
-		PollMobileTerminal extraPollMobTerm = new PollMobileTerminal();
+		final PollMobileTerminal pollMobTerm = new PollMobileTerminal();
+		final PollMobileTerminal extraPollMobTerm = new PollMobileTerminal();
 		
 		mobTermList.add(pollMobTerm);
 		mobTermList.add(extraPollMobTerm);
     	
-    	List<PollAttribute> pollAttrList = new ArrayList<>();
+    	final List<PollAttribute> pollAttrList = new ArrayList<>();
 		
 		when(requestType.getAttributes()).thenReturn(pollAttrList);
 		when(requestType.getPollType()).thenReturn(PollType.CONFIGURATION_POLL);
 		
 		try {
 			PollDataSourceRequestValidator.validateMobileTerminals(requestType);
-		} catch (MobileTerminalModelValidationException e) {
+		} catch (final MobileTerminalModelValidationException e) {
 			fail("Valid configuration poll without dnid/memberNumber");
 		}
 		
-		PollAttribute dnid = new PollAttribute();
+		final PollAttribute dnid = new PollAttribute();
 		dnid.setKey(PollAttributeType.DNID);
 		pollAttrList.add(dnid);
 		
 		try {
 			PollDataSourceRequestValidator.validateMobileTerminals(requestType);
 			fail("Configuration poll too many");
-		} catch (MobileTerminalModelValidationException e) {
+		} catch (final MobileTerminalModelValidationException e) {
 			mobTermList.remove(extraPollMobTerm);
 		}
 		
 		try {
 			PollDataSourceRequestValidator.validateMobileTerminals(requestType);
-		} catch (MobileTerminalModelValidationException e) {
+		} catch (final MobileTerminalModelValidationException e) {
 			fail("Valid single configuration poll");
 		}
     }
@@ -184,12 +184,12 @@ public class PollDataSourceRequestValidatorTest {
     public void testHasUser() throws MobileTerminalModelValidationException {
     	try {
     		PollDataSourceRequestValidator.validateHasUser(null);
-    	} catch (MobileTerminalModelValidationException e) {
+    	} catch (final MobileTerminalModelValidationException e) {
     	}
     	
     	try {
     		PollDataSourceRequestValidator.validateHasUser("");
-    	} catch (MobileTerminalModelValidationException e) {
+    	} catch (final MobileTerminalModelValidationException e) {
     	}
     	
     	PollDataSourceRequestValidator.validateHasUser("TEST_USER");

@@ -28,7 +28,7 @@ public class PollChannelDto {
 		return connectId;
 	}
 
-	public void setConnectId(String connectId) {
+	public void setConnectId(final String connectId) {
 		this.connectId = connectId;
 	}
 	
@@ -36,7 +36,7 @@ public class PollChannelDto {
 		return mobileTerminalType;
 	}
 
-	public void setMobileTerminalType(String mobileTerminalType) {
+	public void setMobileTerminalType(final String mobileTerminalType) {
 		this.mobileTerminalType = mobileTerminalType;
 	}
 
@@ -44,7 +44,7 @@ public class PollChannelDto {
 		return comChannelId;
 	}
 
-	public void setComChannelId(String comChannelId) {
+	public void setComChannelId(final String comChannelId) {
 		this.comChannelId = comChannelId;
 	}
 
@@ -52,7 +52,7 @@ public class PollChannelDto {
 		return mobileTerminalAttributes;
 	}
 
-	public void setMobileTerminalAttributes(List<AttributeDto> attributes) {
+	public void setMobileTerminalAttributes(final List<AttributeDto> attributes) {
 		this.mobileTerminalAttributes = attributes;
 	}
 
@@ -60,7 +60,7 @@ public class PollChannelDto {
 		return mobileTerminalId;
 	}
 
-	public void setMobileTerminalId(String mobileTerminalId) {
+	public void setMobileTerminalId(final String mobileTerminalId) {
 		this.mobileTerminalId = mobileTerminalId;
 	}
 
@@ -68,7 +68,7 @@ public class PollChannelDto {
 		return poll;
 	}
 
-	public void setPoll(PollDto poll) {
+	public void setPoll(final PollDto poll) {
 		this.poll = poll;
 	}
 }

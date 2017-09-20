@@ -18,7 +18,7 @@ public class PollTimerMessage {
     public PollTimerMessage() {
     }
 
-    public PollTimerMessage(String message) {
+    public PollTimerMessage(final String message) {
         this.message = message;
     }
 
@@ -26,7 +26,7 @@ public class PollTimerMessage {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessage(final String message) {
         this.message = message;
     }
 

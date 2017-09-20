@@ -16,7 +16,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 public class ConnectMapperException extends MobileTerminalModelMapperException {
 	private static final long serialVersionUID = 1L;
 
-	public ConnectMapperException(String message) {
+	public ConnectMapperException(final String message) {
 		super(message);
 	}
 }

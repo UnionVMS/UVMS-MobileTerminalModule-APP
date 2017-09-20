@@ -22,7 +22,7 @@ public enum MobileTerminalFaultCode {
 	
 	private int code;
 	
-	private MobileTerminalFaultCode(int code) {
+	private MobileTerminalFaultCode(final int code) {
 		this.code = code;
 	}
 	

@@ -23,7 +23,7 @@ public class SearchKeyValue {
 		return searchFieldHolder;
 	}
 
-	public void setSearchFieldHolder(SearchFieldHolder searchFieldHolder) {
+	public void setSearchFieldHolder(final SearchFieldHolder searchFieldHolder) {
 		this.searchFieldHolder = searchFieldHolder;
 	}
 
@@ -32,7 +32,7 @@ public class SearchKeyValue {
 		return values;
 	}
 
-	public void setValues(List<String> values) {
+	public void setValues(final List<String> values) {
 		this.values = values;
 	}
 }

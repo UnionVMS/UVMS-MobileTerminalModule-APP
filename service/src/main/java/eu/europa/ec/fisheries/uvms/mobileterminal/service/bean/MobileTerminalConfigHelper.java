@@ -30,8 +30,8 @@ public class MobileTerminalConfigHelper implements ConfigHelper {
 
     @Override
     public List<String> getAllParameterKeys() {
-        List<String> allParameterKeys = new ArrayList<String>();
-        for (ParameterKey parameterKey : ParameterKey.values()) {
+        final List<String> allParameterKeys = new ArrayList<String>();
+        for (final ParameterKey parameterKey : ParameterKey.values()) {
             allParameterKeys.add(parameterKey.getKey());
         }
 

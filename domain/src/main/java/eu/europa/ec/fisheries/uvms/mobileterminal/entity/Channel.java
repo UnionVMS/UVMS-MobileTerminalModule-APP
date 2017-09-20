@@ -98,7 +98,7 @@ public class Channel implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(final Long id) {
 		this.id = id;
 	}
 
@@ -106,7 +106,7 @@ public class Channel implements Serializable {
 		return guid;
 	}
 
-	public void setGuid(String guid) {
+	public void setGuid(final String guid) {
 		this.guid = guid;
 	}
 
@@ -114,7 +114,7 @@ public class Channel implements Serializable {
 		return updateTime;
 	}
 
-	public void setUpdateTime(Date updateTime) {
+	public void setUpdateTime(final Date updateTime) {
 		this.updateTime = updateTime;
 	}
 
@@ -122,7 +122,7 @@ public class Channel implements Serializable {
 		return updateUser;
 	}
 
-	public void setUpdateUser(String updateUser) {
+	public void setUpdateUser(final String updateUser) {
 		this.updateUser = updateUser;
 	}
 
@@ -130,7 +130,7 @@ public class Channel implements Serializable {
 		return mobileTerminal;
 	}
 
-	public void setMobileTerminal(MobileTerminal mobileTerminal) {
+	public void setMobileTerminal(final MobileTerminal mobileTerminal) {
 		this.mobileTerminal = mobileTerminal;
 	}
 
@@ -138,7 +138,7 @@ public class Channel implements Serializable {
 		return archived;
 	}
 
-	public void setArchived(Boolean archived) {
+	public void setArchived(final Boolean archived) {
 		this.archived = archived;
 	}
 
@@ -148,9 +148,9 @@ public class Channel implements Serializable {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if(obj instanceof Channel) {
-			Channel other = (Channel)obj;
+			final Channel other = (Channel)obj;
 			if(!EqualsUtil.compare(guid, other.guid)) return false;
 			return true;
 		}
@@ -169,12 +169,12 @@ public class Channel implements Serializable {
 		return histories;
 	}
 
-	public void setHistories(List<ChannelHistory> histories) {
+	public void setHistories(final List<ChannelHistory> histories) {
 		this.histories = histories;
 	}
 
 	public ChannelHistory getCurrentHistory() {
-		for (ChannelHistory history : histories) {
+		for (final ChannelHistory history : histories) {
 			if (history.isActive()) {
 				return history;
 			}

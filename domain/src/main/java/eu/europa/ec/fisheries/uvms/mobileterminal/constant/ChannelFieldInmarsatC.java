@@ -25,8 +25,8 @@ public enum ChannelFieldInmarsatC {
     INSTALLED_BY,
     DNID;
 
-    public static ChannelFieldInmarsatC getAttribute(String type) throws EnumException {
-        for(ChannelFieldInmarsatC attr : ChannelFieldInmarsatC.values()) {
+    public static ChannelFieldInmarsatC getAttribute(final String type) throws EnumException {
+        for(final ChannelFieldInmarsatC attr : ChannelFieldInmarsatC.values()) {
             if(attr.name().equalsIgnoreCase(type)) {
                 return attr;
             }

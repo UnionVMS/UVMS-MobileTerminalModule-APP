@@ -32,17 +32,17 @@ public class TestPollHelper {
 
     public PollRequestType createPollRequestType() throws ConfigDaoException, TerminalDaoException {
 
-        PollRequestType prt = new PollRequestType();
+        final PollRequestType prt = new PollRequestType();
         prt.setComment("aComment" + UUID.randomUUID().toString());
         prt.setUserName("TEST");
         prt.setPollType(PollType.MANUAL_POLL);
-        PollMobileTerminal pollMobileTerminal = createPollMobileTerminal();
+        final PollMobileTerminal pollMobileTerminal = createPollMobileTerminal();
         prt.getMobileTerminals().add(pollMobileTerminal);
 
 
-        PollAttribute pollAttribute = new PollAttribute();
+        final PollAttribute pollAttribute = new PollAttribute();
         pollAttribute.setKey(PollAttributeType.START_DATE);
-        String startDate = DateUtils.getUTCNow().toString();
+        final String startDate = DateUtils.getUTCNow().toString();
         pollAttribute.setValue(startDate);
 
         prt.getAttributes().add(pollAttribute);
@@ -51,16 +51,16 @@ public class TestPollHelper {
 
     public PollMobileTerminal createPollMobileTerminal() throws ConfigDaoException, TerminalDaoException {
 
-        String connectId = UUID.randomUUID().toString();
+        final String connectId = UUID.randomUUID().toString();
 
-        MobileTerminal mobileTerminal = createMobileTerminal(connectId);
-        PollMobileTerminal pmt = new PollMobileTerminal();
+        final MobileTerminal mobileTerminal = createMobileTerminal(connectId);
+        final PollMobileTerminal pmt = new PollMobileTerminal();
         pmt.setConnectId(connectId);
         pmt.setMobileTerminalId(mobileTerminal.getGuid());
 
         String channelId = "";
-        Set<Channel> channels = mobileTerminal.getChannels();
-        for (Channel ch : channels) {
+        final Set<Channel> channels = mobileTerminal.getChannels();
+        for (final Channel ch : channels) {
             channelId = ch.getGuid();
             break;
         }
@@ -68,14 +68,14 @@ public class TestPollHelper {
         return pmt;
     }
 
-    public MobileTerminal createMobileTerminal(String connectId) throws TerminalDaoException, ConfigDaoException {
+    public MobileTerminal createMobileTerminal(final String connectId) throws TerminalDaoException, ConfigDaoException {
 
 
-        String serialNo = UUID.randomUUID().toString();
-        MobileTerminal mt = new MobileTerminal();
+        final String serialNo = UUID.randomUUID().toString();
+        final MobileTerminal mt = new MobileTerminal();
 
         MobileTerminalPlugin mtp = null;
-        List<MobileTerminalPlugin> plugs = mobileTerminalPluginDao.getPluginList();
+        final List<MobileTerminalPlugin> plugs = mobileTerminalPluginDao.getPluginList();
         mtp = plugs.get(0);
         mt.setSerialNo(serialNo);
         mt.setUpdateTime(new Date());
@@ -87,8 +87,8 @@ public class TestPollHelper {
         mt.setInactivated(false);
 
 
-        Set<MobileTerminalEvent> events = new HashSet<>();
-        MobileTerminalEvent event = new MobileTerminalEvent();
+        final Set<MobileTerminalEvent> events = new HashSet<>();
+        final MobileTerminalEvent event = new MobileTerminalEvent();
         event.setConnectId(connectId);
         event.setActive(true);
         event.setMobileTerminal(mt);
@@ -104,8 +104,8 @@ public class TestPollHelper {
         mt.setMobileTerminalEvents(events);
 
 
-        Set<Channel> channels = new HashSet<>();
-        Channel channel = new Channel();
+        final Set<Channel> channels = new HashSet<>();
+        final Channel channel = new Channel();
         channel.setArchived(false);
         channel.setGuid(UUID.randomUUID().toString());
         channel.setMobileTerminal(mt);

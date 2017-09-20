@@ -63,17 +63,17 @@ public class ConfigModelBean  {
 	ChannelDao channelDao;
     
     public List<TerminalSystemType> getAllTerminalSystems() throws MobileTerminalModelException {
-        Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> pluginsByType = getPlugins();
-		List<TerminalSystemType> terminalSystemList = new ArrayList<>();
+        final Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> pluginsByType = getPlugins();
+		final List<TerminalSystemType> terminalSystemList = new ArrayList<>();
 
-		for (MobileTerminalTypeEnum type : pluginsByType.keySet()) {
+		for (final MobileTerminalTypeEnum type : pluginsByType.keySet()) {
 
-			TerminalSystemConfiguration terminalFieldConfiguration = PluginMapper.mapTerminalFieldConfiguration(type);
-			TerminalSystemConfiguration comchannelFieldConfiguration = PluginMapper.mapComchannelFieldConfiguration(type);
-			List<OceanRegion> oceanRegionList = oceanRegionDao.getOceanRegionList();
-			CapabilityConfiguration capabilityConfiguration = PluginMapper.mapCapabilityConfiguration(type, pluginsByType.get(type), oceanRegionList);
+			final TerminalSystemConfiguration terminalFieldConfiguration = PluginMapper.mapTerminalFieldConfiguration(type);
+			final TerminalSystemConfiguration comchannelFieldConfiguration = PluginMapper.mapComchannelFieldConfiguration(type);
+			final List<OceanRegion> oceanRegionList = oceanRegionDao.getOceanRegionList();
+			final CapabilityConfiguration capabilityConfiguration = PluginMapper.mapCapabilityConfiguration(type, pluginsByType.get(type), oceanRegionList);
 
-			TerminalSystemType systemType = new TerminalSystemType();
+			final TerminalSystemType systemType = new TerminalSystemType();
 
 			systemType.setType(type.name());
 			systemType.setTerminalConfiguration(terminalFieldConfiguration);
@@ -87,9 +87,9 @@ public class ConfigModelBean  {
     }
 
 	public List<ConfigList> getConfigValues() throws MobileTerminalModelException {
-		List<ConfigList> configValues = new ArrayList<>();
-		for(MobileTerminalConfigType config : MobileTerminalConfigType.values()) {
-			ConfigList list = new ConfigList();
+		final List<ConfigList> configValues = new ArrayList<>();
+		for(final MobileTerminalConfigType config : MobileTerminalConfigType.values()) {
+			final ConfigList list = new ConfigList();
 			list.setName(config.name());
 			switch(config) {
 			case POLL_TYPE:
@@ -108,34 +108,34 @@ public class ConfigModelBean  {
 	}
 
 	private List<String> getPollTimeSpan() {
-		List<String> list = new ArrayList<>();
+		final List<String> list = new ArrayList<>();
 		list.add("Today");
 		return list;
 	}
 
 	private List<String> getTransponders() {
-		List<String> list = new ArrayList<>();
-		for(MobileTerminalTypeEnum transponder : MobileTerminalTypeEnum.values()) {
+		final List<String> list = new ArrayList<>();
+		for(final MobileTerminalTypeEnum transponder : MobileTerminalTypeEnum.values()) {
 			list.add(transponder.name());
 		}
 		return list;
 	}
 
 	private List<String> getPollTypes() {
-		List<String> list = new ArrayList<>();
-		for(PollTypeEnum type : PollTypeEnum.values()) {
+		final List<String> list = new ArrayList<>();
+		for(final PollTypeEnum type : PollTypeEnum.values()) {
 			list.add(type.name());
 		}
 		return list;
 	}
 	
-	MobileTerminalPlugin updatePlugin(PluginService plugin) throws TerminalDaoException {
+	MobileTerminalPlugin updatePlugin(final PluginService plugin) throws TerminalDaoException {
 		try {
 			MobileTerminalPlugin entity = mobileTerminalPluginDao.getPluginByServiceName(plugin.getServiceName());
 			if(PluginMapper.equals(entity, plugin)) {
 				return entity;
 			} else {
-				for(MobileTerminalPluginCapability capability : entity.getCapabilities()) {
+				for(final MobileTerminalPluginCapability capability : entity.getCapabilities()) {
 					capability.setPlugin(null);
 				}
 				entity.getCapabilities().clear();
@@ -143,19 +143,19 @@ public class ConfigModelBean  {
 				mobileTerminalPluginDao.updatePlugin(entity);
 				return entity;
 			}
-		} catch (NoEntityFoundException e) {
+		} catch (final NoEntityFoundException e) {
 			return null;
 		}
 	}
 	
-	public List<Plugin> upsertPlugins(List<PluginService> pluginList) throws MobileTerminalModelException {
+	public List<Plugin> upsertPlugins(final List<PluginService> pluginList) throws MobileTerminalModelException {
 		if(pluginList == null) {
 			throw new InputArgumentException("No pluginList to upsert");
 		}
 		
-		Map<String, PluginService> map = new HashMap<>();
-		List<Plugin> responseList = new ArrayList<>();
-		for(PluginService plugin : pluginList) {
+		final Map<String, PluginService> map = new HashMap<>();
+		final List<Plugin> responseList = new ArrayList<>();
+		for(final PluginService plugin : pluginList) {
 			if(plugin.getLabelName() == null || plugin.getLabelName().isEmpty()) {
 				throw new InputArgumentException("No plugin name");
 			}
@@ -171,7 +171,7 @@ public class ConfigModelBean  {
 				}
 				map.put(plugin.getServiceName(), plugin);
 				responseList.add(PluginMapper.mapEntityToModel(entity));
-			} catch (TerminalDaoException e) {
+			} catch (final TerminalDaoException e) {
 				throw new MobileTerminalModelException("Couldn't persist plugin " + e.getMessage());
 			}
 		}
@@ -181,11 +181,11 @@ public class ConfigModelBean  {
 		return responseList;
 	}
 	
-	List<Plugin> inactivatePlugins(Map<String, PluginService> map) throws ConfigDaoException {
-		List<Plugin> responseList = new ArrayList<>();
-		List<MobileTerminalPlugin> availablePlugins = mobileTerminalPluginDao.getPluginList();
-		for(MobileTerminalPlugin plugin : availablePlugins) {
-			PluginService pluginService = map.get(plugin.getPluginServiceName());
+	List<Plugin> inactivatePlugins(final Map<String, PluginService> map) throws ConfigDaoException {
+		final List<Plugin> responseList = new ArrayList<>();
+		final List<MobileTerminalPlugin> availablePlugins = mobileTerminalPluginDao.getPluginList();
+		for(final MobileTerminalPlugin plugin : availablePlugins) {
+			final PluginService pluginService = map.get(plugin.getPluginServiceName());
 			if(pluginService == null && !plugin.getPluginInactive()) {
 				LOG.debug("inactivate no longer available plugin");
 				plugin.setPluginInactive(true);
@@ -195,33 +195,33 @@ public class ConfigModelBean  {
 		return responseList;
 	}
 
-	public List<String> updatedDNIDList(String pluginName) throws MobileTerminalModelException {
-		List<String> dnids = new ArrayList<>();
-		List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
-		for(DNIDList entity : dnidList) {
+	public List<String> updatedDNIDList(final String pluginName) throws MobileTerminalModelException {
+		final List<String> dnids = new ArrayList<>();
+		final List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
+		for(final DNIDList entity : dnidList) {
 			dnids.add(entity.getDNID());
 		}
 		return dnids;
 	}
 	
-	private boolean changed(List<String> activeDnidList, List<DNIDList> existingDNIDList) {
+	private boolean changed(final List<String> activeDnidList, final List<DNIDList> existingDNIDList) {
 		if(activeDnidList.isEmpty() && existingDNIDList.isEmpty()) {
 			return false;
 		}
-		Set<String> activeDnidSet = new HashSet<String>(activeDnidList);
-		Set<String> entityDnidSet = new HashSet<String>();
-		for(DNIDList entity : existingDNIDList) {
+		final Set<String> activeDnidSet = new HashSet<String>(activeDnidList);
+		final Set<String> entityDnidSet = new HashSet<String>();
+		for(final DNIDList entity : existingDNIDList) {
 			entityDnidSet.add(entity.getDNID());
 		}
 		if(activeDnidSet.size() != entityDnidSet.size()) return true;
 		
-		for(String activeDnid : activeDnidSet) {
+		for(final String activeDnid : activeDnidSet) {
 			if(!entityDnidSet.contains(activeDnid)) {
 				return true;
 			}
 		}
 		
-		for(String entityDnid : entityDnidSet) {
+		for(final String entityDnid : entityDnidSet) {
 			if(!activeDnidSet.contains(entityDnid)) {
 				return true;
 			}
@@ -240,9 +240,9 @@ public class ConfigModelBean  {
 	 * @throws ConfigDaoException if unable to fetch original plugin list
 	 */
 	private Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> getPlugins() throws ConfigDaoException {
-        Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> plugins = new HashMap<>();
-        for (MobileTerminalPlugin plugin : mobileTerminalPluginDao.getPluginList()) {
-            MobileTerminalTypeEnum mobileTerminalType = MobileTerminalTypeEnum.getType(plugin.getPluginSatelliteType());
+        final Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> plugins = new HashMap<>();
+        for (final MobileTerminalPlugin plugin : mobileTerminalPluginDao.getPluginList()) {
+            final MobileTerminalTypeEnum mobileTerminalType = MobileTerminalTypeEnum.getType(plugin.getPluginSatelliteType());
             if (mobileTerminalType == null) {
                 continue;
             }
@@ -259,16 +259,16 @@ public class ConfigModelBean  {
         return plugins;
 	}
 
-	public boolean checkDNIDListChange(String pluginName) {
+	public boolean checkDNIDListChange(final String pluginName) {
 		//TODO fix sql query:
 
-		List<String> activeDnidList = channelDao.getActiveDNID(pluginName);
+		final List<String> activeDnidList = channelDao.getActiveDNID(pluginName);
 		try {
-			List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
+			final List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
 			if(changed(activeDnidList, dnidList)) {
 				dnidListDao.removeByPluginName(pluginName);
-				for(String terminalDnid : activeDnidList) {
-					DNIDList dnid = new DNIDList();
+				for(final String terminalDnid : activeDnidList) {
+					final DNIDList dnid = new DNIDList();
 					dnid.setDNID(terminalDnid);
 					dnid.setPluginName(pluginName);
 					dnid.setUpdateTime(DateUtils.getNowDateUTC());
@@ -277,7 +277,7 @@ public class ConfigModelBean  {
 				}
 				return true;
 			}
-		} catch (ConfigDaoException e) {
+		} catch (final ConfigDaoException e) {
 			LOG.error("Couldn't use DNID List {} {}",pluginName,e);
 		}
 		return false;

@@ -14,6 +14,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.util;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
@@ -35,27 +36,27 @@ public class DateUtils {
     final static String DATE_FORMAT = "yyyy-MM-dd";
     private static final String DATE_TIME_PATTERN= "yyyy-MM-dd HH:mm:ss.SSS";
     
-    public static XMLGregorianCalendar getXMLGregorianCalendar(Date date) {
+    public static XMLGregorianCalendar getXMLGregorianCalendar(final Date date) {
         if (date != null) {
-            GregorianCalendar calendar = new GregorianCalendar();
+            final GregorianCalendar calendar = new GregorianCalendar();
             calendar.setTime(date);
             try {
                 return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-            } catch (DatatypeConfigurationException e) {
+            } catch (final DatatypeConfigurationException e) {
                 LOG.error("[ Error when creating calendar instance. ] {} {}", e.getMessage(), e.getStackTrace());
             }
         }
         return null;
     }
 
-    public static Date toDate(XMLGregorianCalendar cal) {
+    public static Date toDate(final XMLGregorianCalendar cal) {
         if (cal != null) {
             return cal.toGregorianCalendar().getTime();
         }
         return null;
     }
 
-    public static boolean isBetween(Date startDate, Date endDate, Date compareDate) {
+    public static boolean isBetween(final Date startDate, final Date endDate, final Date compareDate) {
         if (startDate == null || compareDate == null) {
             LOG.debug("Start date or compare date was null, returning false.");
             return false;
@@ -70,18 +71,18 @@ public class DateUtils {
         return false;
     }
 
-    public static Date parseToUTCDateTime(String dateString) {
+    public static Date parseToUTCDateTime(final String dateString) {
         return parseToUTC(DATE_TIME_FORMAT, dateString);
     }
     
-    public static Date parseToUTCDate(String dateString) {
+    public static Date parseToUTCDate(final String dateString) {
     	return parseToUTC(DATE_FORMAT, dateString);
     }
     
-    private static Date parseToUTC(String format, String dateString) {
-    	DateTimeFormatter formatter = DateTimeFormat.forPattern(format).withOffsetParsed();
-    	DateTime dateTime = formatter.withZoneUTC().parseDateTime(dateString);
-    	GregorianCalendar cal = dateTime.toGregorianCalendar();
+    private static Date parseToUTC(final String format, final String dateString) {
+    	final DateTimeFormatter formatter = DateTimeFormat.forPattern(format).withOffsetParsed();
+    	final DateTime dateTime = formatter.withZoneUTC().parseDateTime(dateString);
+    	final GregorianCalendar cal = dateTime.toGregorianCalendar();
     	return cal.getTime();
     }
     
@@ -89,43 +90,43 @@ public class DateUtils {
         return new DateTime(DateTimeZone.UTC).toDate();
     }
 
-    public static String parseUTCDateTimeToString(Date date) {
+    public static String parseUTCDateTimeToString(final Date date) {
     	return parseUTCToString(DATE_TIME_FORMAT, date);
     }
 
-    public static String parseUTCDateToString(Date date) {
+    public static String parseUTCDateToString(final Date date) {
         return parseUTCToString(DATE_FORMAT, date);
     }
     
-    private static String parseUTCToString(String format, Date date) {
+    private static String parseUTCToString(final String format, final Date date) {
         String dateString = null;
         if (date != null) {
-            DateFormat df = new SimpleDateFormat(format);
+            final DateFormat df = new SimpleDateFormat(format);
             dateString = df.format(date);
         }
         return dateString;
     }
     
-    public static boolean equalsDate(Date one, Date two) {
+    public static boolean equalsDate(final Date one, final Date two) {
     	if(one == null && two == null) return true;
 		if(one == null || two == null) return false;
-		DateTime dateTimeOne = new DateTime(one);
-		DateTime dateTimeTwo = new DateTime(two);
+		final DateTime dateTimeOne = new DateTime(one);
+		final DateTime dateTimeTwo = new DateTime(two);
 		return dateTimeOne.withTimeAtStartOfDay().isEqual(dateTimeTwo.withTimeAtStartOfDay());
     }
 
-    public static XMLGregorianCalendar getXMLGregorianCalendarInUTC(Date dateTimeInUTC){
+    public static XMLGregorianCalendar getXMLGregorianCalendarInUTC(final Date dateTimeInUTC){
         if (dateTimeInUTC != null) {
-            GregorianCalendar calendar = (GregorianCalendar) GregorianCalendar.getInstance(TimeZone.getTimeZone("UTC"));
-            SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_PATTERN);
+            final GregorianCalendar calendar = (GregorianCalendar) Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+            final SimpleDateFormat sdf = new SimpleDateFormat(DATE_TIME_PATTERN);
             sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
             try {
-                Date theDate = sdf.parse(dateTimeInUTC.toString());
+                final Date theDate = sdf.parse(dateTimeInUTC.toString());
                 calendar.setTime(theDate);
                 return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
-            } catch (DatatypeConfigurationException e) {
+            } catch (final DatatypeConfigurationException e) {
                 LOG.error("[ Error when getting XML Gregorian calendar. ] ", e);
-            } catch (ParseException e) {
+            } catch (final ParseException e) {
                 LOG.error("Could not parse dateTimeInUTC: "+dateTimeInUTC.toString()+ " with pattern: " + DATE_TIME_PATTERN);
             }
         }

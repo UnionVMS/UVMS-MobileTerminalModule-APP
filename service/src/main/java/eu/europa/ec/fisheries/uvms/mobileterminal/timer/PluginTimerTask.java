@@ -26,20 +26,20 @@ public class PluginTimerTask implements Runnable{
     ConfigService configService;
     final static Logger LOG = LoggerFactory.getLogger(PluginTimerTask.class);
 
-    public PluginTimerTask(ConfigService configService){
+    public PluginTimerTask(final ConfigService configService){
         this.configService = configService;
     }
 
     @Override
     public void run() {
         try {
-            List<ServiceResponseType> serviceTypes = configService.getRegisteredMobileTerminalPlugins();
+            final List<ServiceResponseType> serviceTypes = configService.getRegisteredMobileTerminalPlugins();
             LOG.debug("get services from exchange registry");
             if(serviceTypes != null) {
                 configService.upsertPlugins(ServiceToPluginMapper.mapToPluginList(serviceTypes), "PluginTimerBean");
                 LOG.debug("upserted plugins");
             }
-        } catch (MobileTerminalException e) {
+        } catch (final MobileTerminalException e) {
             LOG.info("Couldn't update plugins... ", e.getMessage());
         }
 

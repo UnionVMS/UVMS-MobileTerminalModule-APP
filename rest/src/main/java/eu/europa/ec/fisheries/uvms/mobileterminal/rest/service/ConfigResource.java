@@ -64,9 +64,9 @@ public class ConfigResource {
 	public ResponseDto<List<MobileTerminalDeviceConfig>> getConfigTransponders() {
        try {
            LOG.info("Get config transponders invoked in rest layer.");
-           List<TerminalSystemType> list = configService.getTerminalSystems();
+           final List<TerminalSystemType> list = configService.getTerminalSystems();
            return new ResponseDto(MobileTerminalConfig.mapConfigTransponders(list), ResponseCode.OK);
-       } catch (Exception ex) {
+       } catch (final Exception ex) {
            LOG.error("[ Error when getting configTransponders ] {}", ex.getStackTrace());
            return ErrorHandler.getFault(ex);
        }
@@ -89,7 +89,7 @@ public class ConfigResource {
        LOG.info("Get config search fields invoked in rest layer.");
        try {
            return new ResponseDto(SearchKey.values(), ResponseCode.OK);
-       } catch (Exception ex) {
+       } catch (final Exception ex) {
            LOG.error("[ Error when getting config search fields ] {}", ex.getStackTrace());
            return ErrorHandler.getFault(ex);
        }
@@ -101,9 +101,9 @@ public class ConfigResource {
     @Path("/")
     public ResponseDto getConfiguration() {
         try {
-        	List<ConfigList> config = configService.getConfig();
+        	final List<ConfigList> config = configService.getConfig();
             return new ResponseDto(MobileTerminalConfig.mapConfigList(config), ResponseCode.OK);
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             return ErrorHandler.getFault(ex);
         }
     }

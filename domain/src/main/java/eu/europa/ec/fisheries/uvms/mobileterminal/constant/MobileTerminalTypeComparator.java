@@ -17,7 +17,7 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 
 public class MobileTerminalTypeComparator implements Comparator <MobileTerminalType> {
     @Override
-    public int compare(MobileTerminalType o1, MobileTerminalType o2) {
+    public int compare(final MobileTerminalType o1, final MobileTerminalType o2) {
        return o2.getId() - o1.getId();
     }
 }

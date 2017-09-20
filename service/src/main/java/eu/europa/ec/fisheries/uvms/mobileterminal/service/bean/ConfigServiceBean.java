@@ -56,20 +56,20 @@ public class ConfigServiceBean implements ConfigService {
     @Override
     public List<TerminalSystemType> getTerminalSystems() throws MobileTerminalException {
         LOG.debug("GET TERMINAL SYSTEM TRANSPONDERS INVOKED IN SERVICE LAYER");
-		List<TerminalSystemType> systemList = configModel.getAllTerminalSystems();
+		final List<TerminalSystemType> systemList = configModel.getAllTerminalSystems();
         return systemList;
     }
 
 	@Override
 	public List<ConfigList> getConfig() throws MobileTerminalException {
 		LOG.debug("Get configuration in service layer");
-		List<ConfigList> values = configModel.getConfigValues();
+		final List<ConfigList> values = configModel.getConfigValues();
 		return values;
 	}
 
 	@Override
-	public List<Plugin> upsertPlugins(List<PluginService> plugins, String username) throws MobileTerminalException {
-		List<Plugin> plugin = configModel.upsertPlugins(plugins);
+	public List<Plugin> upsertPlugins(final List<PluginService> plugins, final String username) throws MobileTerminalException {
+		final List<Plugin> plugin = configModel.upsertPlugins(plugins);
 		return plugin;
 	}
 
@@ -77,11 +77,11 @@ public class ConfigServiceBean implements ConfigService {
 	public List<ServiceResponseType> getRegisteredMobileTerminalPlugins() {
 		LOG.debug("Get registered service types");
 		try {
-			List<PluginType> pluginTypes = new ArrayList<>();
+			final List<PluginType> pluginTypes = new ArrayList<>();
 			pluginTypes.add(PluginType.SATELLITE_RECEIVER);
-			String data = ExchangeModuleRequestMapper.createGetServiceListRequest(pluginTypes);
-			String messageId = messageProducer.sendModuleMessage(data, ModuleQueue.EXCHANGE);
-			TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+			final String data = ExchangeModuleRequestMapper.createGetServiceListRequest(pluginTypes);
+			final String messageId = messageProducer.sendModuleMessage(data, ModuleQueue.EXCHANGE);
+			final TextMessage response = reciever.getMessage(messageId, TextMessage.class);
 			return ExchangeModuleResponseMapper.mapServiceListResponse(response, messageId);
 		} catch (ExchangeModelMapperException | MobileTerminalMessageException e) {
 			LOG.error("Failed to map to exchange get service list request");

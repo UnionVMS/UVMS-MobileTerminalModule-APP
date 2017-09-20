@@ -51,15 +51,15 @@ public class GetReceivedEventBean {
     @ErrorEvent
     Event<EventMessage> errorEvent;
 
-    public void get(EventMessage message) {
+    public void get(final EventMessage message) {
         try {
-            MobileTerminalType mobileTerminal = getMobileTerminal(message);
-            Connection connection = connectionFactory.createConnection();
+            final MobileTerminalType mobileTerminal = getMobileTerminal(message);
+            final Connection connection = connectionFactory.createConnection();
             try {
                 //TODO: Transacted false??
-                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                String response = MobileTerminalModuleRequestMapper.createMobileTerminalResponse(mobileTerminal);
-                TextMessage responseMessage = session.createTextMessage(response);
+                final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                final String response = MobileTerminalModuleRequestMapper.createMobileTerminalResponse(mobileTerminal);
+                final TextMessage responseMessage = session.createTextMessage(response);
                 responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
                 getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
             } finally {
@@ -74,28 +74,28 @@ public class GetReceivedEventBean {
     }
 
     // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
+    private javax.jms.MessageProducer getProducer(final Session session, final Destination destination) throws JMSException {
+        final javax.jms.MessageProducer producer = session.createProducer(destination);
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
         producer.setTimeToLive(60000L);
         return producer;
     }
 
     // TODO: Go through this logic and error handling
-    private MobileTerminalType getMobileTerminal(EventMessage message) {
+    private MobileTerminalType getMobileTerminal(final EventMessage message) {
         GetMobileTerminalRequest request = null;
         MobileTerminalType mobTerm = null;
         DataSourceQueue dataSource = null;
 
         try {
             request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), GetMobileTerminalRequest.class);
-        } catch (MobileTerminalUnmarshallException ex) {
+        } catch (final MobileTerminalUnmarshallException ex) {
             errorEvent.fire(new EventMessage(message.getJmsMessage(), "Error when mapping message: " + ex.getMessage()));
         }
 
         try {
             dataSource = decideDataflow();
-        } catch (Exception ex) {
+        } catch (final Exception ex) {
             errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when deciding Dataflow for : " + dataSource.name() + " Error message: " + ex.getMessage()));
         }
 
@@ -105,7 +105,7 @@ public class GetReceivedEventBean {
             if (!dataSource.equals(DataSourceQueue.INTERNAL)) {
                 service.upsertMobileTerminal(mobTerm, MobileTerminalSource.NATIONAL, dataSource.name());
             }
-        } catch (MobileTerminalException ex) {
+        } catch (final MobileTerminalException ex) {
             mobTerm = null;
         }
 
@@ -114,7 +114,7 @@ public class GetReceivedEventBean {
             try {
                 request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), GetMobileTerminalRequest.class);
                 mobTerm = service.getMobileTerminalById(request.getId(), DataSourceQueue.INTERNAL);
-            } catch (MobileTerminalException ex) {
+            } catch (final MobileTerminalException ex) {
                 errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when getting vessel from source : " + dataSource.name() + " Error message: " + ex.getMessage()));
             }
         }
@@ -127,7 +127,7 @@ public class GetReceivedEventBean {
     private DataSourceQueue decideDataflow() throws MobileTerminalServiceException {
         try {
 
-            Boolean national = parameters.getBooleanValue(ParameterKey.USE_NATIONAL.getKey());
+            final Boolean national = parameters.getBooleanValue(ParameterKey.USE_NATIONAL.getKey());
 
             LOG.debug("Settings for dataflow are: NATIONAL: {}", national.toString());
 
@@ -137,7 +137,7 @@ public class GetReceivedEventBean {
 
             return DataSourceQueue.INTERNAL;
 
-        } catch (ConfigServiceException ex) {
+        } catch (final ConfigServiceException ex) {
             LOG.error("[ Error when deciding data flow. ] {}", ex.getMessage());
             throw new MobileTerminalServiceException(ex.getMessage());
         }

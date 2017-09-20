@@ -63,8 +63,8 @@ public class TestEqualsUtil {
                 EqualsUtil.equalsOceanRegions(new HashSet<>(Arrays.asList(AOR_W, IOR)), new HashSet<>(Arrays.asList(AOR_W, POR))));
     }
 
-    private InmarsatCHistoryOceanRegion getOceanRegion(Integer code, String name) {
-        InmarsatCHistoryOceanRegion oceanRegion = new InmarsatCHistoryOceanRegion();
+    private InmarsatCHistoryOceanRegion getOceanRegion(final Integer code, final String name) {
+        final InmarsatCHistoryOceanRegion oceanRegion = new InmarsatCHistoryOceanRegion();
         oceanRegion.setCode(code);
         oceanRegion.setName(name);
         return oceanRegion;

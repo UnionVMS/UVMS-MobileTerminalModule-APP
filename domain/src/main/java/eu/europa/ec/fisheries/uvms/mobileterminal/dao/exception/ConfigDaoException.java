@@ -17,7 +17,7 @@ public class ConfigDaoException extends MobileTerminalModelException {
 
     private static final long serialVersionUID = 1996557149817872573L;
 
-    public ConfigDaoException(String message) {
+    public ConfigDaoException(final String message) {
         super(message);
     }
 }

@@ -26,9 +26,9 @@ public class EnumMapperTest {
     //EVENT
     @Test
     public void testGetEventFromId() throws EnumException {
-    	EventCodeEnum idEnum = EventCodeEnum.MODIFY;
-    	Integer id = idEnum.getId();
-    	EventCodeEnum res = EnumMapper.getEventTypeFromId(id);
+    	final EventCodeEnum idEnum = EventCodeEnum.MODIFY;
+    	final Integer id = idEnum.getId();
+    	final EventCodeEnum res = EnumMapper.getEventTypeFromId(id);
     	assertEquals(idEnum, res);
     }
     /*

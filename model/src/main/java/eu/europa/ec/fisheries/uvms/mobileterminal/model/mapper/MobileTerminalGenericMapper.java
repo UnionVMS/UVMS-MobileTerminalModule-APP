@@ -26,8 +26,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 public class MobileTerminalGenericMapper {
     private static Logger LOG = LoggerFactory.getLogger(MobileTerminalGenericMapper.class);
 
-    public static String getComChannelTypeValue(ComChannelType comchannel, String type) throws MobileTerminalModelMapperException {
-        for (ComChannelAttribute comChannelAttr : comchannel.getAttributes()) {
+    public static String getComChannelTypeValue(final ComChannelType comchannel, final String type) throws MobileTerminalModelMapperException {
+        for (final ComChannelAttribute comChannelAttr : comchannel.getAttributes()) {
             if (comChannelAttr.getType().equalsIgnoreCase(type)) {
                 return comChannelAttr.getValue();
             }
@@ -35,8 +35,8 @@ public class MobileTerminalGenericMapper {
         throw new MobileTerminalModelMapperException("Could not get value for ComChannelIdType " + type);
     }
 
-    public static String getPollAttributeTypeValue(List<PollAttribute> attributes, PollAttributeType key) throws MobileTerminalModelMapperException {
-        for (PollAttribute attribute : attributes) {
+    public static String getPollAttributeTypeValue(final List<PollAttribute> attributes, final PollAttributeType key) throws MobileTerminalModelMapperException {
+        for (final PollAttribute attribute : attributes) {
             if (attribute.getKey().equals(key)) {
                 return attribute.getValue();
             }
@@ -44,15 +44,15 @@ public class MobileTerminalGenericMapper {
         throw new MobileTerminalModelMapperException("Could not map PollAttributeType key to value");
     }
 
-    public static ComChannelAttribute createComChannelAttribute(String value, String type) {
-        ComChannelAttribute id = new ComChannelAttribute();
+    public static ComChannelAttribute createComChannelAttribute(final String value, final String type) {
+        final ComChannelAttribute id = new ComChannelAttribute();
         id.setType(type);
         id.setValue(value);
         return id;
     }
 
-    public static MobileTerminalAttribute createMobileTerminalAttribute(String type, String value) {
-        MobileTerminalAttribute attribute = new MobileTerminalAttribute();
+    public static MobileTerminalAttribute createMobileTerminalAttribute(final String type, final String value) {
+        final MobileTerminalAttribute attribute = new MobileTerminalAttribute();
         attribute.setType(type);
         attribute.setValue(value);
         return attribute;

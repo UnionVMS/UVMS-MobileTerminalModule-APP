@@ -18,8 +18,8 @@ public enum ChannelCapability {
 	CONFIGURABLE,
 	POLLABLE;
 	
-	public static ChannelCapability getCapability(String type) throws EnumException {
-		for(ChannelCapability attr : ChannelCapability.values()) {
+	public static ChannelCapability getCapability(final String type) throws EnumException {
+		for(final ChannelCapability attr : ChannelCapability.values()) {
 			if(attr.name().equalsIgnoreCase(type)) {
 				return attr;
 			}

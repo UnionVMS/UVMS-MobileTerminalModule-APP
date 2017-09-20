@@ -28,9 +28,9 @@ public class PollSearchMapperIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testCreateSearchFields() throws SearchMapperException {
 
-        List<ListCriteria> listOfListCriteria = createListOfListCriteriaHelper(SearchKey.POLL_ID);
+        final List<ListCriteria> listOfListCriteria = createListOfListCriteriaHelper(SearchKey.POLL_ID);
 
-        List<PollSearchKeyValue> pollSearchKeyValueList = PollSearchMapper.createSearchFields(listOfListCriteria);
+        final List<PollSearchKeyValue> pollSearchKeyValueList = PollSearchMapper.createSearchFields(listOfListCriteria);
 
         assertNotNull(pollSearchKeyValueList);
     }
@@ -40,16 +40,16 @@ public class PollSearchMapperIntTest extends TransactionalTests {
     public void testCreateCountSearchSql() throws SearchMapperException {
 
         // Note: Any value for isDynamic yields the same SQL phrases.
-        boolean isDynamic = true;
+        final boolean isDynamic = true;
 
-        List<SearchKey> searchKeyList = Arrays.asList(SearchKey.CONNECT_ID, SearchKey.POLL_ID,
+        final List<SearchKey> searchKeyList = Arrays.asList(SearchKey.CONNECT_ID, SearchKey.POLL_ID,
                 SearchKey.POLL_TYPE, SearchKey.TERMINAL_TYPE, SearchKey.USER);
 
-        for(SearchKey searchKey : searchKeyList) {
-            List<ListCriteria> listOfListCriteria = createListOfListCriteriaHelper(searchKey);
-            List<PollSearchKeyValue> pollSearchKeyValueList = PollSearchMapper.createSearchFields(listOfListCriteria);
+        for(final SearchKey searchKey : searchKeyList) {
+            final List<ListCriteria> listOfListCriteria = createListOfListCriteriaHelper(searchKey);
+            final List<PollSearchKeyValue> pollSearchKeyValueList = PollSearchMapper.createSearchFields(listOfListCriteria);
 
-            String selectSql = PollSearchMapper.createCountSearchSql(pollSearchKeyValueList, isDynamic);
+            final String selectSql = PollSearchMapper.createCountSearchSql(pollSearchKeyValueList, isDynamic);
             assertNotNull(selectSql);
             assertTrue(selectSql.contains("SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE"));
 
@@ -77,16 +77,16 @@ public class PollSearchMapperIntTest extends TransactionalTests {
     public void testCreateSelectSearchSql() throws SearchMapperException {
 
         // Note: Any value for isDynamic yields the same SQL phrases.
-        boolean isDynamic = true;
+        final boolean isDynamic = true;
 
-        List<SearchKey> searchKeyList = Arrays.asList(SearchKey.CONNECT_ID, SearchKey.POLL_ID,
+        final List<SearchKey> searchKeyList = Arrays.asList(SearchKey.CONNECT_ID, SearchKey.POLL_ID,
                 SearchKey.POLL_TYPE, SearchKey.TERMINAL_TYPE, SearchKey.USER);
 
-        for(SearchKey searchKey : searchKeyList) {
-            List<ListCriteria> listOfListCriteria = createListOfListCriteriaHelper(searchKey);
-            List<PollSearchKeyValue> pollSearchKeyValueList = PollSearchMapper.createSearchFields(listOfListCriteria);
+        for(final SearchKey searchKey : searchKeyList) {
+            final List<ListCriteria> listOfListCriteria = createListOfListCriteriaHelper(searchKey);
+            final List<PollSearchKeyValue> pollSearchKeyValueList = PollSearchMapper.createSearchFields(listOfListCriteria);
 
-            String selectSql = PollSearchMapper.createSelectSearchSql(pollSearchKeyValueList, isDynamic);
+            final String selectSql = PollSearchMapper.createSelectSearchSql(pollSearchKeyValueList, isDynamic);
             assertNotNull(selectSql);
             assertTrue(selectSql.contains("SELECT DISTINCT p FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE"));
 
@@ -113,23 +113,23 @@ public class PollSearchMapperIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testCreatePollableSearchSql() throws SearchMapperException {
 
-        String id1 = "test_id1";
-        String id2 = "test_id2";
-        List<String> idList = Arrays.asList(id1, id2);
+        final String id1 = "test_id1";
+        final String id2 = "test_id2";
+        final List<String> idList = Arrays.asList(id1, id2);
 
-        String veryComplexSqlPhrase = PollSearchMapper.createPollableSearchSql(idList);
+        final String veryComplexSqlPhrase = PollSearchMapper.createPollableSearchSql(idList);
 
         assertNotNull(veryComplexSqlPhrase);
         assertEquals(veryComplexSqlPhrase, "SELECT DISTINCT c FROM Channel c INNER JOIN FETCH c.mobileTerminal mt INNER JOIN FETCH mt.mobileTerminalEvents me INNER JOIN FETCH me.pollChannel pc INNER JOIN FETCH mt.plugin p  INNER JOIN FETCH p.capabilities cap  WHERE  c.guid = pc.guid  AND me.active = true  AND mt.archived = '0' AND mt.inactivated = '0' AND p.pluginInactive = '0'  AND (cap.name = 'POLLABLE' AND UPPER(cap.value) = 'TRUE' )  AND (me.connectId is not null)  AND me.connectId IN :idList ORDER BY c.guid DESC ");
     }
 
-    private List<ListCriteria> createListOfListCriteriaHelper(SearchKey searchKey) {
+    private List<ListCriteria> createListOfListCriteriaHelper(final SearchKey searchKey) {
 
-        ListCriteria listCriteria1 = new ListCriteria();
+        final ListCriteria listCriteria1 = new ListCriteria();
         listCriteria1.setKey(searchKey);
         listCriteria1.setValue("testListCriteriaValue1");
 
-        ListCriteria listCriteria2 = new ListCriteria();
+        final ListCriteria listCriteria2 = new ListCriteria();
         listCriteria2.setKey(searchKey);
         listCriteria2.setValue("testListCriteriaValue2");
 

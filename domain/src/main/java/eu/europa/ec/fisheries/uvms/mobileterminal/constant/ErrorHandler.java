@@ -24,7 +24,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 
 public class ErrorHandler {
 
-	public static MobileTerminalFaultCode getFaultCode(MobileTerminalModelException e) {
+	public static MobileTerminalFaultCode getFaultCode(final MobileTerminalModelException e) {
 		if(e instanceof InputArgumentException) {
 			return MobileTerminalFaultCode.DOMAIN_INPUT_ERROR;
 		}

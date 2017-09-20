@@ -39,20 +39,20 @@ public class ListReceivedEventBean {
     @ErrorEvent
     Event<EventMessage> errorEvent;
 
-    public void list(EventMessage message) {
+    public void list(final EventMessage message) {
         LOG.info("List Mobile terminals:{}",message);
         try {
-            MobileTerminalListRequest request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), MobileTerminalListRequest.class);
+            final MobileTerminalListRequest request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), MobileTerminalListRequest.class);
 
-            MobileTerminalListResponse mobileTerminalListResponse = mobileTerminalService.getMobileTerminalList(request.getQuery());
-            List<MobileTerminalType> mobileTerminalTypes = mobileTerminalListResponse.getMobileTerminal();
+            final MobileTerminalListResponse mobileTerminalListResponse = mobileTerminalService.getMobileTerminalList(request.getQuery());
+            final List<MobileTerminalType> mobileTerminalTypes = mobileTerminalListResponse.getMobileTerminal();
 
-            Connection connection = connectionFactory.createConnection();
+            final Connection connection = connectionFactory.createConnection();
             try {
                 //TODO: Transacted false??
-                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);
-                TextMessage responseMessage = session.createTextMessage(response);
+                final Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+                final String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);
+                final TextMessage responseMessage = session.createTextMessage(response);
                 responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
                 getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
             } finally {
@@ -67,8 +67,8 @@ public class ListReceivedEventBean {
     }
 
     // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
+    private javax.jms.MessageProducer getProducer(final Session session, final Destination destination) throws JMSException {
+        final javax.jms.MessageProducer producer = session.createProducer(destination);
         producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
         producer.setTimeToLive(60000L);
         return producer;

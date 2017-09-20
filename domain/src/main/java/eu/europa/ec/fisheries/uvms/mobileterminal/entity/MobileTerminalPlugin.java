@@ -90,7 +90,7 @@ public class MobileTerminalPlugin implements Serializable {
         return this.id;
     }
 
-    public void setId(Long id) {
+    public void setId(final Long id) {
         this.id = id;
     }
 
@@ -98,7 +98,7 @@ public class MobileTerminalPlugin implements Serializable {
         return this.description;
     }
 
-    public void setDescription(String description) {
+    public void setDescription(final String description) {
         this.description = description;
     }
 
@@ -106,7 +106,7 @@ public class MobileTerminalPlugin implements Serializable {
         return this.name;
     }
 
-    public void setName(String name) {
+    public void setName(final String name) {
         this.name = name;
     }
 
@@ -114,7 +114,7 @@ public class MobileTerminalPlugin implements Serializable {
         return this.updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(final Date updateTime) {
         this.updateTime = updateTime;
     }
 
@@ -122,7 +122,7 @@ public class MobileTerminalPlugin implements Serializable {
         return this.updatedBy;
     }
 
-    public void setUpdatedBy(String updatedBy) {
+    public void setUpdatedBy(final String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
@@ -130,7 +130,7 @@ public class MobileTerminalPlugin implements Serializable {
 		return pluginServiceName;
 	}
 
-	public void setPluginServiceName(String pluginServiceName) {
+	public void setPluginServiceName(final String pluginServiceName) {
 		this.pluginServiceName = pluginServiceName;
 	}
 
@@ -138,7 +138,7 @@ public class MobileTerminalPlugin implements Serializable {
         return pluginSatelliteType;
     }
 
-    public void setPluginSatelliteType(String pluginSatelliteType) {
+    public void setPluginSatelliteType(final String pluginSatelliteType) {
         this.pluginSatelliteType = pluginSatelliteType;
     }
 
@@ -146,7 +146,7 @@ public class MobileTerminalPlugin implements Serializable {
 		return pluginInactive;
 	}
 
-	public void setPluginInactive(Boolean isInactive) {
+	public void setPluginInactive(final Boolean isInactive) {
 		this.pluginInactive = isInactive;
 	}
 
@@ -154,7 +154,7 @@ public class MobileTerminalPlugin implements Serializable {
 		return mobileTerminals;
 	}
 
-	public void setMobileTerminals(List<MobileTerminal> mobileTerminals) {
+	public void setMobileTerminals(final List<MobileTerminal> mobileTerminals) {
 		this.mobileTerminals = mobileTerminals;
 	}
 
@@ -162,7 +162,7 @@ public class MobileTerminalPlugin implements Serializable {
 		return capabilities;
 	}
 
-	public void setCapabilities(Set<MobileTerminalPluginCapability> capabilities) {
+	public void setCapabilities(final Set<MobileTerminalPluginCapability> capabilities) {
 		this.capabilities = capabilities;
 	}
 }

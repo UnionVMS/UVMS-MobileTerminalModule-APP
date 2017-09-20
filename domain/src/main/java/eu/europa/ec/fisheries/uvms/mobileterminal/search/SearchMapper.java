@@ -22,8 +22,8 @@ public class SearchMapper {
 
     final static Logger LOG = LoggerFactory.getLogger(SearchMapper.class);
 
-    public static String createSelectSearchSql(List<ListCriteria> criteriaList, boolean isDynamic) {
-        StringBuilder buffer = new StringBuilder();
+    public static String createSelectSearchSql(final List<ListCriteria> criteriaList, final boolean isDynamic) {
+        final StringBuilder buffer = new StringBuilder();
 
         buffer.append("SELECT DISTINCT mt")
                 .append(" FROM MobileTerminal mt")
@@ -40,13 +40,13 @@ public class SearchMapper {
                 .append("c.archived = false ")
                 .append(" ) ");
 
-        String operator = isDynamic ? "OR" : "AND";
+        final String operator = isDynamic ? "OR" : "AND";
 
         if (criteriaList != null && !criteriaList.isEmpty()) {
             buffer.append(" AND (");
             boolean first = true;
-            for (ListCriteria criteria : criteriaList) {
-                String key = criteria.getKey().value();
+            for (final ListCriteria criteria : criteriaList) {
+                final String key = criteria.getKey().value();
                 if (first) {
                     first = false;
                 } else {

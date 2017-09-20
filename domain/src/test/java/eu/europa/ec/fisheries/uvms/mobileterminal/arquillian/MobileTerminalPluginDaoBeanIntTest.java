@@ -42,7 +42,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testGetPluginList() throws ConfigDaoException {
 
-        List<MobileTerminalPlugin> mobileTerminalPluginList = mobileTerminalPluginDao.getPluginList();
+        final List<MobileTerminalPlugin> mobileTerminalPluginList = mobileTerminalPluginDao.getPluginList();
 
         assertNotNull(mobileTerminalPluginList);
     }
@@ -53,11 +53,11 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
         try {
             // Given
-            MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
+            final MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
 
             // When
-            MobileTerminalPlugin mobileTerminalPluginAfterCreation = mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
-            MobileTerminalPlugin mobileTerminalPluginReadFromDatabase = mobileTerminalPluginDao.getPluginByServiceName(mobileTerminalPlugin.getPluginServiceName());
+            final MobileTerminalPlugin mobileTerminalPluginAfterCreation = mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
+            final MobileTerminalPlugin mobileTerminalPluginReadFromDatabase = mobileTerminalPluginDao.getPluginByServiceName(mobileTerminalPlugin.getPluginServiceName());
 
             // Then
             assertNotNull(mobileTerminalPluginAfterCreation);
@@ -65,7 +65,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
             assertThat(mobileTerminalPlugin, is(mobileTerminalPluginAfterCreation));
             assertThat(mobileTerminalPlugin.getPluginServiceName(), is(mobileTerminalPluginReadFromDatabase.getPluginServiceName()));
 
-        } catch (TerminalDaoException e) {
+        } catch (final TerminalDaoException e) {
             LOG.error("Test testCreateMobileTerminalPlugin failed with exception {}", e);
         }
     }
@@ -74,7 +74,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testCreateMobileTerminalPlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
 
-        MobileTerminalPlugin failingMobileTerminalPlugin = null;
+        final MobileTerminalPlugin failingMobileTerminalPlugin = null;
 
         mobileTerminalPluginDao.createMobileTerminalPlugin(failingMobileTerminalPlugin);
 
@@ -91,7 +91,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
         mobileTerminalPlugin = mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
 
         // When
-        MobileTerminalPlugin mobileTerminalPluginAfterGetter = mobileTerminalPluginDao.getPluginByServiceName(mobileTerminalPlugin.getPluginServiceName());
+        final MobileTerminalPlugin mobileTerminalPluginAfterGetter = mobileTerminalPluginDao.getPluginByServiceName(mobileTerminalPlugin.getPluginServiceName());
 
         // Then
         assertNotNull(mobileTerminalPluginAfterGetter);
@@ -102,7 +102,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testGetPluginByServiceName_wrongServiceNameThrowsNoEntityFoundException() throws TerminalDaoException {
 
-        MobileTerminalPlugin mobileTerminalPluginAfterGetter = mobileTerminalPluginDao.getPluginByServiceName("thisServiceNameDoesNotExist");
+        final MobileTerminalPlugin mobileTerminalPluginAfterGetter = mobileTerminalPluginDao.getPluginByServiceName("thisServiceNameDoesNotExist");
 
         thrown.expect(NoEntityFoundException.class);
         thrown.expectMessage("No entities found when retrieving mobile terminal plugin by service name");
@@ -112,15 +112,15 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testUpdatePlugin() throws TerminalDaoException {
 
-        MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
+        final MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
 
-        MobileTerminalPlugin mobileTerminalPluginAfterFirstUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
+        final MobileTerminalPlugin mobileTerminalPluginAfterFirstUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
 
         assertThat(mobileTerminalPlugin.getPluginServiceName(), is(mobileTerminalPluginAfterFirstUpdate.getPluginServiceName()));
 
         mobileTerminalPlugin.setPluginServiceName("change_name");
 
-        MobileTerminalPlugin mobileTerminalPluginAfterSecondUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
+        final MobileTerminalPlugin mobileTerminalPluginAfterSecondUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
 
         assertNotNull(mobileTerminalPluginAfterFirstUpdate);
         assertThat(mobileTerminalPluginAfterSecondUpdate.getPluginServiceName(), is(mobileTerminalPlugin.getPluginServiceName()));
@@ -131,9 +131,9 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testUpdatePlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
 
-        MobileTerminalPlugin mobileTerminalPlugin = null;
+        final MobileTerminalPlugin mobileTerminalPlugin = null;
 
-        MobileTerminalPlugin mobileTerminalPluginAfterFirstUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
+        final MobileTerminalPlugin mobileTerminalPluginAfterFirstUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
 
         thrown.expect(TerminalDaoException.class);
         thrown.expectMessage("update mobile terminal plugin");
@@ -141,7 +141,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
     private MobileTerminalPlugin createMobileTerminalPluginHelper() {
 
-        MobileTerminalPlugin mobileTerminalPlugin = new MobileTerminalPlugin();
+        final MobileTerminalPlugin mobileTerminalPlugin = new MobileTerminalPlugin();
 
         mobileTerminalPlugin.setName("test_name");
         mobileTerminalPlugin.setDescription("test_description");

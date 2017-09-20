@@ -11,42 +11,17 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper;
 
-import java.util.List;
-
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ComchannelNameRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemListRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.UpdatedDNIDListRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.UpdatedDNIDListResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.UpsertPluginListRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.CreateMobileTerminalRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.GetMobileTerminalRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.HistoryMobileTerminalListRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalAssignRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalUnAssignRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.SetStatusMobileTerminalRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.UpdateMobileTerminalRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.UpsertMobileTerminalRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAssignQuery;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalDataSourceMethod;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalListQuery;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalStatus;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelValidationException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.validator.MobileTerminalDataSourceRequestValidator;
 
 /**
  **/
 public class MobileTerminalDataSourceRequestMapper {
 
-    public static String mapGetMobileTerminal(MobileTerminalId mobileTerminalId) throws MobileTerminalModelMapperException {
-        GetMobileTerminalRequest request = new GetMobileTerminalRequest();
+    public static String mapGetMobileTerminal(final MobileTerminalId mobileTerminalId) throws MobileTerminalModelMapperException {
+        final GetMobileTerminalRequest request = new GetMobileTerminalRequest();
         request.setMethod(MobileTerminalDataSourceMethod.GET);
         request.setId(mobileTerminalId);
         return JAXBMarshaller.marshallJaxBObjectToString(request);

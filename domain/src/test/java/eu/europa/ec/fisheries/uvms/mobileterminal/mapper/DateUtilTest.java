@@ -28,51 +28,51 @@ public class DateUtilTest {
 
     @Test
     public void testIsBetweenNoDate() {
-    	Date startDate = null;
-    	Date endDate = null;
-    	Date compareDate = null;
+    	final Date startDate = null;
+    	final Date endDate = null;
+    	final Date compareDate = null;
     	assertFalse(DateUtils.isBetween(startDate, endDate, compareDate));
     }
     
     @Test
     public void testIsBetweenSame() {
-    	Date startDate = new Date();
-    	Date compareDate = new Date();
-    	Date endDate = new Date();
+    	final Date startDate = new Date();
+    	final Date compareDate = new Date();
+    	final Date endDate = new Date();
     	assertTrue(DateUtils.isBetween(startDate, endDate, compareDate));
     }
     
     @Test
     public void testIsBetweenActive() {
-    	Calendar cal = Calendar.getInstance();
+    	final Calendar cal = Calendar.getInstance();
     	cal.set(2015, 4, 18, 12, 0, 1);
-    	Date startDate = cal.getTime();
-    	Date compareDate = new Date();
-    	Date endDate = null;
+    	final Date startDate = cal.getTime();
+    	final Date compareDate = new Date();
+    	final Date endDate = null;
     	assertTrue(DateUtils.isBetween(startDate, endDate, compareDate));
     }
     
     @Test
     public void testIsBetween() {
-    	Calendar cal = Calendar.getInstance();
+    	final Calendar cal = Calendar.getInstance();
     	cal.set(2015, 4, 18, 12, 0, 1);
-    	Date startDate = cal.getTime();
+    	final Date startDate = cal.getTime();
     	cal.set(2015, 4, 21, 14, 13, 1);
-    	Date compareDate = cal.getTime();
+    	final Date compareDate = cal.getTime();
     	cal.set(2099, 1, 1, 1, 1, 1);
-    	Date endDate = cal.getTime();
+    	final Date endDate = cal.getTime();
     	assertTrue(DateUtils.isBetween(startDate, endDate, compareDate));
     }
     
     @Test
     public void testIsBetweenBefore() {
-    	Calendar cal = Calendar.getInstance();
+    	final Calendar cal = Calendar.getInstance();
     	cal.set(2015, 4, 18, 12, 0, 1);
-    	Date startDate = cal.getTime();
+    	final Date startDate = cal.getTime();
     	cal.set(2015, 4, 21, 14, 13, 1);
-    	Date compareDate = cal.getTime();
+    	final Date compareDate = cal.getTime();
     	cal.set(2015, 4, 20, 12, 0, 1);
-    	Date endDate = cal.getTime();
+    	final Date endDate = cal.getTime();
     	assertFalse(DateUtils.isBetween(startDate, endDate, compareDate));
     }
 }

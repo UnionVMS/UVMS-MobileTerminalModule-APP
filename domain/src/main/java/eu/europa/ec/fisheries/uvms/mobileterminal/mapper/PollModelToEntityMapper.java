@@ -32,8 +32,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 public class PollModelToEntityMapper {
     private static Logger LOG = LoggerFactory.getLogger(PollModelToEntityMapper.class);
 
-    private static PollBase createNewPollBase(MobileTerminal terminal, String terminalConnect, String channelGuid, PollRequestType requestType, String username) {
-        PollBase pollBase = new PollBase();
+    private static PollBase createNewPollBase(final MobileTerminal terminal, final String terminalConnect, final String channelGuid, final PollRequestType requestType, final String username) {
+        final PollBase pollBase = new PollBase();
         pollBase.setChannelGuid(channelGuid);
         pollBase.setMobileTerminal(terminal);
         pollBase.setTerminalConnect(terminalConnect);
@@ -45,10 +45,10 @@ public class PollModelToEntityMapper {
         return pollBase;
     }
 
-    public static PollProgram mapToProgramPoll(MobileTerminal terminal, String terminalConnect, String channelGuid, PollRequestType requestType, String username)
+    public static PollProgram mapToProgramPoll(final MobileTerminal terminal, final String terminalConnect, final String channelGuid, final PollRequestType requestType, final String username)
             throws MobileTerminalModelMapperException {
-        PollProgram poll = new PollProgram();
-        PollBase pollBase = createNewPollBase(terminal, terminalConnect, channelGuid, requestType, username);
+        final PollProgram poll = new PollProgram();
+        final PollBase pollBase = createNewPollBase(terminal, terminalConnect, channelGuid, requestType, username);
         poll.setPollBase(pollBase);
         poll.setPollState(PollStateEnum.STARTED);
 
@@ -56,10 +56,10 @@ public class PollModelToEntityMapper {
         poll.setUpdatedBy(username);
         poll.setUpdateTime(DateUtils.getNowDateUTC());
 
-        List<PollAttribute> attributes = requestType.getAttributes();
+        final List<PollAttribute> attributes = requestType.getAttributes();
         if (attributes == null || attributes.isEmpty())
             throw new MobileTerminalModelMapperException("No attributes to map to program poll");
-        for (PollAttribute attr : attributes) {
+        for (final PollAttribute attr : attributes) {
             try {
                 switch (attr.getKey()) {
                 case FREQUENCY:
@@ -82,7 +82,7 @@ public class PollModelToEntityMapper {
         return poll;
     }
 
-    public static Poll mapToPoll(MobileTerminal comchannel, String connectId, String channelGuid, PollRequestType requestType, String username) throws MobileTerminalModelMapperException {
+    public static Poll mapToPoll(final MobileTerminal comchannel, final String connectId, final String channelGuid, final PollRequestType requestType, final String username) throws MobileTerminalModelMapperException {
     	switch (requestType.getPollType()) {
         case CONFIGURATION_POLL:
         	return mapToConfigurationPoll(comchannel, connectId, channelGuid, requestType, username);
@@ -95,13 +95,13 @@ public class PollModelToEntityMapper {
     	}
     }
     
-    private static Poll createPollBase(MobileTerminal comchannel, String terminalConnect, String channelGuid, PollRequestType requestType, String username) throws MobileTerminalModelMapperException {
-        Poll poll = new Poll();
-        PollBase pollBase = createNewPollBase(comchannel, terminalConnect, channelGuid, requestType, username);
+    private static Poll createPollBase(final MobileTerminal comchannel, final String terminalConnect, final String channelGuid, final PollRequestType requestType, final String username) throws MobileTerminalModelMapperException {
+        final Poll poll = new Poll();
+        final PollBase pollBase = createNewPollBase(comchannel, terminalConnect, channelGuid, requestType, username);
         poll.setPollBase(pollBase);
         try {
         	poll.setPollType(EnumMapper.getPollTypeFromModel(requestType.getPollType()));
-        } catch (EnumException e) {
+        } catch (final EnumException e) {
         	throw new MobileTerminalModelMapperException("Couldn't map type of poll " + e.getMessage());
         }
 
@@ -111,15 +111,15 @@ public class PollModelToEntityMapper {
         return poll;
     }
 
-    private static Poll mapToConfigurationPoll(MobileTerminal comchannel, String terminalConnect, String channelGuid, PollRequestType requestType, String usernmae)
+    private static Poll mapToConfigurationPoll(final MobileTerminal comchannel, final String terminalConnect, final String channelGuid, final PollRequestType requestType, final String usernmae)
             throws MobileTerminalModelMapperException {
-    	Poll poll = createPollBase(comchannel, terminalConnect, channelGuid, requestType, usernmae);
-        List<PollAttribute> attributes = requestType.getAttributes();
+    	final Poll poll = createPollBase(comchannel, terminalConnect, channelGuid, requestType, usernmae);
+        final List<PollAttribute> attributes = requestType.getAttributes();
         if (attributes == null || attributes.isEmpty())
         	throw new MobileTerminalModelMapperException("No attributes to map to configuration poll");
-        List<PollPayload> payloadList = new ArrayList<>();
-        PollPayload payload = new PollPayload();
-        for (PollAttribute attr : attributes) {
+        final List<PollPayload> payloadList = new ArrayList<>();
+        final PollPayload payload = new PollPayload();
+        for (final PollAttribute attr : attributes) {
         	try {
         		switch (attr.getKey()) {
                 case REPORT_FREQUENCY:
@@ -148,15 +148,15 @@ public class PollModelToEntityMapper {
         return poll;
     }
 
-    private static Poll mapToSamplingPoll(MobileTerminal comchannel, String terminalConnect, String channelGuid, PollRequestType requestType, String username)
+    private static Poll mapToSamplingPoll(final MobileTerminal comchannel, final String terminalConnect, final String channelGuid, final PollRequestType requestType, final String username)
             throws MobileTerminalModelMapperException {
-    	Poll poll = createPollBase(comchannel, terminalConnect, channelGuid, requestType, username);
-        List<PollAttribute> attributes = requestType.getAttributes();
+    	final Poll poll = createPollBase(comchannel, terminalConnect, channelGuid, requestType, username);
+        final List<PollAttribute> attributes = requestType.getAttributes();
         if (attributes == null || attributes.isEmpty())
         	throw new MobileTerminalModelMapperException("No attributes to map to sampling poll");
-        List<PollPayload> payloadList = new ArrayList<>();
-        PollPayload payload = new PollPayload();
-        for (PollAttribute attr : attributes) {
+        final List<PollPayload> payloadList = new ArrayList<>();
+        final PollPayload payload = new PollPayload();
+        for (final PollAttribute attr : attributes) {
         	try {
         		switch (attr.getKey()) {
         		case START_DATE:

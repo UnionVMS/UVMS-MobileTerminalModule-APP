@@ -27,7 +27,7 @@ public class MobileTerminalDeviceConfig {
 		return terminalSystemType;
 	}
 
-	public void setTerminalSystemType(String terminalSystemType) {
+	public void setTerminalSystemType(final String terminalSystemType) {
 		this.terminalSystemType = terminalSystemType;
 	}
 
@@ -35,7 +35,7 @@ public class MobileTerminalDeviceConfig {
 		return terminalFieldList;
 	}
 
-	public void setTerminalFieldList(List<String> terminalFieldList) {
+	public void setTerminalFieldList(final List<String> terminalFieldList) {
 		this.terminalFieldList = terminalFieldList;
 	}
 
@@ -43,7 +43,7 @@ public class MobileTerminalDeviceConfig {
 		return channelFieldList;
 	}
 
-	public void setChannelFieldList(List<String> channelFieldList) {
+	public void setChannelFieldList(final List<String> channelFieldList) {
 		this.channelFieldList = channelFieldList;
 	}
 
@@ -51,7 +51,7 @@ public class MobileTerminalDeviceConfig {
 		return capabilityList;
 	}
 	
-	public void setCapabilityList(List<CapabilityDto> capabilityList) {
+	public void setCapabilityList(final List<CapabilityDto> capabilityList) {
 		this.capabilityList = capabilityList;
 	}
 }

@@ -22,10 +22,10 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 
 public class ServiceToPluginMapper {
 
-	public static List<PluginService> mapToPluginList(List<ServiceResponseType> serviceList) {
-		List<PluginService> pluginList = new ArrayList<>();
-		for(ServiceResponseType service : serviceList) {
-			PluginService plugin = new PluginService();
+	public static List<PluginService> mapToPluginList(final List<ServiceResponseType> serviceList) {
+		final List<PluginService> pluginList = new ArrayList<>();
+		for(final ServiceResponseType service : serviceList) {
+			final PluginService plugin = new PluginService();
 			plugin.setInactive(!service.isActive()); 
 			plugin.setLabelName(service.getName());
 			plugin.setServiceName(service.getServiceClassName());
@@ -38,11 +38,11 @@ public class ServiceToPluginMapper {
 		return pluginList;
 	}
 	
-	private static List<PluginCapability> mapToPluginCapabilityList(List<CapabilityType> capabilities) {
-		List<PluginCapability> capabilityList = new ArrayList<>();
+	private static List<PluginCapability> mapToPluginCapabilityList(final List<CapabilityType> capabilities) {
+		final List<PluginCapability> capabilityList = new ArrayList<>();
 		if(capabilities != null) {
-			for(CapabilityType capability : capabilities) {
-				PluginCapability pluginCapability = new PluginCapability();
+			for(final CapabilityType capability : capabilities) {
+				final PluginCapability pluginCapability = new PluginCapability();
 				pluginCapability.setName(PluginCapabilityType.fromValue(capability.getType().name()));
 				pluginCapability.setValue(capability.getValue());
 				capabilityList.add(pluginCapability);

@@ -16,7 +16,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.TerminalCapabilit
 
 public class CapabilitiesInmarsatC {
 
-    public static boolean getCapability(TerminalCapability capability) {
+    public static boolean getCapability(final TerminalCapability capability) {
         if(capability != null) {
             switch(capability) {
                 case SUPPORT_MULTIPLE_CHANNEL:

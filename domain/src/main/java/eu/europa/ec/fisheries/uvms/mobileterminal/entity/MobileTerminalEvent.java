@@ -106,7 +106,7 @@ public class MobileTerminalEvent implements Serializable {
 		return this.id;
 	}
 
-	public void setId(Long mobtermeventId) {
+	public void setId(final Long mobtermeventId) {
 		this.id = mobtermeventId;
 	}
 
@@ -114,7 +114,7 @@ public class MobileTerminalEvent implements Serializable {
 		return this.comment;
 	}
 
-	public void setComment(String comment) {
+	public void setComment(final String comment) {
 		this.comment = comment;
 	}
 
@@ -122,7 +122,7 @@ public class MobileTerminalEvent implements Serializable {
 		return this.updatetime;
 	}
 
-	public void setUpdateTime(Date updatetime) {
+	public void setUpdateTime(final Date updatetime) {
 		this.updatetime = updatetime;
 	}
 
@@ -130,7 +130,7 @@ public class MobileTerminalEvent implements Serializable {
 		return this.updateuser;
 	}
 
-	public void setUpdatedBy(String updateuser) {
+	public void setUpdatedBy(final String updateuser) {
 		this.updateuser = updateuser;
 	}
 
@@ -138,7 +138,7 @@ public class MobileTerminalEvent implements Serializable {
 		return this.eventCodeType;
 	}
 
-	public void setEventCodeType(EventCodeEnum eventCodeType) {
+	public void setEventCodeType(final EventCodeEnum eventCodeType) {
 		this.eventCodeType = eventCodeType;
 	}
 
@@ -146,7 +146,7 @@ public class MobileTerminalEvent implements Serializable {
 		return this.mobileterminal;
 	}
 
-	public void setMobileTerminal(MobileTerminal mobileterminal) {
+	public void setMobileTerminal(final MobileTerminal mobileterminal) {
 		this.mobileterminal = mobileterminal;
 	}
 
@@ -154,7 +154,7 @@ public class MobileTerminalEvent implements Serializable {
 		return defaultChannel;
 	}
 
-	public void setDefaultChannel(Channel defaultChannel) {
+	public void setDefaultChannel(final Channel defaultChannel) {
 		this.defaultChannel = defaultChannel;
 	}
 
@@ -162,7 +162,7 @@ public class MobileTerminalEvent implements Serializable {
 		return configChannel;
 	}
 
-	public void setConfigChannel(Channel configChannel) {
+	public void setConfigChannel(final Channel configChannel) {
 		this.configChannel = configChannel;
 	}
 
@@ -170,7 +170,7 @@ public class MobileTerminalEvent implements Serializable {
 		return pollChannel;
 	}
 
-	public void setPollChannel(Channel pollChannel) {
+	public void setPollChannel(final Channel pollChannel) {
 		this.pollChannel = pollChannel;
 	}
 
@@ -178,7 +178,7 @@ public class MobileTerminalEvent implements Serializable {
 		return active;
 	}
 
-	public void setActive(boolean active) {
+	public void setActive(final boolean active) {
 		this.active = active;
 	}
 
@@ -186,7 +186,7 @@ public class MobileTerminalEvent implements Serializable {
 		return attributes;
 	}
 
-	public void setAttributes(String attributes) {
+	public void setAttributes(final String attributes) {
 		this.attributes = attributes;
 	}
 
@@ -194,14 +194,14 @@ public class MobileTerminalEvent implements Serializable {
 		return connectId;
 	}
 
-	public void setConnectId(String connectId) {
+	public void setConnectId(final String connectId) {
 		this.connectId = connectId;
 	}
 
 	@Override
-	public boolean equals(Object obj) {
+	public boolean equals(final Object obj) {
 		if(obj instanceof MobileTerminalEvent) {
-			MobileTerminalEvent other = (MobileTerminalEvent)obj;
+			final MobileTerminalEvent other = (MobileTerminalEvent)obj;
 			if(!EqualsUtil.compare(comment, other.comment)) return false;
 			if(!EqualsUtil.compare(eventCodeType.name(), other.eventCodeType.name())) return false;
 			if(!EqualsUtil.compare(updatetime, other.updatetime)) return false;
