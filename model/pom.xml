@@ -22,9 +22,8 @@
 		<wsdl.contract.name>MobileTerminalModuleService</wsdl.contract.name>
 		<wsdl.source.name>MobileTerminalDataSourceService</wsdl.source.name>
 		<cxf-codegen-plugin.version>3.1.13</cxf-codegen-plugin.version>
-		<jax2.basic.version>0.9.5</jax2.basic.version>
 		<dozer.version>5.5.1</dozer.version>
-		<joda.version>2.7</joda.version>
+		<joda.version>2.9.9</joda.version>
 		<binding.xml>binding-date.xml</binding.xml>
 	</properties>
 
@@ -38,12 +37,16 @@
 			<artifactId>javaee-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.jvnet.jaxb2_commons</groupId>
-			<artifactId>jaxb2-basics-runtime</artifactId>
-			<version>${jax2.basic.version}</version>
+			<artifactId>jaxb2-basics</artifactId>
+			<version>0.9.5</version>
 		</dependency>
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.6</version>
+		</dependency>		
 		<dependency>
 			<groupId>net.sf.dozer</groupId>
 			<artifactId>dozer</artifactId>
@@ -66,9 +69,9 @@
 				<version>${cxf-codegen-plugin.version}</version>
 				<dependencies>
 					<dependency>
-						<groupId>org.jvnet.jaxb2_commons</groupId>
-						<artifactId>jaxb2-basics</artifactId>
-						<version>${jax2.basic.version}</version>
+					    <groupId>org.jvnet.jaxb2_commons</groupId>
+					    <artifactId>jaxb2-commons-lang</artifactId>
+					    <version>2.4</version>
 					</dependency>
 				</dependencies>
 				<executions>
@@ -83,9 +86,8 @@
 								<wsdlOption>
 									<wsdl>${basedir}/src/main/resources/contract/${wsdl.contract.name}.wsdl</wsdl>
 									<extraargs>
-										<extraarg>-xjc-XhashCode</extraarg>
-										<extraarg>-xjc-Xequals</extraarg>
-										<extraarg>-xjc-XtoString</extraarg>
+										<extraarg>-xjc-Xcommons-lang</extraarg>
+										<extraarg>-xjc-Xcommons-lang:ToStringStyle=SHORT_PREFIX_STYLE</extraarg>										
 									</extraargs>
 									<bindingFiles>
 										<bindingFile>${basedir}/src/main/resources/${binding.xml}</bindingFile>
@@ -104,9 +106,8 @@
 							<wsdlOptions>
 								<wsdlOption>
 									<extraargs>
-										<extraarg>-xjc-XhashCode</extraarg>
-										<extraarg>-xjc-Xequals</extraarg>
-										<extraarg>-xjc-XtoString</extraarg>
+										<extraarg>-xjc-Xcommons-lang</extraarg>
+										<extraarg>-xjc-Xcommons-lang:ToStringStyle=SHORT_PREFIX_STYLE</extraarg>										
 									</extraargs>
 									<wsdl>${basedir}/src/main/resources/contract/${wsdl.source.name}.wsdl</wsdl>
 									<bindingFiles>
