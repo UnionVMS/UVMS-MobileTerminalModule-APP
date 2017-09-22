@@ -127,7 +127,6 @@
 							<groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
 							<artifactId>mobileterminal-model</artifactId>
 							<version>${mobile.api.check.against.version}</version>
-							<classifier>date</classifier>
 							<type>jar</type>
 						</dependency>
 					</oldVersion>
