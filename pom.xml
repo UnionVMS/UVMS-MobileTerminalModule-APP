@@ -22,7 +22,7 @@
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
         <uvms.config.version>4.0.0</uvms.config.version>
         <audit.model.version>4.0.0</audit.model.version>
-        <exchange.model.version>4.0.0</exchange.model.version>
+        <exchange.model.version>4.0.4</exchange.model.version>
     </properties>
 
 	<dependencies>
