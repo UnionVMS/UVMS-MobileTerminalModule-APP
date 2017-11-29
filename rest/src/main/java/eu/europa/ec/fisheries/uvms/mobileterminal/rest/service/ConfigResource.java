@@ -85,10 +85,10 @@ public class ConfigResource {
    @Consumes(value = {MediaType.APPLICATION_JSON})
    @Produces(value = {MediaType.APPLICATION_JSON})
    @Path("/searchfields")
-   public ResponseDto<List<String>> getConfigSearchFields() {
+   public ResponseDto<SearchKey[]> getConfigSearchFields() {
        LOG.info("Get config search fields invoked in rest layer.");
        try {
-           return new ResponseDto(SearchKey.values(), ResponseCode.OK);
+           return new ResponseDto<SearchKey[]>(SearchKey.values(), ResponseCode.OK);
        } catch (Exception ex) {
            LOG.error("[ Error when getting config search fields ] {}", ex.getStackTrace());
            return ErrorHandler.getFault(ex);
