@@ -66,11 +66,11 @@ public class PollResource {
     @Produces(value = { MediaType.APPLICATION_JSON })
     @Path("/")
     @RequiresFeature(UnionVMSFeature.managePolls)
-    public ResponseDto<List<PollDto>> createPoll(PollRequestType createPoll) {
+    public ResponseDto<CreatePollResultDto> createPoll(PollRequestType createPoll) {
         LOG.info("Create poll invoked in rest layer:{}",createPoll);
         try {
             CreatePollResultDto createPollResultDto = pollService.createPoll(createPoll, request.getRemoteUser());
-            return new ResponseDto(createPollResultDto, ResponseCode.OK);
+            return new ResponseDto<CreatePollResultDto>(createPollResultDto, ResponseCode.OK);
         } catch (Exception ex) {
             LOG.error("[ Error when creating poll {}] {}",createPoll, ex.getStackTrace());
             return ErrorHandler.getFault(ex);
@@ -92,7 +92,7 @@ public class PollResource {
         LOG.info("Get running program polls invoked in rest layer");
         try {
             List<PollDto> polls = pollService.getRunningProgramPolls();
-            return new ResponseDto(polls, ResponseCode.OK);
+            return new ResponseDto<List<PollDto>>(polls, ResponseCode.OK);
         } catch (Exception ex) {
             LOG.error("[ Error when getting running program polls ] {}", ex.getStackTrace());
             return ErrorHandler.getFault(ex);
@@ -114,7 +114,7 @@ public class PollResource {
         LOG.info("Start poll invoked in rest layer:{}",pollId);
         try {
             PollDto poll = pollService.startProgramPoll(pollId, request.getRemoteUser());
-            return new ResponseDto(poll, ResponseCode.OK);
+            return new ResponseDto<PollDto>(poll, ResponseCode.OK);
         } catch (Exception ex) {
             LOG.error("[ Error when starting program poll {}] {}",pollId, ex.getStackTrace());
             return ErrorHandler.getFault(ex);
@@ -137,7 +137,7 @@ public class PollResource {
         LOG.info("Stop poll invoked in rest layer:{}",pollId);
         try {
             PollDto poll = pollService.stopProgramPoll(pollId, request.getRemoteUser());
-            return new ResponseDto(poll, ResponseCode.OK);
+            return new ResponseDto<PollDto>(poll, ResponseCode.OK);
         } catch (Exception ex) {
             LOG.error("[ Error when stopping program poll {} ] {}",pollId, ex.getStackTrace());
             return ErrorHandler.getFault(ex);
@@ -159,7 +159,7 @@ public class PollResource {
         LOG.info("Stop poll invoked in rest layer:{}",pollId);
         try {
             PollDto poll = pollService.inactivateProgramPoll(pollId, request.getRemoteUser());
-            return new ResponseDto(poll, ResponseCode.OK);
+            return new ResponseDto<PollDto>(poll, ResponseCode.OK);
         } catch (Exception ex) {
             LOG.error("[ Error when inactivating program poll {}] {}",pollId, ex.getStackTrace());
             return ErrorHandler.getFault(ex);
@@ -182,7 +182,7 @@ public class PollResource {
         LOG.info("Get poll by search criteria invoked in rest layer:{}",query);
         try {
         	PollChannelListDto pollChannelList = pollService.getPollBySearchQuery(query);
-            return new ResponseDto(pollChannelList, ResponseCode.OK);
+            return new ResponseDto<PollChannelListDto>(pollChannelList, ResponseCode.OK);
         } catch (Exception ex) {
             LOG.error("[ Error when getting poll by search criteria {}] {}",query, ex.getStackTrace());
             return ErrorHandler.getFault(ex);
@@ -204,7 +204,7 @@ public class PollResource {
         LOG.info("Get pollables invoked in rest layer:{}",query);
         try {
             PollChannelListDto pollChannelList = pollService.getPollableChannels(query);
-            return new ResponseDto(pollChannelList, ResponseCode.OK);
+            return new ResponseDto<PollChannelListDto>(pollChannelList, ResponseCode.OK);
         } catch (Exception ex) {
             LOG.error("[ Error when getting poll by search criteria {}] {}",query, ex.getStackTrace());
             return ErrorHandler.getFault(ex);
