@@ -17,7 +17,7 @@ import org.junit.Before;
 public class TransactionalTests extends BuildMobileTerminalDeployment {
 
     @Inject
-    protected UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
     @PersistenceContext(unitName = "mobileTerminalPU")
     protected EntityManager em;
@@ -28,7 +28,7 @@ public class TransactionalTests extends BuildMobileTerminalDeployment {
     }
 
     @After
-    public void after() throws SystemException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+    public void after() throws SystemException {
         userTransaction.rollback();
     }
 

@@ -150,7 +150,7 @@ public class MobileTerminalPluginDaoTest {
 	
 	@Test
 	public void testUpdatePluginVerify() throws TerminalDaoException {
-		testDaoBean.updatePlugin(plugin);
+		testDaoBean.updateMobileTerminalPlugin(plugin);
 		verify(em).merge(plugin);
 		verify(em).flush();
 	}
@@ -158,6 +158,6 @@ public class MobileTerminalPluginDaoTest {
 	@Test(expected=TerminalDaoException.class)
 	public void testUpdatePluginException() throws TerminalDaoException {
 		doThrow(new IllegalArgumentException()).when(em).merge(null);
-		testDaoBean.updatePlugin(null);
+		testDaoBean.updateMobileTerminalPlugin(null);
 	}
 }

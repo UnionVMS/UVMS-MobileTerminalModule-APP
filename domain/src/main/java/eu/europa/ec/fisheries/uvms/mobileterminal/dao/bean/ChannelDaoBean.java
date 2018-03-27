@@ -37,7 +37,6 @@ public class ChannelDaoBean extends Dao implements ChannelDao {
         if(idList != null && !idList.isEmpty()) {
             query.setParameter("idList", idList);
         }
-
         return query.getResultList();
     }
 
@@ -55,7 +54,6 @@ public class ChannelDaoBean extends Dao implements ChannelDao {
                 }
             }
         }
-
         return dnidList;
     }
 

@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.constant;
 
 public class MobileTerminalConstants {
-	public static final String POLL_FIND_BY_ID = "Poll.findById"; //ToDo: This query string is not implemented anywhere. Either implement it or remove it.
+	public static final String POLL_FIND_BY_ID = "Poll.findByPollId";
 	public static final String POLL_PROGRAM_FIND_BY_ID = "PollProgram.findById";
     public static final String POLL_PROGRAM_FIND_ALIVE = "PollProgram.findAlive";
     public static final String POLL_PROGRAM_FIND_RUNNING_AND_STARTED = "PollProgram.findRunningAndStarted";

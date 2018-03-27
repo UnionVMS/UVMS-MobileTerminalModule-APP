@@ -140,7 +140,7 @@ public class ConfigModelBean  {
 				}
 				entity.getCapabilities().clear();
 				entity = PluginMapper.mapModelToEntity(entity, plugin);
-				mobileTerminalPluginDao.updatePlugin(entity);
+				mobileTerminalPluginDao.updateMobileTerminalPlugin(entity);
 				return entity;
 			}
 		} catch (NoEntityFoundException e) {

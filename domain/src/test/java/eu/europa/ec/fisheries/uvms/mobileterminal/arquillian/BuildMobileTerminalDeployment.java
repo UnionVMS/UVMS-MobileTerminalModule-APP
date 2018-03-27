@@ -70,15 +70,10 @@ public abstract class BuildMobileTerminalDeployment {
         testWar.addClass(PollProgramDao.class);
         testWar.addClass(PollProgram.class);
 
-
-
-
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         testWar.addAsLibraries(files);
-
-
 
         return testWar;
     }
