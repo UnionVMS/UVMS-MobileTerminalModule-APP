@@ -48,7 +48,7 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
     @Override
     public PollProgram updatePollProgram(PollProgram pollProgram) throws PollDaoException {
         try {
-            em.merge(pollProgram);
+            pollProgram = em.merge(pollProgram);
             em.flush();
             return pollProgram;
         } catch (EntityExistsException | IllegalArgumentException e) {
@@ -75,7 +75,7 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
             TypedQuery<PollProgram> query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_RUNNING_AND_STARTED, PollProgram.class);
             query.setParameter("currentDate", DateUtils.getUTCNow());
             List<PollProgram> pollPrograms = query.getResultList();
-            List<PollProgram> validPollPrograms = new ArrayList<PollProgram>();
+            List<PollProgram> validPollPrograms = new ArrayList<>();
 
             for (PollProgram pollProgram : pollPrograms) {
                 Date lastRun = pollProgram.getLatestRun();
