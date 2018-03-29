@@ -1,13 +1,13 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.validation.ConstraintViolationException;
 
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -15,8 +15,6 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
@@ -31,12 +29,10 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
     @EJB
-    MobileTerminalPluginDao mobileTerminalPluginDao;
+    private MobileTerminalPluginDao mobileTerminalPluginDao;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
-
-    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPluginDaoBeanIntTest.class);
 
     @Test
     @OperateOnDeployment("normal")
@@ -51,35 +47,66 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testCreateMobileTerminalPlugin() throws TerminalDaoException {
 
-        try {
-            // Given
-            MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
+        // Given
+        MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
 
-            // When
-            MobileTerminalPlugin mobileTerminalPluginAfterCreation = mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
-            MobileTerminalPlugin mobileTerminalPluginReadFromDatabase = mobileTerminalPluginDao.getPluginByServiceName(mobileTerminalPlugin.getPluginServiceName());
+        // When
+        MobileTerminalPlugin mobileTerminalPluginAfterCreation = mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
+        MobileTerminalPlugin mobileTerminalPluginReadFromDatabase = mobileTerminalPluginDao.getPluginByServiceName(mobileTerminalPlugin.getPluginServiceName());
 
-            // Then
-            assertNotNull(mobileTerminalPluginAfterCreation);
-            assertNotNull(mobileTerminalPluginReadFromDatabase);
-            assertThat(mobileTerminalPlugin, is(mobileTerminalPluginAfterCreation));
-            assertThat(mobileTerminalPlugin.getPluginServiceName(), is(mobileTerminalPluginReadFromDatabase.getPluginServiceName()));
-
-        } catch (TerminalDaoException e) {
-            LOG.error("Test testCreateMobileTerminalPlugin failed with exception {}", e);
-        }
+        // Then
+        assertNotNull(mobileTerminalPluginAfterCreation);
+        assertNotNull(mobileTerminalPluginReadFromDatabase);
+        assertSame(mobileTerminalPlugin, mobileTerminalPluginAfterCreation);
+        assertEquals(mobileTerminalPlugin.getPluginServiceName(), mobileTerminalPluginReadFromDatabase.getPluginServiceName());
     }
 
-    @Test(expected = TerminalDaoException.class)
+    @Test
     @OperateOnDeployment("normal")
     public void testCreateMobileTerminalPlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
 
-        MobileTerminalPlugin failingMobileTerminalPlugin = null;
-
-        mobileTerminalPluginDao.createMobileTerminalPlugin(failingMobileTerminalPlugin);
-
         thrown.expect(TerminalDaoException.class);
         thrown.expectMessage("create mobile terminal plugin");
+
+        mobileTerminalPluginDao.createMobileTerminalPlugin(null);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testCreateMobileTerminalPlugin_nameConstraintViolation() throws TerminalDaoException {
+
+        thrown.expect(ConstraintViolationException.class);
+
+        // Given
+        MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
+        char[] chars = new char[101];
+        Arrays.fill(chars, 'x');
+        mobileTerminalPlugin.setName(new String(chars)); // 101 chars
+
+        // When
+        mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
+        em.flush();
+
+        // Then Exception thrown
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testCreateMobileTerminalPlugin_descriptionConstraintViolation() throws TerminalDaoException {
+
+        thrown.expect(ConstraintViolationException.class);
+
+        // Given
+        MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
+        char[] chars = new char[81];
+        Arrays.fill(chars, 'x');
+        mobileTerminalPlugin.setDescription(new String(chars)); // 81 chars
+
+        // When
+        mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
+        em.flush();
+
+        // Then Exception thrown
     }
 
     @Test
@@ -95,48 +122,56 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
         // Then
         assertNotNull(mobileTerminalPluginAfterGetter);
-        assertThat(mobileTerminalPluginAfterGetter.getPluginServiceName(), is("test_serviceName"));
+        assertEquals("test_serviceName", mobileTerminalPluginAfterGetter.getPluginServiceName());
     }
 
     @Test(expected = NoEntityFoundException.class)
     @OperateOnDeployment("normal")
     public void testGetPluginByServiceName_wrongServiceNameThrowsNoEntityFoundException() throws TerminalDaoException {
 
-        MobileTerminalPlugin mobileTerminalPluginAfterGetter = mobileTerminalPluginDao.getPluginByServiceName("thisServiceNameDoesNotExist");
-
         thrown.expect(NoEntityFoundException.class);
         thrown.expectMessage("No entities found when retrieving mobile terminal plugin by service name");
+
+        mobileTerminalPluginDao.getPluginByServiceName("thisServiceNameDoesNotExist");
     }
 
     @Test
     @OperateOnDeployment("normal")
     public void testUpdatePlugin() throws TerminalDaoException {
 
+        MobileTerminalPlugin created = createMobileTerminalPluginHelper();
+
+        created = mobileTerminalPluginDao.createMobileTerminalPlugin(created);
+        created.setPluginServiceName("change_name");
+
+        MobileTerminalPlugin updated = mobileTerminalPluginDao.updateMobileTerminalPlugin(created);
+
+        assertNotNull(created);
+        assertEquals(updated.getId(), created.getId());
+        assertEquals(updated.getPluginServiceName(), created.getPluginServiceName());
+        assertEquals("change_name", created.getPluginServiceName());
+    }
+
+    @Test(expected = TerminalDaoException.class)
+    @OperateOnDeployment("normal")
+    public void testUpdatePlugin_updateInsteadOfPersistFailsWithTerminalDaoException() throws TerminalDaoException {
+
+        thrown.expect(TerminalDaoException.class);
+        thrown.expectMessage(" [ There is no such MobileTerminalPlugin object to update ] ");
+
         MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
 
-        MobileTerminalPlugin mobileTerminalPluginAfterFirstUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
-
-        assertThat(mobileTerminalPlugin.getPluginServiceName(), is(mobileTerminalPluginAfterFirstUpdate.getPluginServiceName()));
-
-        mobileTerminalPlugin.setPluginServiceName("change_name");
-
-        MobileTerminalPlugin mobileTerminalPluginAfterSecondUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
-
-        assertNotNull(mobileTerminalPluginAfterFirstUpdate);
-        assertThat(mobileTerminalPluginAfterSecondUpdate.getPluginServiceName(), is(mobileTerminalPlugin.getPluginServiceName()));
-        assertThat(mobileTerminalPlugin.getPluginServiceName(), is("change_name"));
+        mobileTerminalPluginDao.updateMobileTerminalPlugin(mobileTerminalPlugin);
     }
 
     @Test(expected = TerminalDaoException.class)
     @OperateOnDeployment("normal")
     public void testUpdatePlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
 
-        MobileTerminalPlugin mobileTerminalPlugin = null;
-
-        MobileTerminalPlugin mobileTerminalPluginAfterFirstUpdate = mobileTerminalPluginDao.updatePlugin(mobileTerminalPlugin);
-
         thrown.expect(TerminalDaoException.class);
-        thrown.expectMessage("update mobile terminal plugin");
+        thrown.expectMessage(" [ There is no such MobileTerminalPlugin object to update ] ");
+
+        mobileTerminalPluginDao.updateMobileTerminalPlugin(null);
     }
 
     private MobileTerminalPlugin createMobileTerminalPluginHelper() {

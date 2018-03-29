@@ -29,7 +29,7 @@ public interface MobileTerminalPluginDao {
 	 * @return
 	 * @throws ConfigDaoException
 	 */
-	public List<MobileTerminalPlugin> getPluginList() throws ConfigDaoException;
+	List<MobileTerminalPlugin> getPluginList() throws ConfigDaoException;
 	
 	/**
 	 * Persist mobile terminal plugin
@@ -37,7 +37,7 @@ public interface MobileTerminalPluginDao {
 	 * @return
 	 * @throws TerminalDaoException
 	 */
-	public MobileTerminalPlugin createMobileTerminalPlugin(MobileTerminalPlugin plugin) throws TerminalDaoException;
+	MobileTerminalPlugin createMobileTerminalPlugin(MobileTerminalPlugin plugin) throws TerminalDaoException;
 
 	/**
 	 * 
@@ -45,7 +45,7 @@ public interface MobileTerminalPluginDao {
 	 * @return
 	 * @throws NoEntityFoundException
 	 */
-	public MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException;
+	MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException;
 
 	/**
 	 * Merge and flush
@@ -54,5 +54,5 @@ public interface MobileTerminalPluginDao {
 	 * @return
 	 * @throws TerminalDaoException
 	 */
-	public MobileTerminalPlugin updatePlugin(MobileTerminalPlugin entity) throws TerminalDaoException;
+	MobileTerminalPlugin updateMobileTerminalPlugin(MobileTerminalPlugin entity) throws TerminalDaoException;
 }

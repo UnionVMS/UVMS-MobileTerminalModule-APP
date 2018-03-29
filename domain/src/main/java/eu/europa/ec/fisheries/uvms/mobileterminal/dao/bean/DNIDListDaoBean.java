@@ -28,7 +28,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
 
 @Stateless
 public class DNIDListDaoBean extends Dao implements DNIDListDao {
-	final static Logger LOG = LoggerFactory.getLogger(DNIDListDaoBean.class);
+
+	private final static Logger LOG = LoggerFactory.getLogger(DNIDListDaoBean.class);
 
 	@Override
 	public List<DNIDList> getAllDNIDList() throws ConfigDaoException {
@@ -46,8 +47,8 @@ public class DNIDListDaoBean extends Dao implements DNIDListDao {
 		try {
             TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST_BY_PLUGIN, DNIDList.class);
             query.setParameter("pluginName", pluginName);
-            return query.getResultList();
-        } catch (NoResultException e) {
+			return query.getResultList();
+		} catch (NoResultException e) {
             LOG.error("[ Error when getting dnid list by plugin. ] {}", e.getMessage());
             throw new ConfigDaoException("No entities found when retrieving dnid list by plugin");
         }

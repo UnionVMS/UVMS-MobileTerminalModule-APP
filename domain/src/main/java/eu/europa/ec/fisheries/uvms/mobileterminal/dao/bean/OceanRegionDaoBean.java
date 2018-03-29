@@ -28,7 +28,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
 
 @Stateless
 public class OceanRegionDaoBean extends Dao implements OceanRegionDao {
-	final static Logger LOG = LoggerFactory.getLogger(OceanRegionDaoBean.class);
+
+	private final static Logger LOG = LoggerFactory.getLogger(OceanRegionDaoBean.class);
 
 	@Override
 	public List<OceanRegion> getOceanRegionList() throws ConfigDaoException {
@@ -40,5 +41,4 @@ public class OceanRegionDaoBean extends Dao implements OceanRegionDao {
             throw new ConfigDaoException("No entities found when retrieving ocean regions");
         }
 	}
-	
 }

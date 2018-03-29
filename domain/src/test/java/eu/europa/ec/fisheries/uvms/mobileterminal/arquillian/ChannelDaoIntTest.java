@@ -25,7 +25,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 public class ChannelDaoIntTest extends TransactionalTests {
 
     @Inject
-    ChannelDao channelDao;
+    private ChannelDao channelDao;
 
     @Test
     @OperateOnDeployment("normal")
@@ -53,6 +53,20 @@ public class ChannelDaoIntTest extends TransactionalTests {
 
         //When
         List<Channel> channels = channelDao.getPollableListSearch(emptyList);
+
+        //Then
+        assertThat(channels.size(), is(0));
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void testGetPollableListSearch_NULL() {
+
+        //Given - null
+        List<String> nullAsList = null;
+
+        //When
+        List<Channel> channels = channelDao.getPollableListSearch(nullAsList);
 
         //Then
         assertThat(channels.size(), is(0));

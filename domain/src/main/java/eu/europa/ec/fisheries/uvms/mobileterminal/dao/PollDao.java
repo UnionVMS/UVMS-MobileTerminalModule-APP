@@ -29,15 +29,7 @@ public interface PollDao {
      * @param poll
      * @throws PollDaoException
      */
-    public void createPoll(Poll poll) throws PollDaoException;
-
-    /**
-     * Create pollProgram
-     *
-     * @param poll
-     * @throws PollDaoException
-     */
-    public void createPollProgram(PollProgram poll) throws PollDaoException;
+    void createPoll(Poll poll) throws PollDaoException;
 
     /**
      * Get poll by internal id
@@ -46,7 +38,7 @@ public interface PollDao {
      * @return
      * @throws PollDaoException
      */
-    public Poll getPoll(String pollId) throws PollDaoException;
+    Poll getPollByPoolId(Long pollId) throws PollDaoException;
 
     /**
      * Get all polls connected to program poll with given internal id
@@ -55,22 +47,21 @@ public interface PollDao {
      * @return
      * @throws PollDaoException
      */
-    public List<Poll> getPollListByProgramPoll(Integer pollProgramId) throws PollDaoException;
+    List<Poll> getPollListByProgramPoll(Integer pollProgramId) throws PollDaoException;
 
     /**
      * Get count of polls from sql with search criterias
      * 
      * @param sql
      * @param searchFields
-     * @param isDynamic
      * @return
      */
-    public Long getPollListSearchCount(String sql, List<PollSearchKeyValue> searchFields, boolean isDynamic);
+    Long getPollListSearchCount(String sql, List<PollSearchKeyValue> searchFields);
     
     /**
      * Get polls paginated from sql with search criterias
      * @return
      * @throws PollDaoException
      */
-    public List<Poll> getPollListSearchPaginated(Integer page, Integer listSize, String sql, List<PollSearchKeyValue> searchFields, boolean isDynamic) throws PollDaoException;
+    List<Poll> getPollListSearchPaginated(Integer pageNumber, Integer pageSize, String sql, List<PollSearchKeyValue> searchFields) throws PollDaoException;
 }

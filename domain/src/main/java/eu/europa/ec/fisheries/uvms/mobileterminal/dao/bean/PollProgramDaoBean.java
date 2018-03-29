@@ -33,7 +33,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 @Stateless
 public class PollProgramDaoBean extends Dao implements PollProgramDao {
 
-    final static Logger LOG = LoggerFactory.getLogger(PollProgramDaoBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(PollProgramDaoBean.class);
 
     @Override
     public void createPollProgram(PollProgram pollProgram) throws PollDaoException {

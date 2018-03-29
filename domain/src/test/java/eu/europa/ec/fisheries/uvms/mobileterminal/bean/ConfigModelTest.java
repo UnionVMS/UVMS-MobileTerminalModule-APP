@@ -157,7 +157,7 @@ public class ConfigModelTest {
 		mockStatic(PluginMapper.class);
 		when(PluginMapper.equals(siriusone, pluginType)).thenReturn(false);
 		
-		when(mobileTerminalPluginDao.updatePlugin(any(MobileTerminalPlugin.class))).thenThrow(new TerminalDaoException("Couldn't update entity"));
+		when(mobileTerminalPluginDao.updateMobileTerminalPlugin(any(MobileTerminalPlugin.class))).thenThrow(new TerminalDaoException("Couldn't update entity"));
 		
 		MobileTerminalPlugin resEntity = testModelBean.updatePlugin(pluginType);
 	}
@@ -185,7 +185,7 @@ public class ConfigModelTest {
 		mockStatic(PluginMapper.class);
 		when(PluginMapper.mapModelToEntity(siriusone, pluginType)).thenReturn(siriusone);
 		
-		when(mobileTerminalPluginDao.updatePlugin(any(MobileTerminalPlugin.class))).thenReturn(siriusone);
+		when(mobileTerminalPluginDao.updateMobileTerminalPlugin(any(MobileTerminalPlugin.class))).thenReturn(siriusone);
 		
 		MobileTerminalPlugin resEntity = testModelBean.updatePlugin(pluginType);
 		assertNotNull(resEntity);

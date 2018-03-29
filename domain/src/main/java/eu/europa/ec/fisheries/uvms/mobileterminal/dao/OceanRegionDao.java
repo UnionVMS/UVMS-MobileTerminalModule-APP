@@ -27,5 +27,5 @@ public interface OceanRegionDao {
 	 * @return
 	 * @throws ConfigDaoException
 	 */
-	public List<OceanRegion> getOceanRegionList() throws ConfigDaoException;
+	List<OceanRegion> getOceanRegionList() throws ConfigDaoException;
 }

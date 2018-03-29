@@ -30,7 +30,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 
 @Stateless
 public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPluginDao {
-	final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPluginDaoBean.class);
+
+	private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPluginDaoBean.class);
 
 	@Override
 	public List<MobileTerminalPlugin> getPluginList() throws ConfigDaoException {
@@ -65,15 +66,18 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
         }
 	}
 
-	//ToDo: Look at if a null check is needed on an incoming MobileTerminalPlugin entity before allowing a merge.
 	@Override
-	public MobileTerminalPlugin updatePlugin(MobileTerminalPlugin entity) throws TerminalDaoException {
+	public MobileTerminalPlugin updateMobileTerminalPlugin(MobileTerminalPlugin entity) throws TerminalDaoException {
+		if(entity == null || entity.getId() == null) {
+			// It's a defensive decision to prevent clients from using merge excessively instead of persist.
+			throw new TerminalDaoException(" [ There is no such MobileTerminalPlugin object to update ] ");
+		}
 		try {
-			em.merge(entity);
+			entity = em.merge(entity);
 			em.flush();
 			return entity;
 		} catch (Exception e) {
-			throw new TerminalDaoException("  [ update mobile terminal plugin ]");
+			throw new TerminalDaoException(" [ Error occurred while trying to update MobileTerminalPlugin ] ");
 		}
 	}
 }
