@@ -11,27 +11,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
-import org.hibernate.Query;
-import org.hibernate.Session;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import java.util.List;
 
 @Stateless
 public class TerminalDaoBean extends Dao implements TerminalDao {
-	final static Logger LOG = LoggerFactory.getLogger(TerminalDaoBean.class);
+
+    private final static Logger LOG = LoggerFactory.getLogger(TerminalDaoBean.class);
 
 	@Override
 	public MobileTerminal getMobileTerminalByGuid(String guid) throws NoEntityFoundException {
@@ -73,20 +72,14 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
         try {
             em.merge(terminal);
             em.flush();
-        } catch (RuntimeException e) {
-            LOG.error("[ Error when updating. ] {}", e.getMessage());
-            throw new TerminalDaoException("[ Error when updating. ]");
         } catch (Exception e) {
-            LOG.error("[ Error when updating. ] {}", e.getMessage());
-            throw new TerminalDaoException("[ Error when updating. ]");
-        } catch (Throwable e) {
             LOG.error("[ Error when updating. ] {}", e.getMessage());
             throw new TerminalDaoException("[ Error when updating. ]");
         }
     }
 
     @Override
-    public List<MobileTerminal> getMobileTerminalsByQuery(String sql) throws NoEntityFoundException {
+    public List<MobileTerminal> getMobileTerminalsByQuery(String sql) {
         Session session = em.unwrap(Session.class);
         Query query = session.createQuery(sql);
         return query.list();

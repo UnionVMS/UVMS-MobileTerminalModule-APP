@@ -1,20 +1,5 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.ejb.EJB;
-
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
@@ -24,6 +9,18 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import javax.ejb.EJB;
+import javax.persistence.PersistenceException;
+import java.util.*;
+
+import static org.junit.Assert.*;
 
 /**
  * Created by thofan on 2017-04-28.
@@ -32,15 +29,16 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTyp
 @RunWith(Arquillian.class)
 public class TerminalDaoBeanIT extends TransactionalTests {
 
-    final static Logger LOG = LoggerFactory.getLogger(TerminalDaoBeanIT.class);
-    Random rnd = new Random();
+    private Random rnd = new Random();
 
     @EJB
     private TerminalDao terminalDaoBean;
 
     @EJB
-    MobileTerminalPluginDao testDaoBean;
+    private MobileTerminalPluginDao testDaoBean;
 
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
 
     @Test
     @OperateOnDeployment("normal")
@@ -57,14 +55,37 @@ public class TerminalDaoBeanIT extends TransactionalTests {
                     (fetchedBySerialNo.getSerialNo() != null) &&
                     (fetchedBySerialNo.getSerialNo().equals(serialNo)));
 // @formatter:on
-            Assert.assertTrue(ok);
+            assertTrue(ok);
         } catch (TerminalDaoException e) {
-            Assert.fail();
-            LOG.error(e.toString(), e);
+            fail(e.getMessage());
         }
-
     }
 
+    @Test
+    @OperateOnDeployment("normal")
+    public void createMobileTerminal_WillFailWithUpdateUserConstraintViolation() {
+
+        thrown.expect(PersistenceException.class);
+        thrown.expectMessage("could not execute statement");
+
+        String serialNo = createSerialNumber();
+        MobileTerminal mobileTerminal = createMobileTerminalHelper(serialNo);
+
+        char[] chars = new char[61];
+        Arrays.fill(chars, 'x');
+        mobileTerminal.setUpdatedBy(new String(chars));
+
+        em.persist(mobileTerminal);
+        em.flush();
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void getMobileTerminalBySerialNo() {
+
+        // this is the same as create since they both use getMobileTerminalBySerialNo to verify functionality
+        createMobileTerminal();
+    }
 
     @Test
     @OperateOnDeployment("normal")
@@ -83,14 +104,11 @@ public class TerminalDaoBeanIT extends TransactionalTests {
                     (fetchedBySerialNo.getGuid() != null) &&
                     (!fetchedBySerialNo.getGuid().equals(uuid)));
 // @formatter:on
-            Assert.assertTrue(ok);
+            assertTrue(ok);
         } catch (TerminalDaoException e) {
-            Assert.fail();
-            LOG.error(e.toString(), e);
+            fail(e.getMessage());
         }
     }
-
-
 
     @Test
     @OperateOnDeployment("normal")
@@ -103,73 +121,37 @@ public class TerminalDaoBeanIT extends TransactionalTests {
             em.flush();
             MobileTerminal fetchedBySerialNo = terminalDaoBean.getMobileTerminalBySerialNo(serialNo);
             String fetchedGUID = fetchedBySerialNo.getGuid();
+            assertNotNull(fetchedGUID);
             MobileTerminal fetchedByGUID = terminalDaoBean.getMobileTerminalByGuid(fetchedGUID);
 // @formatter:off
-            boolean ok = ((fetchedBySerialNo != null) &&
-                    (fetchedBySerialNo.getSerialNo() != null) &&
-                    (fetchedBySerialNo.getGuid() != null) &&
-                    (fetchedBySerialNo.getSerialNo().equals(serialNo)) &&
-                    (fetchedByGUID != null)) &&
-                    (fetchedByGUID.getGuid() != null) &&
-                    (fetchedByGUID.getGuid().equals(fetchedBySerialNo.getGuid()));
+            boolean ok = (
+                            (fetchedBySerialNo.getSerialNo() != null) &&
+                            (fetchedBySerialNo.getGuid() != null) &&
+                            (fetchedBySerialNo.getSerialNo().equals(serialNo)) &&
+                            (fetchedByGUID != null)) &&
+                            (fetchedByGUID.getGuid() != null) &&
+                            (fetchedByGUID.getGuid().equals(fetchedBySerialNo.getGuid())
+                        );
 // @formatter:on
-            Assert.assertTrue(ok);
+            assertTrue(ok);
         } catch (TerminalDaoException e) {
-            Assert.fail();
-            LOG.error(e.toString(), e);
+            fail(e.getMessage());
         }
     }
 
     @Test
     @OperateOnDeployment("normal")
-    public void getMobileTerminalByGuid_NON_EXISTING_GUID() {
+    public void getMobileTerminalByGuid_NON_EXISTING_GUID() throws TerminalDaoException {
+
+        thrown.expect(NoEntityFoundException.class);
 
         String aNonExistingGuid = UUID.randomUUID().toString();
         String serialNo = createSerialNumber();
         MobileTerminal mobileTerminal = createMobileTerminalHelper(serialNo);
-        try {
-            terminalDaoBean.createMobileTerminal(mobileTerminal);
-            em.flush();
-            MobileTerminal fetchedByGUID = terminalDaoBean.getMobileTerminalByGuid(aNonExistingGuid);
-// @formatter:off
-            boolean ok = (
-                    (fetchedByGUID == null)
-            );
-// @formatter:on
-            Assert.fail();
-        } catch (NoEntityFoundException e) {
-            Assert.assertTrue(true);
-        } catch (TerminalDaoException e) {
-            Assert.fail();
-            LOG.error(e.toString(), e);
-        }
+        terminalDaoBean.createMobileTerminal(mobileTerminal);
+        em.flush();
+        terminalDaoBean.getMobileTerminalByGuid(aNonExistingGuid);
     }
-
-
-    @Test
-    @OperateOnDeployment("normal")
-    public void getMobileTerminalBySerialNo() {
-
-        // this is the same as create since they both use getMobileTerminalBySerialNo to verify functionallity
-
-        String serialNo = createSerialNumber();
-        MobileTerminal mobileTerminal = createMobileTerminalHelper(serialNo);
-        try {
-            terminalDaoBean.createMobileTerminal(mobileTerminal);
-            em.flush();
-            MobileTerminal fetchedBySerialNo = terminalDaoBean.getMobileTerminalBySerialNo(serialNo);
-// @formatter:off
-            boolean ok = ((fetchedBySerialNo != null) &&
-                    (fetchedBySerialNo.getSerialNo() != null) &&
-                    (fetchedBySerialNo.getSerialNo().equals(serialNo)));
-// @formatter:on
-            Assert.assertTrue(ok);
-        } catch (TerminalDaoException e) {
-            Assert.fail();
-            LOG.error(e.toString(), e);
-        }
-    }
-
 
     @Test
     @OperateOnDeployment("normal")
@@ -179,21 +161,22 @@ public class TerminalDaoBeanIT extends TransactionalTests {
 
         String updateUser = UUID.randomUUID().toString();
         mobileTerminal.setUpdatedBy(updateUser);
-        store(mobileTerminal);
+
+        em.persist(mobileTerminal);
+        em.flush();
 
         String sql = "SELECT m FROM MobileTerminal m WHERE m.updateuser = '" + updateUser + "'";
 
         try {
-            List<MobileTerminal>
-                    rs = terminalDaoBean.getMobileTerminalsByQuery(sql);
+            List<MobileTerminal> mobileTerminals = terminalDaoBean.getMobileTerminalsByQuery(sql);
 // @formatter:off
             boolean ok = (
-                    (rs != null) &&
-                            (rs.size() > 0));
+                    (mobileTerminals != null) &&
+                    (mobileTerminals.size() > 0));
 
             boolean found = false;
             if (ok) {
-                for (MobileTerminal mt : rs) {
+                for (MobileTerminal mt : mobileTerminals) {
                     String wrkUpdateUser = mt.getUpdatedBy();
                     if (wrkUpdateUser.equals(updateUser)) {
                         found = true;
@@ -203,13 +186,11 @@ public class TerminalDaoBeanIT extends TransactionalTests {
             }
             ok = ok && found;
 // @formatter:on
-            Assert.assertTrue(ok);
+            assertTrue(ok);
         } catch (TerminalDaoException e) {
-            Assert.fail();
-            LOG.error(e.toString(), e);
+            fail(e.getMessage());
         }
     }
-
 
     @Test
     @OperateOnDeployment("normal")
@@ -231,20 +212,37 @@ public class TerminalDaoBeanIT extends TransactionalTests {
                     (fetchedBySerialNo.getGuid() != null) &&
                     (fetchedBySerialNo.getGuid().equals("UPDATED")));
 // @formatter:on
-            Assert.assertTrue(ok);
+            assertTrue(ok);
         } catch (TerminalDaoException e) {
-            Assert.fail();
-            LOG.error(e.toString(), e);
+            fail(e.getMessage());
         }
-
     }
 
+    @Test
+    @OperateOnDeployment("normal")
+    public void updateMobileTerminal_WillFailWithGuidConstraintViolation() throws TerminalDaoException {
+
+        thrown.expect(TerminalDaoException.class);
+        thrown.expectMessage("[ Error when updating. ]");
+
+        String serialNo = createSerialNumber();
+        MobileTerminal mobileTerminal = createMobileTerminalHelper(serialNo);
+        terminalDaoBean.createMobileTerminal(mobileTerminal);
+        em.flush();
+        MobileTerminal fetchedBySerialNo = terminalDaoBean.getMobileTerminalBySerialNo(serialNo);
+
+        String uuid = UUID.randomUUID().toString() + "length-violation";
+        fetchedBySerialNo.setGuid(uuid);
+
+        terminalDaoBean.updateMobileTerminal(mobileTerminal);
+        em.flush();
+    }
 
     private MobileTerminal createMobileTerminalHelper(String serialNo) {
 
         MobileTerminal mt = new MobileTerminal();
 
-        MobileTerminalPlugin mtp = null;
+        MobileTerminalPlugin mtp;
 
         List<MobileTerminalPlugin> plugs = null;
         try {
@@ -252,7 +250,6 @@ public class TerminalDaoBeanIT extends TransactionalTests {
         } catch (ConfigDaoException e) {
             e.printStackTrace();
         }
-
 
         mtp = plugs.get(0);
         mt.setSerialNo(serialNo);
@@ -265,17 +262,9 @@ public class TerminalDaoBeanIT extends TransactionalTests {
         mt.setInactivated(false);
 
         return mt;
-
     }
 
     private String createSerialNumber() {
         return "SNU" + rnd.nextInt();
-
     }
-
-    private void store(MobileTerminal mobileTerminal) {
-        em.persist(mobileTerminal);
-        em.flush();
-    }
-
 }
