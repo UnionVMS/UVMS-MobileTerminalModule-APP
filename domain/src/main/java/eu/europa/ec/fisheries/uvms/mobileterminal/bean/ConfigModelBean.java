@@ -48,19 +48,19 @@ import java.util.*;
 @LocalBean
 public class ConfigModelBean  {
 
-    final static Logger LOG = LoggerFactory.getLogger(ConfigModelBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ConfigModelBean.class);
     
     @EJB
-    OceanRegionDao oceanRegionDao;
+    private OceanRegionDao oceanRegionDao;
 
     @EJB
-    MobileTerminalPluginDao mobileTerminalPluginDao;
+    private MobileTerminalPluginDao mobileTerminalPluginDao;
     
     @EJB
-    DNIDListDao dnidListDao;
+    private DNIDListDao dnidListDao;
     
     @EJB
-	ChannelDao channelDao;
+	private ChannelDao channelDao;
     
     public List<TerminalSystemType> getAllTerminalSystems() throws MobileTerminalModelException {
         Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> pluginsByType = getPlugins();
@@ -86,7 +86,7 @@ public class ConfigModelBean  {
         return terminalSystemList;
     }
 
-	public List<ConfigList> getConfigValues() throws MobileTerminalModelException {
+	public List<ConfigList> getConfigValues() {
 		List<ConfigList> configValues = new ArrayList<>();
 		for(MobileTerminalConfigType config : MobileTerminalConfigType.values()) {
 			ConfigList list = new ConfigList();
@@ -105,28 +105,6 @@ public class ConfigModelBean  {
 			configValues.add(list);
 		}
 		return configValues;
-	}
-
-	private List<String> getPollTimeSpan() {
-		List<String> list = new ArrayList<>();
-		list.add("Today");
-		return list;
-	}
-
-	private List<String> getTransponders() {
-		List<String> list = new ArrayList<>();
-		for(MobileTerminalTypeEnum transponder : MobileTerminalTypeEnum.values()) {
-			list.add(transponder.name());
-		}
-		return list;
-	}
-
-	private List<String> getPollTypes() {
-		List<String> list = new ArrayList<>();
-		for(PollTypeEnum type : PollTypeEnum.values()) {
-			list.add(type.name());
-		}
-		return list;
 	}
 	
 	MobileTerminalPlugin updatePlugin(PluginService plugin) throws TerminalDaoException {
@@ -203,30 +181,28 @@ public class ConfigModelBean  {
 		}
 		return dnids;
 	}
-	
-	private boolean changed(List<String> activeDnidList, List<DNIDList> existingDNIDList) {
-		if(activeDnidList.isEmpty() && existingDNIDList.isEmpty()) {
-			return false;
-		}
-		Set<String> activeDnidSet = new HashSet<String>(activeDnidList);
-		Set<String> entityDnidSet = new HashSet<String>();
-		for(DNIDList entity : existingDNIDList) {
-			entityDnidSet.add(entity.getDNID());
-		}
-		if(activeDnidSet.size() != entityDnidSet.size()) return true;
-		
-		for(String activeDnid : activeDnidSet) {
-			if(!entityDnidSet.contains(activeDnid)) {
+
+	public boolean checkDNIDListChange(String pluginName) {
+		//TODO fix sql query:
+
+		List<String> activeDnidList = channelDao.getActiveDNID(pluginName);
+		try {
+			List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
+			if(changed(activeDnidList, dnidList)) {
+				dnidListDao.removeByPluginName(pluginName);
+				for(String terminalDnid : activeDnidList) {
+					DNIDList dnid = new DNIDList();
+					dnid.setDNID(terminalDnid);
+					dnid.setPluginName(pluginName);
+					dnid.setUpdateTime(DateUtils.getNowDateUTC());
+					dnid.setUpdateUser(MobileTerminalConstants.UPDATE_USER);
+					dnidListDao.create(dnid);
+				}
 				return true;
 			}
+		} catch (ConfigDaoException e) {
+			LOG.error("Couldn't use DNID List {} {}",pluginName,e);
 		}
-		
-		for(String entityDnid : entityDnidSet) {
-			if(!activeDnidSet.contains(entityDnid)) {
-				return true;
-			}
-		}
-		
 		return false;
 	}
 
@@ -259,27 +235,50 @@ public class ConfigModelBean  {
         return plugins;
 	}
 
-	public boolean checkDNIDListChange(String pluginName) {
-		//TODO fix sql query:
+	private boolean changed(List<String> activeDnidList, List<DNIDList> existingDNIDList) {
+		if(activeDnidList.isEmpty() && existingDNIDList.isEmpty()) {
+			return false;
+		}
+		Set<String> activeDnidSet = new HashSet<>(activeDnidList);
+		Set<String> entityDnidSet = new HashSet<>();
+		for(DNIDList entity : existingDNIDList) {
+			entityDnidSet.add(entity.getDNID());
+		}
+		if(activeDnidSet.size() != entityDnidSet.size()) return true;
 
-		List<String> activeDnidList = channelDao.getActiveDNID(pluginName);
-		try {
-			List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
-			if(changed(activeDnidList, dnidList)) {
-				dnidListDao.removeByPluginName(pluginName);
-				for(String terminalDnid : activeDnidList) {
-					DNIDList dnid = new DNIDList();
-					dnid.setDNID(terminalDnid);
-					dnid.setPluginName(pluginName);
-					dnid.setUpdateTime(DateUtils.getNowDateUTC());
-					dnid.setUpdateUser(MobileTerminalConstants.UPDATE_USER);
-					dnidListDao.create(dnid);
-				}
+		for(String activeDnid : activeDnidSet) {
+			if(!entityDnidSet.contains(activeDnid)) {
 				return true;
 			}
-		} catch (ConfigDaoException e) {
-			LOG.error("Couldn't use DNID List {} {}",pluginName,e);
+		}
+
+		for(String entityDnid : entityDnidSet) {
+			if(!activeDnidSet.contains(entityDnid)) {
+				return true;
+			}
 		}
 		return false;
+	}
+
+	private List<String> getPollTimeSpan() {
+		List<String> list = new ArrayList<>();
+		list.add("Today");
+		return list;
+	}
+
+	private List<String> getTransponders() {
+		List<String> list = new ArrayList<>();
+		for(MobileTerminalTypeEnum transponder : MobileTerminalTypeEnum.values()) {
+			list.add(transponder.name());
+		}
+		return list;
+	}
+
+	private List<String> getPollTypes() {
+		List<String> list = new ArrayList<>();
+		for(PollTypeEnum type : PollTypeEnum.values()) {
+			list.add(type.name());
+		}
+		return list;
 	}
 }

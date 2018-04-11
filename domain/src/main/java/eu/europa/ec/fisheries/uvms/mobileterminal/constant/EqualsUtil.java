@@ -11,41 +11,34 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.constant;
 
-import java.util.Date;
-import java.util.Set;
-
-import org.apache.commons.collections.CollectionUtils;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.inmarsatc.InmarsatCHistoryOceanRegion;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
+import org.apache.commons.collections.CollectionUtils;
+
+import java.util.Date;
+import java.util.Objects;
+import java.util.Set;
 
 public class EqualsUtil {
 
 	public static boolean compare(String one, String two) {
-		if(one == null && two == null) return true;
-		if(one == null) return false;
-		return one.equalsIgnoreCase(two);
+		return Objects.equals(one, two);
 	}
 	
 	public static boolean compare(Date one, Date two) {
 		return DateUtils.equalsDate(one, two);
 	}
-	
-	public static boolean compare(Integer one, Integer two) {
-		if(one == null && two == null) return true;
-		if(one == null) return false;
-		return one.equals(two);
+
+	public static boolean compare(Boolean one, Boolean two) {
+		return Objects.equals(one, two);
 	}
 	
-	public static boolean compare(Boolean one, Boolean two) {
-		if(one == null && two == null) return true;
-		if(one == null) return false;
-		return one.equals(two);
+	public static boolean compare(Integer one, Integer two) {
+		return Objects.equals(one, two);
 	}
 	
 	public static int getHashCode(Object obj) {
-		if(obj == null) return 0;
-		return obj.hashCode();
+		return Objects.hashCode(obj);
 	}
 
 	public static boolean equalsOceanRegions(Set<InmarsatCHistoryOceanRegion> oceanRegionsOne, Set<InmarsatCHistoryOceanRegion> oceanRegionsTwo) {
@@ -65,5 +58,4 @@ public class EqualsUtil {
 	        return CollectionUtils.isEqualCollection(oceanRegionsOne, oceanRegionsTwo);
 	    }
 	}
-
 }

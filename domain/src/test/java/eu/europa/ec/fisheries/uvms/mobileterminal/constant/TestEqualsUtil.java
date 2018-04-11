@@ -11,25 +11,27 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.constant;
 
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
-import java.util.Arrays;
-import java.util.HashSet;
-
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.inmarsatc.InmarsatCHistoryOceanRegion;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.inmarsatc.InmarsatCHistoryOceanRegion;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashSet;
+
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(MockitoJUnitRunner.class)
 public class TestEqualsUtil {
 
-    InmarsatCHistoryOceanRegion AOR_E = getOceanRegion(581, "EAST_ATLANTIC");
-    InmarsatCHistoryOceanRegion POR = getOceanRegion(582, "PACIFIC");
-    InmarsatCHistoryOceanRegion IOR = getOceanRegion(583, "INDIAN");
-    InmarsatCHistoryOceanRegion AOR_W = getOceanRegion(584, "WEST_ATLANTIC");
+    private InmarsatCHistoryOceanRegion AOR_E = getOceanRegion(581, "EAST_ATLANTIC");
+    private InmarsatCHistoryOceanRegion POR = getOceanRegion(582, "PACIFIC");
+    private InmarsatCHistoryOceanRegion IOR = getOceanRegion(583, "INDIAN");
+    private InmarsatCHistoryOceanRegion AOR_W = getOceanRegion(584, "WEST_ATLANTIC");
 
     @Test
     public void testEqualsOceanRegionsBothEmpty() {
@@ -63,6 +65,34 @@ public class TestEqualsUtil {
                 EqualsUtil.equalsOceanRegions(new HashSet<>(Arrays.asList(AOR_W, IOR)), new HashSet<>(Arrays.asList(AOR_W, POR))));
     }
 
+    @Test
+    public void testCompareString() {
+        assertTrue(EqualsUtil.compare("test", new String("test")));
+        assertFalse(EqualsUtil.compare("test", new String("Test")));
+        assertFalse(EqualsUtil.compare("", null));
+    }
+
+    @Test
+    public void testCompareDate() {
+        assertTrue(EqualsUtil.compare(parseDate("2000-01-01"), parseDate("2000-01-01")));
+        assertFalse(EqualsUtil.compare(parseDate("2000-01-01"), parseDate("2010-01-01")));
+        assertFalse(EqualsUtil.compare(parseDate("2000-01-01"), null));
+    }
+
+    @Test
+    public void testCompareInteger() {
+        assertTrue(EqualsUtil.compare(10, new Integer(10)));
+        assertFalse(EqualsUtil.compare(10, new Integer(100)));
+        assertFalse(EqualsUtil.compare(10, null));
+    }
+
+    @Test
+    public void testCompareBoolean() {
+        assertTrue(EqualsUtil.compare(true, true));
+        assertFalse(EqualsUtil.compare(true, false));
+        assertFalse(EqualsUtil.compare(true, null));
+    }
+
     private InmarsatCHistoryOceanRegion getOceanRegion(Integer code, String name) {
         InmarsatCHistoryOceanRegion oceanRegion = new InmarsatCHistoryOceanRegion();
         oceanRegion.setCode(code);
@@ -70,4 +100,11 @@ public class TestEqualsUtil {
         return oceanRegion;
     }
 
+    private static Date parseDate(String date) {
+        try {
+            return new SimpleDateFormat("yyyy-MM-dd").parse(date);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
 }
