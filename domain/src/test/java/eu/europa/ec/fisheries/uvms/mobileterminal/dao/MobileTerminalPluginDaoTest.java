@@ -11,21 +11,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.QueryTimeoutException;
-import javax.persistence.TypedQuery;
-
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -34,31 +25,32 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class MobileTerminalPluginDaoTest {
 
 	@Mock
-	EntityManager em;
+	private EntityManager em;
 	@Mock
-	TypedQuery<MobileTerminalPlugin> query;
+	private TypedQuery<MobileTerminalPlugin> query;
 	@Mock
-	MobileTerminalPlugin plugin;
+	private MobileTerminalPlugin plugin;
 	
 	@InjectMocks
-	MobileTerminalPluginDaoBean testDaoBean;
+	private MobileTerminalPluginDaoBean testDaoBean;
 	
 	@Before
 	public void setUp() {
 		MockitoAnnotations.initMocks(this);
 	}
-	
+
 	@Test
 	public void testGetPluginListEmpty() throws ConfigDaoException {
 		List<MobileTerminalPlugin> result = new ArrayList<>();
@@ -105,7 +97,7 @@ public class MobileTerminalPluginDaoTest {
 		when(em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_ALL, MobileTerminalPlugin.class)).thenReturn(query);
 		when(query.getResultList()).thenThrow(new QueryTimeoutException());
 		
-		List<MobileTerminalPlugin> pluginList = testDaoBean.getPluginList();
+		testDaoBean.getPluginList();
 	}
 	
 	@Test(expected=TerminalDaoException.class)
@@ -145,7 +137,7 @@ public class MobileTerminalPluginDaoTest {
 		when(em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, MobileTerminalPlugin.class)).thenReturn(query);
 		when(query.getSingleResult()).thenThrow(new NoResultException());
 		
-		MobileTerminalPlugin result = testDaoBean.getPluginByServiceName(serviceClassName);
+		testDaoBean.getPluginByServiceName(serviceClassName);
 	}
 	
 	@Test
