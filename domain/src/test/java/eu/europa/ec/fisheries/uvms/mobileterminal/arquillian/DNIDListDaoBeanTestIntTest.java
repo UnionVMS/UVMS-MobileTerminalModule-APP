@@ -1,11 +1,8 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import java.util.Calendar;
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.validation.ConstraintViolationException;
-
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Rule;
@@ -13,9 +10,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
+import javax.ejb.EJB;
+import javax.validation.ConstraintViolationException;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.List;
 
 import static org.junit.Assert.*;
 
@@ -42,7 +41,7 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetDNIDList() throws ConfigDaoException {
+    public void testGetDNIDListByPlugin() throws ConfigDaoException {
         DNIDList dnidList = createDnidList();
         dnidListDao.create(dnidList);
         em.flush();
@@ -69,6 +68,7 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
 
         DNIDList dnidList = createDnidList();
         char[] dnId = new char[101];
+        Arrays.fill(dnId, 'x');
         dnidList.setDNID(new String(dnId));
         dnidListDao.create(dnidList);
         em.flush();
@@ -82,12 +82,25 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
 
         DNIDList dnidList = createDnidList();
         char[] pluginName = new char[501];
+        Arrays.fill(pluginName, 'x');
         dnidList.setPluginName(new String(pluginName));
         dnidListDao.create(dnidList);
         em.flush();
     }
 
-    //TODO: Implement negative tests when there exists constraints to actually test
+    @Test
+    @OperateOnDeployment("normal")
+    public void testCreateWithBadUpdateUser() throws ConfigDaoException {
+
+        thrown.expect(ConstraintViolationException.class);
+
+        DNIDList dnidList = createDnidList();
+        char[] updateUser = new char[61];
+        Arrays.fill(updateUser, 'x');
+        dnidList.setUpdateUser(new String(updateUser));
+        dnidListDao.create(dnidList);
+        em.flush();
+    }
 
     @Test
     @OperateOnDeployment("normal")
@@ -118,7 +131,7 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
         List<DNIDList> after = dnidListDao.getAllDNIDList();
         assertNotNull(after);
 
-        assertTrue(before.size() == (after.size() - 1));
+        assertEquals(before.size(), (after.size() - 1));
     }
 
     private DNIDList createDnidList() {
