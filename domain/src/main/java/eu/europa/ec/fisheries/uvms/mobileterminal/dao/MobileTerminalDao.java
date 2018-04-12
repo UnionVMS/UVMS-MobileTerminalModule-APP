@@ -11,9 +11,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+
 public interface MobileTerminalDao<T> {
 
-	public T createEntity(T entity);
+	public T createEntity(T entity) throws ConfigDaoException;
 	
 	public T getEntityById(Integer id);
 	

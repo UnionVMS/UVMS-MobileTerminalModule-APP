@@ -52,6 +52,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTyp
  */
 @Entity
 @NamedQueries({
+	@NamedQuery(name=MobileTerminalConstants.MOBILE_TERMINAL_FIND_ALL, query = "SELECT m FROM MobileTerminal m"),
 	@NamedQuery(name=MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_GUID, query="SELECT m FROM MobileTerminal m WHERE m.guid = :guid"),
 	@NamedQuery(name=MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_SERIAL_NO, query="SELECT m FROM MobileTerminal m WHERE m.serialNo = :serialNo")
 })
