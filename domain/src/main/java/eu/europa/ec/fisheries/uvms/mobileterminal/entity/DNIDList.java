@@ -58,6 +58,7 @@ public class DNIDList implements Serializable {
     @Column(name = "updattim")
     private Date updateTime;
 
+    @Size(max = 60)
     @Column(name = "upuser")
     private String updatedBy;
 

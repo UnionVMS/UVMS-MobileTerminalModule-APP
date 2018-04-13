@@ -12,11 +12,10 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import java.util.List;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 
 import javax.ejb.Local;
-
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import java.util.List;
 
 /**
  * Created by osdjup on 2016-11-16.
@@ -29,7 +28,7 @@ public interface ChannelDao {
      * @param idList
      * @return
      */
-    public List<Channel> getPollableListSearch(List<String> idList);
+    List<Channel> getPollableListSearch(List<String> idList);
 
-    public List<String> getActiveDNID(String pluginName);
+    List<String> getActiveDNID(String pluginName);
 }

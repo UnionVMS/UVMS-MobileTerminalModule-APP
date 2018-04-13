@@ -59,10 +59,11 @@ public class MobileTerminalPlugin implements Serializable {
     @Column(name = "name")
     private String name;
 
-    @Size(max=500)
+    @Size(max = 500)
     @Column(name = "service_name")
     private String pluginServiceName;
 
+    @Size(max = 50)
     @Column(name = "satellite_type")
     private String pluginSatelliteType;
 
