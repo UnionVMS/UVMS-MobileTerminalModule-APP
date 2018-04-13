@@ -38,7 +38,8 @@ public class PollSearchMapper {
 			throw new SearchMapperException("Non valid search criteria");
 		}
 
-		PollSearchKeyValue searchKeyValue = getSearchKeyValue(getSearchField(criteria.getKey()), searchKeys);
+		PollSearchField searchField = getSearchField(criteria.getKey());
+		PollSearchKeyValue searchKeyValue = getSearchKeyValue(searchField, searchKeys);
 		searchKeyValue.getValues().add(criteria.getValue());
 		return searchKeyValue;
 	}
@@ -82,52 +83,31 @@ public class PollSearchMapper {
 		}
 
 		final List<String> searchFields = new ArrayList<>();
-		final String innerJoinPollBase = " INNER JOIN p.pollBase pb";
-		final String innerJoinMobTerminal = " INNER JOIN pb.mobileterminal mt ";
-		final String innerJoinMobTermConnect = " INNER JOIN mt.mobileterminalconnect tc ";
 
 		for (PollSearchKeyValue keyValue : searchKeys) {
-
 			PollSearchField pollSearchField = keyValue.getSearchField();
-
 			String tableName = pollSearchField.getTable().getTableName();
-			String connectIdTableName = PollSearchField.CONNECT_ID.getTable().getTableName();
-			String terminalTypeTableName = PollSearchField.TERMINAL_TYPE.getTable().getTableName();
-			String userTableName = PollSearchField.USER.getTable().getTableName();
-
-			if (!searchFields.contains(tableName) &&
-					!searchFields.contains(connectIdTableName) &&
-					!searchFields.contains(terminalTypeTableName) &&
-					tableName.equals(userTableName)) {
-
-				builder.append(innerJoinPollBase);
-
-			} else if (!searchFields.contains(tableName) &&
-					tableName.equals(terminalTypeTableName)) {
-
-				if (!searchFields.contains(userTableName)) {
-					builder.append(innerJoinPollBase);
-					searchFields.add(userTableName);
-				}
-				builder.append(innerJoinMobTerminal);
-
-			} else if (!searchFields.contains(tableName) &&
-					!searchFields.contains(connectIdTableName) &&
-					tableName.equals(connectIdTableName)) {
-
-				if (!searchFields.contains(userTableName)) {
-					builder.append(innerJoinPollBase);
-					searchFields.add(userTableName);
-				}
-				if (!searchFields.contains(terminalTypeTableName)) {
-					builder.append(innerJoinMobTerminal);
-					searchFields.add(terminalTypeTableName);
-				}
-				builder.append(innerJoinMobTermConnect);
-			}
-
 			if (!searchFields.contains(tableName))
 				searchFields.add(tableName);
+		}
+
+		String userTableName = PollSearchField.USER.getTable().getTableName();
+		String terminalTypeTableName = PollSearchField.TERMINAL_TYPE.getTable().getTableName();
+		String connectIdTableName = PollSearchField.CONNECT_ID.getTable().getTableName();
+
+		if(searchFields.contains(userTableName))
+			builder.append(" INNER JOIN p.pollBase pb");
+		if(searchFields.contains(terminalTypeTableName)) {
+			if (!searchFields.contains(userTableName))
+				builder.append(" INNER JOIN p.pollBase pb");
+			builder.append(" INNER JOIN pb.mobileterminal mt ");
+		}
+		if(searchFields.contains(connectIdTableName)) {
+			if (!searchFields.contains(userTableName))
+				builder.append(" INNER JOIN p.pollBase pb");
+			if (!searchFields.contains(terminalTypeTableName))
+				builder.append(" INNER JOIN pb.mobileterminal mt ");
+			builder.append(" INNER JOIN mt.mobileterminalconnect tc ");
 		}
 
 		if (!searchKeys.isEmpty()) {
