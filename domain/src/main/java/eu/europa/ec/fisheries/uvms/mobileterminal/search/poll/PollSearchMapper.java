@@ -11,86 +11,130 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.search.poll;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.ListCriteria;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.SearchKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception.SearchMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class PollSearchMapper {
 
 	public static List<PollSearchKeyValue> createSearchFields(List<ListCriteria> criterias) throws SearchMapperException {
 		Map<PollSearchField, PollSearchKeyValue> searchKeyValues = new HashMap<>();
-        for (ListCriteria criteria : criterias) {
-        	PollSearchKeyValue keyValue = mapSearchKey(criteria, searchKeyValues);
-            searchKeyValues.put(keyValue.getSearchField(), keyValue);
-        }
-        return new ArrayList<PollSearchKeyValue>(searchKeyValues.values());
+		for (ListCriteria criteria : criterias) {
+			PollSearchKeyValue keyValue = mapSearchKey(criteria, searchKeyValues);
+			searchKeyValues.put(keyValue.getSearchField(), keyValue);
+		}
+		return new ArrayList<>(searchKeyValues.values());
 	}
-	
-    private static PollSearchKeyValue mapSearchKey(ListCriteria criteria, Map<PollSearchField, PollSearchKeyValue> searchKeys) throws SearchMapperException {
-        if (criteria == null || criteria.getKey() == null || criteria.getValue() == null) {
-            throw new SearchMapperException("Non valid search criteria");
-        }
 
-        PollSearchKeyValue searchKeyValue = getSearchKeyValue(getSearchField(criteria.getKey()), searchKeys);
-        searchKeyValue.getValues().add(criteria.getValue());
-        return searchKeyValue;
-    }
-	
-    private static PollSearchKeyValue getSearchKeyValue(PollSearchField field, Map<PollSearchField, PollSearchKeyValue> searchKeys) {
-    	PollSearchKeyValue searchKeyValue = searchKeys.get(field);
-        if (searchKeyValue == null) {
-            searchKeyValue = new PollSearchKeyValue();
-        }
-        searchKeyValue.setSearchField(field);
-        return searchKeyValue;
-    }
-    
+	private static PollSearchKeyValue mapSearchKey(ListCriteria criteria, Map<PollSearchField, PollSearchKeyValue> searchKeys) throws SearchMapperException {
+		if (criteria == null || criteria.getKey() == null || criteria.getValue() == null) {
+			throw new SearchMapperException("Non valid search criteria");
+		}
+
+		PollSearchKeyValue searchKeyValue = getSearchKeyValue(getSearchField(criteria.getKey()), searchKeys);
+		searchKeyValue.getValues().add(criteria.getValue());
+		return searchKeyValue;
+	}
+
+	private static PollSearchKeyValue getSearchKeyValue(PollSearchField field, Map<PollSearchField, PollSearchKeyValue> searchKeys) {
+		PollSearchKeyValue searchKeyValue = searchKeys.get(field);
+		if (searchKeyValue == null) {
+			searchKeyValue = new PollSearchKeyValue();
+		}
+		searchKeyValue.setSearchField(field);
+		return searchKeyValue;
+	}
+
 	private static PollSearchField getSearchField(SearchKey key) throws SearchMapperException {
-		switch(key) {
-		case CONNECT_ID:
-			return PollSearchField.CONNECT_ID;
-		case POLL_ID:
-			return PollSearchField.POLL_ID;
-		case POLL_TYPE:
-			return PollSearchField.POLL_TYPE;
-		case TERMINAL_TYPE:
-			return PollSearchField.TERMINAL_TYPE;
-		case USER:
-			return PollSearchField.USER;
-		default:
-			throw new SearchMapperException("No searchKey " + key.name());
+		switch (key) {
+			case CONNECT_ID:
+				return PollSearchField.CONNECT_ID;
+			case POLL_ID:
+				return PollSearchField.POLL_ID;
+			case POLL_TYPE:
+				return PollSearchField.POLL_TYPE;
+			case TERMINAL_TYPE:
+				return PollSearchField.TERMINAL_TYPE;
+			case USER:
+				return PollSearchField.USER;
+			default:
+				throw new SearchMapperException("No searchKey " + key.name());
 		}
 	}
 
-	/**
+	/*
 	 * ToDo: This method builds an invalid sql phrase when enum PollSearchField.CONNECT_ID is set in PollSearchKeyValue.
-	 * ToDo: Sql being built is: "SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE tc.connectValue IN (:connectionValue) "
-	 * ToDo: It also causes an exception in method getPollListSearchCount() in PollDaoBean (row 84) when enum SearchField.USER is set in PollSearchKeyValue
-	 * ToDo: as it expects a Long return value but it gets an object of type Poll.
+	 * ToDo: It's based on MobileTerminalConnect entity class is not implemented yet.
 	 */
 
 	private static String createSearchSql(List<PollSearchKeyValue> searchKeys, boolean isDynamic) {
 		StringBuilder builder = new StringBuilder();
 		String OPERATOR = " OR ";
-		if(isDynamic) {
+		if (isDynamic) {
 			OPERATOR = " AND ";
 		}
-		
-		builder.append(" INNER JOIN p.pollBase pb ");
-		builder.append(" INNER JOIN pb.mobileterminal mt ");
-		
-		if(!searchKeys.isEmpty()) {
+
+		final List<String> searchFields = new ArrayList<>();
+		final String innerJoinPollBase = " INNER JOIN p.pollBase pb";
+		final String innerJoinMobTerminal = " INNER JOIN pb.mobileterminal mt ";
+		final String innerJoinMobTermConnect = " INNER JOIN mt.mobileterminalconnect tc ";
+
+		for (PollSearchKeyValue keyValue : searchKeys) {
+
+			PollSearchField pollSearchField = keyValue.getSearchField();
+
+			String tableName = pollSearchField.getTable().getTableName();
+			String connectIdTableName = PollSearchField.CONNECT_ID.getTable().getTableName();
+			String terminalTypeTableName = PollSearchField.TERMINAL_TYPE.getTable().getTableName();
+			String userTableName = PollSearchField.USER.getTable().getTableName();
+
+			if (!searchFields.contains(tableName) &&
+					!searchFields.contains(connectIdTableName) &&
+					!searchFields.contains(terminalTypeTableName) &&
+					tableName.equals(userTableName)) {
+
+				builder.append(innerJoinPollBase);
+
+			} else if (!searchFields.contains(tableName) &&
+					tableName.equals(terminalTypeTableName)) {
+
+				if (!searchFields.contains(userTableName)) {
+					builder.append(innerJoinPollBase);
+					searchFields.add(userTableName);
+				}
+				builder.append(innerJoinMobTerminal);
+
+			} else if (!searchFields.contains(tableName) &&
+					!searchFields.contains(connectIdTableName) &&
+					tableName.equals(connectIdTableName)) {
+
+				if (!searchFields.contains(userTableName)) {
+					builder.append(innerJoinPollBase);
+					searchFields.add(userTableName);
+				}
+				if (!searchFields.contains(terminalTypeTableName)) {
+					builder.append(innerJoinMobTerminal);
+					searchFields.add(terminalTypeTableName);
+				}
+				builder.append(innerJoinMobTermConnect);
+			}
+
+			if (!searchFields.contains(tableName))
+				searchFields.add(tableName);
+		}
+
+		if (!searchKeys.isEmpty()) {
 			builder.append(" WHERE ");
 			boolean first = true;
-			for(PollSearchKeyValue keyValue : searchKeys) {
-				if(first) {
+			for (PollSearchKeyValue keyValue : searchKeys) {
+				if (first) {
 					first = false;
 				} else {
 					builder.append(OPERATOR);
@@ -99,15 +143,12 @@ public class PollSearchMapper {
 				builder.append(" IN (:").append(keyValue.getSearchField().getSqlReplaceToken()).append(") ");
 			}
 		}
-		
+
 		return builder.toString();
 	}
-	
+
 	public static String createCountSearchSql(List<PollSearchKeyValue> searchKeys, boolean isDynamic) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT COUNT (DISTINCT p) FROM Poll p ");
-		builder.append(createSearchSql(searchKeys, isDynamic));
-		return builder.toString();
+		return "SELECT COUNT (DISTINCT p) FROM Poll p " + createSearchSql(searchKeys, isDynamic);
 	}
 
 	public static String createSelectSearchSql(List<PollSearchKeyValue> searchKeys, boolean isDynamic) {
@@ -116,7 +157,7 @@ public class PollSearchMapper {
 		builder.append(createSearchSql(searchKeys, isDynamic));
 		return builder.toString();
 	}
-	
+
 	public static String createPollableSearchSql(List<String> idList) {
 		StringBuilder builder = new StringBuilder();
 		builder.append("SELECT DISTINCT c FROM Channel c");
@@ -131,7 +172,7 @@ public class PollSearchMapper {
 		builder.append(" AND mt.archived = '0' AND mt.inactivated = '0' AND p.pluginInactive = '0' ");
 		builder.append(" AND (cap.name = 'POLLABLE' AND UPPER(cap.value) = 'TRUE' ) ");
 		builder.append(" AND (me.connectId is not null) ");
-		if( idList != null && !idList.isEmpty()) {
+		if (idList != null && !idList.isEmpty()) {
 			builder.append(" AND me.connectId IN :idList");
 		}
 		builder.append(" ORDER BY c.guid DESC ");
