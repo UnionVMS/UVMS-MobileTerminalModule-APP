@@ -63,12 +63,16 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
             em.flush();
         } catch (Exception e) {
             LOG.error("[ Error when creating. ] {}", e.getMessage());
-            throw new TerminalDaoException("[ Error when creating. ]");
+            throw new TerminalDaoException("[ Error when creating. ]" + e.getMessage());
         }
     }
 
     @Override
     public void updateMobileTerminal(MobileTerminal terminal) throws TerminalDaoException {
+        if(terminal == null || terminal.getId() == null) {
+            // It's a defensive decision to prevent clients from using merge excessively instead of persist.
+            throw new TerminalDaoException(" [ There is no such persisted entity to update ] ");
+        }
         try {
             em.merge(terminal);
             em.flush();

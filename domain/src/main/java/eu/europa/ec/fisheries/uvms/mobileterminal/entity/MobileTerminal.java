@@ -94,6 +94,7 @@ public class MobileTerminal implements Serializable {
 	@Column(name="updatetime")
 	private Date updatetime;
 
+	@Size(max = 60)
 	@Column(name="updateuser")
 	private String updateuser;
 
@@ -113,8 +114,6 @@ public class MobileTerminal implements Serializable {
 	public MobileTerminal() {
 	}
 
-	// TODO  is this really OK ??????
-	// TODO if GUID set at creation time it will be ovrwritten !!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	@PrePersist
 	private void atPrePersist() {
 		setGuid(UUID.randomUUID().toString());
