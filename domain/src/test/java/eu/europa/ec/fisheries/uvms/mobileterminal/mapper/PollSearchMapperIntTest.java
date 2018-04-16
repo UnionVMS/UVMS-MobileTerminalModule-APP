@@ -51,23 +51,24 @@ public class PollSearchMapperIntTest extends TransactionalTests {
 
             String selectSql = PollSearchMapper.createCountSearchSql(pollSearchKeyValueList, isDynamic);
             assertNotNull(selectSql);
-            assertTrue(selectSql.contains("SELECT COUNT (DISTINCT p) FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE"));
+            assertTrue(selectSql.contains("SELECT COUNT (DISTINCT p) FROM Poll p "));
 
             switch(searchKey) {
                 case CONNECT_ID:
                     assertTrue(selectSql.contains("tc.connectValue IN (:connectionValue) "));
-                    continue;
+                    break;
                 case POLL_ID:
                     assertTrue(selectSql.contains("p.guid IN (:guid) "));
-                    continue;
+                    break;
                 case POLL_TYPE:
                     assertTrue(selectSql.contains("p.pollType IN (:pollType) "));
-                    continue;
+                    break;
                 case TERMINAL_TYPE:
                     assertTrue(selectSql.contains("mt.mobileTerminalType IN (:mobileTerminalType) "));
-                    continue;
+                    break;
                 case USER:
                     assertTrue(selectSql.contains("pb.creator IN (:creator) "));
+                    break;
             }
         }
     }
@@ -88,7 +89,7 @@ public class PollSearchMapperIntTest extends TransactionalTests {
 
             String selectSql = PollSearchMapper.createSelectSearchSql(pollSearchKeyValueList, isDynamic);
             assertNotNull(selectSql);
-            assertTrue(selectSql.contains("SELECT DISTINCT p FROM Poll p  INNER JOIN p.pollBase pb  INNER JOIN pb.mobileterminal mt  WHERE"));
+            assertTrue(selectSql.contains("SELECT DISTINCT p FROM Poll p "));
 
             switch(searchKey) {
                 case CONNECT_ID:
