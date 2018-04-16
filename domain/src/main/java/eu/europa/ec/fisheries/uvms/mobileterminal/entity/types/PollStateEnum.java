@@ -21,12 +21,11 @@ public enum PollStateEnum {
 
     private Integer id;
 
-    private PollStateEnum(int id) {
+    PollStateEnum(int id) {
         this.id = id;
     }
 
     public Integer getId() {
         return id;
     }
-
 }

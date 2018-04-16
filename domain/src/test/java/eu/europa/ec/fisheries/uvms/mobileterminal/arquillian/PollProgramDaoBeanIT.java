@@ -1,22 +1,5 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.UUID;
-
-import javax.ejb.EJB;
-import javax.persistence.Query;
-
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Assert;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
-import org.junit.runner.RunWith;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
@@ -31,6 +14,16 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSou
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Rule;
+import org.junit.Test;
+import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+
+import javax.ejb.EJB;
+import javax.validation.ConstraintViolationException;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
@@ -44,7 +37,6 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     private Calendar cal = Calendar.getInstance();
 
     private int startYear = 1999;
-    private int endYear = 2019;
     private int latestRunYear = 2017;
 
     private Random rnd = new Random();
@@ -63,140 +55,147 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void createPollProgram() {
+    public void createPollProgram() throws PollDaoException {
 
         // we want to be able to tamper with the dates for proper test coverage
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_MONTH, 20);
-        cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
 
         String mobileTerminalSerialNumber = createSerialNumber();
         PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
-        try {
-            pollProgramDao.createPollProgram(pollProgram);
-            String guid = pollProgram.getGuid();
-            PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
+
+        pollProgramDao.createPollProgram(pollProgram);
+        String guid = pollProgram.getGuid();
+        PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
 
 //@formatter:off
-            boolean ok = ((fetchedPollProgram != null) &&
-                    (fetchedPollProgram.getGuid() != null) &&
-                    (fetchedPollProgram.getGuid().equals(guid)));
-// @formatter:on
-            assertTrue(ok);
-        } catch (PollDaoException e) {
-            fail(e.getMessage());
-        }
+        boolean ok = ((fetchedPollProgram != null) &&
+                (fetchedPollProgram.getGuid() != null) &&
+                (fetchedPollProgram.getGuid().equals(guid)));
+//@formatter:on
+        assertTrue(ok);
     }
 
     @Test
     @OperateOnDeployment("normal")
-    public void updatePollProgram() {
+    public void createPollProgram_updateUserConstraintViolation() throws PollDaoException {
+
+        thrown.expect(ConstraintViolationException.class);
+        thrown.expectMessage("Validation failed for classes [eu.europa.ec.fisheries.uvms.mobileterminal.entity" +
+                ".poll.PollProgram] during persist time for groups [javax.validation.groups.Default, ]");
+
+        // we want to be able to tamper with the dates for proper test coverage
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
+
+        String mobileTerminalSerialNumber = createSerialNumber();
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
+        char[] updatedBy = new char[61];
+        Arrays.fill(updatedBy, 'x');
+        pollProgram.setUpdatedBy(new String(updatedBy));
+
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void createPollProgram_withNullWillFail() throws PollDaoException {
+        thrown.expect(PollDaoException.class);
+        thrown.expectMessage("[ create poll program ] attempt to create create event with null entity");
+
+        pollProgramDao.createPollProgram(null);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void updatePollProgram() throws PollDaoException {
 
         // we want to be able to tamper with the dates for proper test  coverage
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_MONTH, 20);
-        cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
 
         String mobileTerminalSerialNumber = createSerialNumber();
         PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
-        try {
-            pollProgramDao.createPollProgram(pollProgram);
-            em.flush();
 
-            // change the GUID
-            String guid = UUID.randomUUID().toString();
-            pollProgram.setGuid(guid);
-            pollProgram.setUpdatedBy("update");
-            // store
-            pollProgramDao.updatePollProgram(pollProgram);
-            em.flush();
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
 
-            PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
+        // change the GUID
+        String guid = UUID.randomUUID().toString();
+        pollProgram.setGuid(guid);
+        pollProgram.setUpdatedBy("update");
+        // store
+        pollProgramDao.updatePollProgram(pollProgram);
+        em.flush();
+
+        PollProgram fetchedPollProgram = pollProgramDao.getPollProgramByGuid(guid);
 
 // @formatter:off
-            boolean ok = ((fetchedPollProgram != null) &&
-                    (fetchedPollProgram.getGuid() != null) &&
-                    (fetchedPollProgram.getGuid().equals(guid)) &&
-                    (fetchedPollProgram.getUpdatedBy() != null) &&
-                    (fetchedPollProgram.getUpdatedBy().equals("update")));
+        boolean ok = ((fetchedPollProgram != null) &&
+                (fetchedPollProgram.getGuid() != null) &&
+                (fetchedPollProgram.getGuid().equals(guid)) &&
+                (fetchedPollProgram.getUpdatedBy() != null) &&
+                (fetchedPollProgram.getUpdatedBy().equals("update")));
 // @formatter:on
-            assertTrue(ok);
-
-        } catch (PollDaoException e) {
-            fail(e.getMessage());
-        }
+        assertTrue(ok);
     }
 
     @Test
     @OperateOnDeployment("normal")
-    public void getProgramPollsAlive() {
+    public void updatePollProgram_WithNonePersistedEntityWillFail() throws PollDaoException {
 
-        // we want to be able to tamper with the dates for proper test coverage
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
+        thrown.expect(PollDaoException.class);
+        thrown.expectMessage(" [ There is no such persisted entity to update ] ");
 
-
-        cal.set(Calendar.DAY_OF_MONTH, 20);
-        cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
-
-
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        // we want to be able to tamper with the dates for proper test  coverage
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
 
         String mobileTerminalSerialNumber = createSerialNumber();
         PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
 
-        try {
-            pollProgramDao.createPollProgram(pollProgram);
-            em.flush();
-            List<PollProgram> pollsAlive = pollProgramDao.getProgramPollsAlive();
-            boolean found = false;
-            for (PollProgram pp : pollsAlive) {
-                String tmpGuid = pp.getGuid();
-                if (tmpGuid.equals(pollProgram.getGuid())) {
-                    found = true;
-                    break;
-                }
-            }
-            assertTrue(found);
-        } catch (PollDaoException e) {
-            fail(e.getMessage());
-        }
+        pollProgramDao.updatePollProgram(pollProgram);
+        em.flush();
     }
 
     @Test
     @OperateOnDeployment("normal")
-    public void getProgramPollsAlive_ShouldFailWithCurrentDateBiggerThenStopDate() {
+    public void getProgramPollsAlive() throws PollDaoException {
 
         // we want to be able to tamper with the dates for proper test coverage
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
 
+        String mobileTerminalSerialNumber = createSerialNumber();
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
 
-        cal.set(Calendar.DAY_OF_MONTH, 20);
-        cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
+        List<PollProgram> pollsAlive = pollProgramDao.getProgramPollsAlive();
+        boolean found = false;
+        for (PollProgram pp : pollsAlive) {
+            String tmpGuid = pp.getGuid();
+            if (tmpGuid.equals(pollProgram.getGuid())) {
+                found = true;
+                break;
+            }
+        }
+        assertTrue(found);
+    }
 
+    @Test
+    @OperateOnDeployment("normal")
+    public void getProgramPollsAlive_ShouldFailWithCurrentDateBiggerThenStopDate() throws PollDaoException {
+
+        // we want to be able to tamper with the dates for proper test coverage
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
 
         cal.set(Calendar.DAY_OF_MONTH, 28);
         cal.set(Calendar.YEAR, startYear - 1);
@@ -205,123 +204,194 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         String mobileTerminalSerialNumber = createSerialNumber();
         PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
 
-        try {
-            pollProgramDao.createPollProgram(pollProgram);
-            em.flush();
-            List<PollProgram> pollsAlive = pollProgramDao.getProgramPollsAlive();
-            boolean found = false;
-            for (PollProgram pp : pollsAlive) {
-                String tmpGuid = pp.getGuid();
-                if (tmpGuid.equals(pollProgram.getGuid())) {
-                    found = true;
-                    break;
-                }
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
+        List<PollProgram> pollsAlive = pollProgramDao.getProgramPollsAlive();
+        boolean found = false;
+        for (PollProgram pp : pollsAlive) {
+            String tmpGuid = pp.getGuid();
+            if (tmpGuid.equals(pollProgram.getGuid())) {
+                found = true;
+                break;
             }
-            assertFalse(found);
-        } catch (PollDaoException e) {
-            fail(e.getMessage());
         }
+        assertFalse(found);
     }
 
     @Test
     @OperateOnDeployment("normal")
-    public void getPollProgramRunningAndStarted() {
+    public void getProgramPollsAlive_ShouldFailWithPollStateArchived() throws PollDaoException {
+
+        // we want to be able to tamper with the dates for proper test coverage
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
+
+        String mobileTerminalSerialNumber = createSerialNumber();
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
+        pollProgram.setPollState(PollStateEnum.ARCHIVED);
+
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
+        List<PollProgram> pollsAlive = pollProgramDao.getProgramPollsAlive();
+        boolean found = false;
+        for (PollProgram pp : pollsAlive) {
+            String tmpGuid = pp.getGuid();
+            if (tmpGuid.equals(pollProgram.getGuid())) {
+                found = true;
+                break;
+            }
+        }
+        assertFalse(found);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void getPollProgramRunningAndStarted() throws PollDaoException {
 
         Date now = DateUtils.getUTCNow();
         cal.setTime(now);
 
         // we want to be able to tamper with the dates for proper test coverage
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
-
-
-        cal.set(Calendar.DAY_OF_MONTH, 20);
-        cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
-
-
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
 
         String mobileTerminalSerialNumber = createSerialNumber();
         PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
 
-        try {
-            pollProgramDao.createPollProgram(pollProgram);
-            em.flush();
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
 
-            List<PollProgram> pollPrograms;
+        List<PollProgram> pollPrograms;
 
-            pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
+        pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
 
-            boolean found = false;
-            for (PollProgram pp : pollPrograms) {
-                String tmpGuid = pp.getGuid();
-                if (tmpGuid.equals(pollProgram.getGuid())) {
-                    found = true;
-                    break;
-                }
+        boolean found = false;
+        for (PollProgram pp : pollPrograms) {
+            String tmpGuid = pp.getGuid();
+            if (tmpGuid.equals(pollProgram.getGuid())) {
+                found = true;
+                break;
             }
-            assertTrue(found);
-            assertTrue(pollPrograms.size() > 0);
-        } catch (PollDaoException e) {
-            fail(e.getMessage());
         }
+        assertTrue(found);
+        assertTrue(pollPrograms.size() > 0);
     }
 
     @Test
     @OperateOnDeployment("normal")
-    public void getPollProgramRunningAndStarted_ShouldFailWhenLatestRunBiggerThenNow() {
+    public void getPollProgramRunningAndStarted_ShouldFailWhenLatestRunBiggerThenNow() throws PollDaoException {
 
         Date now = DateUtils.getUTCNow();
         cal.setTime(now);
 
         // we want to be able to tamper with the dates for proper test coverage
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
-
+        Date startDate = getStartDate();
 
         cal.set(Calendar.DAY_OF_MONTH, 20);
         cal.set(Calendar.YEAR, latestRunYear + 3);
         Date latestRun = cal.getTime();
 
-
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        Date stopDate = getStopDate();
 
         String mobileTerminalSerialNumber = createSerialNumber();
         PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
 
-        try {
-            pollProgramDao.createPollProgram(pollProgram);
-            em.flush();
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
 
-            List<PollProgram> pollPrograms;
+        List<PollProgram> pollPrograms;
 
-            pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
+        pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
 
-            boolean found = false;
-            for (PollProgram pp : pollPrograms) {
-                String tmpGuid = pp.getGuid();
-                if (tmpGuid.equals(pollProgram.getGuid())) {
-                    found = true;
-                    break;
-                }
+        boolean found = false;
+        for (PollProgram pp : pollPrograms) {
+            String tmpGuid = pp.getGuid();
+            if (tmpGuid.equals(pollProgram.getGuid())) {
+                found = true;
+                break;
             }
-            assertFalse(found);
-            assertFalse(pollPrograms.size() > 0);
-        } catch (PollDaoException e) {
-            fail(e.getMessage());
         }
+        assertFalse(found);
+        assertFalse(pollPrograms.size() > 0);
     }
 
     @Test
     @OperateOnDeployment("normal")
-    public void getPollProgramByGuid() {
+    public void getPollProgramRunningAndStarted_ShouldFailWhenStartDateBiggerThenNow() throws PollDaoException {
+
+        Date now = DateUtils.getUTCNow();
+        cal.setTime(now);
+
+        // we want to be able to tamper with the dates for proper test coverage
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.YEAR, cal.get(Calendar.YEAR) + 1);
+        Date startDate = cal.getTime();
+
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
+
+        String mobileTerminalSerialNumber = createSerialNumber();
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
+
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
+
+        List<PollProgram> pollPrograms;
+
+        pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
+
+        boolean found = false;
+        for (PollProgram pp : pollPrograms) {
+            String tmpGuid = pp.getGuid();
+            if (tmpGuid.equals(pollProgram.getGuid())) {
+                found = true;
+                break;
+            }
+        }
+        assertFalse(found);
+        assertFalse(pollPrograms.size() > 0);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void getPollProgramRunningAndStarted_ShouldFailWhenPollStateIsNotStarted() throws PollDaoException {
+
+        Date now = DateUtils.getUTCNow();
+        cal.setTime(now);
+
+        // we want to be able to tamper with the dates for proper test coverage
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
+
+        String mobileTerminalSerialNumber = createSerialNumber();
+        PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
+        pollProgram.setPollState(PollStateEnum.STOPPED);
+
+        pollProgramDao.createPollProgram(pollProgram);
+        em.flush();
+
+        List<PollProgram> pollPrograms;
+
+        pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
+
+        boolean found = false;
+        for (PollProgram pp : pollPrograms) {
+            String tmpGuid = pp.getGuid();
+            if (tmpGuid.equals(pollProgram.getGuid())) {
+                found = true;
+                break;
+            }
+        }
+        assertFalse(found);
+        assertFalse(pollPrograms.size() > 0);
+    }
+
+    @Test
+    @OperateOnDeployment("normal")
+    public void getPollProgramByGuid() throws PollDaoException {
         // same as create since it uses the same methods to validate itself
         createPollProgram();
     }
@@ -334,17 +404,9 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         thrown.expectMessage("No entity found getting by id");
 
         // we want to be able to tamper with the dates for proper test coverage
-        cal.set(Calendar.DAY_OF_MONTH, 1);
-        cal.set(Calendar.YEAR, startYear);
-        Date startDate = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_MONTH, 20);
-        cal.set(Calendar.YEAR, latestRunYear);
-        Date latestRun = cal.getTime();
-
-        cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.YEAR, endYear);
-        Date stopDate = cal.getTime();
+        Date startDate = getStartDate();
+        Date latestRun = getLatestRunDate();
+        Date stopDate = getStopDate();
 
         String mobileTerminalSerialNumber = createSerialNumber();
         PollProgram pollProgram = createPollProgramHelper(mobileTerminalSerialNumber, startDate, stopDate, latestRun);
@@ -383,10 +445,9 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     private MobileTerminal createMobileTerminalHelper(String serialNo) {
 
         MobileTerminal mt = new MobileTerminal();
-
         MobileTerminalPlugin mtp;
-
         List<MobileTerminalPlugin> plugs = null;
+
         try {
             plugs = testDaoBean.getPluginList();
         } catch (ConfigDaoException e) {
@@ -412,8 +473,25 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         }
     }
 
+    private Date getStartDate() {
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        cal.set(Calendar.YEAR, startYear);
+        return cal.getTime();
+    }
+
+    private Date getLatestRunDate() {
+        cal.set(Calendar.DAY_OF_MONTH, 20);
+        cal.set(Calendar.YEAR, latestRunYear);
+        return cal.getTime();
+    }
+    
+    private Date getStopDate() {
+        cal.set(Calendar.DAY_OF_MONTH, 28);
+        cal.set(Calendar.YEAR, 2019);
+        return cal.getTime();
+    }
+
     private String createSerialNumber() {
         return "SNU" + rnd.nextInt();
-
     }
 }
