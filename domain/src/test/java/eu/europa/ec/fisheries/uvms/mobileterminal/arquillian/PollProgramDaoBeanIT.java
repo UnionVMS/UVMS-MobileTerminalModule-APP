@@ -484,7 +484,7 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         cal.set(Calendar.YEAR, latestRunYear);
         return cal.getTime();
     }
-    
+
     private Date getStopDate() {
         cal.set(Calendar.DAY_OF_MONTH, 28);
         cal.set(Calendar.YEAR, 2019);
