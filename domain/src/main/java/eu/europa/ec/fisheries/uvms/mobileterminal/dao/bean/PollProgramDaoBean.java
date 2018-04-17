@@ -11,24 +11,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
-import javax.ejb.Stateless;
-import javax.persistence.EntityExistsException;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.Stateless;
+import javax.persistence.EntityExistsException;
+import javax.persistence.NoResultException;
+import javax.persistence.TypedQuery;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 @Stateless
 public class PollProgramDaoBean extends Dao implements PollProgramDao {
@@ -47,6 +45,10 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
 
     @Override
     public PollProgram updatePollProgram(PollProgram pollProgram) throws PollDaoException {
+        if(pollProgram == null || pollProgram.getId() == null) {
+            // It's a defensive decision to prevent clients from using merge excessively instead of persist.
+            throw new PollDaoException(" [ There is no such persisted entity to update ] ");
+        }
         try {
             pollProgram = em.merge(pollProgram);
             em.flush();
