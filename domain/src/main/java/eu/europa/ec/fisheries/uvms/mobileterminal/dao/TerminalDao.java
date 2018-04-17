@@ -11,24 +11,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 
+import javax.ejb.Local;
+import java.util.List;
+
 @Local
 public interface TerminalDao {
 
-    public MobileTerminal getMobileTerminalByGuid(String guid) throws NoEntityFoundException;
+    MobileTerminal getMobileTerminalByGuid(String guid) throws NoEntityFoundException;
 
-    public MobileTerminal getMobileTerminalBySerialNo(String serialNo) throws NoEntityFoundException;
+    MobileTerminal getMobileTerminalBySerialNo(String serialNo) throws NoEntityFoundException;
 
-    public List<MobileTerminal> getMobileTerminalsByQuery(String sql) throws NoEntityFoundException;
+    List<MobileTerminal> getMobileTerminalsByQuery(String sql) throws NoEntityFoundException;
 
-    public void createMobileTerminal(MobileTerminal terminal) throws TerminalDaoException;
+    void createMobileTerminal(MobileTerminal terminal) throws TerminalDaoException;
 
-    public void updateMobileTerminal(MobileTerminal terminal) throws TerminalDaoException;
+    void updateMobileTerminal(MobileTerminal terminal) throws TerminalDaoException;
 }
