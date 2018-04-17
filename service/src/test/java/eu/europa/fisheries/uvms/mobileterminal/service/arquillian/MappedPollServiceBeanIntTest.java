@@ -1,97 +1,71 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import javax.ejb.EJB;
-import javax.persistence.Query;
-
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollMobileTerminal;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.ChannelHistory;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
+import org.jboss.arquillian.container.test.api.OperateOnDeployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import javax.ejb.EJB;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by thofan on 2017-05-04.
  *
- * TODO Since presence of REQUIRES_NEW are very limitied in these classes, we dont test them right now, We will revisit
+ * TODO Since presence of REQUIRES_NEW are very limited in these classes, we don't test them right now, We will revisit
  */
 
 @RunWith(Arquillian.class)
 public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
-
     @EJB
-    MappedPollService mappedPollService;
+    private MappedPollService mappedPollService;
 
     @EJB
     private TerminalDao terminalDaoBean;
 
     @EJB
-    MobileTerminalPluginDao testDaoBean;
+    private MobileTerminalPluginDao testDaoBean;
 
     @Test
     @OperateOnDeployment("normal")
-    public void createPoll() {
+    public void createPoll() throws MobileTerminalServiceException {
 
         System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
-
         PollRequestType pollRequestType = helper_createPollRequestType(PollType.MANUAL_POLL);
-        try {
 
-            // create a poll
-            CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
-            em.flush();
-            List<String> sendPolls = createPollResultDto.getSentPolls();
-            String pollGuid = sendPolls.get(0);
+        // create a poll
+        CreatePollResultDto createPollResultDto = mappedPollService.createPoll(pollRequestType, "TEST");
+        em.flush();
+        List<String> sendPolls = createPollResultDto.getSentPolls();
+        String pollGuid = sendPolls.get(0);
 
-            Assert.assertNotNull(pollGuid);
-            
-         } catch (MobileTerminalServiceException e) {
-            Assert.fail();
-        }
+        Assert.assertNotNull(pollGuid);
     }
 
     private PollRequestType helper_createPollRequestType(PollType pollType) {
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.YEAR, 2015);
-        SimpleDateFormat format = new SimpleDateFormat();
-        format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss Z");
         String startDate = format.format(cal.getTime());
         cal.set(Calendar.YEAR, 2020);
         String endDate = format.format(cal.getTime());
-
 
         PollRequestType prt = new PollRequestType();
         prt.setComment("aComment" + UUID.randomUUID().toString());
@@ -99,7 +73,6 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         prt.setPollType(pollType);
         PollMobileTerminal pollMobileTerminal = helper_createPollMobileTerminal();
         prt.getMobileTerminals().add(pollMobileTerminal);
-
 
         PollAttribute psStart = new PollAttribute();
         PollAttribute psEnd = new PollAttribute();
@@ -141,11 +114,10 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
     private MobileTerminal helper_createMobileTerminal(String connectId) {
 
-
         String serialNo = UUID.randomUUID().toString();
         MobileTerminal mt = new MobileTerminal();
 
-        MobileTerminalPlugin mtp = null;
+        MobileTerminalPlugin mtp;
         List<MobileTerminalPlugin> plugs = null;
         try {
             plugs = testDaoBean.getPluginList();
@@ -162,23 +134,19 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         mt.setArchived(false);
         mt.setInactivated(false);
 
-
         Set<MobileTerminalEvent> events = new HashSet<>();
         MobileTerminalEvent event = new MobileTerminalEvent();
         event.setConnectId(connectId);
         event.setActive(true);
         event.setMobileTerminal(mt);
 
-
         String attributes = PollAttributeType.START_DATE.value() + "=" + DateUtils.getUTCNow().toString();
         attributes = attributes + ";";
         attributes = attributes + PollAttributeType.END_DATE.value() + "=" + DateUtils.getUTCNow().toString();
         event.setAttributes(attributes);
 
-
         events.add(event);
         mt.setMobileTerminalEvents(events);
-
 
         Set<Channel> channels = new HashSet<>();
         Channel channel = new Channel();
@@ -200,10 +168,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
             e.printStackTrace();
             return null;
         }
-
-
     }
-
 
     private Channel helper_createChannel(MobileTerminal mt){
 
@@ -217,18 +182,13 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         em.persist(channel);
         em.flush();
 
-
         ChannelHistory channelHistory = new ChannelHistory();
         channelHistory.setChannel(channel);
         channelHistory.setActive(true);
 
         em.persist(channelHistory);
-
         em.flush();
 
         return channel;
-
     }
-
-
 }
