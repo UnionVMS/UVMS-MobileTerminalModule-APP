@@ -140,6 +140,9 @@ public class ConfigModelBean  {
 			if(plugin.getServiceName() == null || plugin.getServiceName().isEmpty()) {
 				throw new InputArgumentException("No service name");
 			}
+			if(plugin.getSatelliteType() == null || plugin.getSatelliteType().isEmpty()) {
+				throw new InputArgumentException("No satellite type");
+			}
 			
 			try {
 				MobileTerminalPlugin entity = updatePlugin(plugin);

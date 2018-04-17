@@ -134,7 +134,6 @@ public class ConfigModelTest {
 	public void testUpsertPluginsEmptyInput() throws MobileTerminalModelException {
 		List<PluginService> pluginList = new ArrayList<>();
 		List<Plugin> plugins = testModelBean.upsertPlugins(pluginList);
-
 		assertEquals(pluginList.size(), plugins.size());
 	}
 
@@ -207,9 +206,11 @@ public class ConfigModelTest {
 	public void testUpsertPluginsCreate() throws MobileTerminalModelException {
 		String pluginLabelName = "serviceLabelName";
 		String pluginServiceName = "serviceName";
+		String pluginSatelliteType = "satelliteType";
 		List<PluginService> pluginList = new ArrayList<>();
 		when(pluginType.getLabelName()).thenReturn(pluginLabelName);
 		when(pluginType.getServiceName()).thenReturn(pluginServiceName);
+		when(pluginType.getSatelliteType()).thenReturn(pluginSatelliteType);
 		pluginList.add(pluginType);
 
 		when(mobileTerminalPluginDao.getPluginByServiceName(pluginServiceName)).thenThrow(new NoEntityFoundException("No plugin to update"));

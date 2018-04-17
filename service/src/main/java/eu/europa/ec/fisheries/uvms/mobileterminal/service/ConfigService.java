@@ -11,10 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
@@ -23,11 +19,11 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
-/**
- **/
+import javax.ejb.Local;
+import java.util.List;
+
 @Local
 public interface ConfigService {
-
 
     /**
      * Get all defined terminal system transponders
@@ -35,7 +31,7 @@ public interface ConfigService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public List<TerminalSystemType> getTerminalSystems() throws MobileTerminalException;
+    List<TerminalSystemType> getTerminalSystems() throws MobileTerminalException;
 	
 	/**
 	 * Get configuration
@@ -43,7 +39,7 @@ public interface ConfigService {
 	 * @return
 	 * @throws MobileTerminalException
 	 */
-	public List<ConfigList> getConfig() throws MobileTerminalException;
+	List<ConfigList> getConfig() throws MobileTerminalException;
 	
 	/**
 	 * 
@@ -51,12 +47,12 @@ public interface ConfigService {
 	 * @return
 	 * @throws MobileTerminalException
 	 */
-	public List<Plugin> upsertPlugins(List<PluginService> pluginList, String username) throws MobileTerminalException;
+	List<Plugin> upsertPlugins(List<PluginService> pluginList, String username) throws MobileTerminalException;
 	
 	/**
 	 * Get plugins (from exchange) matching MobileTerminal plugins
 	 * @return
 	 * @throws MobileTerminalException
 	 */
-	public List<ServiceResponseType> getRegisteredMobileTerminalPlugins();
+	List<ServiceResponseType> getRegisteredMobileTerminalPlugins() throws MobileTerminalException;
 }
