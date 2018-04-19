@@ -11,14 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
-
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -43,32 +38,11 @@ public abstract class AbstractMTRestTest {
 	                .withTransitivity().asFile();
 	        testWar.addAsLibraries(files);
 	     
-	        printFiles(files);
-	        
 	        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.rest");
 
 	        testWar.delete("/WEB-INF/web.xml");
 	        testWar.addAsWebInfResource("mock-web.xml", "web.xml");
 
 	        return testWar;
-	    }
-	    
-	    private static void printFiles(File[] files) {
-
-	        List<File> filesSorted = new ArrayList<>();
-	        for(File f : files){
-	            filesSorted.add(f);
-	        }
-
-	        Collections.sort(filesSorted, new Comparator<File>() {
-	            @Override
-	            public int compare(File o1, File o2) {
-	                return o1.getName().compareTo(o2.getName());
-	            }
-	        });
-
-	        for(File f : filesSorted){
-	            System.out.println("--->>>   "   +   f.getName());
-	        }
 	    }
 }

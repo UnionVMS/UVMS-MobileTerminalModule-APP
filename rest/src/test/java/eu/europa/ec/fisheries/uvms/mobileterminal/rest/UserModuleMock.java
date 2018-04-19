@@ -12,12 +12,12 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.rest;
 
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import eu.europa.ec.fisheries.uvms.commons.message.impl.AbstractProducer;
 import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
 import eu.europa.ec.fisheries.uvms.user.model.mapper.UserModuleResponseMapper;
 import eu.europa.ec.fisheries.wsdl.user.types.Context;
@@ -33,26 +33,28 @@ import eu.europa.ec.fisheries.wsdl.user.types.UserContext;
 public class UserModuleMock implements MessageListener {
 
     final static Logger LOG = LoggerFactory.getLogger(UserModuleMock.class);
-    
-//    @Inject
-//    MessageProducer messageProducer;
-    
+
     @Override
     public void onMessage(Message message) {
         try {
-        
-        UserContext userContext = getAssetUserContext();
-        String responseString;
+
+            UserContext userContext = getMobileTerminalUserContext();
+            String responseString;
             responseString = UserModuleResponseMapper.mapToGetUserContextResponse(userContext);
 
-//        messageProducer.sendModuleResponseMessage((TextMessage) message, responseString);
+            new AbstractProducer() {
+                @Override
+                public String getDestinationName() {
+                    return "jms/queue/UVMSMobileTerminal";
+                }
+            }.sendResponseMessageToSender((TextMessage) message, responseString);
 
         } catch (Exception e) {
             LOG.error("UserModuleMock Error", e);
         }
     }
-    
-    private UserContext getAssetUserContext() {
+
+    private UserContext getMobileTerminalUserContext() {
         UserContext userContext = new UserContext();
         userContext.setContextSet(new ContextSet());
         Context context = new Context();

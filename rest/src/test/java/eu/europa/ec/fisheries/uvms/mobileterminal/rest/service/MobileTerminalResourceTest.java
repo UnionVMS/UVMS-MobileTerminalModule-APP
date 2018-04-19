@@ -11,19 +11,33 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
 
+import static org.junit.Assert.assertThat;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
+import org.hamcrest.CoreMatchers;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.AbstractMTRestTest;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.MobileTerminalTestHelper;
 
 @RunWith(Arquillian.class)
 public class MobileTerminalResourceTest extends AbstractMTRestTest {
-
+    
     @Test
     @RunAsClient
-    public void testTest() {
+    public void createMobileTerminalTest() {
+        MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
+        Response response = getWebTarget()
+                                .path("mobileterminal")
+                                .request(MediaType.APPLICATION_JSON)
+                                .post(Entity.json(mobileTerminal));
+        
+        assertThat(response.getStatus(), CoreMatchers.is(Status.OK.getStatusCode()));
     }
-
 }

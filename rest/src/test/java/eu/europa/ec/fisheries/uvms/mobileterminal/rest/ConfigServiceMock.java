@@ -11,17 +11,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest;
 
 import java.util.Arrays;
-
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
-import javax.inject.Inject;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-
 import eu.europa.ec.fisheries.schema.config.types.v1.PullSettingsStatus;
 import eu.europa.ec.fisheries.schema.config.types.v1.SettingType;
-import eu.europa.ec.fisheries.uvms.config.model.exception.ModelMarshallException;
+import eu.europa.ec.fisheries.uvms.commons.message.impl.AbstractProducer;
 import eu.europa.ec.fisheries.uvms.config.model.mapper.ModuleResponseMapper;
 
 @MessageDriven(mappedName = "jms/queue/UVMSConfigEvent", activationConfig = {
@@ -30,8 +27,6 @@ import eu.europa.ec.fisheries.uvms.config.model.mapper.ModuleResponseMapper;
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "UVMSConfigEvent")})
 public class ConfigServiceMock implements MessageListener {
     
-//    @Inject
-//    MessageProducer messageProducer;
     
     @Override
     public void onMessage(Message message) {
@@ -41,8 +36,15 @@ public class ConfigServiceMock implements MessageListener {
             mockSetting.setValue("Value");
             mockSetting.setDescription("From ConfigServiceMock.java");
             String response = ModuleResponseMapper.toPullSettingsResponse(Arrays.asList(mockSetting), PullSettingsStatus.OK);
-//            messageProducer.sendModuleResponseMessage((TextMessage) message, response);
-        } catch (ModelMarshallException e) {
+            
+            new AbstractProducer() {
+                @Override
+                public String getDestinationName() {
+                    return "jms/queue/UVMSMobileTerminal";
+                }
+            }.sendResponseMessageToSender((TextMessage) message, response);
+            
+        } catch (Exception e) {
         }
     }
 }
