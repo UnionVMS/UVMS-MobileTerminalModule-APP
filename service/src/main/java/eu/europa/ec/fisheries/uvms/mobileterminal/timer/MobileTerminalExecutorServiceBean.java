@@ -11,20 +11,21 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
-import javax.ejb.Stateless;
-
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 
-@Stateless
+@Startup
+@Singleton
 public class MobileTerminalExecutorServiceBean {
 
-    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalExecutorServiceBean.class);
+    private static final Logger LOG = LoggerFactory.getLogger(MobileTerminalExecutorServiceBean.class);
 
     @EJB
     ConfigService configService;
@@ -35,6 +36,18 @@ public class MobileTerminalExecutorServiceBean {
     PluginTimerTask pluginTimerTask;
     PollTimerTask pollTimerTask;
 
+    @PostConstruct
+    public void initPlugins() {
+        try {
+            if(pluginTimerTask == null) {
+                pluginTimerTask = new PluginTimerTask(configService);
+            }
+            pluginTimerTask.run();
+        } catch (Exception e) {
+            LOG.error("Error when initializing PluginTimerTask", e);
+        }
+    }
+    
     @Schedule(minute = "*/5", hour = "*", persistent = false)
     public void initPluginTimer() {
         try {
@@ -46,7 +59,6 @@ public class MobileTerminalExecutorServiceBean {
         } catch (Exception e) {
             LOG.error("[ Error when initializing PluginTimerTask. ] {}", e.getMessage());
         }
-
     }
 
     @Schedule(minute = "*/5", hour = "*", persistent = false)
