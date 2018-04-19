@@ -33,7 +33,7 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>mobileterminal-message</artifactId>
+            <artifactId>mobileterminal-message-impl</artifactId>
             <version>${project.version}</version>
             <scope>test</scope>
         </dependency>
