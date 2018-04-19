@@ -41,51 +41,48 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 @Stateless
 public class ConfigServiceBean implements ConfigService {
 
-    final static Logger LOG = LoggerFactory.getLogger(ConfigServiceBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ConfigServiceBean.class);
 
     @EJB
-    MessageProducer messageProducer;
+	private	MessageProducer messageProducer;
 
 	//@EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
 	@EJB
-	ConfigModelBean configModel;
+	private ConfigModelBean configModel;
 
     @EJB
-    MessageConsumer reciever;
+    private MessageConsumer messageConsumer;
 
     @Override
     public List<TerminalSystemType> getTerminalSystems() throws MobileTerminalException {
         LOG.debug("GET TERMINAL SYSTEM TRANSPONDERS INVOKED IN SERVICE LAYER");
-		List<TerminalSystemType> systemList = configModel.getAllTerminalSystems();
-        return systemList;
+		return configModel.getAllTerminalSystems();
     }
 
 	@Override
-	public List<ConfigList> getConfig() throws MobileTerminalException {
+	public List<ConfigList> getConfig() {
 		LOG.debug("Get configuration in service layer");
-		List<ConfigList> values = configModel.getConfigValues();
-		return values;
+		return configModel.getConfigValues();
 	}
 
 	@Override
 	public List<Plugin> upsertPlugins(List<PluginService> plugins, String username) throws MobileTerminalException {
-		List<Plugin> plugin = configModel.upsertPlugins(plugins);
-		return plugin;
+		return configModel.upsertPlugins(plugins);
 	}
 
 	@Override
-	public List<ServiceResponseType> getRegisteredMobileTerminalPlugins() {
+	public List<ServiceResponseType> getRegisteredMobileTerminalPlugins() throws MobileTerminalException {
 		LOG.debug("Get registered service types");
 		try {
 			List<PluginType> pluginTypes = new ArrayList<>();
 			pluginTypes.add(PluginType.SATELLITE_RECEIVER);
 			String data = ExchangeModuleRequestMapper.createGetServiceListRequest(pluginTypes);
 			String messageId = messageProducer.sendModuleMessage(data, ModuleQueue.EXCHANGE);
-			TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+			TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
 			return ExchangeModuleResponseMapper.mapServiceListResponse(response, messageId);
 		} catch (ExchangeModelMapperException | MobileTerminalMessageException e) {
 			LOG.error("Failed to map to exchange get service list request");
-			return null;
+			throw new MobileTerminalException("Failed to map to exchange get service list request");
 		}
 	}
 }

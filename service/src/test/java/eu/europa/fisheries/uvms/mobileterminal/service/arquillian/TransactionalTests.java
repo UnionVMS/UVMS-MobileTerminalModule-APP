@@ -1,26 +1,20 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
+import org.junit.After;
+import org.junit.Before;
+
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
-
-import org.junit.After;
-import org.junit.Before;
+import javax.transaction.*;
 
 public class TransactionalTests extends BuildMobileTerminalServiceDeployment {
 
     @PersistenceContext
-    protected EntityManager em;
-
+    EntityManager em;
 
     @Inject
-    protected UserTransaction userTransaction;
+    private UserTransaction userTransaction;
 
     @Before
     public void before() throws SystemException, NotSupportedException {
@@ -28,9 +22,7 @@ public class TransactionalTests extends BuildMobileTerminalServiceDeployment {
     }
 
     @After
-    public void after() throws SystemException, HeuristicRollbackException, HeuristicMixedException, RollbackException {
+    public void after() throws SystemException {
         userTransaction.rollback();
     }
-
 }
-
