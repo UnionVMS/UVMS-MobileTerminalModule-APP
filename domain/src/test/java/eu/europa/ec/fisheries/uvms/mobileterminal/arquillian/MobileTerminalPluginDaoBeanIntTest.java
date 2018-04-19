@@ -35,18 +35,11 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetDefaultPluginList() throws ConfigDaoException {
-
-        List<MobileTerminalPlugin> mobileTerminalPluginList = mobileTerminalPluginDao.getPluginList();
-
-        assertNotNull(mobileTerminalPluginList);
-        assertEquals(3, mobileTerminalPluginList.size());
-    }
-
-    @Test
-    @OperateOnDeployment("normal")
     public void testGetPluginListWithNewPlugin() throws ConfigDaoException, TerminalDaoException {
 
+        List<MobileTerminalPlugin> mobileTerminalPluginListBefore = mobileTerminalPluginDao.getPluginList();
+        assertNotNull(mobileTerminalPluginListBefore);
+        
         // Given
         MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
         mobileTerminalPlugin = mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
@@ -57,7 +50,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
         // Then
         assertNotNull(mobileTerminalPlugin.getId());
         assertNotNull(mobileTerminalPluginList);
-        assertEquals(4, mobileTerminalPluginList.size());
+        assertEquals(mobileTerminalPluginListBefore.size() + 1, mobileTerminalPluginList.size());
     }
 
     @Test

@@ -19,6 +19,9 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
+import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityListType;
+import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityType;
+import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityTypeType;
 import eu.europa.ec.fisheries.uvms.commons.message.impl.AbstractProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.mapper.ExchangeModuleResponseMapper;
 
@@ -37,6 +40,12 @@ public class ExchangeModuleMock implements MessageListener {
             serviceResponseType.setName("Thrane&Thrane");
             serviceResponseType.setSatelliteType("INMARSAT_C");
             serviceResponseType.setActive(true);
+            CapabilityListType capabilityList = new CapabilityListType();
+            CapabilityType capabilityType = new CapabilityType();
+            capabilityType.setType(CapabilityTypeType.POLLABLE);
+            capabilityType.setValue("TRUE");
+            capabilityList.getCapability().add(capabilityType);
+            serviceResponseType.setCapabilityList(capabilityList);
             serviceResponse.add(serviceResponseType);
             String response = ExchangeModuleResponseMapper.mapServiceListResponse(serviceResponse);
 
