@@ -12,10 +12,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
 
 import static org.junit.Assert.assertThat;
+import java.io.StringReader;
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonReader;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import org.hamcrest.CoreMatchers;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
@@ -24,6 +26,7 @@ import org.junit.runner.RunWith;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.AbstractMTRestTest;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.MobileTerminalTestHelper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
 
 @RunWith(Arquillian.class)
 public class MobileTerminalResourceTest extends AbstractMTRestTest {
@@ -33,11 +36,14 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
     public void createMobileTerminalTest() {
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
-        Response response = getWebTarget()
+        String response = getWebTarget()
                                 .path("mobileterminal")
                                 .request(MediaType.APPLICATION_JSON)
-                                .post(Entity.json(mobileTerminal));
+                                .post(Entity.json(mobileTerminal), String.class);
         
-        assertThat(response.getStatus(), CoreMatchers.is(Status.OK.getStatusCode()));
+        JsonReader jsonReader = Json.createReader(new StringReader(response));
+        JsonObject jsonObject = jsonReader.readObject();
+        
+        assertThat(jsonObject.getInt("code"), CoreMatchers.is(ResponseCode.OK.getCode()));
     }
 }
