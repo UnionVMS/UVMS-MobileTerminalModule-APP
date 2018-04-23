@@ -46,22 +46,22 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTermin
 @Stateless
 public class PollServiceBean implements PollService {
 
-    final static Logger LOG = LoggerFactory.getLogger(PollServiceBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(PollServiceBean.class);
 
     @EJB
-    MessageProducer messageProducer;
+    private MessageProducer messageProducer;
 
     @EJB
-    MessageConsumer reciever;
+    private MessageConsumer messageConsumer;
 
     @EJB
-    PluginService sendPollService;
+    private PluginService sendPollService;
 
     @EJB
-    PollTimerService timerService;
+    private PollTimerService timerService;
 
     @EJB
-    PollDomainModelBean pollModel;
+    private PollDomainModelBean pollModel;
 
     @Override
     public CreatePollResultDto createPoll(PollRequestType poll, String username) throws MobileTerminalServiceException {
@@ -115,8 +115,7 @@ public class PollServiceBean implements PollService {
     public List<PollResponseType> getRunningProgramPolls() throws MobileTerminalServiceException {
         LOG.debug("GET RUNNING PROGRAM POLLS INVOKED IN SERVICE LAYER");
         try {
-            List<PollResponseType> pollProgramList = pollModel.getPollProgramList(true);
-            return pollProgramList;
+            return pollModel.getPollProgramList(true);
         } catch (MobileTerminalModelException e) {
             throw new MobileTerminalServiceException(e.getMessage());
         }
@@ -186,8 +185,7 @@ public class PollServiceBean implements PollService {
     public PollListResponse getPollBySearchCriteria(PollListQuery query) throws MobileTerminalServiceException {
         LOG.debug("GET POLL BY SEARCHCRITERIA INVOKED IN SERVICE LAYER");
         try {
-            PollListResponse pollResponse = pollModel.getPollList(query);
-            return pollResponse;
+            return pollModel.getPollList(query);
         } catch (MobileTerminalModelException e) {
             throw new MobileTerminalServiceException(e.getMessage());
         }
@@ -197,9 +195,6 @@ public class PollServiceBean implements PollService {
     public List<PollResponseType> timer() throws MobileTerminalException {
         LOG.debug("TIMER TRIGGERED IN SERVICE LAYER");
 
-        List<PollResponseType> pollTimerProgramList = pollModel.getPollProgramRunningAndStarted();
-
-        return pollTimerProgramList;
+        return pollModel.getPollProgramRunningAndStarted();
     }
-
 }

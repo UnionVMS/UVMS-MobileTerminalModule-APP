@@ -45,24 +45,23 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import java.util.*;
 
-/**
- **/
 @Stateless
 @LocalBean
 public class PollDomainModelBean  {
-    final static Logger LOG = LoggerFactory.getLogger(PollDomainModelBean.class);
+
+    private final static Logger LOG = LoggerFactory.getLogger(PollDomainModelBean.class);
 
     @EJB
-    PollDao pollDao;
+    private PollDao pollDao;
 
     @EJB
-    PollProgramDao pollProgramDao;
+    private PollProgramDao pollProgramDao;
 
     @EJB
-    TerminalDao terminalDao;
+    private TerminalDao terminalDao;
 
     @EJB
-    ChannelDao channelDao;
+    private ChannelDao channelDao;
     
     private MobileTerminalType mapPollableTerminalType(MobileTerminalTypeEnum type, String guid) throws MobileTerminalModelException {
         MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);
@@ -169,7 +168,7 @@ public class PollDomainModelBean  {
     }
 
     private void validateMobileTerminalPluginCapability(Set<MobileTerminalPluginCapability> capabilities, PollType pollType, String pluginServiceName) throws MobileTerminalModelException {
-        PluginCapabilityType pluginCapabilityType = PluginCapabilityType.CONFIGURABLE;
+        PluginCapabilityType pluginCapabilityType;
         switch (pollType){
             case CONFIGURATION_POLL:
                 pluginCapabilityType = PluginCapabilityType.CONFIGURABLE;
@@ -196,9 +195,7 @@ public class PollDomainModelBean  {
 
     private List<PollResponseType> createPollPrograms(Map<PollProgram, MobileTerminalType> map, String username) throws MobileTerminalModelException {
         List<PollResponseType> responseList = new ArrayList<>();
-        Iterator<Map.Entry<PollProgram, MobileTerminalType>> iterator = map.entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry<PollProgram, MobileTerminalType> next = iterator.next();
+        for (Map.Entry<PollProgram, MobileTerminalType> next : map.entrySet()) {
             PollProgram pollProgram = next.getKey();
             MobileTerminalType mobileTerminalType = next.getValue();
             try {
@@ -217,9 +214,7 @@ public class PollDomainModelBean  {
 
     private List<PollResponseType> createPolls(Map<Poll, MobileTerminalType> map, PollType pollType) throws MobileTerminalModelException {
         List<PollResponseType> responseList = new ArrayList<>();
-        Iterator<Map.Entry<Poll, MobileTerminalType>> iterator = map.entrySet().iterator();
-        while (iterator.hasNext()){
-            Map.Entry<Poll, MobileTerminalType> next = iterator.next();
+        for (Map.Entry<Poll, MobileTerminalType> next : map.entrySet()) {
             Poll poll = next.getKey();
             MobileTerminalType mobileTerminalType = next.getValue();
             try {
@@ -317,8 +312,7 @@ public class PollDomainModelBean  {
             case STOPPED:
             }
 
-            // TODO
-            // check terminal/comchannel?
+            // TODO: check terminal/comchannel?
 
             program.setPollState(EnumMapper.getPollStateTypeFromModel(state));
 
@@ -364,7 +358,7 @@ public class PollDomainModelBean  {
         
         int numberMatches = mobileTerminalList.size();
         
-        int numberOfPages = (int) (numberMatches / listSize);
+        int numberOfPages = (numberMatches / listSize);
         if (numberMatches % listSize != 0) {
             numberOfPages += 1;
         }
@@ -380,14 +374,12 @@ public class PollDomainModelBean  {
         	response.setMobileTerminalList(newList);
         }
         
-        
         response.setTotalNumberOfPages(numberOfPages);
         response.setCurrentPage(query.getPagination().getPage());
         
         long out = System.currentTimeMillis();
         LOG.debug("Get pollable channels " + (out-in) + " ms");
         return response;
-
     }
 
     private List<PollResponseType> getResponseList(List<PollProgram> pollPrograms) throws MobileTerminalModelException {
@@ -404,5 +396,4 @@ public class PollDomainModelBean  {
         }
         return responseList;
     }
-
 }

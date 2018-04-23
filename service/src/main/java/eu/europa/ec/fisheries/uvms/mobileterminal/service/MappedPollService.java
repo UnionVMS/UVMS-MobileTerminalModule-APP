@@ -11,10 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
@@ -23,6 +19,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelListDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+
+import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface MappedPollService {
@@ -34,7 +33,7 @@ public interface MappedPollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public CreatePollResultDto createPoll(PollRequestType pollRequest, String username) throws MobileTerminalServiceException;
+    CreatePollResultDto createPoll(PollRequestType pollRequest, String username) throws MobileTerminalServiceException;
 
     /**
      * Get running program polls
@@ -42,7 +41,7 @@ public interface MappedPollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public List<PollDto> getRunningProgramPolls() throws MobileTerminalServiceException;
+    List<PollDto> getRunningProgramPolls() throws MobileTerminalServiceException;
 
     /**
      * Start program poll
@@ -51,7 +50,7 @@ public interface MappedPollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollDto startProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
+    PollDto startProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
 
     /**
      * Stop program poll
@@ -60,7 +59,7 @@ public interface MappedPollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollDto stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
+    PollDto stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
 
     /**
      * Inactivate program poll
@@ -69,16 +68,16 @@ public interface MappedPollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollDto inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
+    PollDto inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
 
     /**
      * Get poll by search criteria
      * 
-     * @param criteria
+     * @param query
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollChannelListDto getPollBySearchQuery(PollListQuery query) throws MobileTerminalServiceException;
+    PollChannelListDto getPollBySearchQuery(PollListQuery query) throws MobileTerminalServiceException;
 
     /**
      * Get pollable channels
@@ -88,6 +87,5 @@ public interface MappedPollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollChannelListDto getPollableChannels(PollableQuery query) throws MobileTerminalException;
-
+    PollChannelListDto getPollableChannels(PollableQuery query) throws MobileTerminalException;
 }

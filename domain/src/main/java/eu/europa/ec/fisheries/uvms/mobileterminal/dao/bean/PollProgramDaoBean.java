@@ -105,10 +105,11 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
         try {
             TypedQuery<PollProgram> query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID, PollProgram.class);
             query.setParameter("guid", guid);
-            return query.getSingleResult();
+            PollProgram pollProgram = query.getSingleResult();
+            return pollProgram;
         } catch (NoResultException e) {
             LOG.error("[ Error when getting poll program by id. ] {}", e.getMessage());
-            throw new PollDaoException("No entity found getting by id");
+            throw new PollDaoException("No entity found getting by id xxx");
         }
     }
 }
