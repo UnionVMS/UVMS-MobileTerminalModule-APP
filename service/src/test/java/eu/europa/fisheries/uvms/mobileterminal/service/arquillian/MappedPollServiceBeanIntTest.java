@@ -82,6 +82,8 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void startProgramPoll() throws MobileTerminalServiceException, PollDaoException, ConfigDaoException, TerminalDaoException {
 
+        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+
         // we want to be able to tamper with the dates for proper test coverage
         Date startDate = getStartDate();
         Date latestRun = getLatestRunDate();
@@ -98,14 +100,16 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         PollDto startedProgramPoll = mappedPollService.startProgramPoll(guid, username);
         assertNotNull(startedProgramPoll);
 
-        // List<PollValue> values = startedProgramPoll.getValue();
-        // boolean found = validatePollKeyValue(values, PollKey.PROGRAM_RUNNING, "true");
-        // assertTrue(found);
+        List<PollValue> values = startedProgramPoll.getValue();
+        boolean found = validatePollKeyValue(values, PollKey.PROGRAM_RUNNING, "true");
+        assertTrue(found);
     }
 
     @Test
     @OperateOnDeployment("normal")
     public void stopProgramPoll() throws MobileTerminalServiceException, PollDaoException, ConfigDaoException, TerminalDaoException {
+
+        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         // we want to be able to tamper with the dates for proper test coverage
         Date startDate = getStartDate();
@@ -126,14 +130,16 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         PollDto stoppedProgramPoll = mappedPollService.stopProgramPoll(guid, username);
         assertNotNull(stoppedProgramPoll);
 
-        // List<PollValue> values = stoppedProgramPoll.getValue();
-        // boolean found = validatePollKeyValue(values, PollKey.PROGRAM_RUNNING, "false");
-        // assertTrue(found);
+        List<PollValue> values = stoppedProgramPoll.getValue();
+        boolean found = validatePollKeyValue(values, PollKey.PROGRAM_RUNNING, "false");
+        assertTrue(found);
     }
 
     @Test
     @OperateOnDeployment("normal")
     public void inactivateProgramPoll() throws MobileTerminalServiceException, PollDaoException, ConfigDaoException, TerminalDaoException {
+
+        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         // we want to be able to tamper with the dates for proper test coverage
         Date startDate = getStartDate();
@@ -158,9 +164,9 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         PollDto inactivatedProgramPoll = mappedPollService.inactivateProgramPoll(guid, username);
         assertNotNull(inactivatedProgramPoll);
 
-        // List<PollValue> values1 = inactivatedProgramPoll.getValue();
-        // boolean isStopped = validatePollKeyValue(values1, PollKey.PROGRAM_RUNNING, "false");
-        // assertTrue(isStopped);
+        List<PollValue> values1 = inactivatedProgramPoll.getValue();
+        boolean isStopped = validatePollKeyValue(values1, PollKey.PROGRAM_RUNNING, "false");
+        assertTrue(isStopped);
     }
 
     @Test
