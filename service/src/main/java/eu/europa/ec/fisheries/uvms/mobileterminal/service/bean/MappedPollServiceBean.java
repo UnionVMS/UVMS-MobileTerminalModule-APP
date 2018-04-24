@@ -11,20 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
@@ -37,23 +24,29 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class MappedPollServiceBean implements MappedPollService {
-    final static Logger LOG = LoggerFactory.getLogger(MappedPollServiceBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MappedPollServiceBean.class);
 
     @EJB
-    PollService pollService;
+    private PollService pollService;
 
     @EJB
-    MobileTerminalService mobileTerminalService;
+    private MobileTerminalService mobileTerminalService;
 
     @Override
     public CreatePollResultDto createPoll(PollRequestType pollRequest, String username) throws MobileTerminalServiceException {
         LOG.debug("Create poll");
 
-        CreatePollResultDto pollResponse = pollService.createPoll(pollRequest, username);
-        return pollResponse;
+        return pollService.createPoll(pollRequest, username);
     }
 
     @Override

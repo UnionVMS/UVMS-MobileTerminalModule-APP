@@ -11,10 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
@@ -22,6 +18,9 @@ import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseTyp
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+
+import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface PollService {
@@ -34,13 +33,13 @@ public interface PollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public CreatePollResultDto createPoll(PollRequestType poll, String username) throws MobileTerminalServiceException;
+    CreatePollResultDto createPoll(PollRequestType poll, String username) throws MobileTerminalServiceException;
 
     /**
      *
      * @return @throws MobileTerminalServiceException
      */
-    public List<PollResponseType> getRunningProgramPolls() throws MobileTerminalServiceException;
+    List<PollResponseType> getRunningProgramPolls() throws MobileTerminalServiceException;
 
     /**
      *
@@ -48,7 +47,7 @@ public interface PollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollResponseType startProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
+    PollResponseType startProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
 
     /**
      *
@@ -56,7 +55,7 @@ public interface PollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollResponseType stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
+    PollResponseType stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
 
     /**
      *
@@ -64,21 +63,20 @@ public interface PollService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollResponseType inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
+    PollResponseType inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException;
 
     /**
      *
-     * @param criteria
+     * @param query
      * @return
      * @throws MobileTerminalServiceException
      */
-    public PollListResponse getPollBySearchCriteria(PollListQuery query) throws MobileTerminalServiceException;
+    PollListResponse getPollBySearchCriteria(PollListQuery query) throws MobileTerminalServiceException;
 
     /**
      *
      * @return List of poll programs
      * @throws MobileTerminalServiceException
      */
-    public List<PollResponseType> timer() throws MobileTerminalException;
-
+    List<PollResponseType> timer() throws MobileTerminalException;
 }

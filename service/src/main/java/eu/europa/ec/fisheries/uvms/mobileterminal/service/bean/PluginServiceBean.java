@@ -47,20 +47,20 @@ public class PluginServiceBean implements PluginService {
 
     final static Logger LOG = LoggerFactory.getLogger(PluginServiceBean.class);
 
-    public static final String EXCHANGE_MODULE_NAME = "exchange";
-    public static final String DELIMETER = ".";
-    public static final String INTERNAL_DELIMETER = ",";
-    public static final String SETTING_KEY_DNID_LIST = "DNIDS";
+    private static final String EXCHANGE_MODULE_NAME = "exchange";
+    private static final String DELIMETER = ".";
+    private static final String INTERNAL_DELIMETER = ",";
+    private static final String SETTING_KEY_DNID_LIST = "DNIDS";
 
     @EJB
-    MessageProducer messageProducer;
+    private MessageProducer messageProducer;
 
     @EJB
-    MessageConsumer reciever;
+    private MessageConsumer messageConsumer;
 
 //    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
     @EJB
-    ConfigModelBean configModel;
+    private ConfigModelBean configModel;
 
     @Override
     public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException {
@@ -69,7 +69,7 @@ public class PluginServiceBean implements PluginService {
             String pluginServiceName = poll.getMobileTerminal().getPlugin().getServiceName();
             String exchangeData = ExchangeModuleRequestMapper.createSetCommandSendPollRequest(pluginServiceName, pollType, username, null);
             String messageId = messageProducer.sendModuleMessage(exchangeData, ModuleQueue.EXCHANGE);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+            TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
             AcknowledgeType ack = ExchangeModuleResponseMapper.mapSetCommandResponse(response, messageId);
             LOG.debug("Poll: " + poll.getPollId().getGuid() + " sent to exchange. Response: " + ack.getType());
             return ack.getType();
@@ -78,8 +78,6 @@ public class PluginServiceBean implements PluginService {
             throw new MobileTerminalServiceException("Failed to send poll command. Poll with guid " + poll.getPollId().getGuid() + " was not sent");
         }
     }
-    
-    
 
     @Override
     public void processUpdatedDNIDList(String pluginName) {
@@ -87,11 +85,11 @@ public class PluginServiceBean implements PluginService {
             List<String> dnidList = configModel.updatedDNIDList(pluginName);
 
             String settingKey = pluginName + DELIMETER + SETTING_KEY_DNID_LIST;
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder builder = new StringBuilder();
             for (String dnid : dnidList) {
-                buffer.append(dnid + INTERNAL_DELIMETER);
+                builder.append(dnid).append(INTERNAL_DELIMETER);
             }
-            String settingValue = buffer.toString();
+            String settingValue = builder.toString();
 
             try {
                 sendUpdatedDNIDListToConfig(pluginName, settingKey, settingValue);
@@ -114,7 +112,7 @@ public class PluginServiceBean implements PluginService {
 
         String setSettingRequest = ModuleRequestMapper.toSetSettingRequest(EXCHANGE_MODULE_NAME, setting, "UVMS");
         String messageId = messageProducer.sendModuleMessage(setSettingRequest, ModuleQueue.CONFIG);
-        TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+        TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
         LOG.info("UpdatedDNIDList sent to config module");
     }
 
@@ -122,11 +120,10 @@ public class PluginServiceBean implements PluginService {
         try {
             String request = ExchangeModuleRequestMapper.createUpdatePluginSettingRequest(pluginName, settingKey, settingValue);
             String messageId = messageProducer.sendModuleMessage(request, ModuleQueue.EXCHANGE);
-            TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+            TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
             LOG.info("UpdatedDNIDList sent to exchange module {} {}",pluginName,settingKey);
         } catch (ExchangeModelMarshallException | MobileTerminalMessageException e) {
             LOG.error("Failed to send updated DNID list {} {} {}",pluginName,settingKey,e);
         }
     }
-
 }
