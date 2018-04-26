@@ -282,7 +282,8 @@ public class PollDomainModelBean  {
 
     public List<PollResponseType> getPollProgramList(boolean onlyAlivePrograms) throws MobileTerminalModelException {
         List<PollProgram> pollPrograms = pollProgramDao.getProgramPollsAlive();
-        return getResponseList(pollPrograms);
+        List<PollResponseType> responseList = getResponseList(pollPrograms);
+        return responseList;
     }
 
 

@@ -7,9 +7,15 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollBase;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 
@@ -21,6 +27,9 @@ import java.util.*;
 @Stateless
 @LocalBean
 public class TestPollHelper {
+
+    private Calendar cal = Calendar.getInstance();
+    private Random rnd = new Random();
 
     @EJB
     private TerminalDao terminalDao;
@@ -184,5 +193,54 @@ public class TestPollHelper {
         serialNumberMobileTerminalAttribute.setType(type);
         serialNumberMobileTerminalAttribute.setValue(value);
         attributes.add(serialNumberMobileTerminalAttribute);
+    }
+
+    public PollProgram createPollProgramHelper(String mobileTerminalSerialNo, Date startDate, Date stopDate, Date latestRun)
+            throws ConfigDaoException, TerminalDaoException {
+
+        PollProgram pp = new PollProgram();
+        // create a valid mobileTerminal
+        MobileTerminal mobileTerminal = createMobileTerminal(mobileTerminalSerialNo);
+
+        PollBase pb = new PollBase();
+        String channelGuid = UUID.randomUUID().toString();
+        String terminalConnect = UUID.randomUUID().toString();
+        pb.setChannelGuid(channelGuid);
+        pb.setMobileTerminal(mobileTerminal);
+        pb.setTerminalConnect(terminalConnect);
+        pp.setFrequency(1);
+        pp.setLatestRun(latestRun);
+        pp.setPollBase(pb);
+        pp.setPollState(PollStateEnum.STARTED);
+        pp.setStartDate(startDate);
+        pp.setStopDate(stopDate);
+        pp.setUpdateTime(latestRun);
+        pp.setUpdatedBy("TEST");
+
+        return pp;
+    }
+
+    public Date getStartDate() {
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        int startYear = 1999;
+        cal.set(Calendar.YEAR, startYear);
+        return cal.getTime();
+    }
+
+    public Date getLatestRunDate() {
+        cal.set(Calendar.DAY_OF_MONTH, 20);
+        int latestRunYear = 2017;
+        cal.set(Calendar.YEAR, latestRunYear);
+        return cal.getTime();
+    }
+
+    public Date getStopDate() {
+        cal.set(Calendar.DAY_OF_MONTH, 28);
+        cal.set(Calendar.YEAR, 2019);
+        return cal.getTime();
+    }
+
+    public String createSerialNumber() {
+        return "SNU" + rnd.nextInt();
     }
 }
