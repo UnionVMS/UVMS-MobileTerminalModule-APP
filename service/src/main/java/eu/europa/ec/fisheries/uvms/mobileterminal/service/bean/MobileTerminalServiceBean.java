@@ -13,8 +13,6 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionAttribute;
-import javax.ejb.TransactionAttributeType;
 import javax.jms.TextMessage;
 
 import org.slf4j.Logger;
@@ -50,22 +48,25 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTermin
 @Stateless
 public class MobileTerminalServiceBean implements MobileTerminalService {
 
-    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalServiceBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalServiceBean.class);
 
     @EJB
-    MessageProducer messageProducer;
+    private MessageProducer messageProducer;
 
     @EJB
-    MessageConsumer reciever;
+    private MessageConsumer messageConsumer;
 
     @EJB
-    PluginService pluginService;
+    private PluginService pluginService;
+
     @EJB
-    MobileTerminalDomainModelBean mobileTerminalModel;
+    private MobileTerminalDomainModelBean mobileTerminalModel;
+
     @EJB
-    ConfigModelBean configModel;
+    private ConfigModelBean configModel;
+
     @EJB
-    PollDomainModelBean pollModel;
+    private PollDomainModelBean pollModel;
     
     /**
      * {@inheritDoc}
@@ -172,7 +173,7 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         }
         String data = MobileTerminalDataSourceRequestMapper.mapGetMobileTerminal(id);
         String messageId = messageProducer.sendDataSourceMessage(data, queue);
-        TextMessage response = reciever.getMessage(messageId, TextMessage.class);
+        TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
         return MobileTerminalDataSourceResponseMapper.mapToMobileTerminalFromResponse(response, messageId);
     }
 

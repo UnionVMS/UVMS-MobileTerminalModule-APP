@@ -1,16 +1,16 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 
 import javax.ejb.EJB;
@@ -29,7 +29,6 @@ public class TestPollHelper {
     private MobileTerminalPluginDao mobileTerminalPluginDao;
 
     public PollRequestType createPollRequestType() throws ConfigDaoException, TerminalDaoException {
-
         PollRequestType prt = new PollRequestType();
         prt.setComment("aComment" + UUID.randomUUID().toString());
         prt.setUserName("TEST");
@@ -102,5 +101,88 @@ public class TestPollHelper {
         mt.setChannels(channels);
         terminalDao.createMobileTerminal(mt);
         return mt;
+    }
+
+    public MobileTerminalType createBasicMobileTerminal() throws TerminalDaoException {
+        MobileTerminalType mobileTerminal = new MobileTerminalType();
+        mobileTerminal.setSource(MobileTerminalSource.INTERNAL);
+        mobileTerminal.setType("INMARSAT_C");
+        List<MobileTerminalAttribute> attributes = mobileTerminal.getAttributes();
+        addAttribute(attributes, MobileTerminalConstants.SERIAL_NUMBER, generateARandomStringWithMaxLength(10));
+        addAttribute(attributes, "SATELLITE_NUMBER", "S" + generateARandomStringWithMaxLength(4));
+        addAttribute(attributes, "ANTENNA", "A");
+        addAttribute(attributes, "TRANSCEIVER_TYPE", "A");
+        addAttribute(attributes, "SOFTWARE_VERSION", "A");
+
+        List<ComChannelType> channels = mobileTerminal.getChannels();
+        ComChannelType comChannelType = new ComChannelType();
+        channels.add(comChannelType);
+        comChannelType.setGuid(UUID.randomUUID().toString());
+        comChannelType.setName("VMS");
+
+        addChannelAttribute(comChannelType, "FREQUENCY_GRACE_PERIOD", "54000");
+        addChannelAttribute(comChannelType, "MEMBER_NUMBER", "100");
+        addChannelAttribute(comChannelType, "FREQUENCY_EXPECTED", "7200");
+        addChannelAttribute(comChannelType, "FREQUENCY_IN_PORT", "10800");
+        addChannelAttribute(comChannelType, "LES_DESCRIPTION", "Thrane&Thrane");
+        addChannelAttribute(comChannelType, "DNID", "1" + generateARandomStringWithMaxLength(3));
+        addChannelAttribute(comChannelType, "INSTALLED_BY", "Mike Great");
+
+        addChannelCapability(comChannelType, "POLLABLE", true);
+        addChannelCapability(comChannelType, "CONFIGURABLE", true);
+        addChannelCapability(comChannelType, "DEFAULT_REPORTING", true);
+
+        Plugin plugin = new Plugin();
+        plugin.setServiceName("eu.europa.ec.fisheries.uvms.plugins.inmarsat");
+        plugin.setLabelName("Thrane&Thrane");
+        plugin.setSatelliteType("INMARSAT_C");
+        plugin.setInactive(false);
+
+        MobileTerminalPlugin mobileTerminalPlugin = PluginMapper.mapModelToEntity((createPluginService()));
+        mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
+
+        mobileTerminal.setPlugin(plugin);
+
+        return mobileTerminal;
+    }
+
+    private PluginService createPluginService() {
+        PluginService pluginService = new PluginService();
+        pluginService.setInactive(false);
+        pluginService.setLabelName("Thrane&Thrane");
+        pluginService.setSatelliteType("INMARSAT_C");
+        pluginService.setServiceName("eu.europa.ec.fisheries.uvms.plugins.inmarsat");
+        return pluginService;
+    }
+
+    private String generateARandomStringWithMaxLength(int len) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < len; i++) {
+            int val = new Random().nextInt(10);
+            builder.append(String.valueOf(val));
+        }
+        return builder.toString();
+    }
+
+    private void addChannelCapability(ComChannelType comChannelType, String type, boolean value) {
+        ComChannelCapability channelCapability = new ComChannelCapability();
+
+        channelCapability.setType(type);
+        channelCapability.setValue(value);
+        comChannelType.getCapabilities().add(channelCapability);
+    }
+
+    private void addChannelAttribute(ComChannelType comChannelType, String type, String value) {
+        ComChannelAttribute channelAttribute = new ComChannelAttribute();
+        channelAttribute.setType(type);
+        channelAttribute.setValue(value);
+        comChannelType.getAttributes().add(channelAttribute);
+    }
+
+    private void addAttribute(List<MobileTerminalAttribute> attributes, String type, String value) {
+        MobileTerminalAttribute serialNumberMobileTerminalAttribute = new MobileTerminalAttribute();
+        serialNumberMobileTerminalAttribute.setType(type);
+        serialNumberMobileTerminalAttribute.setValue(value);
+        attributes.add(serialNumberMobileTerminalAttribute);
     }
 }
