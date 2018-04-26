@@ -7,7 +7,7 @@
     <parent>
         <artifactId>mobileterminal</artifactId>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-        <version>4.0.9-SNAPSHOT</version>
+        <version>4.0.9</version>
     </parent>
 
 
@@ -15,7 +15,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-message</artifactId>
-            <version>4.0.9-SNAPSHOT</version>
+            <version>4.0.9</version>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
@@ -36,7 +36,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-service</artifactId>
-            <version>4.0.9-SNAPSHOT</version>
+            <version>4.0.9</version>
         </dependency>
         <dependency>
             <groupId>fish.focus.uvms.maven</groupId>
