@@ -11,16 +11,16 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service;
 
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
+import javax.ejb.Local;
+
 @Local
 public interface PluginService {
 
-	public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException;
+	AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException;
 	
-	public void processUpdatedDNIDList(String pluginName);
+	void processUpdatedDNIDList(String pluginName);
 }
