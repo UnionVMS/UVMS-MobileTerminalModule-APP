@@ -5,7 +5,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConst
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalModuleResponseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,17 +32,15 @@ public class PingReceivedEventBean {
 
     public void ping(EventMessage message) {
         try {
-            Connection connection = connectionFactory.createConnection();
-            try {
-                //TODO: Transacted false??
+            try (Connection connection = connectionFactory.createConnection()) {
+                // In a Java EE web or EJB container, when there is an active JTA transaction in progress:
+                // Both arguments transacted and acknowledgeMode are ignored.
                 Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
                 String pingResponse = MobileTerminalModuleResponseMapper.createPingResponse("pong");
                 TextMessage pingResponseMessage = session.createTextMessage(pingResponse);
                 pingResponseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
                 pingResponseMessage.setJMSDestination(message.getJmsMessage().getJMSReplyTo());
                 getProducer(session, pingResponseMessage.getJMSDestination()).send(pingResponseMessage);
-            } finally {
-                connection.close();
             }
         } catch (MobileTerminalModelMapperException | JMSException e) {
             LOG.error("Ping message went wrong", e);

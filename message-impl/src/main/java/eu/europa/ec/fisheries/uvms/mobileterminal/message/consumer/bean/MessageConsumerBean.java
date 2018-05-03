@@ -11,25 +11,26 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean;
 
-import javax.ejb.*;
-import javax.enterprise.event.Event;
-import javax.inject.Inject;
-import javax.jms.Message;
-import javax.jms.MessageListener;
-import javax.jms.TextMessage;
-
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.GetReceivedEventBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ListReceivedEventBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PingReceivedEventBean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleBaseRequest;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.GetReceivedEventBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ListReceivedEventBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PingReceivedEventBean;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
+import javax.ejb.MessageDriven;
+import javax.enterprise.event.Event;
+import javax.inject.Inject;
+import javax.jms.Message;
+import javax.jms.MessageListener;
+import javax.jms.TextMessage;
 
 @MessageDriven(mappedName = MessageConstants.COMPONENT_EVENT_QUEUE, activationConfig = {
         @ActivationConfigProperty(propertyName = "messagingType", propertyValue = MessageConstants.CONNECTION_TYPE),
@@ -40,7 +41,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
 })
 public class MessageConsumerBean implements MessageListener {
 
-    final static Logger LOG = LoggerFactory.getLogger(MessageConsumerBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MessageConsumerBean.class);
 
     @EJB
     private GetReceivedEventBean getReceivedEventBean;
@@ -62,7 +63,6 @@ public class MessageConsumerBean implements MessageListener {
         LOG.info("Message received in mobileterminal:{}",message);
         
         try {
-            
             MobileTerminalModuleBaseRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, MobileTerminalModuleBaseRequest.class);
 
             switch (request.getMethod()) {
@@ -79,11 +79,9 @@ public class MessageConsumerBean implements MessageListener {
                     LOG.error("[ Unsupported request: {} ]", request.getMethod());
                     break;
             }
-
         } catch (NullPointerException | MobileTerminalUnmarshallException e) {
             LOG.error("[ Error when receiving message in mobileterminal. ] {}", e.getMessage());
             errorEvent.fire(new EventMessage(textMessage, "Error when receivning message in mobileterminal: " + e.getMessage()));
         }
     }
-
 }
