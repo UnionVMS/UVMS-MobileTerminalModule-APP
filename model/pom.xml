@@ -51,6 +51,12 @@
 			<artifactId>dozer</artifactId>
 			<version>${dozer.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-client</artifactId>
+			<version>5.14.5</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
