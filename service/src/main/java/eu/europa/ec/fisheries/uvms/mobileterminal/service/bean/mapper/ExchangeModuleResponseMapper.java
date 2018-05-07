@@ -21,30 +21,6 @@ import java.util.List;
 public class ExchangeModuleResponseMapper {
 
 	private static Logger LOG = LoggerFactory.getLogger(ExchangeModuleResponseMapper.class);
-	
-    public static void validateResponse(TextMessage response, String correlationId) throws JMSException, ExchangeValidationException {
-
-        if (response == null) {
-            throw new ExchangeValidationException("Error when validating response in ResponseMapper: Response is Null");
-        }
-
-        if (response.getJMSCorrelationID() == null) {
-            throw new ExchangeValidationException("No corelationId in response (Null) . Expected was: " + correlationId);
-        }
-
-        if (!correlationId.equalsIgnoreCase(response.getJMSCorrelationID())) {
-            throw new ExchangeValidationException("Wrong corelationId in response. Expected was: " + correlationId + "But actual was: "
-                    + response.getJMSCorrelationID());
-        }
-
-        try {
-			ExchangeFault fault = JAXBMarshaller.unmarshallTextMessage(response, ExchangeFault.class);
-	        //TODO use fault
-			throw new ExchangeValidationException(fault.getCode() + " - " + fault.getMessage());
-		} catch (ExchangeModelMarshallException e) {
-			//everything went well
-		}        
-    }
 
     public static AcknowledgeType mapAcknowledgeTypeOK() {
     	AcknowledgeType ackType = new AcknowledgeType();
@@ -119,6 +95,30 @@ public class ExchangeModuleResponseMapper {
 		} catch(JMSException | ExchangeModelMarshallException e) {
 			LOG.error("[ Error when mapping response to service types ]");
 			throw new ExchangeModelMapperException("[ Error when mapping response to service types ] " + e.getMessage());
+		}
+	}
+
+	private static void validateResponse(TextMessage response, String correlationId) throws JMSException, ExchangeValidationException {
+
+		if (response == null) {
+			throw new ExchangeValidationException("Error when validating response in ResponseMapper: Response is Null");
+		}
+
+		if (response.getJMSCorrelationID() == null) {
+			throw new ExchangeValidationException("No corelationId in response (Null) . Expected was: " + correlationId);
+		}
+
+		if (!correlationId.equalsIgnoreCase(response.getJMSCorrelationID())) {
+			throw new ExchangeValidationException("Wrong corelationId in response. Expected was: " + correlationId + "But actual was: "
+					+ response.getJMSCorrelationID());
+		}
+
+		try {
+			ExchangeFault fault = JAXBMarshaller.unmarshallTextMessage(response, ExchangeFault.class);
+			//TODO use fault
+			throw new ExchangeValidationException(fault.getCode() + " - " + fault.getMessage());
+		} catch (ExchangeModelMarshallException e) {
+			//everything went well
 		}
 	}
 }

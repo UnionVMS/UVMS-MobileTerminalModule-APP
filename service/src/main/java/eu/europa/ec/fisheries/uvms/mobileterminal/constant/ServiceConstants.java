@@ -20,5 +20,4 @@ public class ServiceConstants {
     public static final String DB_ACCESS_POLL_DOMAIN_MODEL = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/PollDomainModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.PollDomainModel";
     public static final String DB_ACCESS_CONFIG_MODEL = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/ConfigModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.ConfigModel";
     public static final String DB_ACCESS_MOBILE_TERMINAL_DOMAIN_MODEL = "java:global/mobileterminal-dbaccess-module/mobileterminal-dbaccess-domain/MobileTerminalDomainModelBean!eu.europa.ec.fisheries.uvms.mobileterminal.MobileTerminalDomainModel";
-
 }

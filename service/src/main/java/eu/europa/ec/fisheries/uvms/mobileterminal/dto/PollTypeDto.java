@@ -14,15 +14,11 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.dto;
 import javax.xml.bind.annotation.XmlEnum;
 import javax.xml.bind.annotation.XmlType;
 
-/**
- **/
 @XmlType(name = "PollType")
 @XmlEnum
 public enum PollTypeDto {
-
     PROGRAM_POLL,
     SAMPLING_POLL,
     MANUAL_POLL,
-    CONFIGURATION_POLL;
-
+    CONFIGURATION_POLL
 }

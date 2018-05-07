@@ -11,14 +11,12 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dto;
 
-/**
- **/
 public class PollValue {
 
     private PollKey key;
     private String value;
 
-    public PollValue(PollKey key, String value) {
+    PollValue(PollKey key, String value) {
         this.key = key;
         this.value = value;
     }
@@ -38,5 +36,4 @@ public class PollValue {
     public void setValue(String value) {
         this.value = value;
     }
-
 }

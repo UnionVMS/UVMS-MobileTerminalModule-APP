@@ -24,5 +24,4 @@ public enum ParameterKey {
     public String getKey() {
         return key;
     }
-
 }

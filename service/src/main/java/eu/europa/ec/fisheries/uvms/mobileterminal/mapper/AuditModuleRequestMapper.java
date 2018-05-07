@@ -89,7 +89,6 @@ public class AuditModuleRequestMapper {
         return mapToAuditLog(AuditObjectTypeEnum.PROGRAM_POLL.getValue(), AuditOperationEnum.STOP.getValue(), guid, AuditOperationEnum.STOP.getValue(), username);
     }
 
-
     public static String mapAuditLogProgramPollInactivated(String guid, String username) throws AuditModelMarshallException {
         return mapToAuditLog(AuditObjectTypeEnum.PROGRAM_POLL.getValue(), AuditOperationEnum.INACTIVATE.getValue(), guid, AuditOperationEnum.INACTIVATE.getValue(), username);
     }

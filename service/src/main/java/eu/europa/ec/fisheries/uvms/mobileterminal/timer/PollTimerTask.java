@@ -11,12 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 
-import java.util.Date;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
@@ -24,13 +18,18 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalGen
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.PollDataSourceRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.List;
 
 public class PollTimerTask implements Runnable{
 
-    final static Logger LOG = LoggerFactory.getLogger(PollTimerTask.class);
-    PollService pollService;
+    private final static Logger LOG = LoggerFactory.getLogger(PollTimerTask.class);
+    private PollService pollService;
 
-    public PollTimerTask(PollService pollService){
+    PollTimerTask(PollService pollService){
         this.pollService = pollService;
     }
 
