@@ -11,12 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
@@ -28,9 +22,12 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceMapperException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- **/
+import java.util.ArrayList;
+import java.util.List;
+
 public class PollMapper {
 
     final static Logger LOG = LoggerFactory.getLogger(PollMapper.class);
@@ -90,7 +87,7 @@ public class PollMapper {
         return dto;
     }
 
-    public static String getPollAttribute(PollAttributeType type, List<PollAttribute> attributes) {
+    private static String getPollAttribute(PollAttributeType type, List<PollAttribute> attributes) {
         for (PollAttribute attribute : attributes) {
             if (attribute.getKey().equals(type)) {
                 return attribute.getValue();

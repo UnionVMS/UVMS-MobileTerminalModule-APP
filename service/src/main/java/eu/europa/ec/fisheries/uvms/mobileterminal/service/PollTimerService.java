@@ -16,6 +16,5 @@ import javax.ejb.Local;
 @Local
 public interface PollTimerService {
 
-    public void timerTimeout();
-
+    void timerTimeout();
 }

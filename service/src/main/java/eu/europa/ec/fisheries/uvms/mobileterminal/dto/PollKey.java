@@ -11,10 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dto;
 
-/**
- **/
 public enum PollKey {
-
     CONNECTION_ID,
     TRANSPONDER,
     START_DATE,
@@ -24,5 +21,5 @@ public enum PollKey {
     POLL_COMMENT,
     FREQUENCY,
     PROGRAM_RUNNING,
-    USER;
+    USER
 }
