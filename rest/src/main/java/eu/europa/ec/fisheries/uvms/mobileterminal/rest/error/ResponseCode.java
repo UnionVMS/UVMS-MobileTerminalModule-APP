@@ -11,25 +11,19 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.error;
 
-/**
- **/
 public enum ResponseCode {
 	OK(200),
-	
+	UNDEFINED_ERROR(500),
 	MOBILE_TERMINAL_ERROR(501),
-	
 	INPUT_ERROR(511),
 	MAPPING_ERROR(512),
-	
 	SERVICE_ERROR(521),
 	MODEL_ERROR(522),
-	DOMAIN_ERROR(523),
-	
-	UNDEFINED_ERROR(500);
+	DOMAIN_ERROR(523);
 	
 	private int code;
 	
-	private ResponseCode(int code) {
+	ResponseCode(int code) {
 		this.code = code;
 	}
 	

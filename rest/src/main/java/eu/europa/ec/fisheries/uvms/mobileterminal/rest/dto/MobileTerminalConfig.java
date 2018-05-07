@@ -11,23 +11,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.Capability;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityConfiguration;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class MobileTerminalConfig {
 
-    private MobileTerminalConfig() {
-    }
+    private MobileTerminalConfig() {}
 
     public static List<MobileTerminalDeviceConfig> mapConfigTransponders(List<TerminalSystemType> list) {
-        List<MobileTerminalDeviceConfig> transponders = new ArrayList<MobileTerminalDeviceConfig>();
+        List<MobileTerminalDeviceConfig> transponders = new ArrayList<>();
       
         for (TerminalSystemType system : list) {
 
