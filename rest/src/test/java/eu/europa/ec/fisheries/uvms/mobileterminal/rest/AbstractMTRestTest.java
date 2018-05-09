@@ -10,10 +10,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest;
 
-import java.io.File;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.WebTarget;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -21,28 +17,33 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.WebTarget;
+import java.io.File;
+
 @ArquillianSuiteDeployment
 public abstract class AbstractMTRestTest {
 
-	    protected WebTarget getWebTarget() {
-	        Client client = ClientBuilder.newClient();
-	        return client.target("http://localhost:28080/test/rest");
-	    }
+	protected WebTarget getWebTarget() {
+		Client client = ClientBuilder.newClient();
+		return client.target("http://localhost:28080/test/rest");
+	}
 
-	    @Deployment(name = "normal", order = 1)
-	    public static Archive<?> createDeployment() {
+	@Deployment(name = "normal", order = 1)
+	public static Archive<?> createDeployment() {
 
-	        WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
+		WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
 
-	        File[] files = Maven.resolver().loadPomFromFile("pom.xml").importRuntimeAndTestDependencies().resolve()
-	                .withTransitivity().asFile();
-	        testWar.addAsLibraries(files);
-	     
-	        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.rest");
+		File[] files = Maven.resolver().loadPomFromFile("pom.xml").importRuntimeAndTestDependencies().resolve()
+				.withTransitivity().asFile();
+		testWar.addAsLibraries(files);
 
-	        testWar.delete("/WEB-INF/web.xml");
-	        testWar.addAsWebInfResource("mock-web.xml", "web.xml");
+		testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.rest");
 
-	        return testWar;
-	    }
+		testWar.delete("/WEB-INF/web.xml");
+		testWar.addAsWebInfResource("mock-web.xml", "web.xml");
+
+		return testWar;
+	}
 }
