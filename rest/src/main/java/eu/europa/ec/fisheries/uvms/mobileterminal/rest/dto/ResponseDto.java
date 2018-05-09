@@ -11,10 +11,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto;
 
-import java.util.Objects;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
 import org.slf4j.MDC;
+
+import java.util.Objects;
 
 /**
  ** @param <T>
@@ -46,7 +46,6 @@ public class ResponseDto<T> {
     public String getRequestId() {
         return requestId ;
     }
-
 
     @Override
     public int hashCode() {

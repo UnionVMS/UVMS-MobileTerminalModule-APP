@@ -23,59 +23,54 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.InputArgumen
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceMapperException;
 
-/**
- **/
 public class ErrorHandler {
     
     public static ResponseDto getFault(Exception ex) {
     	if(ex instanceof MobileTerminalServiceException) {
     		if(ex instanceof InputArgumentException) {
-    			return new ResponseDto<String>(ex.getMessage(), ResponseCode.INPUT_ERROR);
+    			return new ResponseDto<>(ex.getMessage(), ResponseCode.INPUT_ERROR);
             }
     		
             if(ex instanceof MobileTerminalServiceMapperException) {
-            	return new ResponseDto<String>(ex.getMessage(), ResponseCode.MAPPING_ERROR);
+            	return new ResponseDto<>(ex.getMessage(), ResponseCode.MAPPING_ERROR);
             }
-            return new ResponseDto<String>(ex.getMessage(), ResponseCode.SERVICE_ERROR);
+            return new ResponseDto<>(ex.getMessage(), ResponseCode.SERVICE_ERROR);
     	}
     	
     	if(ex instanceof MobileTerminalModelException) {
     		if(ex instanceof MobileTerminalModelValidationException) {
-    			return new ResponseDto<String>(ex.getMessage(), ResponseCode.INPUT_ERROR);
+    			return new ResponseDto<>(ex.getMessage(), ResponseCode.INPUT_ERROR);
     		}
     		
     		if(ex instanceof MobileTerminalModelMapperException) {
     			//MobileTerminalValidationException
         		//MobileTerminalUnmarshallException
-    			return new ResponseDto<String>(ex.getMessage(), ResponseCode.MAPPING_ERROR);
+    			return new ResponseDto<>(ex.getMessage(), ResponseCode.MAPPING_ERROR);
     		}
     		
     		if(ex instanceof MobileTerminalFaultException) {
         		return extractFault((MobileTerminalFaultException)ex);
         	}
     		
-    		return new ResponseDto<String>(ex.getMessage(), ResponseCode.MODEL_ERROR);
+    		return new ResponseDto<>(ex.getMessage(), ResponseCode.MODEL_ERROR);
     	}
-    	
+
     	if(ex instanceof MobileTerminalException) {
-    		return new ResponseDto<String>(ex.getMessage(), ResponseCode.MOBILE_TERMINAL_ERROR);
+    		return new ResponseDto<>(ex.getMessage(), ResponseCode.MOBILE_TERMINAL_ERROR);
     	}
-    	
-        return new ResponseDto<String>(ex.getMessage(), ResponseCode.UNDEFINED_ERROR);
+        return new ResponseDto<>(ex.getMessage(), ResponseCode.UNDEFINED_ERROR);
     }
 
     private static ResponseDto extractFault(MobileTerminalFaultException ex) {
         MobileTerminalFault fault = ex.getMobileTerminalFault();
         if (fault == null) {
-            return new ResponseDto<String>(ex.getMessage(), ResponseCode.DOMAIN_ERROR);
+            return new ResponseDto<>(ex.getMessage(), ResponseCode.DOMAIN_ERROR);
         }
 
         MobileTerminalType terminal = fault.getTerminal();
         if (terminal == null) {
-            return new ResponseDto<String>(fault.getMessage(), fault.getCode());
+            return new ResponseDto<>(fault.getMessage(), fault.getCode());
         }
-
-        return new ResponseDto<MobileTerminalType>(terminal, fault.getCode());
+        return new ResponseDto<>(terminal, fault.getCode());
     }
-    
 }

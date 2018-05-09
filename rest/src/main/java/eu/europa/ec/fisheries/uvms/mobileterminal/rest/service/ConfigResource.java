@@ -11,19 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
 
-import java.util.List;
-
-import javax.ejb.EJB;
-import javax.ejb.Stateless;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.SearchKey;
@@ -35,18 +22,33 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
 import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
+import java.util.List;
+import java.util.Map;
 
 /**
- * @apiDescription Handles all Polls*/
+ * @apiDescription Handles all Polls
+ */
 @Path("/config")
 @Stateless
+@Consumes(value = {MediaType.APPLICATION_JSON})
+@Produces(value = {MediaType.APPLICATION_JSON})
 @RequiresFeature(UnionVMSFeature.viewVesselsAndMobileTerminals)
 public class ConfigResource {
 
-    final static Logger LOG = LoggerFactory.getLogger(ConfigResource.class);
+    private final static Logger LOG = LoggerFactory.getLogger(ConfigResource.class);
 
     @EJB
-    ConfigService configService;
+    private ConfigService configService;
     
     /**
     *
@@ -58,14 +60,12 @@ public class ConfigResource {
     *
     */
    @GET
-   @Consumes(value = {MediaType.APPLICATION_JSON})
-   @Produces(value = {MediaType.APPLICATION_JSON})
    @Path("/transponders")
 	public ResponseDto<List<MobileTerminalDeviceConfig>> getConfigTransponders() {
        try {
            LOG.info("Get config transponders invoked in rest layer.");
            List<TerminalSystemType> list = configService.getTerminalSystems();
-           return new ResponseDto(MobileTerminalConfig.mapConfigTransponders(list), ResponseCode.OK);
+           return new ResponseDto<>(MobileTerminalConfig.mapConfigTransponders(list), ResponseCode.OK);
        } catch (Exception ex) {
            LOG.error("[ Error when getting configTransponders ] {}", ex.getStackTrace());
            return ErrorHandler.getFault(ex);
@@ -82,13 +82,11 @@ public class ConfigResource {
     *
     */
    @GET
-   @Consumes(value = {MediaType.APPLICATION_JSON})
-   @Produces(value = {MediaType.APPLICATION_JSON})
    @Path("/searchfields")
    public ResponseDto<SearchKey[]> getConfigSearchFields() {
        LOG.info("Get config search fields invoked in rest layer.");
        try {
-           return new ResponseDto<SearchKey[]>(SearchKey.values(), ResponseCode.OK);
+           return new ResponseDto<>(SearchKey.values(), ResponseCode.OK);
        } catch (Exception ex) {
            LOG.error("[ Error when getting config search fields ] {}", ex.getStackTrace());
            return ErrorHandler.getFault(ex);
@@ -96,13 +94,11 @@ public class ConfigResource {
    }
     
     @GET
-    @Consumes(value = {MediaType.APPLICATION_JSON})
-    @Produces(value = {MediaType.APPLICATION_JSON})
     @Path("/")
-    public ResponseDto getConfiguration() {
+    public ResponseDto<Map<String, List<String>>>getConfiguration() {
         try {
         	List<ConfigList> config = configService.getConfig();
-            return new ResponseDto(MobileTerminalConfig.mapConfigList(config), ResponseCode.OK);
+            return new ResponseDto<>(MobileTerminalConfig.mapConfigList(config), ResponseCode.OK);
         } catch (Exception ex) {
             return ErrorHandler.getFault(ex);
         }
