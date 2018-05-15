@@ -11,26 +11,24 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelCapability;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 
 public class MobileTerminalTestHelper {
+
+    private static String serialNumber;
 
     public static MobileTerminalType createBasicMobileTerminal() {
         MobileTerminalType mobileTerminal = new MobileTerminalType();
         mobileTerminal.setSource(MobileTerminalSource.INTERNAL);
         mobileTerminal.setType("INMARSAT_C");
         List<MobileTerminalAttribute> attributes = mobileTerminal.getAttributes();
-        addAttribute(attributes, MobileTerminalConstants.SERIAL_NUMBER, generateARandomStringWithMaxLength(10));
+        serialNumber = generateARandomStringWithMaxLength(10);
+        addAttribute(attributes, MobileTerminalConstants.SERIAL_NUMBER, serialNumber);
         addAttribute(attributes, "SATELLITE_NUMBER", "S" + generateARandomStringWithMaxLength(4));
         addAttribute(attributes, "ANTENNA", "A");
         addAttribute(attributes, "TRANSCEIVER_TYPE", "A");
@@ -94,5 +92,34 @@ public class MobileTerminalTestHelper {
         serialNumberMobileTerminalAttribute.setType(type);
         serialNumberMobileTerminalAttribute.setValue(value);
         attributes.add(serialNumberMobileTerminalAttribute);
+    }
+
+    public static MobileTerminalListQuery createMobileTerminalListQuery() {
+
+        MobileTerminalListQuery query = new MobileTerminalListQuery();
+
+        // ListPagination
+        ListPagination pagination = new ListPagination();
+        pagination.setListSize(1);
+        pagination.setPage(1);
+
+        // MobileTerminalSearchCriteria
+        MobileTerminalSearchCriteria criteria = new MobileTerminalSearchCriteria();
+
+        ListCriteria crt = new ListCriteria();
+        SearchKey searchKey = SearchKey.SERIAL_NUMBER;
+        crt.setKey(searchKey);
+        crt.setValue(serialNumber);
+
+        criteria.getCriterias().add(crt);
+
+        query.setPagination(pagination);
+        query.setMobileTerminalSearchCriteria(criteria);
+
+        return query;
+    }
+
+    public static String getSerialNumber() {
+        return serialNumber;
     }
 }

@@ -12,6 +12,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalListQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.AbstractMTRestTest;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.MobileTerminalTestHelper;
@@ -119,5 +121,33 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
         assertTrue(updated.contains("IRIDIUM"));
         assertTrue(updated.contains(guid));
         assertTrue(updated.contains(String.valueOf(id.intValue())));
+    }
+
+    @Test
+    @RunAsClient
+    public void getMobileTerminalList() {
+        MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
+
+        String created = getWebTarget()
+                .path("mobileterminal")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(mobileTerminal), String.class);
+
+        JsonReader jsonReader = Json.createReader(new StringReader(created));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        assertEquals(jsonObject.getInt("code"), ResponseCode.OK.getCode());
+
+        MobileTerminalListQuery mobileTerminalListQuery = MobileTerminalTestHelper.createMobileTerminalListQuery();
+
+        String response = getWebTarget()
+                .path("/mobileterminal/list")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(mobileTerminalListQuery), String.class);
+
+        assertNotNull(response);
+        assertTrue(response.contains(MobileTerminalTestHelper.getSerialNumber()));
+        assertTrue(response.contains("INMARSAT_C"));
+        assertTrue(response.contains(MobileTerminalSource.INTERNAL.value()));
     }
 }
