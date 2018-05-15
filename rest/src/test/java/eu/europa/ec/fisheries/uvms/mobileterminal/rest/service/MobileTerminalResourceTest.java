@@ -187,7 +187,7 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
         assertNotNull(response);
         assertTrue(response.contains(guid));
     }
-
+    
     @Test
     @RunAsClient
     public void unAssignMobileTerminalTest() {
