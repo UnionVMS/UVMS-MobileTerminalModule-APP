@@ -11,14 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.entity.types;
 
-
 public enum TerminalSourceEnum {
 	INTERNAL(1),
 	NATIONAL(2);
 
     private Integer id;
 
-    private TerminalSourceEnum(int id) {
+    TerminalSourceEnum(int id) {
         this.id = id;
     }
 	

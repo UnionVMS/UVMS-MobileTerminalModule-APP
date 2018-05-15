@@ -159,13 +159,6 @@ public class EnumMapper {
         throw new EnumException("Couldn't map enum (from model) in " + PollTypeEnum.class.getName());
     }
 
-    /**
-     * POLL STATE ENUM
-     *
-     * @param status
-     * @return
-     * @throws EnumException
-     */
     public static PollStateEnum getPollStateTypeFromId(Integer id) throws EnumException {
         if (id != null) {
             for (PollStateEnum polltype : PollStateEnum.values()) {

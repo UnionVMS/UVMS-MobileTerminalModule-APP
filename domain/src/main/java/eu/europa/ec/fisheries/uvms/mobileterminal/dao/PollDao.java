@@ -11,33 +11,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+
+import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface PollDao {
 
-    /**
-     * Create poll
-     *
-     * @param poll
-     * @throws PollDaoException
-     */
     void createPoll(Poll poll) throws PollDaoException;
 
-    /**
-     * Get poll by internal id
-     *
-     * @param pollId
-     * @return
-     * @throws PollDaoException
-     */
     Poll getPollByPoolId(Long pollId) throws PollDaoException;
 
     /**

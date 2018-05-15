@@ -21,5 +21,4 @@ public class PollDaoMappingException extends MobileTerminalModelException {
     public PollDaoMappingException(String message) {
         super(message);
     }
-
 }

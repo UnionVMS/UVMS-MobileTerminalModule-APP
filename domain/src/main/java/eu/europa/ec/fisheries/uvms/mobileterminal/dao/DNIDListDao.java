@@ -11,22 +11,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
+
+import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface DNIDListDao {
 
-	public List<DNIDList> getAllDNIDList() throws ConfigDaoException;
+	List<DNIDList> getAllDNIDList() throws ConfigDaoException;
 	
-	public List<DNIDList> getDNIDList(String pluginName) throws ConfigDaoException;
+	List<DNIDList> getDNIDList(String pluginName) throws ConfigDaoException;
 
-	public void removeByPluginName(String pluginName) throws ConfigDaoException;
+	void removeByPluginName(String pluginName) throws ConfigDaoException;
 
-	public DNIDList create(DNIDList dnid) throws ConfigDaoException;
-
+	DNIDList create(DNIDList dnid) throws ConfigDaoException;
 }
