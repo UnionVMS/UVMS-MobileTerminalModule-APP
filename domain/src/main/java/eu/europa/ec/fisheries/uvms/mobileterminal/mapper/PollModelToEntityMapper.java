@@ -11,12 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
 import eu.europa.ec.fisheries.uvms.commons.date.DateUtils;
@@ -28,6 +22,11 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollPayload;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PollModelToEntityMapper {
     private static Logger LOG = LoggerFactory.getLogger(PollModelToEntityMapper.class);
@@ -78,7 +77,6 @@ public class PollModelToEntityMapper {
                 throw new MobileTerminalModelMapperException("Poll attribute [ " + attr.getKey() + " ] could not be parsed");
             }
         }
-
         return poll;
     }
 

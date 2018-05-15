@@ -37,7 +37,6 @@ public class PollSearchMapper {
 		if (criteria == null || criteria.getKey() == null || criteria.getValue() == null) {
 			throw new SearchMapperException("Non valid search criteria");
 		}
-
 		PollSearchField searchField = getSearchField(criteria.getKey());
 		PollSearchKeyValue searchKeyValue = getSearchKeyValue(searchField, searchKeys);
 		searchKeyValue.getValues().add(criteria.getValue());
@@ -119,11 +118,11 @@ public class PollSearchMapper {
 				} else {
 					builder.append(OPERATOR);
 				}
-				builder.append(keyValue.getSearchField().getTable().getTableAlias()).append(".").append(keyValue.getSearchField().getSqlColumnName());
+				builder.append(keyValue.getSearchField().getTable().getTableAlias()).append(".")
+						.append(keyValue.getSearchField().getSqlColumnName());
 				builder.append(" IN (:").append(keyValue.getSearchField().getSqlReplaceToken()).append(") ");
 			}
 		}
-
 		return builder.toString();
 	}
 
@@ -132,10 +131,8 @@ public class PollSearchMapper {
 	}
 
 	public static String createSelectSearchSql(List<PollSearchKeyValue> searchKeys, boolean isDynamic) {
-		StringBuilder builder = new StringBuilder();
-		builder.append("SELECT DISTINCT p FROM Poll p ");
-		builder.append(createSearchSql(searchKeys, isDynamic));
-		return builder.toString();
+		return "SELECT DISTINCT p FROM Poll p " +
+				createSearchSql(searchKeys, isDynamic);
 	}
 
 	public static String createPollableSearchSql(List<String> idList) {

@@ -38,7 +38,6 @@ import org.hibernate.annotations.FetchMode;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.EqualsUtil;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
 
-
 /**
  * The persistent class for the mobileterminalevent database table.
  * 
@@ -204,8 +203,7 @@ public class MobileTerminalEvent implements Serializable {
 			MobileTerminalEvent other = (MobileTerminalEvent)obj;
 			if(!EqualsUtil.compare(comment, other.comment)) return false;
 			if(!EqualsUtil.compare(eventCodeType.name(), other.eventCodeType.name())) return false;
-			if(!EqualsUtil.compare(updatetime, other.updatetime)) return false;
-			return true;
+			return EqualsUtil.compare(updatetime, other.updatetime);
 		}
 		return false;
 	}

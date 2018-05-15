@@ -11,33 +11,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelCapability;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
 import eu.europa.ec.fisheries.uvms.commons.date.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.ChannelHistory;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.UUID;
 
 public class MobileTerminalModelToEntityMapper {
     private static Logger LOG = LoggerFactory.getLogger(MobileTerminalModelToEntityMapper.class);
@@ -65,12 +54,7 @@ public class MobileTerminalModelToEntityMapper {
         entity.setUpdateTime(DateUtils.getNowDateUTC());
         entity.setUpdatedBy(username);
 
-        try {
-            mapHistoryAttributes(entity, model, username, comment, event);
-        } catch (EnumException e) {
-            LOG.error("[ Error when mapping attribute types ]");
-            throw new MobileTerminalModelMapperException(e.getMessage());
-        }
+        mapHistoryAttributes(entity, model, username, comment, event);
 
         // Channels can only change for these events
         if (event == EventCodeEnum.MODIFY || event == EventCodeEnum.CREATE) {
@@ -81,10 +65,8 @@ public class MobileTerminalModelToEntityMapper {
                 throw new MobileTerminalModelMapperException(e.getMessage());
             }
         }
-
         entity.setUpdateTime(DateUtils.getNowDateUTC());
         entity.setUpdatedBy(username);
-
 
         return entity;
     }
@@ -189,11 +171,10 @@ public class MobileTerminalModelToEntityMapper {
                 channel.getHistories().add(archive);
             }
         }
-
         entity.setChannels(channels);
     }
 
-    private static void mapHistoryAttributes(MobileTerminal entity, MobileTerminalType model, String username, String comment, EventCodeEnum eventCode) throws EnumException, MobileTerminalModelMapperException {
+    private static void mapHistoryAttributes(MobileTerminal entity, MobileTerminalType model, String username, String comment, EventCodeEnum eventCode) {
         List<MobileTerminalAttribute> modelAttributes = model.getAttributes();
         MobileTerminalEvent current = entity.getCurrentEvent();
 
@@ -218,22 +199,20 @@ public class MobileTerminalModelToEntityMapper {
     }
 
     private static String mapHistoryAttributes(List<MobileTerminalAttribute> modelAttributes) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (MobileTerminalAttribute attr : modelAttributes) {
             sb.append(attr.getType()).append("=");
             sb.append(attr.getValue()).append(";");
         }
-
         return sb.toString();
     }
 
     private static String mapComChannelAttributes(List<ComChannelAttribute> modelAttributes) {
-        StringBuffer sb = new StringBuffer();
+        StringBuilder sb = new StringBuilder();
         for (ComChannelAttribute attr : modelAttributes) {
             sb.append(attr.getType()).append("=");
             sb.append(attr.getValue()).append(";");
         }
-
         return sb.toString();
     }
 

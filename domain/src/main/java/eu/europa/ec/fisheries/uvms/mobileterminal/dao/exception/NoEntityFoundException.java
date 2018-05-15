@@ -18,5 +18,4 @@ public class NoEntityFoundException extends TerminalDaoException {
     public NoEntityFoundException(String message) {
         super(message);
     }
-
 }

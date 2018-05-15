@@ -24,7 +24,7 @@ public enum EventCodeEnum {
 
 	private final int id;
 	
-	private EventCodeEnum(int id) {
+	EventCodeEnum(int id) {
 		this.id = id;
 	}
 	

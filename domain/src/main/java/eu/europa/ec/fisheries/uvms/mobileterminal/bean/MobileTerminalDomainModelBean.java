@@ -44,16 +44,13 @@ import java.util.List;
 @LocalBean
 public class MobileTerminalDomainModelBean  {
 
-    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalDomainModelBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalDomainModelBean.class);
 
     @EJB
-    TerminalDao terminalDao;
-    
-    @EJB
-    ConfigModelBean config;
+    private TerminalDao terminalDao;
 
     @EJB
-    MobileTerminalPluginDao pluginDao;
+    private MobileTerminalPluginDao pluginDao;
     
     public MobileTerminal getMobileTerminalEntityById(MobileTerminalId id) throws InputArgumentException, NoEntityFoundException {
     	if(id == null || id.getGuid() == null || id.getGuid().isEmpty()) throw new InputArgumentException("Non valid id");
@@ -175,7 +172,7 @@ public class MobileTerminalDomainModelBean  {
             throw new InputArgumentException("No Mobile terminalId in request");
         }
         if (query.getConnectId() == null || query.getConnectId().isEmpty()) {
-            throw new InputArgumentException("No connect id in requesst");
+            throw new InputArgumentException("No connect id in request");
         }
 
         MobileTerminalId mobTermId = query.getMobileTerminalId();
@@ -247,7 +244,7 @@ public class MobileTerminalDomainModelBean  {
         throw new MobileTerminalModelException("Terminal " + mobTermId + " is not linked to an asset with guid " + connectId);
     }
 
-    public MobileTerminalType upsertMobileTerminal(MobileTerminalType mobileTerminal,String username) throws InputArgumentException, MobileTerminalModelException {
+    public MobileTerminalType upsertMobileTerminal(MobileTerminalType mobileTerminal,String username) throws MobileTerminalModelException {
 
         if (mobileTerminal == null) {
             throw new InputArgumentException("RequestQuery is null");
@@ -257,15 +254,13 @@ public class MobileTerminalDomainModelBean  {
         }
 
         try {
-            MobileTerminalType terminal = updateMobileTerminal(mobileTerminal, "Upserted by external module", username); //TODO comment?
-            return terminal;
+            return updateMobileTerminal(mobileTerminal, "Upserted by external module", username);
         } catch (NumberFormatException | MobileTerminalModelException e) {
             LOG.error("[ Error when upserting mobile terminal: Mobile terminal update failed trying to insert. ] {} {}", e.getMessage(), e.getStackTrace());
             if (e instanceof MobileTerminalExistsException) {
                 throw e;
             }
         }
-
         return createMobileTerminal(mobileTerminal, username);
     }
 
@@ -343,7 +338,7 @@ public class MobileTerminalDomainModelBean  {
 
 
         ListResponseDto response = new ListResponseDto();
-        List<MobileTerminalType> mobileTerminalList = new ArrayList<MobileTerminalType>();
+        List<MobileTerminalType> mobileTerminalList = new ArrayList<>();
 
         Integer page = query.getPagination().getPage();
         Integer listSize = query.getPagination().getListSize();
@@ -372,21 +367,18 @@ public class MobileTerminalDomainModelBean  {
         if (totalMatches % listSize != 0) {
             numberOfPages += 1;
         }
-
         response.setMobileTerminalList(mobileTerminalList);
-        if((totalMatches-1) <= 0) {
-        } else {
+
+        if ((totalMatches - 1) > 0) {
         	if(stopIndex >= totalMatches) {
             	stopIndex = totalMatches;
             }
         	LOG.debug("stopIndex: " + stopIndex);
         	response.setMobileTerminalList(new ArrayList<>(mobileTerminalList.subList(startIndex, stopIndex)));
         }
-        
         response.setTotalNumberOfPages(numberOfPages);
         response.setCurrentPage(page);
 
-        
         return response;
     }
 }

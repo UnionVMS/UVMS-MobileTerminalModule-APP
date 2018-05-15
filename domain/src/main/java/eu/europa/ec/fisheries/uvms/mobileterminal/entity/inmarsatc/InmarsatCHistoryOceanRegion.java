@@ -135,5 +135,4 @@ public class InmarsatCHistoryOceanRegion implements Serializable {
 	public int hashCode() {
 		return EqualsUtil.getHashCode(code) + EqualsUtil.getHashCode(name);
 	}
-
 }

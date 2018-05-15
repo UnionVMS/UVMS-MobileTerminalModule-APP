@@ -82,7 +82,6 @@ public class ConfigModelBean  {
 
 			terminalSystemList.add(systemType);
 		}
-
         return terminalSystemList;
     }
 

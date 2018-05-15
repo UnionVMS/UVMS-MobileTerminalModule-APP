@@ -25,13 +25,13 @@ public enum SearchField {
     private final String sqlReplaceToken;
     private final Class clazz;
     
-    private SearchField(String sqlColumnName, String sqlReplaceToken) {
+    SearchField(String sqlColumnName, String sqlReplaceToken) {
         this.sqlColumnName = sqlColumnName;
         this.sqlReplaceToken = sqlReplaceToken;
         this.clazz = String.class;
     }
     
-    private SearchField(String sqlColumnName, String sqlReplaceToken, Class clazz) {
+    SearchField(String sqlColumnName, String sqlReplaceToken, Class clazz) {
         this.sqlColumnName = sqlColumnName;
         this.sqlReplaceToken = sqlReplaceToken;
         this.clazz = clazz;

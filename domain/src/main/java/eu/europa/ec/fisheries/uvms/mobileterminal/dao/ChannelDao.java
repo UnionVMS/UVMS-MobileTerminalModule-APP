@@ -23,11 +23,6 @@ import java.util.List;
 @Local
 public interface ChannelDao {
 
-    /**
-     * Get all pollable InmarsatC channels
-     * @param idList
-     * @return
-     */
     List<Channel> getPollableListSearch(List<String> idList);
 
     List<String> getActiveDNID(String pluginName);

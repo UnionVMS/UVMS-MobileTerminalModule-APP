@@ -37,8 +37,7 @@ public class ChannelDaoBean extends Dao implements ChannelDao {
         if(idList != null && !idList.isEmpty()) {
             query.setParameter("idList", idList);
         }
-        List<Channel> resultList = query.getResultList();
-        return resultList;
+        return query.getResultList();
     }
 
     @Override

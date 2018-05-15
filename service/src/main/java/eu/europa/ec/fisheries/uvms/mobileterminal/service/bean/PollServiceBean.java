@@ -115,7 +115,7 @@ public class PollServiceBean implements PollService {
     public List<PollResponseType> getRunningProgramPolls() throws MobileTerminalServiceException {
         LOG.debug("GET RUNNING PROGRAM POLLS INVOKED IN SERVICE LAYER");
         try {
-            return pollModel.getPollProgramList(true);
+            return pollModel.getPollProgramList();
         } catch (MobileTerminalModelException e) {
             throw new MobileTerminalServiceException(e.getMessage());
         }

@@ -11,20 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelCapability;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
@@ -33,6 +20,13 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MobileTerminalEntityToModelMapper {
     private static Logger LOG = LoggerFactory.getLogger(MobileTerminalEntityToModelMapper.class);
@@ -144,7 +138,6 @@ public class MobileTerminalEntityToModelMapper {
                 channelList.add(comChannel);
             }
         }
-
         return channelList;
     }
 
@@ -168,5 +161,4 @@ public class MobileTerminalEntityToModelMapper {
         terminalId.setGuid(mobtermGuid);
         return terminalId;
     }
-
 }

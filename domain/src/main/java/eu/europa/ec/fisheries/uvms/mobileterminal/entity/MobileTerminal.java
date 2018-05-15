@@ -45,7 +45,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstan
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 
-
 /**
  * The persistent class for the mobileterminal database table.
  * 

@@ -11,48 +11,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 
+import javax.ejb.Local;
+import java.util.List;
+
 @Local
 public interface MobileTerminalPluginDao {
 
-	/**
-	 * Get all mobile terminal plugins
-	 * 
-	 * @return
-	 * @throws ConfigDaoException
-	 */
 	List<MobileTerminalPlugin> getPluginList() throws ConfigDaoException;
-	
-	/**
-	 * Persist mobile terminal plugin
-	 * @param plugin
-	 * @return
-	 * @throws TerminalDaoException
-	 */
+
 	MobileTerminalPlugin createMobileTerminalPlugin(MobileTerminalPlugin plugin) throws TerminalDaoException;
 
-	/**
-	 * 
-	 * @param serviceName
-	 * @return
-	 * @throws NoEntityFoundException
-	 */
 	MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException;
 
-	/**
-	 * Merge and flush
-	 * 
-	 * @param entity
-	 * @return
-	 * @throws TerminalDaoException
-	 */
 	MobileTerminalPlugin updateMobileTerminalPlugin(MobileTerminalPlugin entity) throws TerminalDaoException;
 }

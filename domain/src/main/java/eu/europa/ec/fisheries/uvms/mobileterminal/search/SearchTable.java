@@ -32,7 +32,7 @@ public enum SearchTable {
 	private String tableName;
 	private String tableAlias;
 	
-	private SearchTable(String tableName, String tableAlias) {
+	SearchTable(String tableName, String tableAlias) {
 		this.tableName=tableName;
 		this.tableAlias = tableAlias;
 	}
@@ -44,5 +44,4 @@ public enum SearchTable {
 	public String getTableName() {
 		return tableName;
 	}
-
 }

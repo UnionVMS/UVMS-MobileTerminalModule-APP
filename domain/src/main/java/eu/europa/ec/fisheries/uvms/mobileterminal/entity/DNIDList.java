@@ -104,5 +104,4 @@ public class DNIDList implements Serializable {
     public void setDNID(String dnid) {
         this.dnid = dnid;
     }
-
 }
