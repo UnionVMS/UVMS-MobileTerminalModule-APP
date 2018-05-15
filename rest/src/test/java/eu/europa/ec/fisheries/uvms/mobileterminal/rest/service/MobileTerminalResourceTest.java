@@ -11,6 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
 
+
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.AbstractMTRestTest;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.MobileTerminalTestHelper;
@@ -123,7 +124,7 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
     @Test
     @RunAsClient
-    public void getMobileTerminalList() {
+    public void getMobileTerminalListTest() {
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
         String created = getWebTarget()
@@ -151,7 +152,7 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
     @Test
     @RunAsClient
-    public void createMobileTerminalAssignQuery() {
+    public void assignMobileTerminalTest() {
 
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
@@ -185,5 +186,52 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
         assertNotNull(response);
         assertTrue(response.contains(guid));
+    }
+
+    @Test
+    @RunAsClient
+    public void unAssignMobileTerminalTest() {
+        MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
+
+        String created = getWebTarget()
+                .path("mobileterminal")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(mobileTerminal), String.class);
+
+        JsonReader jsonReader = Json.createReader(new StringReader(created));
+        JsonObject jsonObject = jsonReader.readObject();
+
+        assertEquals(jsonObject.getInt("code"), ResponseCode.OK.getCode());
+
+        JsonObject data = jsonObject.getJsonObject("data");
+        JsonObject terminalId = data.getJsonObject("mobileTerminalId");
+        String guid = terminalId.getString("guid");
+
+        MobileTerminalAssignQuery query = new MobileTerminalAssignQuery();
+        String connectId = UUID.randomUUID().toString();
+        query.setConnectId(connectId);
+
+        MobileTerminalId mobileTerminalId = new MobileTerminalId();
+        mobileTerminalId.setGuid(guid);
+        query.setMobileTerminalId(mobileTerminalId);
+
+
+        String responseAssign = getWebTarget()
+                .path("/mobileterminal/assign")
+                .queryParam("comment", "NEW_TEST_COMMENT")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(query), String.class);
+
+        assertNotNull(responseAssign);
+        assertTrue(responseAssign.contains(guid));
+
+        String responseUnAssign = getWebTarget()
+                .path("/mobileterminal/unassign")
+                .queryParam("comment", "NEW_TEST_COMMENT")
+                .request(MediaType.APPLICATION_JSON)
+                .post(Entity.json(query), String.class);
+
+        assertNotNull(responseUnAssign);
+        assertTrue(responseUnAssign.contains(guid));
     }
 }
