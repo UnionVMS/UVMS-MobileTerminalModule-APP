@@ -1,6 +1,5 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
-
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.GetMobileTerminalRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
@@ -46,7 +45,6 @@ public class GetReceivedEventBean {
     @EJB
     private MobileTerminalService service;
 
-
     @Inject
     @ErrorEvent
     Event<EventMessage> errorEvent;
@@ -61,7 +59,9 @@ public class GetReceivedEventBean {
                 String response = MobileTerminalModuleRequestMapper.createMobileTerminalResponse(mobileTerminal);
                 TextMessage responseMessage = session.createTextMessage(response);
                 responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
+//                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
+                javax.jms.MessageProducer producer = session.createProducer(message.getJmsMessage().getJMSReplyTo());
+                producer.send(responseMessage);
             } finally {
                 connection.close();
             }
@@ -73,32 +73,29 @@ public class GetReceivedEventBean {
         }
     }
 
-    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        producer.setTimeToLive(60000L);
-        return producer;
-    }
+//    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
+//    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
+//        javax.jms.MessageProducer producer = session.createProducer(destination);
+//        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+//        producer.setTimeToLive(60000L);
+//        return producer;
+//    }
 
     // TODO: Go through this logic and error handling
     private MobileTerminalType getMobileTerminal(EventMessage message) {
         GetMobileTerminalRequest request = null;
         MobileTerminalType mobTerm = null;
         DataSourceQueue dataSource = null;
-
         try {
             request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), GetMobileTerminalRequest.class);
         } catch (MobileTerminalUnmarshallException ex) {
             errorEvent.fire(new EventMessage(message.getJmsMessage(), "Error when mapping message: " + ex.getMessage()));
         }
-
         try {
             dataSource = decideDataflow();
         } catch (Exception ex) {
             errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when deciding Dataflow for : " + dataSource.name() + " Error message: " + ex.getMessage()));
         }
-
         try {
             LOG.debug("Got message to MobileTerminalModule, Executing Get MobileTerminal from datasource {}", dataSource.name());
             mobTerm = service.getMobileTerminalById(request.getId(), dataSource);
@@ -108,7 +105,6 @@ public class GetReceivedEventBean {
         } catch (MobileTerminalException ex) {
             mobTerm = null;
         }
-
         if (mobTerm == null) {
             LOG.debug("Trying to retrieve MobileTerminal from datasource: {0} as second option", DataSourceQueue.INTERNAL.name());
             try {
@@ -118,30 +114,20 @@ public class GetReceivedEventBean {
                 errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when getting vessel from source : " + dataSource.name() + " Error message: " + ex.getMessage()));
             }
         }
-
         return mobTerm;
     }
 
-
-
     private DataSourceQueue decideDataflow() throws MobileTerminalServiceException {
         try {
-
             Boolean national = parameters.getBooleanValue(ParameterKey.USE_NATIONAL.getKey());
-
             LOG.debug("Settings for dataflow are: NATIONAL: {}", national.toString());
-
             if (national) {
                 return DataSourceQueue.INTEGRATION;
             }
-
             return DataSourceQueue.INTERNAL;
-
         } catch (ConfigServiceException ex) {
             LOG.error("[ Error when deciding data flow. ] {}", ex.getMessage());
             throw new MobileTerminalServiceException(ex.getMessage());
         }
-
     }
-
 }

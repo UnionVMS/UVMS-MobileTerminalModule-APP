@@ -54,7 +54,9 @@ public class ListReceivedEventBean {
                 String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);
                 TextMessage responseMessage = session.createTextMessage(response);
                 responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
+//                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
+                javax.jms.MessageProducer producer = session.createProducer(message.getJmsMessage().getJMSReplyTo());
+                producer.send(responseMessage);
             } finally {
                 connection.close();
             }
@@ -63,15 +65,13 @@ public class ListReceivedEventBean {
             // Propagate error
             throw new EJBException(e);
         }
-
     }
 
-    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        producer.setTimeToLive(60000L);
-        return producer;
-    }
-
+//    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
+//    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
+//        javax.jms.MessageProducer producer = session.createProducer(destination);
+//        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+//        producer.setTimeToLive(60000L);
+//        return producer;
+//    }
 }

@@ -11,6 +11,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean;
 
+import eu.europa.ec.fisheries.uvms.commons.message.impl.JMSUtils;
+import eu.europa.ec.fisheries.uvms.config.exception.ConfigMessageException;
+import eu.europa.ec.fisheries.uvms.config.message.ConfigMessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.jms.Connection;
@@ -18,20 +27,10 @@ import javax.jms.ConnectionFactory;
 import javax.jms.Queue;
 import javax.jms.Session;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.uvms.commons.message.impl.JMSUtils;
-import eu.europa.ec.fisheries.uvms.config.exception.ConfigMessageException;
-import eu.europa.ec.fisheries.uvms.config.message.ConfigMessageConsumer;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
-
 @Stateless
 public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMessageConsumer {
 
-    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMessageConsumer.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMessageConsumer.class);
 
     private final static long TIMEOUT = 30000; //TODO timeout
 

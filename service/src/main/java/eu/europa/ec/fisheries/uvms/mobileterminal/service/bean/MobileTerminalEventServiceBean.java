@@ -11,20 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
-import javax.annotation.Resource;
-import javax.ejb.Stateless;
-import javax.enterprise.event.Event;
-import javax.enterprise.event.Observes;
-import javax.inject.Inject;
-import javax.jms.Connection;
-import javax.jms.ConnectionFactory;
-import javax.jms.DeliveryMode;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Session;
-import javax.jms.TextMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
@@ -32,6 +18,15 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMes
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.EventService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.annotation.Resource;
+import javax.ejb.Stateless;
+import javax.enterprise.event.Event;
+import javax.enterprise.event.Observes;
+import javax.inject.Inject;
+import javax.jms.*;
 
 @Stateless
 public class MobileTerminalEventServiceBean implements EventService {
@@ -48,10 +43,9 @@ public class MobileTerminalEventServiceBean implements EventService {
     @Override
     public void returnError(@Observes @ErrorEvent EventMessage message) {
         try {
-            Connection connection = connectionFactory.createConnection();
-            try {
-                //TODO: Transacted false??
-                LOG.debug("Sending error message back from Mobile Terminal module to recipient om JMS Queue with correlationID: {} ", message.getJmsMessage().getJMSMessageID());
+            try (Connection connection = connectionFactory.createConnection()) {
+                LOG.debug("Sending error message back from Mobile Terminal module to recipient om JMS Queue with correlationID: {} ",
+                        message.getJmsMessage().getJMSMessageID());
                 Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
                 MobileTerminalFault request = new MobileTerminalFault();
@@ -60,9 +54,9 @@ public class MobileTerminalEventServiceBean implements EventService {
 
                 TextMessage response = session.createTextMessage(data);
                 response.setJMSCorrelationID(message.getJmsMessage().getJMSCorrelationID());
-                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(response);
-            } finally {
-                connection.close();
+//                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(response);
+                MessageProducer producer = session.createProducer(message.getJmsMessage().getJMSReplyTo());
+                producer.send(response);
             }
 
         } catch (MobileTerminalModelMapperException | JMSException ex) {
@@ -70,12 +64,11 @@ public class MobileTerminalEventServiceBean implements EventService {
         }
     }
 
-    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        producer.setTimeToLive(60000L);
-        return producer;
-    }
-
+//    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
+//    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
+//        javax.jms.MessageProducer producer = session.createProducer(destination);
+//        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+//        producer.setTimeToLive(60000L);
+//        return producer;
+//    }
 }

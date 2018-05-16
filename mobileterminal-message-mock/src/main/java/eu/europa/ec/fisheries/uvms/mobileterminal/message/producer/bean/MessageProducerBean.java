@@ -11,28 +11,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean;
 
-import eu.europa.ec.fisheries.uvms.config.exception.ConfigMessageException;
 import eu.europa.ec.fisheries.uvms.config.message.ConfigMessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
-import javax.jms.DeliveryMode;
-import javax.jms.Destination;
-import javax.jms.JMSException;
-import javax.jms.Session;
 import java.util.UUID;
 
 @Stateless
 public class MessageProducerBean implements MessageProducer, ConfigMessageProducer {
-
-
-    final static Logger LOG = LoggerFactory.getLogger(MessageProducerBean.class);
 
     public static final String MESSAGE_PRODUCER_METHODS_FAIL = "MESSAGE_PRODUCER_METHODS_FAIL";
 
@@ -60,14 +50,14 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
     }
 
     @Override
-    public String sendConfigMessage(String text) throws ConfigMessageException {
+    public String sendConfigMessage(String text) {
         return UUID.randomUUID().toString();
     }
 
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        producer.setTimeToLive(60000L);
-        return producer;
-    }
+//    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
+//        javax.jms.MessageProducer producer = session.createProducer(destination);
+//        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
+//        producer.setTimeToLive(60000L);
+//        return producer;
+//    }
 }
