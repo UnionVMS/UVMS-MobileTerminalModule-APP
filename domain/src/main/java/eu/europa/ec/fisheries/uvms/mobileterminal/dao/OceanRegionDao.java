@@ -11,21 +11,14 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
+
+import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface OceanRegionDao {
 
-	/**
-	 * Get list of ocean regions
-	 * 
-	 * @return
-	 * @throws ConfigDaoException
-	 */
 	List<OceanRegion> getOceanRegionList() throws ConfigDaoException;
 }

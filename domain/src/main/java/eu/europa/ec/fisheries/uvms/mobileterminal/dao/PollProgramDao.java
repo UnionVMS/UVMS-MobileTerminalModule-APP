@@ -11,32 +11,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
 
-import java.util.List;
-
-import javax.ejb.Local;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+
+import javax.ejb.Local;
+import java.util.List;
 
 @Local
 public interface PollProgramDao {
 
-    /**
-     * Create poll program
-     *
-     * @param pollProgram
-     * @throws PollDaoException
-     */
-    public void createPollProgram(PollProgram pollProgram) throws PollDaoException;
-    
-    /**
-     * Update poll program
-     * 
-     * @param pollProgram
-     * @return
-     * @throws PollDaoException
-     */
-    public PollProgram updatePollProgram(PollProgram pollProgram) throws PollDaoException;
+    void createPollProgram(PollProgram pollProgram) throws PollDaoException;
+
+    PollProgram updatePollProgram(PollProgram pollProgram) throws PollDaoException;
     
     /**
      * Get a list of alive poll programs
@@ -46,23 +32,17 @@ public interface PollProgramDao {
      * @return
      * @throws PollDaoException
      */
-    public List<PollProgram> getProgramPollsAlive() throws PollDaoException;
+    List<PollProgram> getProgramPollsAlive() throws PollDaoException;
 
     /**
      * Get a list of running and started programs
      * A poll program is running when current date is after start date,
      * and the state is STARTED
-     * 
+     *
      * @return
      * @throws PollDaoException
      */
-    public List<PollProgram> getPollProgramRunningAndStarted() throws PollDaoException;
-    
-    /**
-     * Get poll program by guid
-     * @param guid
-     * @return
-     * @throws PollDaoException
-     */
-	public PollProgram getPollProgramByGuid(String guid) throws PollDaoException;
+    List<PollProgram> getPollProgramRunningAndStarted() throws PollDaoException;
+
+	PollProgram getPollProgramByGuid(String guid) throws PollDaoException;
 }

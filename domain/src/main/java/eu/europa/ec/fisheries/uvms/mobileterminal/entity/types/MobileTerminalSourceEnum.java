@@ -14,5 +14,5 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.entity.types;
 
 public enum MobileTerminalSourceEnum {
 	INTERNAL,
-	NATIONAL;
+	NATIONAL
 }

@@ -187,15 +187,11 @@ public class ChannelHistory {
             if (!name.equalsIgnoreCase(other.getName())) {
                 return false;
             }
-           // if (!id.equals(other.getId())) {
-           //     return false;
-           // }
             Map<String, String> attr = AttributeMapper.mapAttributeString(attributes);
             Map<String, String> otherAttr = AttributeMapper.mapAttributeString(other.getAttributes());
 
             if((attr == null) && (otherAttr == null)) return true;
-            if((attr == null) && (otherAttr != null)) return false;
-            if((attr != null) && (otherAttr == null)) return false;
+            if(attr == null || otherAttr == null) return false;
 
             if(attr.size() != otherAttr.size()) return false;
 
@@ -217,8 +213,7 @@ public class ChannelHistory {
                 return false;
             }
         }
-
-        return true;
+        return false;
     }
 
     @Override

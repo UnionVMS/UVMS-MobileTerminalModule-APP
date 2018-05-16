@@ -15,9 +15,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoExcepti
 
 public interface MobileTerminalDao<T> {
 
-	public T createEntity(T entity) throws ConfigDaoException;
+	T createEntity(T entity) throws ConfigDaoException;
 	
-	public T getEntityById(Integer id);
+	T getEntityById(Integer id);
 	
-	public T getEntityByGuid(String guid);
+	T getEntityByGuid(String guid);
 }

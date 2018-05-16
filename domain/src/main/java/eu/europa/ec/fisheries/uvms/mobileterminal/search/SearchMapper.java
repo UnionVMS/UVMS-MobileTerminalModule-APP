@@ -11,21 +11,20 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.search;
 
-import java.util.List;
-
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ListCriteria;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ListCriteria;
+import java.util.List;
 
 public class SearchMapper {
 
-    final static Logger LOG = LoggerFactory.getLogger(SearchMapper.class);
+    private final static Logger LOG = LoggerFactory.getLogger(SearchMapper.class);
 
     public static String createSelectSearchSql(List<ListCriteria> criteriaList, boolean isDynamic) {
-        StringBuilder buffer = new StringBuilder();
+        StringBuilder builder = new StringBuilder();
 
-        buffer.append("SELECT DISTINCT mt")
+        builder.append("SELECT DISTINCT mt")
                 .append(" FROM MobileTerminal mt")
                 .append(" INNER JOIN FETCH mt.mobileTerminalEvents me")
                 .append(" LEFT JOIN FETCH mt.channels c")
@@ -43,41 +42,41 @@ public class SearchMapper {
         String operator = isDynamic ? "OR" : "AND";
 
         if (criteriaList != null && !criteriaList.isEmpty()) {
-            buffer.append(" AND (");
+            builder.append(" AND (");
             boolean first = true;
             for (ListCriteria criteria : criteriaList) {
                 String key = criteria.getKey().value();
                 if (first) {
                     first = false;
                 } else {
-                    buffer.append(operator);
+                    builder.append(operator);
                 }
                 if ("CONNECT_ID".equals(key)) {
-                    buffer.append(" ( me.connectId = ")
+                    builder.append(" ( me.connectId = ")
                           .append("'").append(criteria.getValue()).append("' ) ");
                 } else {
                     if (MobileTerminalSearchAttributes.isAttribute(key)) {
-                        buffer.append(" ( me.attributes LIKE ")
+                        builder.append(" ( me.attributes LIKE ")
                                 .append("'%").append(key).append("=")
                                 .append(criteria.getValue().replace('*', '%')).append(";%' ) ");
                     } else if (ChannelSearchAttributes.isAttribute(key)) {
-                        buffer.append(" ( ch.attributes LIKE ")
+                        builder.append(" ( ch.attributes LIKE ")
                                 .append("'%").append(key).append("=")
                                 .append(criteria.getValue().replace('*', '%')).append(";%' ) ");
                     } else {
-                        buffer.append(" ( ch.attributes LIKE ")
+                        builder.append(" ( ch.attributes LIKE ")
                                 .append("'%").append(key).append("=")
                                 .append(criteria.getValue().replace('*', '%')).append(";%' ");
-                        buffer.append(" OR ");
-                        buffer.append(" me.attributes LIKE ")
+                        builder.append(" OR ");
+                        builder.append(" me.attributes LIKE ")
                                 .append("'%").append(key).append("=")
                                 .append(criteria.getValue().replace('*', '%')).append(";%' ) ");
                     }
                 }
             }
-            buffer.append(")");
+            builder.append(")");
         }
-        LOG.debug("SELECT SQL {}", buffer.toString());
-        return buffer.toString();
+        LOG.debug("SELECT SQL {}", builder.toString());
+        return builder.toString();
     }
 }

@@ -21,5 +21,4 @@ public class MobileTerminalDaoMappingException extends MobileTerminalModelExcept
     public MobileTerminalDaoMappingException(String message) {
         super(message);
     }
-
 }
