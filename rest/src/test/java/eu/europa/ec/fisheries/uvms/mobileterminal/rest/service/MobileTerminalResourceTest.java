@@ -19,6 +19,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
 import org.hamcrest.CoreMatchers;
 import org.jboss.arquillian.container.test.api.RunAsClient;
 import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.arquillian.transaction.api.annotation.TransactionMode;
+import org.jboss.arquillian.transaction.api.annotation.Transactional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.slf4j.Logger;
@@ -36,12 +38,14 @@ import java.util.UUID;
 import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
+@Transactional
 public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
     private static final Logger LOG = LoggerFactory.getLogger(MobileTerminalResourceTest.class);
 
     @Test
     @RunAsClient
+    @Transactional(TransactionMode.ROLLBACK)
     public void createMobileTerminalTest() {
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
@@ -58,6 +62,7 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
     @Test
     @RunAsClient
+    @Transactional(TransactionMode.ROLLBACK)
     public void getMobileTerminalByIdTest() {
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
@@ -86,6 +91,7 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
     @Test
     @RunAsClient
+    @Transactional(TransactionMode.ROLLBACK)
     public void updateMobileTerminalTest() {
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
@@ -124,6 +130,7 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
     @Test
     @RunAsClient
+    @Transactional(TransactionMode.ROLLBACK)
     public void getMobileTerminalListTest() {
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
@@ -152,6 +159,7 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
     @Test
     @RunAsClient
+    @Transactional(TransactionMode.ROLLBACK)
     public void assignMobileTerminalTest() {
 
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
@@ -190,6 +198,7 @@ public class MobileTerminalResourceTest extends AbstractMTRestTest {
     
     @Test
     @RunAsClient
+    @Transactional(TransactionMode.ROLLBACK)
     public void unAssignMobileTerminalTest() {
         MobileTerminalType mobileTerminal = MobileTerminalTestHelper.createBasicMobileTerminal();
 
