@@ -50,7 +50,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 	}
 
 	@Override
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
 
 		Connection connection = null;
@@ -77,7 +77,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 	}
 
 	@Override
-    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
 		Connection connection = null;
 		try {

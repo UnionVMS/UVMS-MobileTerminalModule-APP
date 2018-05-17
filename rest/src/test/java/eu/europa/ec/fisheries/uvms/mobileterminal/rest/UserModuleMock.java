@@ -10,21 +10,18 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest;
 
+import eu.europa.ec.fisheries.uvms.commons.message.impl.AbstractProducer;
+import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
+import eu.europa.ec.fisheries.uvms.user.model.mapper.UserModuleResponseMapper;
+import eu.europa.ec.fisheries.wsdl.user.types.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.ejb.ActivationConfigProperty;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import eu.europa.ec.fisheries.uvms.commons.message.impl.AbstractProducer;
-import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
-import eu.europa.ec.fisheries.uvms.user.model.mapper.UserModuleResponseMapper;
-import eu.europa.ec.fisheries.wsdl.user.types.Context;
-import eu.europa.ec.fisheries.wsdl.user.types.ContextSet;
-import eu.europa.ec.fisheries.wsdl.user.types.Feature;
-import eu.europa.ec.fisheries.wsdl.user.types.Role;
-import eu.europa.ec.fisheries.wsdl.user.types.UserContext;
 
 @MessageDriven(mappedName = "jms/queue/UVMSUserEvent", activationConfig = {
         @ActivationConfigProperty(propertyName = "messagingType", propertyValue = "javax.jms.MessageListener"), 
@@ -32,12 +29,11 @@ import eu.europa.ec.fisheries.wsdl.user.types.UserContext;
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "UVMSUserEvent")})
 public class UserModuleMock implements MessageListener {
 
-    final static Logger LOG = LoggerFactory.getLogger(UserModuleMock.class);
+    private final static Logger LOG = LoggerFactory.getLogger(UserModuleMock.class);
 
     @Override
     public void onMessage(Message message) {
         try {
-
             UserContext userContext = getMobileTerminalUserContext();
             String responseString;
             responseString = UserModuleResponseMapper.mapToGetUserContextResponse(userContext);

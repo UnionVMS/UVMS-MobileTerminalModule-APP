@@ -64,12 +64,12 @@ public class MobileTerminalTestHelper {
     }
 
     private static String generateARandomStringWithMaxLength(int len) {
-        String ret = "";
+        StringBuilder ret = new StringBuilder();
         for (int i = 0; i < len; i++) {
             int val = new Random().nextInt(10);
-            ret += String.valueOf(val);
+            ret.append(String.valueOf(val));
         }
-        return ret;
+        return ret.toString();
     }
 
     private static void addChannelCapability(ComChannelType comChannelType, String type, boolean value) {
