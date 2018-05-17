@@ -53,11 +53,4 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
     public String sendConfigMessage(String text) {
         return UUID.randomUUID().toString();
     }
-
-//    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-//        javax.jms.MessageProducer producer = session.createProducer(destination);
-//        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-//        producer.setTimeToLive(60000L);
-//        return producer;
-//    }
 }

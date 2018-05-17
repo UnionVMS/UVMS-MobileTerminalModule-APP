@@ -42,33 +42,21 @@ public class MobileTerminalEventServiceBean implements EventService {
 
     @Override
     public void returnError(@Observes @ErrorEvent EventMessage message) {
-        try {
-            try (Connection connection = connectionFactory.createConnection()) {
-                LOG.debug("Sending error message back from Mobile Terminal module to recipient om JMS Queue with correlationID: {} ",
-                        message.getJmsMessage().getJMSMessageID());
-                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
+        try (Connection connection = connectionFactory.createConnection()) {
+            LOG.debug("Sending error message back from Mobile Terminal module to recipient om JMS Queue with correlationID: {} ",
+                    message.getJmsMessage().getJMSMessageID());
+            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-                MobileTerminalFault request = new MobileTerminalFault();
-                request.setMessage(message.getErrorMessage());
-                String data = JAXBMarshaller.marshallJaxBObjectToString(request);
+            MobileTerminalFault request = new MobileTerminalFault();
+            request.setMessage(message.getErrorMessage());
+            String data = JAXBMarshaller.marshallJaxBObjectToString(request);
 
-                TextMessage response = session.createTextMessage(data);
-                response.setJMSCorrelationID(message.getJmsMessage().getJMSCorrelationID());
-//                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(response);
-                MessageProducer producer = session.createProducer(message.getJmsMessage().getJMSReplyTo());
-                producer.send(response);
-            }
-
+            TextMessage response = session.createTextMessage(data);
+            response.setJMSCorrelationID(message.getJmsMessage().getJMSCorrelationID());
+            MessageProducer producer = session.createProducer(message.getJmsMessage().getJMSReplyTo());
+            producer.send(response);
         } catch (MobileTerminalModelMapperException | JMSException ex) {
             LOG.error("Error when returning Error message to recipient", ex.getMessage());
         }
     }
-
-//    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-//    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-//        javax.jms.MessageProducer producer = session.createProducer(destination);
-//        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-//        producer.setTimeToLive(60000L);
-//        return producer;
-//    }
 }

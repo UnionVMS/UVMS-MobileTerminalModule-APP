@@ -40,7 +40,6 @@ public class PingReceivedEventBean {
                 TextMessage pingResponseMessage = session.createTextMessage(pingResponse);
                 pingResponseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
                 pingResponseMessage.setJMSDestination(message.getJmsMessage().getJMSReplyTo());
-//                getProducer(session, pingResponseMessage.getJMSDestination()).send(pingResponseMessage);
                 javax.jms.MessageProducer producer = session.createProducer(pingResponseMessage.getJMSDestination());
                 producer.send(pingResponseMessage);
             }
@@ -51,12 +50,4 @@ public class PingReceivedEventBean {
             throw new EJBException(e);
         }
     }
-
-//    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-//    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-//        javax.jms.MessageProducer producer = session.createProducer(destination);
-//        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-//        producer.setTimeToLive(60000L);
-//        return producer;
-//    }
 }

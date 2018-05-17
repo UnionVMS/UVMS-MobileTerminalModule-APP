@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
+import javax.ejb.TransactionAttributeType;
 import javax.jms.*;
 
 @Stateless
@@ -49,7 +50,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 	}
 
 	@Override
-    @TransactionAttribute
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
 
 		Connection connection = null;
@@ -76,7 +77,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 	}
 
 	@Override
-    @TransactionAttribute
+    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
 	public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
 		Connection connection = null;
 		try {
@@ -90,17 +91,14 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 
 			switch (queue) {
 			case AUDIT:
-//				getProducer(session, auditQueue).send(message);
 				producer = session.createProducer(auditQueue);
 				producer.send(message);
 				break;
 			case EXCHANGE:
-//				getProducer(session, exchangeQueue).send(message);
 				producer = session.createProducer(exchangeQueue);
 				producer.send(message);
 				break;
 			case CONFIG:
-//				getProducer(session, configQueue).send(message);
 				producer = session.createProducer(configQueue);
 				producer.send(message);
 				break;
@@ -124,11 +122,4 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 			throw new ConfigMessageException(e.getMessage());
 		}
 	}
-
-//	private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-//		javax.jms.MessageProducer producer = session.createProducer(destination);
-//		producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-//		producer.setTimeToLive(60000L);
-//		return producer;
-//	}
 }
