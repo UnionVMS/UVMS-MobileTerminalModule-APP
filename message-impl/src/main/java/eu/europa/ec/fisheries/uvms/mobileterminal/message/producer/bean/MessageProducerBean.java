@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionAttribute;
 import javax.jms.*;
 
 @Stateless
@@ -48,7 +49,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 	}
 
 	@Override
-//    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @TransactionAttribute
 	public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
 
 		Connection connection = null;
@@ -75,7 +76,7 @@ public class MessageProducerBean implements MessageProducer, ConfigMessageProduc
 	}
 
 	@Override
-//    @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
+    @TransactionAttribute
 	public String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException {
 		Connection connection = null;
 		try {
