@@ -11,17 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto;
 
-import static org.junit.Assert.assertEquals;
-import static org.mockito.Mockito.doReturn;
-
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
-import org.mockito.MockitoAnnotations;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
@@ -30,29 +19,39 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.mock.MockData;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.service.MobileTerminalResource;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 
 import javax.servlet.http.HttpServletRequest;
+
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.doReturn;
 
 public class ResponseTest {
 
     @Mock
-    MobileTerminalService mobileTerminalService;
+    private MobileTerminalService mobileTerminalService;
 
     @Mock
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @InjectMocks
-    MobileTerminalResource mobileTerminalResource;
+    private MobileTerminalResource mobileTerminalResource;
 
-    MobileTerminalResource SERVICE_NULL = new MobileTerminalResource();
-    private static final Integer LIST_SIZE = 3;
+//    private MobileTerminalResource SERVICE_NULL = new MobileTerminalResource();
+//    private static final Integer LIST_SIZE = 3;
 
     private static final Integer MOBILE_TERMINAL_ID_INT = 1;
     private static final String MOBILE_TERMINAL_ID = "NKJSDGHKJy9239";
 
-    private final ResponseCode ERROR_RESULT;
+//    private final ResponseCode ERROR_RESULT;
 
-    private final ResponseDto SUCCESS_RESULT_CREATE;
+//    private final ResponseDto SUCCESS_RESULT_CREATE;
     private final ResponseDto SUCCESS_RESULT_LIST_RESPONSE;
     private final ResponseDto SUCCESS_RESULT_UPDATE;
     private final ResponseDto SUCCESS_RESULT_GET_BY_ID;
@@ -61,11 +60,11 @@ public class ResponseTest {
     private final MobileTerminalListResponse MOBILE_TERMINAL_LIST_RESPONSE = MockData.createMobileTerminalListResponse();
 
     public ResponseTest() {
-        ERROR_RESULT = ResponseCode.UNDEFINED_ERROR;
-        SUCCESS_RESULT_UPDATE = new ResponseDto(MOBILE_TERMINAL_DTO, ResponseCode.OK);
-        SUCCESS_RESULT_LIST_RESPONSE = new ResponseDto(MOBILE_TERMINAL_LIST_RESPONSE, ResponseCode.OK);
-        SUCCESS_RESULT_CREATE = new ResponseDto(MOBILE_TERMINAL_DTO, ResponseCode.OK);
-        SUCCESS_RESULT_GET_BY_ID = new ResponseDto(MOBILE_TERMINAL_DTO, ResponseCode.OK);
+//        ERROR_RESULT = ResponseCode.UNDEFINED_ERROR;
+        SUCCESS_RESULT_UPDATE = new ResponseDto<>(MOBILE_TERMINAL_DTO, ResponseCode.OK);
+        SUCCESS_RESULT_LIST_RESPONSE = new ResponseDto<>(MOBILE_TERMINAL_LIST_RESPONSE, ResponseCode.OK);
+//        SUCCESS_RESULT_CREATE = new ResponseDto<>(MOBILE_TERMINAL_DTO, ResponseCode.OK);
+        SUCCESS_RESULT_GET_BY_ID = new ResponseDto<>(MOBILE_TERMINAL_DTO, ResponseCode.OK);
     }
 
     @Before
@@ -109,15 +108,13 @@ public class ResponseTest {
 
     @Test
     public void checkDtoReturnsValid() {
-
         String VALUE = "HELLO_DTO";
-        ResponseDto dto = new ResponseDto(VALUE, ResponseCode.OK);
+        ResponseDto dto = new ResponseDto<>(VALUE, ResponseCode.OK);
         Assert.assertEquals(dto.getCode().intValue(), ResponseCode.OK.getCode());
         Assert.assertEquals(dto.getData(), VALUE);
 
-        dto = new ResponseDto(null, ResponseCode.UNDEFINED_ERROR);
+        dto = new ResponseDto<>(null, ResponseCode.UNDEFINED_ERROR);
         Assert.assertEquals(dto.getCode().intValue(), ResponseCode.UNDEFINED_ERROR.getCode());
-        Assert.assertEquals(dto.getData(), null);
-
+        Assert.assertNull(dto.getData());
     }
 }

@@ -47,31 +47,20 @@ public class ListReceivedEventBean {
             MobileTerminalListResponse mobileTerminalListResponse = mobileTerminalService.getMobileTerminalList(request.getQuery());
             List<MobileTerminalType> mobileTerminalTypes = mobileTerminalListResponse.getMobileTerminal();
 
-            Connection connection = connectionFactory.createConnection();
-            try {
-                //TODO: Transacted false??
+            try (Connection connection = connectionFactory.createConnection()) {
+                // In a Java EE web or EJB container, when there is an active JTA transaction in progress:
+                // Both arguments transacted and acknowledgeMode are ignored.
                 Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
                 String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);
                 TextMessage responseMessage = session.createTextMessage(response);
                 responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-                getProducer(session, message.getJmsMessage().getJMSReplyTo()).send(responseMessage);
-            } finally {
-                connection.close();
+                MessageProducer producer = session.createProducer(message.getJmsMessage().getJMSReplyTo());
+                producer.send(responseMessage);
             }
         } catch (MobileTerminalException | JMSException e) {
             errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when trying to get list in MobileTerminal: " + e.getMessage()));
             // Propagate error
             throw new EJBException(e);
         }
-
     }
-
-    // TODO: This needs to be fixed, NON_PERSISTENT and timetolive is not ok.
-    private javax.jms.MessageProducer getProducer(Session session, Destination destination) throws JMSException {
-        javax.jms.MessageProducer producer = session.createProducer(destination);
-        producer.setDeliveryMode(DeliveryMode.NON_PERSISTENT);
-        producer.setTimeToLive(60000L);
-        return producer;
-    }
-
 }
