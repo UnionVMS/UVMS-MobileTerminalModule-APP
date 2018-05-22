@@ -34,8 +34,6 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
-/**
- * @apiDescription Handles poll operations*/
 @Path("/poll")
 @Stateless
 @Consumes(value = { MediaType.APPLICATION_JSON })
@@ -84,7 +82,7 @@ public class PollResource {
             List<PollDto> polls = pollService.getRunningProgramPolls();
             return new ResponseDto<>(polls, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when getting running program polls ] {}", ex.getStackTrace());
+            LOG.error("[ Error when getting running program polls ] {}", (Object) ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
     }
@@ -104,7 +102,7 @@ public class PollResource {
             PollDto poll = pollService.startProgramPoll(pollId, request.getRemoteUser());
             return new ResponseDto<>(poll, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when starting program poll {}] {}",pollId, ex.getStackTrace());
+            LOG.error("[ Error when starting program poll {}] {}", pollId, ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
     }
@@ -186,7 +184,7 @@ public class PollResource {
             PollChannelListDto pollChannelList = pollService.getPollableChannels(query);
             return new ResponseDto<>(pollChannelList, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when getting poll by search criteria {}] {}",query, ex.getStackTrace());
+            LOG.error("[ Error when getting poll by search criteria {}] {}", query, ex.getStackTrace());
             return ErrorHandler.getFault(ex);
         }
     }

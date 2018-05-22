@@ -11,9 +11,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollValue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollBase;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
@@ -92,7 +90,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         String username = "TEST";
 
         String connectId = UUID.randomUUID().toString();
-        PollProgram pollProgram = createPollProgramHelper(connectId, startDate, stopDate, latestRun);
+        PollProgram pollProgram = testPollHelper.createPollProgramHelper(connectId, startDate, stopDate, latestRun);
 
         pollProgramDao.createPollProgram(pollProgram);
         String guid = pollProgram.getGuid();
@@ -119,7 +117,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         String username = "TEST";
 
         String connectId = UUID.randomUUID().toString();
-        PollProgram pollProgram = createPollProgramHelper(connectId, startDate, stopDate, latestRun);
+        PollProgram pollProgram = testPollHelper.createPollProgramHelper(connectId, startDate, stopDate, latestRun);
 
         pollProgramDao.createPollProgram(pollProgram);
         String guid = pollProgram.getGuid();
@@ -149,7 +147,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         String username = "TEST";
 
         String connectId = UUID.randomUUID().toString();
-        PollProgram pollProgram = createPollProgramHelper(connectId, startDate, stopDate, latestRun);
+        PollProgram pollProgram = testPollHelper.createPollProgramHelper(connectId, startDate, stopDate, latestRun);
 
         pollProgramDao.createPollProgram(pollProgram);
         String guid = pollProgram.getGuid();
@@ -201,30 +199,6 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         // thrown.expectMessage("No poll id given");
 
         mappedPollService.stopProgramPoll(null, "TEST");
-    }
-
-    private PollProgram createPollProgramHelper(String connectId, Date startDate, Date stopDate, Date latestRun) throws ConfigDaoException, TerminalDaoException {
-
-        PollProgram pp = new PollProgram();
-        // create a valid mobileTerminal
-        MobileTerminal mobileTerminal = testPollHelper.createMobileTerminal(connectId);
-
-        PollBase pb = new PollBase();
-        String channelGuid = UUID.randomUUID().toString();
-        String terminalConnect = UUID.randomUUID().toString();
-        pb.setChannelGuid(channelGuid);
-        pb.setMobileTerminal(mobileTerminal);
-        pb.setTerminalConnect(terminalConnect);
-        pp.setFrequency(1);
-        pp.setLatestRun(latestRun);
-        pp.setPollBase(pb);
-        pp.setPollState(PollStateEnum.STARTED);
-        pp.setStartDate(startDate);
-        pp.setStopDate(stopDate);
-        pp.setUpdateTime(latestRun);
-        pp.setUpdatedBy("TEST");
-
-        return pp;
     }
 
     private PollRequestType helper_createPollRequestType(PollType pollType) throws ConfigDaoException, TerminalDaoException {

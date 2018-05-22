@@ -55,12 +55,23 @@ public class UserModuleMock implements MessageListener {
         userContext.setContextSet(new ContextSet());
         Context context = new Context();
         context.setRole(new Role());
+
         Feature manageVesselsFeature = new Feature();
         manageVesselsFeature.setName(UnionVMSFeature.manageMobileTerminals.name());
         context.getRole().getFeature().add(manageVesselsFeature);
+
         Feature viewVesselsFeature = new Feature();
         viewVesselsFeature.setName(UnionVMSFeature.viewVesselsAndMobileTerminals.name());
         context.getRole().getFeature().add(viewVesselsFeature);
+
+        Feature viewMobileTerminalPolls = new Feature();
+        viewMobileTerminalPolls.setName(UnionVMSFeature.viewMobileTerminalPolls.name());
+        context.getRole().getFeature().add(viewMobileTerminalPolls);
+
+        Feature managePolls = new Feature();
+        managePolls.setName(UnionVMSFeature.managePolls.name());
+        context.getRole().getFeature().add(managePolls);
+
         userContext.getContextSet().getContexts().add(context);
         return userContext;
     }
