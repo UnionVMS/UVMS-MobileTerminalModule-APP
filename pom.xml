@@ -127,7 +127,6 @@
         <module>rest</module>
         <module>service</module>
         <module>message</module>
-        <module>domain</module>
         <module>message-impl</module>
         <module>mobileterminal-message-mock</module>
         <module>module</module>
