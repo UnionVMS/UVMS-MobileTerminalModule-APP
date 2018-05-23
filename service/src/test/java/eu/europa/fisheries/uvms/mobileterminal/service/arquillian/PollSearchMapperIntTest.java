@@ -1,8 +1,7 @@
-package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
+package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.ListCriteria;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.SearchKey;
-import eu.europa.ec.fisheries.uvms.mobileterminal.arquillian.TransactionalTests;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception.SearchMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;

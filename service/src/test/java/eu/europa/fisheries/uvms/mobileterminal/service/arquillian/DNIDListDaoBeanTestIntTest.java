@@ -1,4 +1,4 @@
-package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
+package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.DNIDListDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;

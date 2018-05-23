@@ -1,4 +1,4 @@
-package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
+package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import java.io.File;
 
@@ -23,8 +23,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
 /**
  * Created by andreasw on 2017-02-13.
  */
-@ArquillianSuiteDeployment
-public abstract class BuildMobileTerminalDeployment {
+//@ArquillianSuiteDeployment
+public abstract class BuildMobileTerminalDeployment_DOMAIN {
 
     @Deployment(name = "normal", order = 1)
     public static Archive<?> createDeployment() {
