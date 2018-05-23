@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
+package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
@@ -28,6 +28,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigModelBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -45,11 +46,11 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
-
 @PowerMockIgnore("javax.management.*")
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({PluginMapper.class, ConfigModelBean.class})
 public class ConfigModelTest {
+
 
 	@Mock
 	private OceanRegionDaoBean oceanRegionDao;
@@ -82,6 +83,7 @@ public class ConfigModelTest {
         when(twostage.getPluginSatelliteType()).thenReturn("INMARSAT_C");
 	}
 
+
 	@Test
 	public void testGetAllTerminalSystemsEmpty() throws MobileTerminalModelException {
 		List<MobileTerminalPlugin> pluginList = new ArrayList<>();
@@ -93,6 +95,8 @@ public class ConfigModelTest {
 
 		assertEquals(0, terminalSystems.size());
 	}
+
+
 
 	@Test
 	public void testGetAllTerminalSystems() throws MobileTerminalModelException {
@@ -111,6 +115,7 @@ public class ConfigModelTest {
 			assertNotNull(system.getType());
 		}
 	}
+
 
 	@Test(expected=MobileTerminalModelException.class)
 	public void testGetAllTerminalSystemsException() throws MobileTerminalModelException {
@@ -322,4 +327,5 @@ public class ConfigModelTest {
 		boolean isChanged = testModelBean.checkDNIDListChange(serviceName);
 		assertTrue(isChanged);
 	}
+
 }

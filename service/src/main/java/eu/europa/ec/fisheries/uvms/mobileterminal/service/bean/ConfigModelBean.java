@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.CapabilityConfiguration;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
@@ -46,7 +46,7 @@ import java.util.*;
 
 @Stateless
 @LocalBean
-public class ConfigModelBean  {
+public class ConfigModelBean {
 
     private final static Logger LOG = LoggerFactory.getLogger(ConfigModelBean.class);
     
@@ -106,7 +106,7 @@ public class ConfigModelBean  {
 		return configValues;
 	}
 	
-	MobileTerminalPlugin updatePlugin(PluginService plugin) throws TerminalDaoException {
+	public MobileTerminalPlugin updatePlugin(PluginService plugin) throws TerminalDaoException {
 		try {
 			MobileTerminalPlugin entity = mobileTerminalPluginDao.getPluginByServiceName(plugin.getServiceName());
 			if(PluginMapper.equals(entity, plugin)) {
@@ -161,7 +161,7 @@ public class ConfigModelBean  {
 		return responseList;
 	}
 	
-	List<Plugin> inactivatePlugins(Map<String, PluginService> map) throws ConfigDaoException {
+	public List<Plugin> inactivatePlugins(Map<String, PluginService> map) throws ConfigDaoException {
 		List<Plugin> responseList = new ArrayList<>();
 		List<MobileTerminalPlugin> availablePlugins = mobileTerminalPluginDao.getPluginList();
 		for(MobileTerminalPlugin plugin : availablePlugins) {
