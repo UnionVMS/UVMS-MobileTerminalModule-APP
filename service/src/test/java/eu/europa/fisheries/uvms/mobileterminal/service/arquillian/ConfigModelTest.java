@@ -15,10 +15,10 @@ import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.OceanRegionDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.DNIDListDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.OceanRegionDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
@@ -53,10 +53,10 @@ public class ConfigModelTest {
 
 
 	@Mock
-	private OceanRegionDao oceanRegionDao;
+	private OceanRegionDaoBean oceanRegionDao;
 
 	@Mock
-	private MobileTerminalPluginDao mobileTerminalPluginDao;
+	private MobileTerminalPluginDaoBean mobileTerminalPluginDao;
 
 	@Mock
 	private PluginService pluginType;
@@ -68,10 +68,10 @@ public class ConfigModelTest {
     private MobileTerminalPlugin twostage;
 
 	@Mock
-	private ChannelDao channelDao;
+	private ChannelDaoBean channelDao;
 
 	@Mock
-	private DNIDListDao dnidListDao;
+	private DNIDListDaoBean dnidListDao;
 
 	@InjectMocks
     private ConfigModelBean testModelBean;

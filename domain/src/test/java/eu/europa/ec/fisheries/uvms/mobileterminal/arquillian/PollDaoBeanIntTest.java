@@ -1,6 +1,6 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNotNull;
 public class PollDaoBeanIntTest extends TransactionalTests {
 
     @EJB
-    private PollDao pollDao;
+    private PollDaoBean pollDao;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

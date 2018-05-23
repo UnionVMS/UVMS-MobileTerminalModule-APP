@@ -1,6 +1,8 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
 import java.io.File;
+
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -9,9 +11,6 @@ import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
@@ -56,18 +55,19 @@ public abstract class BuildMobileTerminalDeployment {
         
         testWar.addPackages(true, "eu.europa.ec.fisheries.schema");
         testWar.addClass(TransactionalTests.class);
-        testWar.addClass(TerminalDao.class);
+//        testWar.addClass(TerminalDao.class);
         testWar.addClass(TerminalDaoBean.class);
         testWar.addClass(MobileTerminal.class);
         testWar.addClass(MobileTerminalTypeEnum.class);
-        testWar.addClass(MobileTerminalPluginDao.class);
+//        testWar.addClass(MobileTerminalPluginDao.class);
         testWar.addClass(MobileTerminalPluginDaoBean.class);
      
         testWar.addClass(PollDaoBean.class);
         testWar.addClass(PollSearchKeyValue.class);
         testWar.addClass(PollSearchMapper.class);
 
-        testWar.addClass(PollProgramDao.class);
+//        testWar.addClass(PollProgramDao.class);
+        testWar.addClass(PollProgramDaoBean.class);
         testWar.addClass(PollProgram.class);
 
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");

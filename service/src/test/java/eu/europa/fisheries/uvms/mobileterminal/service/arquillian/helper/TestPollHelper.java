@@ -3,8 +3,8 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
@@ -32,10 +32,10 @@ public class TestPollHelper {
     private Random rnd = new Random();
 
     @EJB
-    private TerminalDao terminalDao;
+    private TerminalDaoBean terminalDao;
 
     @EJB
-    private MobileTerminalPluginDao mobileTerminalPluginDao;
+    private MobileTerminalPluginDaoBean mobileTerminalPluginDao;
 
     public PollRequestType createPollRequestType() throws ConfigDaoException, TerminalDaoException {
         PollRequestType prt = new PollRequestType();

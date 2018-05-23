@@ -1,6 +1,6 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
@@ -28,7 +28,7 @@ import static org.junit.Assert.*;
 public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
     @EJB
-    private MobileTerminalPluginDao mobileTerminalPluginDao;
+    private MobileTerminalPluginDaoBean mobileTerminalPluginDao;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

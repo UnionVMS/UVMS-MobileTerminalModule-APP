@@ -24,8 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
@@ -33,11 +31,10 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 
 @Stateless
-public class PollDaoBean extends Dao implements PollDao {
+public class PollDaoBean extends Dao {
 
     private final static Logger LOG = LoggerFactory.getLogger(PollDaoBean.class);
 
-    @Override
     public void createPoll(Poll poll) throws PollDaoException {
         try {
             em.persist(poll);
@@ -47,7 +44,6 @@ public class PollDaoBean extends Dao implements PollDao {
         }
     }
 
-    @Override
     public Poll getPollByPoolId(Long pollId) throws PollDaoException {
         try {
             TypedQuery<Poll> query = em.createNamedQuery(MobileTerminalConstants.POLL_FIND_BY_ID, Poll.class);
@@ -59,13 +55,11 @@ public class PollDaoBean extends Dao implements PollDao {
         }
     }
 
-    @Override
 	//ToDo: This method is not implemented. Need to evaluate if the functionality is required or not.
     public List<Poll> getPollListByProgramPoll(Integer pollProgramId) throws PollDaoException {
         throw new PollDaoException("Not yet implemented");
     }
 
-	@Override
 	public Long getPollListSearchCount(String sql, List<PollSearchKeyValue> searchKeyValues) {
 		TypedQuery<Long> query = em.createQuery(sql, Long.class);
 
@@ -74,7 +68,6 @@ public class PollDaoBean extends Dao implements PollDao {
 		return query.getSingleResult();
 	}
 
-	@Override
 	public List<Poll> getPollListSearchPaginated(Integer pageNumber, Integer pageSize, String sql, List<PollSearchKeyValue> searchKeyValues) {
 		TypedQuery<Poll> query = em.createQuery(sql, Poll.class);
 

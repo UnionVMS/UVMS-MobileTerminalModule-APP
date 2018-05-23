@@ -20,10 +20,10 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.commons.date.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConfigType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.OceanRegionDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.DNIDListDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.OceanRegionDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
@@ -51,16 +51,16 @@ public class ConfigModelBean {
     private final static Logger LOG = LoggerFactory.getLogger(ConfigModelBean.class);
     
     @EJB
-    private OceanRegionDao oceanRegionDao;
+    private OceanRegionDaoBean oceanRegionDao;
 
     @EJB
-    private MobileTerminalPluginDao mobileTerminalPluginDao;
+    private MobileTerminalPluginDaoBean mobileTerminalPluginDao;
     
     @EJB
-    private DNIDListDao dnidListDao;
+    private DNIDListDaoBean dnidListDao;
     
     @EJB
-	private ChannelDao channelDao;
+	private ChannelDaoBean channelDao;
     
     public List<TerminalSystemType> getAllTerminalSystems() throws MobileTerminalModelException {
         Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> pluginsByType = getPlugins();

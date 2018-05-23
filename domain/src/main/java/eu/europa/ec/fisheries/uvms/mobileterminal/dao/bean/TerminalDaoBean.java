@@ -12,8 +12,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
@@ -28,11 +26,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class TerminalDaoBean extends Dao implements TerminalDao {
+public class TerminalDaoBean extends Dao {
 
     private final static Logger LOG = LoggerFactory.getLogger(TerminalDaoBean.class);
 
-	@Override
 	public MobileTerminal getMobileTerminalByGuid(String guid) throws NoEntityFoundException {
 		try {
             TypedQuery<MobileTerminal> query = em.createNamedQuery(MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_GUID, MobileTerminal.class);
@@ -44,7 +41,6 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
         }
 	}
 
-    @Override
     public MobileTerminal getMobileTerminalBySerialNo(String serialNo) throws NoEntityFoundException {
         try {
             TypedQuery<MobileTerminal> query = em.createNamedQuery(MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_SERIAL_NO, MobileTerminal.class);
@@ -56,7 +52,6 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
         }
     }
 
-    @Override
     public void createMobileTerminal(MobileTerminal terminal) throws TerminalDaoException {
         try {
             em.persist(terminal);
@@ -67,7 +62,6 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
         }
     }
 
-    @Override
     public void updateMobileTerminal(MobileTerminal terminal) throws TerminalDaoException {
         if(terminal == null || terminal.getId() == null) {
             // It's a defensive decision to prevent clients from using merge excessively instead of persist.
@@ -82,7 +76,6 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
         }
     }
 
-    @Override
     public List<MobileTerminal> getMobileTerminalsByQuery(String sql) {
         Session session = em.unwrap(Session.class);
         Query query = session.createQuery(sql);

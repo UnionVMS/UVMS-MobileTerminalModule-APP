@@ -21,17 +21,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.OceanRegionDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
 
 @Stateless
-public class OceanRegionDaoBean extends Dao implements OceanRegionDao {
+public class OceanRegionDaoBean extends Dao {
 
 	private final static Logger LOG = LoggerFactory.getLogger(OceanRegionDaoBean.class);
 
-	@Override
 	public List<OceanRegion> getOceanRegionList() throws ConfigDaoException {
 		try {
             TypedQuery<OceanRegion> query = em.createNamedQuery(MobileTerminalConstants.OCEAN_REGIONS, OceanRegion.class);

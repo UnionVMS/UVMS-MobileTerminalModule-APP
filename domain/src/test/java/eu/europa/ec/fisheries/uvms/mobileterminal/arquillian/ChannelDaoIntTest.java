@@ -1,9 +1,9 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
@@ -30,13 +30,13 @@ import static org.junit.Assert.assertThat;
 public class ChannelDaoIntTest extends TransactionalTests {
 
     @Inject
-    private ChannelDao channelDao;
+    private ChannelDaoBean channelDao;
 
     @EJB
-    private MobileTerminalPluginDao mobileTerminalPluginDao;
+    private MobileTerminalPluginDaoBean mobileTerminalPluginDao;
 
     @EJB
-    private MobileTerminalDao mobileTerminalDao;
+    private MobileTerminalDaoBean mobileTerminalDao;
 
     @Test
     @OperateOnDeployment("normal")
@@ -48,7 +48,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
         List<String> idList = Arrays.asList(id1, id2);
 
         MobileTerminal mobileTerminal = createMobileTerminal(id1);
-        MobileTerminal retrieved = (MobileTerminal) mobileTerminalDao.createEntity(mobileTerminal);
+        MobileTerminal retrieved = mobileTerminalDao.createEntity(mobileTerminal);
         assertNotNull(retrieved);
 
         //When

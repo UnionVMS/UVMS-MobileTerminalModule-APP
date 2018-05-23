@@ -5,7 +5,7 @@ import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConfigType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
@@ -34,7 +34,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     private ConfigService configService;
 
     @EJB
-    private MobileTerminalPluginDao mobileTerminalPluginDao;
+    private MobileTerminalPluginDaoBean mobileTerminalPluginDao;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();
