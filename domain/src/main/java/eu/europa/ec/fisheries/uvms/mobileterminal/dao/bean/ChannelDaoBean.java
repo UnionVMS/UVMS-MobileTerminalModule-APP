@@ -12,8 +12,6 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AttributeMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
@@ -28,9 +26,8 @@ import java.util.Map;
  * Created by osdjup on 2016-11-16.
  */
 @Stateless
-public class ChannelDaoBean extends Dao implements ChannelDao {
+public class ChannelDaoBean extends Dao {
 
-    @Override
     public List<Channel> getPollableListSearch(List<String> idList) {
         String sql = PollSearchMapper.createPollableSearchSql(idList);
         TypedQuery<Channel> query = em.createQuery(sql, Channel.class);
@@ -40,7 +37,6 @@ public class ChannelDaoBean extends Dao implements ChannelDao {
         return query.getResultList();
     }
 
-    @Override
     public List<String> getActiveDNID(String pluginName) {
         String sql = getSQLActiveDNID(pluginName);
         TypedQuery<String> query = em.createQuery(sql, String.class);

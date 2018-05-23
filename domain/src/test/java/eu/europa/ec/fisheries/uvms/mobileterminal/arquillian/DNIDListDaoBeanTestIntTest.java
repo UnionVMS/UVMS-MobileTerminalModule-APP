@@ -1,6 +1,6 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.DNIDListDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -29,7 +29,7 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
     private final static String USERNAME = "TEST";
 
     @EJB
-    private DNIDListDao dnidListDao;
+    private DNIDListDaoBean dnidListDao;
 
     @Test
     @OperateOnDeployment("normal")

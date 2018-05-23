@@ -1,8 +1,8 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
@@ -42,13 +42,13 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     private Random rnd = new Random();
 
     @EJB
-    private PollProgramDao pollProgramDao;
+    private PollProgramDaoBean pollProgramDao;
 
     @EJB
-    private TerminalDao terminalDaoBean;
+    private TerminalDaoBean terminalDaoBean;
 
     @EJB
-    private MobileTerminalPluginDao testDaoBean;
+    private MobileTerminalPluginDaoBean testDaoBean;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

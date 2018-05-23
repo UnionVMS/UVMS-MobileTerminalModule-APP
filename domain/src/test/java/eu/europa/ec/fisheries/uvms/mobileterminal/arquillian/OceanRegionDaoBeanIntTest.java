@@ -4,12 +4,12 @@ import java.util.List;
 
 import javax.ejb.EJB;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.OceanRegionDaoBean;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.OceanRegionDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
 
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 public class OceanRegionDaoBeanIntTest extends TransactionalTests {
 
     @EJB
-    private OceanRegionDao oceanRegionDao;
+    private OceanRegionDaoBean oceanRegionDao;
 
     @Test
     @OperateOnDeployment("normal")

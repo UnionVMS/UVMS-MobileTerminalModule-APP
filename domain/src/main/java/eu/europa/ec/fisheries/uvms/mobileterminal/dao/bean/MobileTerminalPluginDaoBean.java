@@ -21,19 +21,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 
 @Stateless
-public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPluginDao {
+public class MobileTerminalPluginDaoBean extends Dao {
 
 	private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPluginDaoBean.class);
 
-	@Override
 	public List<MobileTerminalPlugin> getPluginList() throws ConfigDaoException {
 		try {
             TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_ALL, MobileTerminalPlugin.class);
@@ -43,8 +40,7 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
             throw new ConfigDaoException("No entities found when retrieving all plugins");
         }
 	}
-	
-	@Override
+
 	public MobileTerminalPlugin createMobileTerminalPlugin(MobileTerminalPlugin plugin) throws TerminalDaoException {
 		try {
 			em.persist(plugin);
@@ -54,7 +50,6 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
 		}
 	}
 
-	@Override
 	public MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException {
 		try {
             TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, MobileTerminalPlugin.class);
@@ -66,7 +61,6 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
         }
 	}
 
-	@Override
 	public MobileTerminalPlugin updateMobileTerminalPlugin(MobileTerminalPlugin entity) throws TerminalDaoException {
 		if(entity == null || entity.getId() == null) {
 			// It's a defensive decision to prevent clients from using merge excessively instead of persist.

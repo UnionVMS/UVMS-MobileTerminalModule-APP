@@ -4,7 +4,7 @@ import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
@@ -39,7 +39,7 @@ public class PollServiceBeanIntTest extends TransactionalTests {
     private TestPollHelper testPollHelper;
 
     @EJB
-    private PollProgramDao pollProgramDao;
+    private PollProgramDaoBean pollProgramDao;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

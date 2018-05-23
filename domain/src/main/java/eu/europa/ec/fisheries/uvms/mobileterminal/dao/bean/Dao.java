@@ -22,7 +22,7 @@
  copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package eu.europa.ec.fisheries.uvms.mobileterminal.dao;
+package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

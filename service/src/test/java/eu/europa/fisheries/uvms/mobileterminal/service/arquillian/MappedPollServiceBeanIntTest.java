@@ -1,7 +1,7 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
@@ -43,7 +43,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     private MappedPollService mappedPollService;
 
     @EJB
-    private PollProgramDao pollProgramDao;
+    private PollProgramDaoBean pollProgramDao;
 
     @EJB
     private TestPollHelper testPollHelper;

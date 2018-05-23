@@ -14,10 +14,10 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapabilityType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
@@ -52,16 +52,16 @@ public class PollDomainModelBean  {
     private final static Logger LOG = LoggerFactory.getLogger(PollDomainModelBean.class);
 
     @EJB
-    private PollDao pollDao;
+    private PollDaoBean pollDao;
 
     @EJB
-    private PollProgramDao pollProgramDao;
+    private PollProgramDaoBean pollProgramDao;
 
     @EJB
-    private TerminalDao terminalDao;
+    private TerminalDaoBean terminalDao;
 
     @EJB
-    private ChannelDao channelDao;
+    private ChannelDaoBean channelDao;
     
     private MobileTerminalType mapPollableTerminalType(MobileTerminalTypeEnum type, String guid) throws MobileTerminalModelException {
         MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);

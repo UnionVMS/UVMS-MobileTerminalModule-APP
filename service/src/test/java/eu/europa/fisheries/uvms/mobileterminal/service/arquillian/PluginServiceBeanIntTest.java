@@ -3,7 +3,7 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.DNIDListDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
@@ -30,7 +30,7 @@ public class PluginServiceBeanIntTest extends TransactionalTests {
     @EJB
     private TestPollHelper testPollHelper;
     @EJB
-    private DNIDListDao dnidListDao;
+    private DNIDListDaoBean dnidListDao;
 
     private final String USERNAME = "TEST_USERNAME";
 

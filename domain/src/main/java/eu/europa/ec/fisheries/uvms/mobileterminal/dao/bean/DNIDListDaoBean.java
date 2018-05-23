@@ -12,8 +12,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.DNIDListDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
 import org.slf4j.Logger;
@@ -25,11 +23,10 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Stateless
-public class DNIDListDaoBean extends Dao implements DNIDListDao {
+public class DNIDListDaoBean extends Dao {
 
 	private final static Logger LOG = LoggerFactory.getLogger(DNIDListDaoBean.class);
 
-	@Override
 	public List<DNIDList> getAllDNIDList() throws ConfigDaoException {
 		try {
             TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST, DNIDList.class);
@@ -40,7 +37,6 @@ public class DNIDListDaoBean extends Dao implements DNIDListDao {
         }
 	}
 
-	@Override
 	public List<DNIDList> getDNIDList(String pluginName) throws ConfigDaoException {
 		try {
             TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST_BY_PLUGIN, DNIDList.class);
@@ -52,7 +48,6 @@ public class DNIDListDaoBean extends Dao implements DNIDListDao {
         }
 	}
 
-	@Override
 	public void removeByPluginName(String pluginName) throws ConfigDaoException {
 		List<DNIDList> dnidList = getDNIDList(pluginName);
 		for(DNIDList entity : dnidList) {
@@ -60,7 +55,6 @@ public class DNIDListDaoBean extends Dao implements DNIDListDao {
 		}
 	}
 
-	@Override
 	public DNIDList create(DNIDList entity) throws ConfigDaoException {
 		try {
             em.persist(entity);

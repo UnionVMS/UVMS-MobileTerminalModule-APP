@@ -12,8 +12,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.Dao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.PollProgramDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
@@ -29,11 +27,10 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless
-public class PollProgramDaoBean extends Dao implements PollProgramDao {
+public class PollProgramDaoBean extends Dao {
 
     private final static Logger LOG = LoggerFactory.getLogger(PollProgramDaoBean.class);
 
-    @Override
     public void createPollProgram(PollProgram pollProgram) throws PollDaoException {
         try {
             em.persist(pollProgram);
@@ -43,7 +40,6 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
         }
     }
 
-    @Override
     public PollProgram updatePollProgram(PollProgram pollProgram) throws PollDaoException {
         if(pollProgram == null || pollProgram.getId() == null) {
             // It's a defensive decision to prevent clients from using merge excessively instead of persist.
@@ -59,7 +55,6 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
         }
     }
 
-    @Override
     public List<PollProgram> getProgramPollsAlive() throws PollDaoException {
         try {
             TypedQuery<PollProgram> query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_ALIVE, PollProgram.class);
@@ -71,7 +66,6 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
         }
     }
 
-    @Override
     public List<PollProgram> getPollProgramRunningAndStarted() throws PollDaoException {
         try {
             TypedQuery<PollProgram> query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_RUNNING_AND_STARTED, PollProgram.class);
@@ -100,7 +94,6 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
         }
     }
 
-    @Override
     public PollProgram getPollProgramByGuid(String guid) throws PollDaoException {
         try {
             TypedQuery<PollProgram> query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_BY_ID, PollProgram.class);
