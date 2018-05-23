@@ -9,7 +9,7 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
+package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
@@ -47,7 +47,7 @@ import java.util.*;
 
 @Stateless
 @LocalBean
-public class PollDomainModelBean  {
+public class PollDomainModelBean {
 
     private final static Logger LOG = LoggerFactory.getLogger(PollDomainModelBean.class);
 
