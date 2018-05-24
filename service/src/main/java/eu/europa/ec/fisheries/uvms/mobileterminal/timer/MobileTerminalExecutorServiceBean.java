@@ -11,8 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PollServiceBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,10 +29,10 @@ public class MobileTerminalExecutorServiceBean {
     private static final Logger LOG = LoggerFactory.getLogger(MobileTerminalExecutorServiceBean.class);
 
     @EJB
-    private ConfigService configService;
+    private ConfigServiceBean configService;
 
     @EJB
-    private PollService pollService;
+    private PollServiceBean pollService;
 
     private PluginTimerTask pluginTimerTask;
     private PollTimerTask pollTimerTask;

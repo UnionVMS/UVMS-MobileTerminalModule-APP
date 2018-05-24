@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import org.slf4j.Logger;
@@ -37,13 +38,11 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTermin
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollTimerService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
 @Stateless
-public class PollServiceBean implements PollService {
+@LocalBean
+public class PollServiceBean {
 
     private final static Logger LOG = LoggerFactory.getLogger(PollServiceBean.class);
 
@@ -54,15 +53,14 @@ public class PollServiceBean implements PollService {
     private MessageConsumer messageConsumer;
 
     @EJB
-    private PluginService sendPollService;
+    private PluginServiceBean sendPollService;
 
     @EJB
-    private PollTimerService timerService;
+    private MobileTerminalPollTimerServiceBean timerService;
 
     @EJB
     private PollDomainModelBean pollModel;
 
-    @Override
     public CreatePollResultDto createPoll(PollRequestType poll, String username) throws MobileTerminalServiceException {
         LOG.debug("CREATE POLL INVOKED IN SERVICE LAYER");
         try {
@@ -110,7 +108,6 @@ public class PollServiceBean implements PollService {
         }
     }
 
-    @Override
     public List<PollResponseType> getRunningProgramPolls() throws MobileTerminalServiceException {
         LOG.debug("GET RUNNING PROGRAM POLLS INVOKED IN SERVICE LAYER");
         try {
@@ -120,7 +117,6 @@ public class PollServiceBean implements PollService {
         }
     }
 
-    @Override
     public PollResponseType startProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
         LOG.debug("START POLLING INVOKED IN SERVICE LAYER");
         try {
@@ -140,7 +136,6 @@ public class PollServiceBean implements PollService {
         }
     }
 
-    @Override
     public PollResponseType stopProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
         LOG.debug("STOP POLLING INVOKED IN SERVICE LAYER");
         try {
@@ -160,7 +155,6 @@ public class PollServiceBean implements PollService {
         }
     }
 
-    @Override
     public PollResponseType inactivateProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
         LOG.debug("INACTIVATE PROGRAM POLL INVOKED IN SERVICE LAYER");
         try {
@@ -180,7 +174,6 @@ public class PollServiceBean implements PollService {
         }
     }
 
-    @Override
     public PollListResponse getPollBySearchCriteria(PollListQuery query) throws MobileTerminalServiceException {
         LOG.debug("GET POLL BY SEARCHCRITERIA INVOKED IN SERVICE LAYER");
         try {
@@ -190,7 +183,6 @@ public class PollServiceBean implements PollService {
         }
     }
 
-    @Override
     public List<PollResponseType> timer() throws MobileTerminalException {
         LOG.debug("TIMER TRIGGERED IN SERVICE LAYER");
 

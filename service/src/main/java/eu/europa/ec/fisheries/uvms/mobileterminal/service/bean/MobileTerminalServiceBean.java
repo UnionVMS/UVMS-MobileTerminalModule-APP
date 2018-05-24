@@ -12,6 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.jms.TextMessage;
 
@@ -37,13 +38,12 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProduc
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
 @Stateless
-public class MobileTerminalServiceBean implements MobileTerminalService {
+@LocalBean
+public class MobileTerminalServiceBean {
 
     private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalServiceBean.class);
 
@@ -54,7 +54,7 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     private MessageConsumer messageConsumer;
 
     @EJB
-    private PluginService pluginService;
+    private PluginServiceBean pluginService;
 
     @EJB
     private MobileTerminalDomainModelBean mobileTerminalModel;
@@ -71,7 +71,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @param mobileTerminal
      * @throws MobileTerminalServiceException
      */
-    @Override
     public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, MobileTerminalSource source, String username) throws MobileTerminalException {
         LOG.debug("CREATE MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         mobileTerminal.setSource(source);
@@ -98,7 +97,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    @Override
     public MobileTerminalListResponse getMobileTerminalList(MobileTerminalListQuery query) throws MobileTerminalException {
         LOG.debug("GET MOBILE TERMINAL LIST INVOKED IN SERVICE LAYER");
         ListResponseDto listResponse = mobileTerminalModel.getTerminalListByQuery(query);
@@ -116,7 +114,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    @Override
     public MobileTerminalType getMobileTerminalById(String guid) throws MobileTerminalException {
         LOG.debug("GET MOBILE TERMINAL BY ID INVOKED IN SERVICE LAYER");
         if (guid == null) {
@@ -136,7 +133,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @return
      * @throws MobileTerminalServiceException
      */
-    @Override
     public MobileTerminalType upsertMobileTerminal(MobileTerminalType data, MobileTerminalSource source, String username) throws MobileTerminalException {
         LOG.debug("UPSERT MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         if (data == null) {
@@ -159,7 +155,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @param id
      * @throws MobileTerminalServiceException
      */
-    @Override
     public MobileTerminalType getMobileTerminalById(MobileTerminalId id, DataSourceQueue queue) throws MobileTerminalException {
         LOG.debug("GET MOBILE TERMINAL BY ID ( FROM SPECIFIC QUEUE ) INVOKED IN SERVICE LAYER, QUEUE = ", queue.name());
         if (id == null) {
@@ -180,7 +175,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
      * @param mobileTerminal
      * @param source
      */
-    @Override
     public MobileTerminalType updateMobileTerminal(MobileTerminalType mobileTerminal, String comment, MobileTerminalSource source, String username)
             throws MobileTerminalException {
         LOG.debug("UPDATE MOBILE TERMINAL INVOKED IN SERVICE LAYER");
@@ -202,7 +196,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         return terminalUpdate;
     }
 
-    @Override
     public MobileTerminalType assignMobileTerminal(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalException {
         LOG.debug("ASSIGN MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         MobileTerminalType terminalAssign = mobileTerminalModel.assignMobileTerminalToCarrier(query, comment, username);
@@ -217,7 +210,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         return terminalAssign;
     }
 
-    @Override
     public MobileTerminalType unAssignMobileTerminal(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalException {
         LOG.debug("UNASSIGN MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         MobileTerminalType terminalUnAssign = mobileTerminalModel.unAssignMobileTerminalFromCarrier(query, comment, username);
@@ -232,7 +224,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         return terminalUnAssign;
     }
 
-    @Override
     public MobileTerminalType setStatusMobileTerminal(MobileTerminalId terminalId, String comment, MobileTerminalStatus status, String username)
             throws MobileTerminalException {
         LOG.debug("SET STATUS OF MOBILE TERMINAL INVOKED IN SERVICE LAYER");
@@ -267,7 +258,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         return terminalStatus;
     }
 
-    @Override
     public MobileTerminalHistory getMobileTerminalHistoryList(String guid) throws MobileTerminalException {
         LOG.debug("GET HISTORY OF MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         MobileTerminalId terminalId = new MobileTerminalId();
@@ -276,7 +266,6 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         return historyList;
     }
 
-    @Override
     public MobileTerminalListResponse getPollableMobileTerminal(PollableQuery query) throws MobileTerminalException {
         LOG.debug("Get pollable mobile terminals");
         ListResponseDto listResponse = pollModel.getMobileTerminalPollableList(query);

@@ -15,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.Local;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.jms.TextMessage;
 
@@ -35,41 +37,36 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsum
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 
 @Stateless
-public class ConfigServiceBean implements ConfigService {
+@LocalBean
+public class ConfigServiceBean {
 
     private final static Logger LOG = LoggerFactory.getLogger(ConfigServiceBean.class);
 
     @EJB
 	private	MessageProducer messageProducer;
 
-	//@EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
 	@EJB
 	private ConfigModelBean configModel;
 
     @EJB
     private MessageConsumer messageConsumer;
 
-    @Override
     public List<TerminalSystemType> getTerminalSystems() throws MobileTerminalException {
         LOG.debug("GET TERMINAL SYSTEM TRANSPONDERS INVOKED IN SERVICE LAYER");
 		return configModel.getAllTerminalSystems();
     }
 
-	@Override
 	public List<ConfigList> getConfig() {
 		LOG.debug("Get configuration in service layer");
 		return configModel.getConfigValues();
 	}
 
-	@Override
 	public List<Plugin> upsertPlugins(List<PluginService> plugins, String username) throws MobileTerminalException {
 		return configModel.upsertPlugins(plugins);
 	}
 
-	@Override
 	public List<ServiceResponseType> getRegisteredMobileTerminalPlugins() throws MobileTerminalException {
 		LOG.debug("Get registered service types");
 		try {

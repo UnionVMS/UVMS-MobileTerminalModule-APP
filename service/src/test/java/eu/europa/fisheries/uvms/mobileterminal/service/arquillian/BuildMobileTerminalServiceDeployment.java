@@ -12,10 +12,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
@@ -53,18 +49,13 @@ public abstract class BuildMobileTerminalServiceDeployment {
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
         testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
         testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service");
-       testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.service");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.service");
         testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dto");
         //testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception");
-
-       // testWar.addClass(ConfigModelBean.class);
-       // testWar.addClass(PluginService.class);
-
 
 
         testWar.addClass(TransactionalTests.class);
         testWar.addClass(TestPollHelper.class);
-        testWar.addClass(ConfigService.class);
         testWar.addClass(ConfigServiceBean.class);
         testWar.addClass(MobileTerminalMessageException.class);
         testWar.addClass(MobileTerminalConfigHelper.class);
@@ -76,17 +67,12 @@ public abstract class BuildMobileTerminalServiceDeployment {
 //        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.entity.Parameter.class);
 
         // för Mapped PollServiceBean
-        testWar.addClass(MappedPollService.class);
         testWar.addClass(MappedPollServiceBean.class);
         testWar.addClass(PollRequestType.class);
         testWar.addClass(CreatePollResultDto.class);
         testWar.addClass(MobileTerminalServiceException.class);
-        testWar.addClass(PollService.class);
         testWar.addClass(PollServiceBean.class);
-        testWar.addClass(MobileTerminalService.class);
         testWar.addClass(MobileTerminalServiceBean.class);
-        testWar.addClass(PollService.class);
-        testWar.addClass(PollServiceBean.class);
         testWar.addClass(PollToCommandRequestMapper.class);
         testWar.addClass(PollMapper.class);
         testWar.addClass(AuditModuleRequestMapper.class);

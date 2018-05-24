@@ -9,7 +9,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQu
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalServiceBean;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
@@ -39,7 +39,7 @@ public class MobileTerminalServiceIntTest extends TransactionalTests {
     private TestPollHelper testPollHelper;
 
     @EJB
-    private MobileTerminalService mobileTerminalService;
+    private MobileTerminalServiceBean mobileTerminalService;
 
     @Rule
     public ExpectedException thrown = ExpectedException.none();

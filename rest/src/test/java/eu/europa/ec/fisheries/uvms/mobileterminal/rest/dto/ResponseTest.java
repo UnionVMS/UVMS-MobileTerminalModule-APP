@@ -18,7 +18,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mock.MockData;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.service.MobileTerminalResource;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalServiceBean;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,7 +35,7 @@ import static org.mockito.Mockito.doReturn;
 public class ResponseTest {
 
     @Mock
-    private MobileTerminalService mobileTerminalService;
+    private MobileTerminalServiceBean mobileTerminalService;
 
     @Mock
     private HttpServletRequest request;

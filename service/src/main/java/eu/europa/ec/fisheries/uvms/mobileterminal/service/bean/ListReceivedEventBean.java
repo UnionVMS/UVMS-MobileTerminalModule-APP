@@ -9,7 +9,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMes
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalModuleRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +29,7 @@ public class ListReceivedEventBean {
     final static Logger LOG = LoggerFactory.getLogger(ListReceivedEventBean.class);
 
     @EJB
-    private MobileTerminalService mobileTerminalService;
+    private MobileTerminalServiceBean mobileTerminalService;
 
     @Resource(lookup = MessageConstants.JAVA_MESSAGE_CONNECTION_FACTORY)
     private ConnectionFactory connectionFactory;

@@ -6,7 +6,7 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.DNIDListDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.DNIDList;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PluginServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -26,7 +26,7 @@ import static org.junit.Assert.*;
 public class PluginServiceBeanIntTest extends TransactionalTests {
 
     @EJB
-    private PluginService pluginService;
+    private PluginServiceBean pluginService;
     @EJB
     private TestPollHelper testPollHelper;
     @EJB
