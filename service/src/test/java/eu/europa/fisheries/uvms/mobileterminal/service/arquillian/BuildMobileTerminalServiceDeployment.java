@@ -34,7 +34,18 @@ public abstract class BuildMobileTerminalServiceDeployment {
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
 
         testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
-        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal");
+        testWar.addPackages(true, " eu.europa.fisheries.uvms.mobileterminal");
+
+
+
+
+
+
+
+
+
+
+
 
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
