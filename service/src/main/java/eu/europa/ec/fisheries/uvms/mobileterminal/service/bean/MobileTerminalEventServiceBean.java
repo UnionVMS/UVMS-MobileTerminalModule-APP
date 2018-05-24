@@ -17,11 +17,11 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
@@ -29,7 +29,8 @@ import javax.inject.Inject;
 import javax.jms.*;
 
 @Stateless
-public class MobileTerminalEventServiceBean implements EventService {
+@LocalBean
+public class MobileTerminalEventServiceBean {
 
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalEventServiceBean.class);
 
@@ -40,7 +41,6 @@ public class MobileTerminalEventServiceBean implements EventService {
     @ErrorEvent
     Event<EventMessage> errorEvent;
 
-    @Override
     public void returnError(@Observes @ErrorEvent EventMessage message) {
         try (Connection connection = connectionFactory.createConnection()) {
             LOG.debug("Sending error message back from Mobile Terminal module to recipient om JMS Queue with correlationID: {} ",

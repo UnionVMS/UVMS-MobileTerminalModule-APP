@@ -20,7 +20,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ErrorHandler;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
 import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
 import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
@@ -43,7 +43,7 @@ public class PollResource {
     private final static Logger LOG = LoggerFactory.getLogger(PollResource.class);
 
     @EJB
-    private MappedPollService pollService;
+    private MappedPollServiceBean pollService;
 
     @Context
     private HttpServletRequest request;

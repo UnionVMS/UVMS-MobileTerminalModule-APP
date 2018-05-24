@@ -16,7 +16,7 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ErrorHandler;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalServiceBean;
 import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
 import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
@@ -38,7 +38,7 @@ public class MobileTerminalResource {
     private final static Logger LOG = LoggerFactory.getLogger(ResponseCode.class);
 
     @EJB
-    private MobileTerminalService mobileTerminalService;
+    private MobileTerminalServiceBean mobileTerminalService;
 
     @Context
     private HttpServletRequest request;

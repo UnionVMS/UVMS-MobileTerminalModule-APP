@@ -16,7 +16,7 @@ import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseTyp
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalGenericMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.PollDataSourceRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PollServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +27,9 @@ import java.util.List;
 public class PollTimerTask implements Runnable{
 
     private final static Logger LOG = LoggerFactory.getLogger(PollTimerTask.class);
-    private PollService pollService;
+    private PollServiceBean pollService;
 
-    PollTimerTask(PollService pollService){
+    PollTimerTask(PollServiceBean pollService){
         this.pollService = pollService;
     }
 

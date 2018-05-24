@@ -14,6 +14,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.jms.TextMessage;
 
@@ -38,11 +39,11 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTermin
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 
 @Stateless
-public class PluginServiceBean implements PluginService {
+@LocalBean
+public class PluginServiceBean {
 
     final static Logger LOG = LoggerFactory.getLogger(PluginServiceBean.class);
 
@@ -61,7 +62,6 @@ public class PluginServiceBean implements PluginService {
     @EJB
     private ConfigModelBean configModel;
 
-    @Override
     public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException {
         try {
             PollType pollType = PollToCommandRequestMapper.mapToPollType(poll);
@@ -78,7 +78,6 @@ public class PluginServiceBean implements PluginService {
         }
     }
 
-    @Override
     public void processUpdatedDNIDList(String pluginName) {
         try {
             List<String> dnidList = configModel.updatedDNIDList(pluginName);

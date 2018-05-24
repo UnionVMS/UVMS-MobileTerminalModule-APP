@@ -19,7 +19,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.MobileTerminalDeviceC
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ErrorHandler;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
 import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
 import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class ConfigResource {
     private final static Logger LOG = LoggerFactory.getLogger(ConfigResource.class);
 
     @EJB
-    private ConfigService configService;
+    private ConfigServiceBean configService;
     
     /**
     *

@@ -11,10 +11,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -31,7 +30,7 @@ import static org.junit.Assert.*;
 public class ConfigServiceBeanIntTest extends TransactionalTests {
 
     @EJB
-    private ConfigService configService;
+    private ConfigServiceBean configService;
 
     @EJB
     private MobileTerminalPluginDaoBean mobileTerminalPluginDao;

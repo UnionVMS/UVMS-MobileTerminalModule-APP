@@ -14,7 +14,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.ServiceToPluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +22,10 @@ import java.util.List;
 
 public class PluginTimerTask implements Runnable{
 
-    private ConfigService configService;
+    private ConfigServiceBean configService;
     private final static Logger LOG = LoggerFactory.getLogger(PluginTimerTask.class);
 
-    PluginTimerTask(ConfigService configService){
+    PluginTimerTask(ConfigServiceBean configService){
         this.configService = configService;
     }
 

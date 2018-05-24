@@ -13,7 +13,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -40,7 +40,7 @@ import static org.junit.Assert.assertTrue;
 public class MappedPollServiceBeanIntTest extends TransactionalTests {
 
     @EJB
-    private MappedPollService mappedPollService;
+    private MappedPollServiceBean mappedPollService;
 
     @EJB
     private PollProgramDaoBean pollProgramDao;

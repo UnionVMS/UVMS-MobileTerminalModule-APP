@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
 import org.slf4j.Logger;
@@ -25,19 +26,17 @@ import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseTyp
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalGenericMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.PollDataSourceRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollTimerService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 
 @Stateless
-public class MobileTerminalPollTimerServiceBean implements PollTimerService {
+@LocalBean
+public class MobileTerminalPollTimerServiceBean {
 
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPollTimerServiceBean.class);
 
     @EJB
-    PollService pollService;
+    private PollServiceBean pollService;
 
-    @Override
     public void timerTimeout() {
         Date now = DateUtils.getUTCNow();
         LOG.debug("PollProgram collected from DB at " + now.toString());
@@ -62,5 +61,4 @@ public class MobileTerminalPollTimerServiceBean implements PollTimerService {
             LOG.error("[ Poll scheduler failed. ] " + e.getMessage());
         }
     }
-
 }
