@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             xmlns="urn:source.mobileterminal.schema.fisheries.ec.europa.eu:v1"
-            xmlns:source="urn:source.mobileterminal.schema.fisheries.ec.europa.eu:v1"
             targetNamespace="urn:source.mobileterminal.schema.fisheries.ec.europa.eu:v1"
             xmlns:mobterm="urn:types.mobileterminal.schema.fisheries.ec.europa.eu:v1"
-            xmlns:poll="urn:polltypes.mobileterminal.schema.fisheries.ec.europa.eu:v1"
             elementFormDefault="qualified"
-            attributeFormDefault="unqualified" 
+            attributeFormDefault="unqualified"
             version="1.0">
     
     <xsd:import namespace="urn:polltypes.mobileterminal.schema.fisheries.ec.europa.eu:v1" schemaLocation="MobileTerminalPoll.xsd"/>        

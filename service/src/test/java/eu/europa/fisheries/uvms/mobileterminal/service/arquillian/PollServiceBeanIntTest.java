@@ -25,9 +25,7 @@ import javax.ejb.EJB;
 import java.util.Date;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
 public class PollServiceBeanIntTest extends TransactionalTests {

@@ -6,7 +6,9 @@ import org.junit.Before;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.transaction.*;
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
 
 public class TransactionalTests extends BuildMobileTerminalServiceDeployment {
 

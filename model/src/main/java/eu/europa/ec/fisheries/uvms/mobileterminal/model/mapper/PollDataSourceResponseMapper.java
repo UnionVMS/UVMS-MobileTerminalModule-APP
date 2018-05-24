@@ -11,14 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper;
 
-import java.util.List;
-
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.CreatePollResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
@@ -27,6 +19,12 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalValidationException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
+import java.util.List;
 
 /**
  **/

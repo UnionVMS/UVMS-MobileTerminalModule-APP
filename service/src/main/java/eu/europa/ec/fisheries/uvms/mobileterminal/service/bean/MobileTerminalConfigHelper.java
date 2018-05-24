@@ -11,16 +11,15 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
-import java.util.ArrayList;
-import java.util.List;
+import eu.europa.ec.fisheries.uvms.config.constants.ConfigHelper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
+import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import eu.europa.ec.fisheries.uvms.config.constants.ConfigHelper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ParameterKey;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.ServiceConstants;
+import java.util.ArrayList;
+import java.util.List;
 
 @Stateless
 public class MobileTerminalConfigHelper implements ConfigHelper {

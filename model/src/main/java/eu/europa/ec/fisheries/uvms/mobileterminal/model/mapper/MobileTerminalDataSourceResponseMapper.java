@@ -11,34 +11,22 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper;
 
-import java.util.List;
-
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ComchannelNameResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemListResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.UpdatedDNIDListResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.UpsertPluginListResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.PingResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.HistoryMobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.PingResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalHistory;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalFaultException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalValidationException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
+import java.util.List;
 
 /**
  **/

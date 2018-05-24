@@ -11,14 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
 import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
 import eu.europa.ec.fisheries.uvms.audit.model.mapper.AuditLogMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.constants.AuditObjectTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.constants.AuditOperationEnum;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class AuditModuleRequestMapper {
 

@@ -14,10 +14,6 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.PingResponse;
-
-import javax.jms.JMSException;
-import javax.jms.TextMessage;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
@@ -26,6 +22,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 import java.util.List;
 
 public class MobileTerminalModuleResponseMapper {

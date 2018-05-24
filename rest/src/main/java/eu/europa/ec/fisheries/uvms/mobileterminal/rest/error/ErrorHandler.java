@@ -13,11 +13,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.rest.error;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalFaultException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelValidationException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;

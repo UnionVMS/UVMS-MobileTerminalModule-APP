@@ -3,14 +3,16 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.mapper;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.schema.exchange.common.v1.ExchangeFault;
-import eu.europa.ec.fisheries.schema.exchange.module.v1.*;
+import eu.europa.ec.fisheries.schema.exchange.module.v1.GetServiceListResponse;
+import eu.europa.ec.fisheries.schema.exchange.module.v1.SendMovementToPluginResponse;
+import eu.europa.ec.fisheries.schema.exchange.module.v1.SetCommandResponse;
+import eu.europa.ec.fisheries.schema.exchange.module.v1.UpdatePluginSettingResponse;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
 import eu.europa.ec.fisheries.uvms.exchange.model.constant.FaultCode;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMapperException;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeValidationException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.JAXBMarshaller;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
