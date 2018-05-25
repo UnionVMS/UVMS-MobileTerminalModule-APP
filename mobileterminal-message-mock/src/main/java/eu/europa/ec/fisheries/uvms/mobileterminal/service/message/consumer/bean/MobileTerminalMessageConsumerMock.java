@@ -27,9 +27,9 @@ import javax.ejb.Stateless;
 import javax.jms.*;
 
 @Stateless
-public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMessageConsumer {
+public class MobileTerminalMessageConsumerMock implements MessageConsumer, ConfigMessageConsumer {
 
-    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMessageConsumer.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMessageConsumerMock.class);
 
     private ConnectionFactory connectionFactory;
 

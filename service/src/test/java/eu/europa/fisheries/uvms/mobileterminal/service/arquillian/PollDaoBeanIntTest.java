@@ -310,10 +310,10 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
         // TODO: This exception is thrown unintentionally. Should be fixed by implementing MobileTerminalConnect entity class.
         thrown.expect(EJBTransactionRolledbackException.class);
-        thrown.expectMessage("could not resolve property: mobileterminalconnect of: eu.europa.ec.fisheries.uvms" +
-                ".mobileterminal.entity.MobileTerminal [SELECT COUNT (DISTINCT p) FROM eu.europa.ec.fisheries.uvms" +
-                ".mobileterminal.entity.poll.Poll p  INNER JOIN p.pollBase pb INNER JOIN pb.mobileterminal mt " +
-                " INNER JOIN mt.mobileterminalconnect tc  WHERE tc.connectValue IN (:connectionValue) ]");
+        thrown.expectMessage("could not resolve property: mobileterminalconnect of: eu.europa.ec.fisheries" +
+                ".uvms.mobileterminal.service.entity.MobileTerminal [SELECT COUNT (DISTINCT p) FROM eu.europa.ec." +
+                "fisheries.uvms.mobileterminal.service.entity.poll.Poll p  INNER JOIN p.pollBase pb INNER JOIN pb" +
+                ".mobileterminal mt  INNER JOIN mt.mobileterminalconnect tc  WHERE tc.connectValue IN (:connectionValue) ]");
 
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
         pollSearchKeyValue1.setSearchField(PollSearchField.CONNECT_ID);
@@ -361,14 +361,14 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchPaginated_settingPollSearchField_CONNECT_ID_inPollSearchKeyValueWillBuildNoneWorkingSqlPhrase() throws PollDaoException {
+    public void testGetPollListSearchPaginated_settingPollSearchField_CONNECT_ID_inPollSearchKeyValueWillBuildNoneWorkingSqlPhrase() {
 
         // TODO: This exception is thrown unintentionally. Should be fixed by implementing MobileTerminalConnect entity class.
         thrown.expect(EJBTransactionRolledbackException.class);
-        thrown.expectMessage("could not resolve property: mobileterminalconnect of: eu.europa.ec.fisheries.uvms" +
-                ".mobileterminal.entity.MobileTerminal [SELECT DISTINCT p FROM eu.europa.ec.fisheries.uvms.mobileterminal" +
-                ".entity.poll.Poll p  INNER JOIN p.pollBase pb INNER JOIN pb.mobileterminal mt  INNER JOIN" +
-                " mt.mobileterminalconnect tc  WHERE tc.connectValue IN (:connectionValue) ]");
+        thrown.expectMessage("could not resolve property: mobileterminalconnect of: eu.europa.ec.fisheries" +
+                ".uvms.mobileterminal.service.entity.MobileTerminal [SELECT DISTINCT p FROM eu.europa.ec.fisheries" +
+                ".uvms.mobileterminal.service.entity.poll.Poll p  INNER JOIN p.pollBase pb INNER JOIN pb.mobileterminal mt" +
+                "  INNER JOIN mt.mobileterminalconnect tc  WHERE tc.connectValue IN (:connectionValue) ]");
 
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
         pollSearchKeyValue1.setSearchField(PollSearchField.CONNECT_ID);
@@ -385,7 +385,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchPaginated_pageCountLessThanZeroThrowsException() throws PollDaoException {
+    public void testGetPollListSearchPaginated_pageCountLessThanZeroThrowsException() {
 
         Integer pageNumber = 0;
         Integer pageSize = 1;

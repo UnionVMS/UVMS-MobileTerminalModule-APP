@@ -1,5 +1,8 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.message.consumer.bean.MessageConsumerBeanMock;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.message.consumer.bean.MobileTerminalMessageConsumerMock;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.message.producer.bean.MessageProducerBean;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
@@ -33,12 +36,15 @@ public abstract class BuildMobileTerminalServiceDeployment {
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
 
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal");
-        testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal");
+        testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service");
         //eu.europa.fisheries.uvms.mobileterminal.service.arquillian
 
 
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
 
+        testWar.deleteClass(MessageConsumerBeanMock.class);
+        testWar.deleteClass(MobileTerminalMessageConsumerMock.class);
+        testWar.deleteClass(MessageProducerBean.class);
 
         testWar.addAsLibraries(files);
         return testWar;

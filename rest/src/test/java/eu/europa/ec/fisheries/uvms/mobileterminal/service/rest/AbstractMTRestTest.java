@@ -39,7 +39,9 @@ public abstract class AbstractMTRestTest {
 				.withTransitivity().asFile();
 		testWar.addAsLibraries(files);
 
-		testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.rest");
+		testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.service.rest");
+
+
 
 		testWar.delete("/WEB-INF/web.xml");
 		testWar.addAsWebInfResource("mock-web.xml", "web.xml");

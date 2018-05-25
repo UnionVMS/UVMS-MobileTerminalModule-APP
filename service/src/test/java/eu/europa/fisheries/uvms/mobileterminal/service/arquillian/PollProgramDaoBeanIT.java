@@ -82,7 +82,7 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     public void createPollProgram_updateUserConstraintViolation() throws PollDaoException {
 
         thrown.expect(ConstraintViolationException.class);
-        thrown.expectMessage("Validation failed for classes [eu.europa.ec.fisheries.uvms.mobileterminal.entity" +
+        thrown.expectMessage("Validation failed for classes [eu.europa.ec.fisheries.uvms.mobileterminal.service.entity" +
                 ".poll.PollProgram] during persist time for groups [javax.validation.groups.Default, ]");
 
         // we want to be able to tamper with the dates for proper test coverage

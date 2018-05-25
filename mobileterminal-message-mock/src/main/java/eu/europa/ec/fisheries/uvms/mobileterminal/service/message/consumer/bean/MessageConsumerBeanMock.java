@@ -33,9 +33,9 @@ import javax.jms.TextMessage;
         @ActivationConfigProperty(propertyName = "destinationJndiName", propertyValue = MessageConstants.COMPONENT_EVENT_QUEUE),
         @ActivationConfigProperty(propertyName = "connectionFactoryJndiName", propertyValue = MessageConstants.CONNECTION_FACTORY)
 })
-public class MessageConsumerBean implements MessageListener {
+public class MessageConsumerBeanMock implements MessageListener {
 
-    final static Logger LOG = LoggerFactory.getLogger(MessageConsumerBean.class);
+    final static Logger LOG = LoggerFactory.getLogger(MessageConsumerBeanMock.class);
 
 
 
