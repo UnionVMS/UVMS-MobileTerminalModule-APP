@@ -1,8 +1,8 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.uvms.commons.message.impl.JMSUtils;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PingReceivedEventBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.message.event.carrier.EventMessage;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.service.bean.PingReceivedEventBean;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;

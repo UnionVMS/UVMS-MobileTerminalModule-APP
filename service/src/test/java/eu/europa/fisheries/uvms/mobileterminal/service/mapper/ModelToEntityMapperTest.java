@@ -11,8 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.fisheries.uvms.mobileterminal.service.mapper;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.exception.EnumException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.model.exception.MobileTerminalModelMapperException;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;

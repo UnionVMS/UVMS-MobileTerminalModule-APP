@@ -11,7 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.fisheries.uvms.mobileterminal.service.mapper;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.util.DateUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;

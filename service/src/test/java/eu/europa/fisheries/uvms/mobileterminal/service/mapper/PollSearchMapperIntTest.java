@@ -2,9 +2,9 @@ package eu.europa.fisheries.uvms.mobileterminal.service.mapper;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.ListCriteria;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.SearchKey;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.exception.SearchMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.mapper.exception.SearchMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.PollSearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.poll.PollSearchMapper;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.TransactionalTests;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;

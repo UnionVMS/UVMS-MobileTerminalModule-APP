@@ -1,14 +1,14 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.bean.ChannelDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.bean.MobileTerminalDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.entity.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.entity.types.MobileTerminalSourceEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.util.DateUtils;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;

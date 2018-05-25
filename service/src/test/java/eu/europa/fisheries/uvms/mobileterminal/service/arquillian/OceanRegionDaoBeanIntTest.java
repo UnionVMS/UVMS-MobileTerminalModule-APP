@@ -1,8 +1,8 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.OceanRegionDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.bean.OceanRegionDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.entity.OceanRegion;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Test;

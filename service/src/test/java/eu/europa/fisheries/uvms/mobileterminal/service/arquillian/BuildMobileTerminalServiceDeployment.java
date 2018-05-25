@@ -4,7 +4,6 @@ import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuit
 import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
 import org.slf4j.Logger;
@@ -33,23 +32,13 @@ public abstract class BuildMobileTerminalServiceDeployment {
         // So that Arquillian can invoke test class through its servlet test runner
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
 
-        testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
-        testWar.addPackages(true, " eu.europa.fisheries.uvms.mobileterminal");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal");
+        testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal");
+        //eu.europa.fisheries.uvms.mobileterminal.service.arquillian
 
 
-
-
-
-
-
-
-
-
-
-
-        // Empty beans for EE6 CDI
-        testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
+
 
         testWar.addAsLibraries(files);
         return testWar;

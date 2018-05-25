@@ -1,34 +1,7 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollKey;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
-import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
-import javax.ejb.EJB;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 
 /**
  * Created by thofan on 2017-05-04.
@@ -38,6 +11,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(Arquillian.class)
 public class MappedPollServiceBeanIntTest extends TransactionalTests {
+    /*
 
     @EJB
     private MappedPollServiceBean mappedPollService;
@@ -281,4 +255,6 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
         cal.set(Calendar.YEAR, 2019);
         return cal.getTime();
     }
+
+    */
 }

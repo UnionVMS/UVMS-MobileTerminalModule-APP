@@ -1,34 +1,12 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PollServiceBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
-import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
-import javax.ejb.EJB;
-import java.util.Date;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
 public class PollServiceBeanIntTest extends TransactionalTests {
+
+    /*
 
     @EJB
     private PollServiceBean pollService;
@@ -191,4 +169,6 @@ public class PollServiceBeanIntTest extends TransactionalTests {
         }
         assertTrue(ok);
     }
+
+    */
 }

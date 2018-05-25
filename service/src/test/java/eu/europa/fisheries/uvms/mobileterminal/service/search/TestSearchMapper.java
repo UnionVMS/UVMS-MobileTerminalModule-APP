@@ -11,10 +11,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.fisheries.uvms.mobileterminal.service.search;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchField;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchFieldHolder;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchKeyValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchTable;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.SearchField;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.SearchFieldHolder;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.SearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.SearchTable;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

@@ -1,29 +1,8 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalServiceBean;
-import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
-import javax.ejb.EJB;
-import java.util.List;
-import java.util.UUID;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 /**
  * Created by thofan on 2017-05-29.
@@ -32,6 +11,8 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(Arquillian.class)
 public class MobileTerminalServiceIntTest extends TransactionalTests {
+
+    /*
 
     // TODO we do test on those transactions that are wrong in construction
 
@@ -236,4 +217,6 @@ public class MobileTerminalServiceIntTest extends TransactionalTests {
         created.setType(NEW_MOBILETERMINAL_TYPE);
         return mobileTerminalService.upsertMobileTerminal(created, MobileTerminalSource.INTERNAL, USERNAME);
     }
+
+    */
 }

@@ -1,33 +1,11 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
-import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.Plugin;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConfigType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
-import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
-import org.junit.Rule;
-import org.junit.Test;
-import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
-
-import javax.ejb.EJB;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import static org.junit.Assert.*;
 
 @RunWith(Arquillian.class)
 public class ConfigServiceBeanIntTest extends TransactionalTests {
+    /*
 
     @EJB
     private ConfigServiceBean configService;
@@ -186,4 +164,5 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         }
         return false;
     }
+    */
 }

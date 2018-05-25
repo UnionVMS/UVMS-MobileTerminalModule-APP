@@ -1,11 +1,11 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.bean.PollDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.exception.PollDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.entity.poll.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.PollSearchField;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.PollSearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.search.poll.PollSearchMapper;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Rule;

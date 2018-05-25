@@ -11,9 +11,9 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.fisheries.uvms.mobileterminal.service.mapper;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.EnumMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.dao.exception.EnumException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.mapper.EnumMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;
