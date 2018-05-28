@@ -164,7 +164,7 @@ public class MobileTerminalDomainModelBean {
         throw new MobileTerminalModelException("Update - Not supported mobile terminal type");
     }
 
-    public MobileTerminalType assignMobileTerminalToCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
+    public MobileTerminalType assignMobileTerminalToCarrier(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalModelException {
         if (query == null) {
             throw new InputArgumentException("RequestQuery is null");
         }
