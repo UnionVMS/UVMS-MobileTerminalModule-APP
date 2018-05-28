@@ -51,7 +51,6 @@ public abstract class BuildMobileTerminalServiceDeployment {
         // Import Maven runtime dependencies
         File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")
                 .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
-        printFiles(files);
 
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
@@ -68,12 +67,6 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(ConfigServiceBean.class);
         testWar.addClass(MobileTerminalMessageException.class);
         testWar.addClass(MobileTerminalConfigHelper.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.ParameterService.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.ParameterServiceBean.class);
-//        testWar.addClass(eu.europa.ec.fisheries.schema.config.types.v1.SettingType.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.model.exception.InputArgumentException.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.entity.Parameter.class);
 
         // för Mapped PollServiceBean
         testWar.addClass(MappedPollServiceBean.class);
@@ -92,10 +85,6 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(MobileTerminalException.class);
         testWar.addClass(MobileTerminalUnmarshallException.class);
         testWar.addClass(ConfigServiceException.class);
-
-        // Empty beans for EE6 CDI
-        testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
-        testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
 
         // FROM DOMAIN MODULE
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.constant");
@@ -122,8 +111,9 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(PollProgramDaoBean.class);
         testWar.addClass(PollProgram.class);
 
-        testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
+        // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
 
         testWar.addAsLibraries(files);
         return testWar;
