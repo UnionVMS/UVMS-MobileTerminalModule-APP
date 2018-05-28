@@ -3,7 +3,14 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollToCommandRequestMapper;
@@ -12,6 +19,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
@@ -87,6 +96,34 @@ public abstract class BuildMobileTerminalServiceDeployment {
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
+
+        // FROM DOMAIN MODULE
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.constant");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.entity");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dao");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.mapper");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.exception");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.model.exception");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.util");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dto");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.search");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.model");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.arquillian");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.arquillian.bean");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.schema");
+
+        testWar.addClass(TerminalDaoBean.class);
+        testWar.addClass(MobileTerminal.class);
+        testWar.addClass(MobileTerminalTypeEnum.class);
+        testWar.addClass(MobileTerminalPluginDaoBean.class);
+        testWar.addClass(PollDaoBean.class);
+        testWar.addClass(PollSearchKeyValue.class);
+        testWar.addClass(PollSearchMapper.class);
+        testWar.addClass(PollProgramDaoBean.class);
+        testWar.addClass(PollProgram.class);
+
+        testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
+        testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 
         testWar.addAsLibraries(files);
         return testWar;

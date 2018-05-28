@@ -29,6 +29,6 @@ import javax.persistence.PersistenceContext;
 
 public class Dao {
 
-    @PersistenceContext(unitName = "mobileTerminalPU")
+    @PersistenceContext
     protected EntityManager em;
 }
