@@ -15,7 +15,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-message</artifactId>
-            <version>4.0.10-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
@@ -23,16 +23,6 @@
             <version>${project.version}</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-            <artifactId>mobileterminal-dbaccess-domain</artifactId>
-            <version>4.0.10-SNAPSHOT</version>
-        </dependency>
-        <!--dependency>
-            <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-            <artifactId>mobileterminal-service</artifactId>
-            <version>3.0.8-SNAPSHOT</version>
-        </dependency-->
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms</groupId>
             <artifactId>${uvms.config.artifactId}</artifactId>
