@@ -11,6 +11,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
+import eu.europa.ec.fisheries.schema.audit.search.v1.ListCriteria;
+import eu.europa.ec.fisheries.schema.exchange.movement.mobileterminal.v1.MobileTerminalId;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
 import eu.europa.ec.fisheries.uvms.commons.date.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
@@ -164,7 +166,7 @@ public class MobileTerminalDomainModelBean {
         throw new MobileTerminalModelException("Update - Not supported mobile terminal type");
     }
 
-    public MobileTerminalType assignMobileTerminalToCarrier(MobileTerminalAssignQuery query, String comment,String username) throws MobileTerminalModelException {
+    public MobileTerminalType assignMobileTerminalToCarrier(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalModelException {
         if (query == null) {
             throw new InputArgumentException("RequestQuery is null");
         }
