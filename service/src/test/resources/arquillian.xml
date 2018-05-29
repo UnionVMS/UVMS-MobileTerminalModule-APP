@@ -9,7 +9,7 @@
             <property name="port">28080</property>
         </protocol>
         <configuration>
-            <property name="managementAddress">localhost</property>
+            <property name="managementAddress">127.0.0.1</property>
             <property name="managementPort">9990</property>
             <property name="username">admin</property>
             <property name="password">admin</property>
