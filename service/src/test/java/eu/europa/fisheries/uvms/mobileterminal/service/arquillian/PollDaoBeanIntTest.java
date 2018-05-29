@@ -6,10 +6,12 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
+import org.hamcrest.core.StringContains;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.internal.matchers.ThrowableMessageMatcher;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
@@ -72,7 +74,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     public void testCreatePoll_WithNull() throws PollDaoException {
 
         thrown.expect(PollDaoException.class);
-        thrown.expectMessage("[ create poll ] attempt to create create event with null entity");
+        checkExpectedMessage("[ create poll ] attempt to create create event with null entity");
 
         pollDao.createPoll(null);
         em.flush();
@@ -110,7 +112,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
         Long nonExistingId = 3L;
 
         thrown.expect(PollDaoException.class);
-        thrown.expectMessage("No Poll entity found with TrackId " + nonExistingId);
+        checkExpectedMessage("No Poll entity found with TrackId " + nonExistingId);
 
         pollDao.getPollByPoolId(nonExistingId);
     }
@@ -120,7 +122,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     public void testGetPollById_willFailWithNull() throws PollDaoException {
 
         thrown.expect(PollDaoException.class);
-        thrown.expectMessage("No Poll entity found with TrackId " + null);
+        checkExpectedMessage("No Poll entity found with TrackId " + null);
 
         pollDao.getPollByPoolId(null);
     }
@@ -130,7 +132,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     public void testGetPollListByProgramPoll_willFailWithPollDaoException() throws PollDaoException {
 
         thrown.expect(PollDaoException.class);
-        thrown.expectMessage("Not yet implemented");
+        checkExpectedMessage("Not yet implemented");
 
         Integer pollProgramId = 1;
         pollDao.getPollListByProgramPoll(pollProgramId);
@@ -310,7 +312,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
         // TODO: This exception is thrown unintentionally. Should be fixed by implementing MobileTerminalConnect entity class.
         thrown.expect(EJBTransactionRolledbackException.class);
-        thrown.expectMessage("could not resolve property: mobileterminalconnect of: eu.europa.ec.fisheries.uvms" +
+        checkExpectedMessage("could not resolve property: mobileterminalconnect of: eu.europa.ec.fisheries.uvms" +
                 ".mobileterminal.entity.MobileTerminal [SELECT COUNT (DISTINCT p) FROM eu.europa.ec.fisheries.uvms" +
                 ".mobileterminal.entity.poll.Poll p  INNER JOIN p.pollBase pb INNER JOIN pb.mobileterminal mt " +
                 " INNER JOIN mt.mobileterminalconnect tc  WHERE tc.connectValue IN (:connectionValue) ]");
@@ -340,7 +342,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     public void testGetPollListSearchCount_noSqlPhraseCausesException() {
 
         thrown.expect(EJBTransactionRolledbackException.class);
-        thrown.expectMessage("unexpected end of subtree []");
+        checkExpectedMessage("unexpected end of subtree []");
 
         String sql = "";
         List<PollSearchKeyValue> listOfPollSearchKeyValue = new ArrayList<>();
@@ -352,7 +354,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     public void testGetPollListSearchCount_malformedSqlPhraseCausesException() {
 
         thrown.expect(EJBTransactionRolledbackException.class);
-        thrown.expectMessage("unexpected token: * near line");
+        checkExpectedMessage("unexpected token: * near line");
 
         String sql = "SELECT * FROM Poll p";
         List<PollSearchKeyValue> listOfPollSearchKeyValue = new ArrayList<>();
@@ -365,7 +367,8 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
         // TODO: This exception is thrown unintentionally. Should be fixed by implementing MobileTerminalConnect entity class.
         thrown.expect(EJBTransactionRolledbackException.class);
-        thrown.expectMessage("could not resolve property: mobileterminalconnect of: eu.europa.ec.fisheries.uvms" +
+
+        checkExpectedMessage("could not resolve property: mobileterminalconnect of: eu.europa.ec.fisheries.uvms" +
                 ".mobileterminal.entity.MobileTerminal [SELECT DISTINCT p FROM eu.europa.ec.fisheries.uvms.mobileterminal" +
                 ".entity.poll.Poll p  INNER JOIN p.pollBase pb INNER JOIN pb.mobileterminal mt  INNER JOIN" +
                 " mt.mobileterminalconnect tc  WHERE tc.connectValue IN (:connectionValue) ]");
@@ -385,13 +388,13 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchPaginated_pageCountLessThanZeroThrowsException() throws PollDaoException {
+    public void testGetPollListSearchPaginated_pageCountLessThanZeroThrowsException() {
 
         Integer pageNumber = 0;
         Integer pageSize = 1;
 
         thrown.expect(EJBTransactionRolledbackException.class);
-        thrown.expectMessage("Error building query with values: Page number: " + pageNumber + " and Page size: " + pageSize);
+        checkExpectedMessage("Error building query with values: Page number: " + pageNumber + " and Page size: " + pageSize);
 
         PollSearchKeyValue pollSearchKeyValue1 = new PollSearchKeyValue();
         pollSearchKeyValue1.setSearchField(PollSearchField.POLL_ID);
@@ -498,7 +501,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollListSearchPaginated_PollSearchField_USER() throws PollDaoException {
+    public void testGetPollListSearchPaginated_PollSearchField_USER() {
 
         String testValue1 = "testValue1";
         String testValue2 = "testValue2";
@@ -527,5 +530,9 @@ public class PollDaoBeanIntTest extends TransactionalTests {
         poll.setUpdateTime(new Date());
         poll.setUpdatedBy("testUser");
         return poll;
+    }
+
+    private void checkExpectedMessage(String message) {
+        thrown.expect(new ThrowableMessageMatcher(new StringContains(message)));
     }
 }

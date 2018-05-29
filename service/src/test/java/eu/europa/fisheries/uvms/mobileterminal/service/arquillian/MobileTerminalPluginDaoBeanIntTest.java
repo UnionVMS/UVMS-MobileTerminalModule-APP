@@ -5,10 +5,12 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoExcepti
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
+import org.hamcrest.core.StringContains;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.junit.Rule;
 import org.junit.Test;
+import org.junit.internal.matchers.ThrowableMessageMatcher;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
@@ -76,7 +78,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     public void testCreateMobileTerminalPlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
 
         thrown.expect(TerminalDaoException.class);
-        thrown.expectMessage("create mobile terminal plugin");
+        checkExpectedMessage("create mobile terminal plugin");
 
         mobileTerminalPluginDao.createMobileTerminalPlugin(null);
     }
@@ -199,7 +201,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     public void testGetPluginByServiceName_wrongServiceNameThrowsNoEntityFoundException() throws TerminalDaoException {
 
         thrown.expect(NoEntityFoundException.class);
-        thrown.expectMessage("No entities found when retrieving mobile terminal plugin by service name");
+        checkExpectedMessage("No entities found when retrieving mobile terminal plugin by service name");
 
         mobileTerminalPluginDao.getPluginByServiceName("thisServiceNameDoesNotExist");
     }
@@ -229,7 +231,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     public void testUpdatePlugin_updateInsteadOfPersistFailsWithTerminalDaoException() throws TerminalDaoException {
 
         thrown.expect(TerminalDaoException.class);
-        thrown.expectMessage(" [ There is no such MobileTerminalPlugin object to update ] ");
+        checkExpectedMessage(" [ There is no such MobileTerminalPlugin object to update ] ");
 
         MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
 
@@ -241,7 +243,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
     public void testUpdatePlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
 
         thrown.expect(TerminalDaoException.class);
-        thrown.expectMessage(" [ There is no such MobileTerminalPlugin object to update ] ");
+        checkExpectedMessage(" [ There is no such MobileTerminalPlugin object to update ] ");
 
         mobileTerminalPluginDao.updateMobileTerminalPlugin(null);
     }
@@ -260,5 +262,9 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
         mobileTerminalPlugin.setUpdatedBy("test_user");
 
         return mobileTerminalPlugin;
+    }
+
+    private void checkExpectedMessage(String message) {
+        thrown.expect(new ThrowableMessageMatcher(new StringContains(message)));
     }
 }
