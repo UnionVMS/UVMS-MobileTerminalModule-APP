@@ -43,6 +43,34 @@
 			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
 		</interceptor-binding>
 		<interceptor-binding>
+			<ejb-name>ChannelDaoBean</ejb-name>
+			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
+		</interceptor-binding>
+		<interceptor-binding>
+			<ejb-name>DNIDListDaoBean</ejb-name>
+			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
+		</interceptor-binding>
+		<interceptor-binding>
+			<ejb-name>MobileTerminalPluginDaoBean</ejb-name>
+			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
+		</interceptor-binding>
+		<interceptor-binding>
+			<ejb-name>OceanRegionDaoBean</ejb-name>
+			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
+		</interceptor-binding>
+		<interceptor-binding>
+			<ejb-name>PollDaoBean</ejb-name>
+			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
+		</interceptor-binding>
+		<interceptor-binding>
+			<ejb-name>PollProgramDaoBean</ejb-name>
+			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
+		</interceptor-binding>
+		<interceptor-binding>
+			<ejb-name>TerminalDaoBean</ejb-name>
+			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
+		</interceptor-binding>
+		<!--<interceptor-binding>
 			<ejb-name>ConfigModelBean</ejb-name>
 			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
 		</interceptor-binding>
@@ -53,7 +81,7 @@
 		<interceptor-binding>
 			<ejb-name>PollDomainModelBean</ejb-name>
 			<interceptor-class>net.bull.javamelody.MonitoringInterceptor</interceptor-class>
-		</interceptor-binding>
+		</interceptor-binding>-->
 
 
 	</assembly-descriptor>

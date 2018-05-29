@@ -1,19 +1,5 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
-import eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollToCommandRequestMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
 import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
 import org.jboss.arquillian.container.test.api.Deployment;
@@ -38,7 +24,6 @@ public abstract class BuildMobileTerminalServiceDeployment {
 
     @Deployment(name = "normal", order = 1)
     public static Archive<?> createDeployment() {
-
         // Import Maven runtime dependencies
         File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")
                 .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
@@ -48,48 +33,29 @@ public abstract class BuildMobileTerminalServiceDeployment {
         // So that Arquillian can invoke test class through its servlet test runner
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
         testWar.addPackages(true, "com.tocea.easycoverage.framework.api");
-        testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service");
-        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.service");
-        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dto");
-        //testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception");
-
 
         testWar.addClass(TransactionalTests.class);
         testWar.addClass(TestPollHelper.class);
-        testWar.addClass(ConfigServiceBean.class);
-        testWar.addClass(MobileTerminalMessageException.class);
-        testWar.addClass(MobileTerminalConfigHelper.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.ParameterService.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.ParameterServiceBean.class);
-//        testWar.addClass(eu.europa.ec.fisheries.schema.config.types.v1.SettingType.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.model.exception.InputArgumentException.class);
-//        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.entity.Parameter.class);
 
-        // för Mapped PollServiceBean
-        testWar.addClass(MappedPollServiceBean.class);
-        testWar.addClass(PollRequestType.class);
-        testWar.addClass(CreatePollResultDto.class);
-        testWar.addClass(MobileTerminalServiceException.class);
-        testWar.addClass(PollServiceBean.class);
-        testWar.addClass(MobileTerminalServiceBean.class);
-        testWar.addClass(PollToCommandRequestMapper.class);
-        testWar.addClass(PollMapper.class);
-        testWar.addClass(AuditModuleRequestMapper.class);
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.constant");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dao");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.dto");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.entity");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.mapper");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.search");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.service");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.timer");
+        testWar.addPackages(true, "eu.europa.ec.fisheries.schema.mobileterminal");
+        testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service.arquillian");
+        testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service.mapper");
 
-        testWar.addClass(PluginService.class);
-        testWar.addClass(MobileTerminalModelMapperException.class);
-        testWar.addClass(MobileTerminalModelException.class);
-        testWar.addClass(MobileTerminalException.class);
-        testWar.addClass(MobileTerminalUnmarshallException.class);
-        testWar.addClass(ConfigServiceException.class);
-
-        // Empty beans for EE6 CDI
-        testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
+        testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
 
         testWar.addAsLibraries(files);
         return testWar;
+
+
     }
 
     private static void printFiles(File[] files) {

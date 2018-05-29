@@ -3,6 +3,7 @@
     <persistence-unit name="mobileTerminal" transaction-type="JTA">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>jdbc/uvms_mobterm</jta-data-source>
+
         
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel</class>
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.ChannelHistory</class>
@@ -25,7 +26,7 @@
         
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
       		<property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.JBossAppServerJtaPlatform"/>
         </properties>
     </persistence-unit>

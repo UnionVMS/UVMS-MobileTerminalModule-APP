@@ -11,23 +11,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.CreatePollRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.GetPollListRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.GetPollProgramListRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.GetPollableRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollId;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollListQuery;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollMobileTerminal;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollStatus;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.SetStatusPollProgramRequest;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalDataSourceMethod;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelValidationException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.validator.PollDataSourceRequestValidator;
 
 public class PollDataSourceRequestMapper {
 
