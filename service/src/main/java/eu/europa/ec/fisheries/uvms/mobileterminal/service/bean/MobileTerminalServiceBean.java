@@ -60,7 +60,7 @@ public class MobileTerminalServiceBean {
     private MobileTerminalDomainModelBean mobileTerminalModel;
 
     @EJB
-    private ConfigModelBean configModel;
+    private ConfigServiceBean configModel;
 
     @EJB
     private PollDomainModelBean pollModel;

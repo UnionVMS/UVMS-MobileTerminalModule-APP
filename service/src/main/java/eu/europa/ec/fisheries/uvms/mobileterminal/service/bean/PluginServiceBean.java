@@ -60,7 +60,7 @@ public class PluginServiceBean {
 
 //    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
     @EJB
-    private ConfigModelBean configModel;
+    private ConfigServiceBean configModel;
 
     public AcknowledgeTypeType sendPoll(PollResponseType poll, String username) throws MobileTerminalServiceException {
         try {
