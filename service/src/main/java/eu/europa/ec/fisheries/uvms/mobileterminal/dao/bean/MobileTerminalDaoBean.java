@@ -6,9 +6,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 @Stateless
-public class MobileTerminalDaoBean extends Dao {
+public class MobileTerminalDaoBean  {
+    @PersistenceContext
+    private EntityManager em;
 
     private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalDaoBean.class);
 

@@ -17,6 +17,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AttributeMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +28,11 @@ import java.util.Map;
  * Created by osdjup on 2016-11-16.
  */
 @Stateless
-public class ChannelDaoBean extends Dao {
+public class ChannelDaoBean  {
+
+    @PersistenceContext
+    private EntityManager em;
+
 
     public List<Channel> getPollableListSearch(List<String> idList) {
         String sql = PollSearchMapper.createPollableSearchSql(idList);
