@@ -19,15 +19,16 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
-import javax.persistence.EntityExistsException;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 @Stateless
-public class PollProgramDaoBean extends Dao {
+public class PollProgramDaoBean  {
+
+    @PersistenceContext
+    private EntityManager em;
 
     private final static Logger LOG = LoggerFactory.getLogger(PollProgramDaoBean.class);
 

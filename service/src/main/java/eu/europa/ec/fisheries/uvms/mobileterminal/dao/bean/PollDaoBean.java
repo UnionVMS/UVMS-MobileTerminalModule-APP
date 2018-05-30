@@ -16,9 +16,7 @@ import java.util.List;
 
 import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.Stateless;
-import javax.persistence.EntityExistsException;
-import javax.persistence.NoResultException;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,7 +29,10 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 
 @Stateless
-public class PollDaoBean extends Dao {
+public class PollDaoBean  {
+
+	@PersistenceContext
+	private EntityManager em;
 
     private final static Logger LOG = LoggerFactory.getLogger(PollDaoBean.class);
 

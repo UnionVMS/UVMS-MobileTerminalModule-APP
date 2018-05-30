@@ -14,7 +14,9 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 import java.util.List;
 
 import javax.ejb.Stateless;
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import org.slf4j.Logger;
@@ -27,7 +29,10 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoExcep
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 
 @Stateless
-public class MobileTerminalPluginDaoBean extends Dao {
+public class MobileTerminalPluginDaoBean  {
+
+	@PersistenceContext
+	private EntityManager em;
 
 	private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPluginDaoBean.class);
 
