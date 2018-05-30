@@ -28,7 +28,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigModelBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -48,7 +48,7 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PowerMockIgnore("javax.management.*")
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({PluginMapper.class, ConfigModelBean.class})
+@PrepareForTest({PluginMapper.class, ConfigServiceBean.class})
 public class ConfigModelTest {
 
 
@@ -74,7 +74,7 @@ public class ConfigModelTest {
 	private DNIDListDaoBean dnidListDao;
 
 	@InjectMocks
-    private ConfigModelBean testModelBean;
+    private ConfigServiceBean testModelBean;
 
 	@Before
 	public void setUp() {
