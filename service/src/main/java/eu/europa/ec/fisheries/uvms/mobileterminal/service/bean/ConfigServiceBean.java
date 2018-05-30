@@ -14,7 +14,6 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 import java.util.*;
 
 import javax.ejb.EJB;
-import javax.ejb.Local;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.jms.TextMessage;
@@ -79,13 +78,6 @@ public class ConfigServiceBean {
     @EJB
     private DNIDListDaoBean dnidListDao;
 
-
-
-
-
-//	@EJB
-//	private ConfigModelBean configModel;
-
     @EJB
     private MessageConsumer messageConsumer;
 
@@ -94,7 +86,6 @@ public class ConfigServiceBean {
     }
 
     public List<ConfigList> getConfig() {
-        LOG.debug("Get configuration in service layer");
         return getConfigValues();
     }
 
@@ -103,7 +94,6 @@ public class ConfigServiceBean {
     }
 
     public List<ServiceResponseType> getRegisteredMobileTerminalPlugins() throws MobileTerminalException {
-        LOG.debug("Get registered service types");
         try {
             List<PluginType> pluginTypes = new ArrayList<>();
             pluginTypes.add(PluginType.SATELLITE_RECEIVER);

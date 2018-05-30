@@ -75,7 +75,7 @@ public class MobileTerminalServiceBean {
     private ConfigServiceBean configModel;
 
     @EJB
-    private PollDomainModelBean pollModel;
+    private PollServiceBean pollModel;
 
     @EJB
     private TerminalDaoBean terminalDao;
@@ -91,7 +91,6 @@ public class MobileTerminalServiceBean {
      * @throws MobileTerminalServiceException
      */
     public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, MobileTerminalSource source, String username) throws MobileTerminalException {
-        LOG.debug("CREATE MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         mobileTerminal.setSource(source);
         MobileTerminalType createdMobileTerminal = createMobileTerminal(mobileTerminal, username);
         boolean dnidUpdated = configModel.checkDNIDListChange(createdMobileTerminal.getPlugin().getServiceName());
@@ -117,7 +116,6 @@ public class MobileTerminalServiceBean {
      * @throws MobileTerminalServiceException
      */
     public MobileTerminalListResponse getMobileTerminalList(MobileTerminalListQuery query) throws MobileTerminalException {
-        LOG.debug("GET MOBILE TERMINAL LIST INVOKED IN SERVICE LAYER");
         ListResponseDto listResponse = getTerminalListByQuery(query);
         MobileTerminalListResponse response = new MobileTerminalListResponse();
         response.setCurrentPage(listResponse.getCurrentPage());
@@ -134,7 +132,6 @@ public class MobileTerminalServiceBean {
      * @throws MobileTerminalServiceException
      */
     public MobileTerminalType getMobileTerminalById(String guid) throws MobileTerminalException {
-        LOG.debug("GET MOBILE TERMINAL BY ID INVOKED IN SERVICE LAYER");
         if (guid == null) {
             throw new InputArgumentException("No id");
         }
@@ -153,7 +150,6 @@ public class MobileTerminalServiceBean {
      * @throws MobileTerminalServiceException
      */
     public MobileTerminalType upsertMobileTerminal(MobileTerminalType data, MobileTerminalSource source, String username) throws MobileTerminalException {
-        LOG.debug("UPSERT MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         if (data == null) {
             throw new InputArgumentException("No Mobile terminal to update [ NULL ]");
         }
@@ -175,7 +171,6 @@ public class MobileTerminalServiceBean {
      * @throws MobileTerminalServiceException
      */
     public MobileTerminalType getMobileTerminalById(MobileTerminalId id, DataSourceQueue queue) throws MobileTerminalException {
-        LOG.debug("GET MOBILE TERMINAL BY ID ( FROM SPECIFIC QUEUE ) INVOKED IN SERVICE LAYER, QUEUE = ", queue.name());
         if (id == null) {
             throw new InputArgumentException("No id");
         }
@@ -196,7 +191,6 @@ public class MobileTerminalServiceBean {
      */
     public MobileTerminalType updateMobileTerminal(MobileTerminalType mobileTerminal, String comment, MobileTerminalSource source, String username)
             throws MobileTerminalException {
-        LOG.debug("UPDATE MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         mobileTerminal.setSource(source);
         MobileTerminalType terminalUpdate = updateMobileTerminal(mobileTerminal, comment, username);
         try {
@@ -216,7 +210,6 @@ public class MobileTerminalServiceBean {
     }
 
     public MobileTerminalType assignMobileTerminal(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalException {
-        LOG.debug("ASSIGN MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         MobileTerminalType terminalAssign = assignMobileTerminalToCarrier(query, comment, username);
         try {
             String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalAssigned(terminalAssign.getMobileTerminalId().getGuid(), comment, username);
@@ -230,7 +223,6 @@ public class MobileTerminalServiceBean {
     }
 
     public MobileTerminalType unAssignMobileTerminal(MobileTerminalAssignQuery query, String comment, String username) throws MobileTerminalException {
-        LOG.debug("UNASSIGN MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         MobileTerminalType terminalUnAssign = unAssignMobileTerminalFromCarrier(query, comment, username);
         try {
             String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUnassigned(terminalUnAssign.getMobileTerminalId().getGuid(), comment, username);
@@ -245,7 +237,6 @@ public class MobileTerminalServiceBean {
 
     public MobileTerminalType setStatusMobileTerminal(MobileTerminalId terminalId, String comment, MobileTerminalStatus status, String username)
             throws MobileTerminalException {
-        LOG.debug("SET STATUS OF MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         MobileTerminalType terminalStatus = setStatusMobileTerminal(terminalId, comment, status, username);
         try {
             String auditData = null;
@@ -278,7 +269,6 @@ public class MobileTerminalServiceBean {
     }
 
     public MobileTerminalHistory getMobileTerminalHistoryList(String guid) throws MobileTerminalException {
-        LOG.debug("GET HISTORY OF MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         MobileTerminalId terminalId = new MobileTerminalId();
         terminalId.setGuid(guid);
         MobileTerminalHistory historyList = getMobileTerminalHistoryList(terminalId);
@@ -286,7 +276,6 @@ public class MobileTerminalServiceBean {
     }
 
     public MobileTerminalListResponse getPollableMobileTerminal(PollableQuery query) throws MobileTerminalException {
-        LOG.debug("Get pollable mobile terminals");
         ListResponseDto listResponse = pollModel.getMobileTerminalPollableList(query);
         MobileTerminalListResponse response = new MobileTerminalListResponse();
         response.setCurrentPage(listResponse.getCurrentPage());
@@ -509,55 +498,6 @@ public class MobileTerminalServiceBean {
         return createMobileTerminal(mobileTerminal, username);
     }
 
-    /*
-    public MobileTerminalType setStatusMobileTerminal______2(MobileTerminalId id, String comment, MobileTerminalStatus status, String username) throws MobileTerminalModelException {
-        if (id == null) {
-            throw new eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException("No Mobile Terminal");
-        }
-        if (status == null) {
-            throw new eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException("No terminal status to set");
-        }
-
-        MobileTerminal terminal = getMobileTerminalEntityById(id);
-
-        MobileTerminalEvent current = terminal.getCurrentEvent();
-        current.setActive(false);
-
-        MobileTerminalEvent event = new MobileTerminalEvent();
-        event.setActive(true);
-        event.setPollChannel(current.getPollChannel());
-        event.setDefaultChannel(current.getDefaultChannel());
-        event.setUpdateTime(DateUtils.getNowDateUTC());
-        event.setConfigChannel(current.getConfigChannel());
-        event.setAttributes(current.getAttributes());
-        event.setComment(comment);
-        event.setConnectId(current.getConnectId());
-        event.setMobileTerminal(terminal);
-        event.setUpdatedBy(username);
-        switch (status) {
-            case ACTIVE:
-                event.setEventCodeType(EventCodeEnum.ACTIVATE);
-                terminal.setInactivated(false);
-                break;
-            case INACTIVE:
-                event.setEventCodeType(EventCodeEnum.INACTIVATE);
-                terminal.setInactivated(true);
-                break;
-            case ARCHIVE:
-                event.setEventCodeType(EventCodeEnum.ARCHIVE);
-                terminal.setArchived(true);
-                break;
-            default:
-                LOG.error("[ Non valid status to set ] {}", status);
-                throw new MobileTerminalModelException("Non valid status to set");
-        }
-
-        terminal.getMobileTerminalEvents().add(event);
-        terminalDao.updateMobileTerminal(terminal);
-
-        return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
-    }
-    */
 
     public MobileTerminalHistory getMobileTerminalHistoryList(MobileTerminalId id) throws MobileTerminalModelException {
         if (id == null) {
