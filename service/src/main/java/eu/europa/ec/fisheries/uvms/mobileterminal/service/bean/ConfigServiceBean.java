@@ -213,17 +213,13 @@ public class ConfigServiceBean {
                 throw new InputArgumentException("No satellite type");
             }
 
-            try {
-                MobileTerminalPlugin entity = updatePlugin(plugin);
-                if (entity == null) {
-                    entity = PluginMapper.mapModelToEntity(plugin);
-                    entity = mobileTerminalPluginDao.createMobileTerminalPlugin(entity);
-                }
-                map.put(plugin.getServiceName(), plugin);
-                responseList.add(PluginMapper.mapEntityToModel(entity));
-            } catch (TerminalDaoException e) {
-                throw new MobileTerminalModelException("Couldn't persist plugin " + e.getMessage());
+            MobileTerminalPlugin entity = updatePlugin(plugin);
+            if (entity == null) {
+                entity = PluginMapper.mapModelToEntity(plugin);
+                entity = mobileTerminalPluginDao.createMobileTerminalPlugin(entity);
             }
+            map.put(plugin.getServiceName(), plugin);
+            responseList.add(PluginMapper.mapEntityToModel(entity));
         }
 
         responseList.addAll(inactivatePlugins(map));
@@ -245,7 +241,7 @@ public class ConfigServiceBean {
         return responseList;
     }
 
-    public MobileTerminalPlugin updatePlugin(PluginService plugin) throws TerminalDaoException {
+    public MobileTerminalPlugin updatePlugin(PluginService plugin) {
         try {
             MobileTerminalPlugin entity = mobileTerminalPluginDao.getPluginByServiceName(plugin.getServiceName());
             if (PluginMapper.equals(entity, plugin)) {
@@ -310,7 +306,7 @@ public class ConfigServiceBean {
     }
 
 
-    public List<String> updatedDNIDList(String pluginName)  {
+    public List<String> updatedDNIDList(String pluginName) {
         List<String> dnids = new ArrayList<>();
         List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
         for (DNIDList entity : dnidList) {

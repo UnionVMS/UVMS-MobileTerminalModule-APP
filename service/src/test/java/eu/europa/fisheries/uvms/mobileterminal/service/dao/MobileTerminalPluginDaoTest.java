@@ -90,34 +90,15 @@ public class MobileTerminalPluginDaoTest {
 		assertEquals(result.size(), pluginList.size());
 	}
 	
-	@Test(expected=ConfigDaoException.class)
-	public void testGetPluginListResultListException() throws ConfigDaoException {
-		List<MobileTerminalPlugin> result = new ArrayList<>();
-		result.add(plugin);
-		when(em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_ALL, MobileTerminalPlugin.class)).thenReturn(query);
-		when(query.getResultList()).thenThrow(new QueryTimeoutException());
-		
-		testDaoBean.getPluginList();
-	}
-	
-	@Test(expected=TerminalDaoException.class)
-	public void testCreateMobileTerminalPluginNull() throws TerminalDaoException {
-		doThrow(new IllegalArgumentException()).when(em).persist(null);
-		testDaoBean.createMobileTerminalPlugin(null);
-	}
-	
+
+
 	@Test
 	public void testCreateMobileTerminalPluginVerify() throws TerminalDaoException {
 		testDaoBean.createMobileTerminalPlugin(plugin);
 		verify(em).persist(plugin);
 	}
 	
-	@Test(expected=TerminalDaoException.class)
-	public void testCreateMobileTerminalPluginException() throws TerminalDaoException {
-		doThrow(new EntityExistsException()).when(em).persist(plugin);
-		testDaoBean.createMobileTerminalPlugin(plugin);
-	}
-	
+
 	@Test
 	public void testGetPluginByServiceName() throws NoEntityFoundException {
 		String serviceClassName = "ServiceClassName";
@@ -147,9 +128,8 @@ public class MobileTerminalPluginDaoTest {
 		verify(em).flush();
 	}
 	
-	@Test(expected=TerminalDaoException.class)
-	public void testUpdatePluginException() throws TerminalDaoException {
-		doThrow(new IllegalArgumentException()).when(em).merge(null);
-		testDaoBean.updateMobileTerminalPlugin(null);
+	@Test
+	public void testUpdatePluginException()  {
+		Object o = testDaoBean.updateMobileTerminalPlugin(null);
 	}
 }

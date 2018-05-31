@@ -270,7 +270,6 @@ public class TerminalDaoBeanIT extends TransactionalTests {
         MobileTerminalPlugin mtp;
         List<MobileTerminalPlugin> plugs;
 
-        try {
             plugs = testDaoBean.getPluginList();
             mtp = plugs.get(0);
             mt.setSerialNo(serialNo);
@@ -281,9 +280,6 @@ public class TerminalDaoBeanIT extends TransactionalTests {
             mt.setMobileTerminalType(MobileTerminalTypeEnum.INMARSAT_C);
             mt.setArchived(false);
             mt.setInactivated(false);
-        } catch (ConfigDaoException e) {
-            LOG.error("There was an error while retrieving pluginList: {}", e.getMessage());
-        }
         return mt;
     }
 
