@@ -120,7 +120,7 @@ public class DNIDListDaoBeanTestIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetAllDNIDList() throws ConfigDaoException {
+    public void testGetAllDNIDList() {
         List<DNIDList> before = dnidListDao.getAllDNIDList();
         assertNotNull(before);
 

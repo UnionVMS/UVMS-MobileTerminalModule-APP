@@ -310,7 +310,7 @@ public class ConfigServiceBean {
     }
 
 
-    public List<String> updatedDNIDList(String pluginName) throws MobileTerminalModelException {
+    public List<String> updatedDNIDList(String pluginName)  {
         List<String> dnids = new ArrayList<>();
         List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
         for (DNIDList entity : dnidList) {
