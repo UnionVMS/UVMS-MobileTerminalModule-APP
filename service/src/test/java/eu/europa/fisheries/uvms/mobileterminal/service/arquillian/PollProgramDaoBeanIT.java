@@ -448,11 +448,7 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
         MobileTerminalPlugin mtp;
         List<MobileTerminalPlugin> plugs = null;
 
-        try {
             plugs = testDaoBean.getPluginList();
-        } catch (ConfigDaoException e) {
-            fail(e.getMessage());
-        }
 
         mtp = plugs.get(0);
         mt.setSerialNo(serialNo);

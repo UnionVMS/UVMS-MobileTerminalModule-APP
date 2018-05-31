@@ -36,23 +36,14 @@ public class MobileTerminalPluginDaoBean  {
 
 	private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalPluginDaoBean.class);
 
-	public List<MobileTerminalPlugin> getPluginList() throws ConfigDaoException {
-		try {
+	public List<MobileTerminalPlugin> getPluginList()  {
             TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_ALL, MobileTerminalPlugin.class);
             return query.getResultList();
-        } catch (Exception e) {
-            LOG.error("[ Error when getting plugin list. ] " + e.getMessage());
-            throw new ConfigDaoException("No entities found when retrieving all plugins");
-        }
 	}
 
-	public MobileTerminalPlugin createMobileTerminalPlugin(MobileTerminalPlugin plugin) throws TerminalDaoException {
-		try {
+	public MobileTerminalPlugin createMobileTerminalPlugin(MobileTerminalPlugin plugin)  {
 			em.persist(plugin);
 			return plugin;
-		} catch (Exception e) {
-			throw new TerminalDaoException("[ create mobile terminal plugin ] ");
-		}
 	}
 
 	public MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException {
@@ -66,17 +57,9 @@ public class MobileTerminalPluginDaoBean  {
         }
 	}
 
-	public MobileTerminalPlugin updateMobileTerminalPlugin(MobileTerminalPlugin entity) throws TerminalDaoException {
-		if(entity == null || entity.getId() == null) {
-			// It's a defensive decision to prevent clients from using merge excessively instead of persist.
-			throw new TerminalDaoException(" [ There is no such MobileTerminalPlugin object to update ] ");
-		}
-		try {
+	public MobileTerminalPlugin updateMobileTerminalPlugin(MobileTerminalPlugin entity)  {
 			entity = em.merge(entity);
 			em.flush();
 			return entity;
-		} catch (Exception e) {
-			throw new TerminalDaoException(" [ Error occurred while trying to update MobileTerminalPlugin ] ");
-		}
 	}
 }
