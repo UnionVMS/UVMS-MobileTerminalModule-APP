@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet author="osdjup" id="comchannel">
         <createTable tableName="channel">
@@ -30,5 +30,19 @@
         <addColumn tableName="channel">
             <column name="archived" type="BOOLEAN"/>
         </addColumn>
+    </changeSet>
+
+    <changeSet author="stihft" id="addIndexOnTableChannelAndColumnMobterm_id">
+        <createIndex
+                indexName="channel_i_1"
+                tableName="channel">
+            <column name="mobterm_id" type="bigint"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex
+                    indexName="channel_i_1"
+                    tableName="channel"/>
+        </rollback>
     </changeSet>
 </databaseChangeLog>
