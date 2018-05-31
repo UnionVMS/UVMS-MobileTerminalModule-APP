@@ -96,7 +96,7 @@ public class ConfigResource {
                    .build();
        }
    }
-    
+
     @GET
     @Path("/")
     public Response getConfiguration() {
