@@ -32,41 +32,26 @@ public class DNIDListDaoBean {
 
 	private final static Logger LOG = LoggerFactory.getLogger(DNIDListDaoBean.class);
 
-	public List<DNIDList> getAllDNIDList() throws ConfigDaoException {
-		try {
+	public List<DNIDList> getAllDNIDList()  {
             TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST, DNIDList.class);
             return query.getResultList();
-        } catch (NoResultException e) {
-            LOG.error("[ Error when getting dnid list. ] {}", e.getMessage());
-            throw new ConfigDaoException("No entities found when retrieving dnid list");
-        }
 	}
 
-	public List<DNIDList> getDNIDList(String pluginName) throws ConfigDaoException {
-		try {
+	public List<DNIDList> getDNIDList(String pluginName)  {
             TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST_BY_PLUGIN, DNIDList.class);
             query.setParameter("pluginName", pluginName);
 			return query.getResultList();
-		} catch (NoResultException e) {
-            LOG.error("[ Error when getting dnid list by plugin. ] {}", e.getMessage());
-            throw new ConfigDaoException("No entities found when retrieving dnid list by plugin");
-        }
 	}
 
-	public void removeByPluginName(String pluginName) throws ConfigDaoException {
+	public void removeByPluginName(String pluginName)  {
 		List<DNIDList> dnidList = getDNIDList(pluginName);
 		for(DNIDList entity : dnidList) {
 			em.remove(entity);
 		}
 	}
 
-	public DNIDList create(DNIDList entity) throws ConfigDaoException {
-		try {
+	public DNIDList create(DNIDList entity)  {
             em.persist(entity);
             return entity;
-        } catch (Exception e) {
-            LOG.error("[ Error when creating dnid list entity. ]", e.getMessage());
-            throw new ConfigDaoException("[ dnid list entity ] " + e.getMessage());
-        }
 	}
 }

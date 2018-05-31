@@ -20,7 +20,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelListDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceMapperException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,8 +49,7 @@ public class MappedPollServiceBean {
         return pollService.createPoll(pollRequest, username);
     }
 
-    public List<PollDto> getRunningProgramPolls() throws MobileTerminalServiceException {
-        LOG.debug("Get running program polls");
+    public List<PollDto> getRunningProgramPolls() throws MobileTerminalModelMapperException, MobileTerminalServiceMapperException {
 
         List<PollResponseType> pollResponse = pollService.getRunningProgramPolls();
         return PollMapper.mapPolls(pollResponse);

@@ -8,6 +8,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import org.hamcrest.core.StringContains;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.internal.matchers.ThrowableMessageMatcher;
@@ -15,6 +16,7 @@ import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 
 import javax.ejb.EJB;
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.validation.ConstraintViolationException;
 import java.util.Arrays;
 import java.util.Date;
@@ -41,7 +43,7 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
         List<MobileTerminalPlugin> mobileTerminalPluginListBefore = mobileTerminalPluginDao.getPluginList();
         assertNotNull(mobileTerminalPluginListBefore);
-        
+
         // Given
         MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
         mobileTerminalPlugin = mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
@@ -75,12 +77,16 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testCreateMobileTerminalPlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
+    public void testCreateMobileTerminalPlugin_persistNullEntityFailsWithTerminalDaoException() {
 
-        thrown.expect(TerminalDaoException.class);
-        checkExpectedMessage("create mobile terminal plugin");
 
-        mobileTerminalPluginDao.createMobileTerminalPlugin(null);
+        try {
+            mobileTerminalPluginDao.createMobileTerminalPlugin(null);
+            Assert.fail(); // it MUST fail so coming here is ERROR
+        } catch (EJBTransactionRolledbackException e) {
+            Assert.assertTrue(true);
+
+        }
     }
 
     @Test
@@ -226,26 +232,28 @@ public class MobileTerminalPluginDaoBeanIntTest extends TransactionalTests {
         assertEquals(newServiceName, created.getPluginServiceName());
     }
 
-    @Test(expected = TerminalDaoException.class)
+    @Test
     @OperateOnDeployment("normal")
     public void testUpdatePlugin_updateInsteadOfPersistFailsWithTerminalDaoException() throws TerminalDaoException {
 
-        thrown.expect(TerminalDaoException.class);
-        checkExpectedMessage(" [ There is no such MobileTerminalPlugin object to update ] ");
 
         MobileTerminalPlugin mobileTerminalPlugin = createMobileTerminalPluginHelper();
 
-        mobileTerminalPluginDao.updateMobileTerminalPlugin(mobileTerminalPlugin);
+        MobileTerminalPlugin obj = mobileTerminalPluginDao.updateMobileTerminalPlugin(mobileTerminalPlugin);
+        Assert.assertTrue(obj != null);
     }
 
-    @Test(expected = TerminalDaoException.class)
+    @Test
     @OperateOnDeployment("normal")
-    public void testUpdatePlugin_persistNullEntityFailsWithTerminalDaoException() throws TerminalDaoException {
+    public void testUpdatePlugin_persistNullEntityFailsWithTerminalDaoException() {
 
-        thrown.expect(TerminalDaoException.class);
-        checkExpectedMessage(" [ There is no such MobileTerminalPlugin object to update ] ");
 
-        mobileTerminalPluginDao.updateMobileTerminalPlugin(null);
+        try {
+            mobileTerminalPluginDao.updateMobileTerminalPlugin(null);
+            Assert.fail();
+        } catch (EJBTransactionRolledbackException e) {
+            Assert.assertTrue(true);
+        }
     }
 
     private MobileTerminalPlugin createMobileTerminalPluginHelper() {

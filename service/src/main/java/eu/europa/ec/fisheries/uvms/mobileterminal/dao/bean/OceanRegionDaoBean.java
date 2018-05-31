@@ -15,15 +15,10 @@ import java.util.List;
 
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion;
 
 @Stateless
@@ -32,15 +27,9 @@ public class OceanRegionDaoBean  {
     @PersistenceContext
     private EntityManager em;
 
-	private final static Logger LOG = LoggerFactory.getLogger(OceanRegionDaoBean.class);
 
-	public List<OceanRegion> getOceanRegionList() throws ConfigDaoException {
-		try {
+	public List<OceanRegion> getOceanRegionList()  {
             TypedQuery<OceanRegion> query = em.createNamedQuery(MobileTerminalConstants.OCEAN_REGIONS, OceanRegion.class);
             return query.getResultList();
-        } catch (NoResultException e) {
-            LOG.error("[ Error when getting ocean regions. ] {}", e.getMessage());
-            throw new ConfigDaoException("No entities found when retrieving ocean regions");
-        }
 	}
 }

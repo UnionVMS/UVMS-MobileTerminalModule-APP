@@ -9,6 +9,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
 import org.hamcrest.core.StringContains;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.internal.matchers.ThrowableMessageMatcher;
@@ -73,11 +74,16 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void testCreatePoll_WithNull() throws PollDaoException {
 
-        thrown.expect(PollDaoException.class);
-        checkExpectedMessage("[ create poll ] attempt to create create event with null entity");
 
-        pollDao.createPoll(null);
-        em.flush();
+        try {
+            pollDao.createPoll(null);
+            Assert.fail();
+
+            em.flush();
+        }
+        catch(RuntimeException e){
+            Assert.assertTrue(true);
+        }
     }
 
     @Test

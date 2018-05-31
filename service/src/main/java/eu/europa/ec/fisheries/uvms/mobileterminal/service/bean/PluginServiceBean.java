@@ -79,8 +79,11 @@ public class PluginServiceBean {
     }
 
     public void processUpdatedDNIDList(String pluginName) {
-        try {
             List<String> dnidList = configModel.updatedDNIDList(pluginName);
+            if(dnidList.size() < 1){
+                LOG.error("Couldn't get updated DNID List");
+                return;
+            }
 
             String settingKey = pluginName + DELIMETER + SETTING_KEY_DNID_LIST;
             StringBuilder builder = new StringBuilder();
@@ -95,9 +98,6 @@ public class PluginServiceBean {
                 LOG.debug("Couldn't send to config module. Sending to exchange module.");
                 sendUpdatedDNIDListToExchange(pluginName, SETTING_KEY_DNID_LIST, settingValue);
             }
-        } catch (MobileTerminalModelException ex) {
-            LOG.error("Couldn't get updated DNID List");
-        }
     }
 
     private void sendUpdatedDNIDListToConfig(String pluginName, String settingKey, String settingValue) throws ModelMarshallException, MobileTerminalMessageException {

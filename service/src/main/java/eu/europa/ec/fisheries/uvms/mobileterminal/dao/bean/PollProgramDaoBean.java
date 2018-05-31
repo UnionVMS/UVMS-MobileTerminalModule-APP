@@ -25,50 +25,30 @@ import java.util.Date;
 import java.util.List;
 
 @Stateless
-public class PollProgramDaoBean  {
+public class PollProgramDaoBean {
 
     @PersistenceContext
     private EntityManager em;
 
     private final static Logger LOG = LoggerFactory.getLogger(PollProgramDaoBean.class);
 
-    public void createPollProgram(PollProgram pollProgram) throws PollDaoException {
-        try {
-            em.persist(pollProgram);
-        } catch (EntityExistsException | IllegalArgumentException e) {
-            LOG.error("[ Error when creating poll program. ] {}", e.getMessage());
-            throw new PollDaoException("[ create poll program ] " + e.getMessage());
-        }
+    public void createPollProgram(PollProgram pollProgram) {
+        em.persist(pollProgram);
     }
 
-    public PollProgram updatePollProgram(PollProgram pollProgram) throws PollDaoException {
-        if(pollProgram == null || pollProgram.getId() == null) {
-            // It's a defensive decision to prevent clients from using merge excessively instead of persist.
-            throw new PollDaoException(" [ There is no such persisted entity to update ] ");
-        }
-        try {
-            pollProgram = em.merge(pollProgram);
-            em.flush();
-            return pollProgram;
-        } catch (EntityExistsException | IllegalArgumentException e) {
-            LOG.error("[ Error when updating poll program. ] {}", e.getMessage());
-            throw new PollDaoException("[ update poll program ] " + e.getMessage());
-        }
+    public PollProgram updatePollProgram(PollProgram pollProgram) {
+        pollProgram = em.merge(pollProgram);
+        em.flush();
+        return pollProgram;
     }
 
-    public List<PollProgram> getProgramPollsAlive() throws PollDaoException {
-        try {
-            TypedQuery<PollProgram> query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_ALIVE, PollProgram.class);
-            query.setParameter("currentDate", DateUtils.getUTCNow());
-            return query.getResultList();
-        } catch (NoResultException e) {
-            LOG.error("[ Error when getting poll program alive. ] {}", e.getMessage());
-            throw new PollDaoException("No entities found when retrieving getPollProgramAlive");
-        }
+    public List<PollProgram> getProgramPollsAlive()  {
+        TypedQuery<PollProgram> query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_ALIVE, PollProgram.class);
+        query.setParameter("currentDate", DateUtils.getUTCNow());
+        return query.getResultList();
     }
 
-    public List<PollProgram> getPollProgramRunningAndStarted() throws PollDaoException {
-        try {
+    public List<PollProgram> getPollProgramRunningAndStarted()  {
             TypedQuery<PollProgram> query = em.createNamedQuery(MobileTerminalConstants.POLL_PROGRAM_FIND_RUNNING_AND_STARTED, PollProgram.class);
             query.setParameter("currentDate", DateUtils.getUTCNow());
             List<PollProgram> pollPrograms = query.getResultList();
@@ -80,7 +60,6 @@ public class PollProgramDaoBean  {
                 Date now = DateUtils.getUTCNow();
 
                 boolean createPoll = lastRun == null || now.getTime() >= lastRun.getTime() + frequency * 1000;
-                LOG.debug("createPoll:{} for guid '{}' (lastRun:{}, frequency:{}, now:{})", createPoll, pollProgram.getGuid(), lastRun, frequency, now);
 
                 if (createPoll) {
                     pollProgram.setLatestRun(now);
@@ -89,10 +68,6 @@ public class PollProgramDaoBean  {
             }
 
             return validPollPrograms;
-        } catch (NoResultException e) {
-            LOG.error("[ Error when getting poll program running and started. ] {}", e.getMessage());
-            throw new PollDaoException("No entities found when retrieving getPollProgramRunningAndStarted");
-        }
     }
 
     public PollProgram getPollProgramByGuid(String guid) throws PollDaoException {

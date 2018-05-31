@@ -36,13 +36,8 @@ public class PollDaoBean  {
 
     private final static Logger LOG = LoggerFactory.getLogger(PollDaoBean.class);
 
-    public void createPoll(Poll poll) throws PollDaoException {
-        try {
+    public void createPoll(Poll poll)  {
             em.persist(poll);
-        } catch (EntityExistsException | IllegalArgumentException e) {
-            LOG.error("[ Error when creating poll. ] {}", e.getMessage());
-            throw new PollDaoException("[ create poll ] " + e.getMessage());
-        }
     }
 
     public Poll getPollByPoolId(Long pollId) throws PollDaoException {
