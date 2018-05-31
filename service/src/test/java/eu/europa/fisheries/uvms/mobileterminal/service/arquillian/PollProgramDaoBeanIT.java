@@ -16,6 +16,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -103,10 +104,14 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void createPollProgram_withNullWillFail() throws PollDaoException {
-        thrown.expect(PollDaoException.class);
-        thrown.expectMessage("[ create poll program ] attempt to create create event with null entity");
 
-        pollProgramDao.createPollProgram(null);
+        try {
+            pollProgramDao.createPollProgram(null);
+            Assert.fail();
+        }catch(RuntimeException e){
+            Assert.assertTrue(true);
+
+        }
     }
 
     @Test
@@ -146,10 +151,8 @@ public class PollProgramDaoBeanIT extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void updatePollProgram_WithNonePersistedEntityWillFail() throws PollDaoException {
+    public void updatePollProgram_WithNonePersistedEntityWillFail()  {
 
-        thrown.expect(PollDaoException.class);
-        thrown.expectMessage(" [ There is no such persisted entity to update ] ");
 
         // we want to be able to tamper with the dates for proper test  coverage
         Date startDate = getStartDate();

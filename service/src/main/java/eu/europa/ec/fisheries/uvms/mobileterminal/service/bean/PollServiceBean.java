@@ -129,12 +129,8 @@ public class PollServiceBean {
         }
     }
 
-    public List<PollResponseType> getRunningProgramPolls() throws MobileTerminalServiceException {
-        try {
+    public List<PollResponseType> getRunningProgramPolls()  {
             return getPollProgramList();
-        } catch (MobileTerminalModelException e) {
-            throw new MobileTerminalServiceException(e.getMessage());
-        }
     }
 
     public PollResponseType startProgramPoll(String pollId, String username) throws MobileTerminalServiceException {
@@ -215,7 +211,7 @@ public class PollServiceBean {
 
     /***************************************************************/
 
-    private MobileTerminalType mapPollableTerminalType(MobileTerminalTypeEnum type, String guid) throws MobileTerminalModelException {
+    private MobileTerminalType mapPollableTerminalType(MobileTerminalTypeEnum type, String guid) throws MobileTerminalModelMapperException {
         MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);
         return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
     }
@@ -353,9 +349,6 @@ public class PollServiceBean {
             try {
                 pollProgramDao.createPollProgram(pollProgram);
                 responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, mobileTerminalType));
-            } catch (PollDaoException e) {
-                LOG.error("[ Could not persist PollProgram ]");
-                throw new MobileTerminalModelException("Could not persist PollProgam");
             } catch (MobileTerminalModelMapperException e) {
                 LOG.error("Could not map PollProgram to PollResponseType");
                 throw e;
@@ -424,7 +417,7 @@ public class PollServiceBean {
         return response;
     }
 
-    public List<PollResponseType> getPollProgramList() throws MobileTerminalModelException {
+    public List<PollResponseType> getPollProgramList()  {
         List<PollProgram> pollPrograms = pollProgramDao.getProgramPollsAlive();
         return getResponseList(pollPrograms);
     }
@@ -525,17 +518,18 @@ public class PollServiceBean {
         return response;
     }
 
-    private List<PollResponseType> getResponseList(List<PollProgram> pollPrograms) throws MobileTerminalModelException {
+    private List<PollResponseType> getResponseList(List<PollProgram> pollPrograms)  {
         List<PollResponseType> responseList = new ArrayList<>();
         for (PollProgram pollProgram : pollPrograms) {
-            try {
                 MobileTerminal terminal = pollProgram.getPollBase().getMobileTerminal();
-                MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
+            MobileTerminalType terminalType = null;
+            try {
+                terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
                 responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, terminalType));
-            } catch (NoEntityFoundException e) {
-                LOG.error("[ Unvalid mobile terminal connected to poll program " + pollProgram.getGuid() + " ]");
-                throw new MobileTerminalModelException("[ Unvalid mobile terminal connected to poll program " + pollProgram.getGuid() + " ]");
+            } catch (MobileTerminalModelMapperException e) {
+                LOG.warn(e.toString(), e);
             }
+
         }
         return responseList;
     }

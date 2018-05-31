@@ -11,6 +11,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSou
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
 import org.jboss.arquillian.junit.Arquillian;
+import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -146,12 +147,13 @@ public class TerminalDaoBeanIT extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void getMobileTerminalByGuid_NON_EXISTING_GUID() throws TerminalDaoException {
+    public void getMobileTerminalByGuid_NON_EXISTING_GUID() {
 
-        thrown.expect(NoEntityFoundException.class);
 
         String aNonExistingGuid = UUID.randomUUID().toString();
-        terminalDaoBean.getMobileTerminalByGuid(aNonExistingGuid);
+        MobileTerminal mt =  terminalDaoBean.getMobileTerminalByGuid(aNonExistingGuid);
+        Assert.assertTrue(mt == null);
+
     }
 
     @Test

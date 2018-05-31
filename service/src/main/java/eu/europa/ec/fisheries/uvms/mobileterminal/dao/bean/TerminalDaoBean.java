@@ -35,14 +35,13 @@ public class TerminalDaoBean  {
 
     private final static Logger LOG = LoggerFactory.getLogger(TerminalDaoBean.class);
 
-	public MobileTerminal getMobileTerminalByGuid(String guid) throws NoEntityFoundException {
+	public MobileTerminal getMobileTerminalByGuid(String guid)  {
 		try {
             TypedQuery<MobileTerminal> query = em.createNamedQuery(MobileTerminalConstants.MOBILE_TERMINAL_FIND_BY_GUID, MobileTerminal.class);
             query.setParameter("guid", guid);
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting terminal by GUID. ] {}", e.getMessage());
-            throw new NoEntityFoundException("No entity found with guid " + guid);
+		    return null;
         }
 	}
 
