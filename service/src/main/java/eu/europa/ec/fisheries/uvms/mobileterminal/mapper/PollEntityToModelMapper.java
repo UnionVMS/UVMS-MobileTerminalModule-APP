@@ -28,7 +28,7 @@ import java.util.List;
 public class PollEntityToModelMapper {
     private static Logger LOG = LoggerFactory.getLogger(PollEntityToModelMapper.class);
 
-    private static PollResponseType mapToPollResponseType(PollBase pollBase, MobileTerminalType mobileTerminalType) throws MobileTerminalModelMapperException {
+    private static PollResponseType mapToPollResponseType(PollBase pollBase, MobileTerminalType mobileTerminalType)  {
         PollResponseType response = new PollResponseType();
         response.setComment(pollBase.getComment());
         response.setUserName(pollBase.getUser());
@@ -50,7 +50,7 @@ public class PollEntityToModelMapper {
         return response;
     }
 
-    public static PollResponseType mapToPollResponseType(Poll poll, MobileTerminalType mobileTerminalType, PollType pollType) throws MobileTerminalModelMapperException {
+    public static PollResponseType mapToPollResponseType(Poll poll, MobileTerminalType mobileTerminalType, PollType pollType)  {
         PollResponseType response = mapToPollResponseType(poll.getPollBase(), mobileTerminalType);
         response.setPollType(pollType);
         PollId pollId = new PollId();
