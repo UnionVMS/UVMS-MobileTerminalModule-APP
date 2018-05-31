@@ -108,7 +108,7 @@ public class ConfigServiceBean {
     }
 
 
-    public List<TerminalSystemType> getAllTerminalSystems() throws MobileTerminalModelException {
+    public List<TerminalSystemType> getAllTerminalSystems()  {
         Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> pluginsByType = getPlugins();
         List<TerminalSystemType> terminalSystemList = new ArrayList<>();
 
@@ -131,7 +131,7 @@ public class ConfigServiceBean {
         return terminalSystemList;
     }
 
-    private Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> getPlugins() throws ConfigDaoException {
+    private Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> getPlugins()  {
         Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> plugins = new HashMap<>();
         for (MobileTerminalPlugin plugin : mobileTerminalPluginDao.getPluginList()) {
             MobileTerminalTypeEnum mobileTerminalType = MobileTerminalTypeEnum.getType(plugin.getPluginSatelliteType());
