@@ -14,11 +14,6 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.SearchKey;
-import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.MobileTerminalConfig;
-import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.MobileTerminalDeviceConfig;
-import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ErrorHandler;
-import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
 import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
 import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
@@ -32,8 +27,8 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @apiDescription Handles all Polls
@@ -61,14 +56,14 @@ public class ConfigResource {
     */
    @GET
    @Path("/transponders")
-	public ResponseDto<List<MobileTerminalDeviceConfig>> getConfigTransponders() {
+	public Response getConfigTransponders() {
        try {
            LOG.info("Get config transponders invoked in rest layer.");
            List<TerminalSystemType> list = configService.getTerminalSystems();
-           return new ResponseDto<>(MobileTerminalConfig.mapConfigTransponders(list), ResponseCode.OK);
+           return Response.ok(list).status(Response.Status.OK).build();
        } catch (Exception ex) {
            LOG.error("[ Error when getting configTransponders ] {}", ex.getStackTrace());
-           return ErrorHandler.getFault(ex);
+           return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
        }
    }
 
@@ -83,24 +78,24 @@ public class ConfigResource {
     */
    @GET
    @Path("/searchfields")
-   public ResponseDto<SearchKey[]> getConfigSearchFields() {
+   public Response getConfigSearchFields() {
        LOG.info("Get config search fields invoked in rest layer.");
        try {
-           return new ResponseDto<>(SearchKey.values(), ResponseCode.OK);
+           return Response.ok(SearchKey.values()).status(Response.Status.OK).build();
        } catch (Exception ex) {
            LOG.error("[ Error when getting config search fields ] {}", ex.getStackTrace());
-           return ErrorHandler.getFault(ex);
+           return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
        }
    }
     
     @GET
     @Path("/")
-    public ResponseDto<Map<String, List<String>>>getConfiguration() {
+    public Response getConfiguration() {
         try {
         	List<ConfigList> config = configService.getConfig();
-            return new ResponseDto<>(MobileTerminalConfig.mapConfigList(config), ResponseCode.OK);
+        	return Response.ok(config).status(Response.Status.OK).build();
         } catch (Exception ex) {
-            return ErrorHandler.getFault(ex);
+            return Response.status(Response.Status.BAD_REQUEST).entity(ex.getMessage()).build();
         }
     }
 }
