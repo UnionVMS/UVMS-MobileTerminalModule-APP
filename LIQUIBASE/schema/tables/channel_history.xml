@@ -12,8 +12,8 @@
   -->
 
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet author="johlyn" id="comchannel">
         <createTable tableName="channel_history">
@@ -56,5 +56,33 @@
             <column name="chan_conf" type="BOOLEAN" defaultValueBoolean="false"/>
             <column name="chan_poll" type="BOOLEAN" defaultValueBoolean="false"/>
         </addColumn>
+    </changeSet>
+
+    <changeSet author="stihft" id="addIndexOnTableChannel_historyAndColumnMobterm_event_id">
+        <createIndex
+                indexName="channel_history_i_1"
+                tableName="channel_history">
+            <column name="mobterm_event_id" type="bigint"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex
+                    indexName="channel_history_i_1"
+                    tableName="channel_history"/>
+        </rollback>
+    </changeSet>
+
+    <changeSet author="stihft" id="addIndexOnTableChannel_historyAndColumnChannel_id">
+        <createIndex
+                indexName="channel_history_i_2"
+                tableName="channel_history">
+            <column name="channel_id" type="bigint"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex
+                    indexName="channel_history_i_2"
+                    tableName="channel_history"/>
+        </rollback>
     </changeSet>
 </databaseChangeLog>

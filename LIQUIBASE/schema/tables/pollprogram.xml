@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
 	<changeSet author="johlyn" id="pollprogram create">
         <createTable tableName="POLLPROGRAM">
@@ -32,6 +32,20 @@
         <rollback>
             <dropTable tableName="POLLPROGRAM" cascadeConstraints="true"/>
         </rollback>
+	</changeSet>
+
+	<changeSet author="stihft" id="addIndexOnTablePollprogramAndColumnPollbase_id">
+		<createIndex
+				indexName="pollprogram_i_1"
+				tableName="POLLPROGRAM">
+			<column name="pollbase_id" type="bigint"/>
+		</createIndex>
+
+		<rollback>
+			<dropIndex
+					indexName="pollprogram_i_1"
+					tableName="POLLPROGRAM"/>
+		</rollback>
 	</changeSet>
     
 </databaseChangeLog>

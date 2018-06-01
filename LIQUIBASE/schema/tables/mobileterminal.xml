@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-	xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
     <changeSet author="johlyn" id="mobile terminal base table">
         <createTable tableName="mobileterminal">
@@ -37,4 +37,19 @@
 			referencedColumnNames="id"
 		/>
     </changeSet>
+
+    <changeSet author="stihft" id="addIndexOnTableMobileterminal_capabilityAndColumnPlugin_id">
+        <createIndex
+                indexName="mobileterminal_i_1"
+                tableName="mobileterminal">
+            <column name="plugin_id" type="bigint"/>
+        </createIndex>
+
+        <rollback>
+            <dropIndex
+                    indexName="mobileterminal_i_1"
+                    tableName="mobileterminal"/>
+        </rollback>
+    </changeSet>
+
 </databaseChangeLog>
