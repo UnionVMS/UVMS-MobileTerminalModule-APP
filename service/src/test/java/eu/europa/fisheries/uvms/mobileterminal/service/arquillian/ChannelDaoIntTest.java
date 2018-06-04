@@ -2,9 +2,10 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
@@ -34,11 +35,11 @@ public class ChannelDaoIntTest extends TransactionalTests {
     private MobileTerminalPluginDaoBean mobileTerminalPluginDao;
 
     @EJB
-    private MobileTerminalDaoBean mobileTerminalDao;
+    private TerminalDaoBean mobileTerminalDao;
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollableListSearch() throws ConfigDaoException {
+    public void testGetPollableListSearch() throws ConfigDaoException, TerminalDaoException {
 
         //Given - need a string list of id's.
         String id1 = "test_id1";
@@ -46,8 +47,8 @@ public class ChannelDaoIntTest extends TransactionalTests {
         List<String> idList = Arrays.asList(id1, id2);
 
         MobileTerminal mobileTerminal = createMobileTerminal(id1);
-        MobileTerminal retrieved = mobileTerminalDao.createEntity(mobileTerminal);
-        assertNotNull(retrieved);
+        mobileTerminalDao.createMobileTerminal(mobileTerminal);
+        assertNotNull(mobileTerminal);
 
         //When
         List<Channel> channels = channelDao.getPollableListSearch(idList);
