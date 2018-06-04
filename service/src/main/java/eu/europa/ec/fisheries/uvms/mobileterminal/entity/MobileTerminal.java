@@ -115,6 +115,7 @@ public class MobileTerminal implements Serializable {
 
 	@PrePersist
 	private void atPrePersist() {
+		if(guid == null)
 		setGuid(UUID.randomUUID().toString());
 	}
 	
