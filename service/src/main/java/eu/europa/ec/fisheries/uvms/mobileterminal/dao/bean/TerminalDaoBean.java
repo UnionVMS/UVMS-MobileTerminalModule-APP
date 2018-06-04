@@ -56,10 +56,10 @@ public class TerminalDaoBean  {
         }
     }
 
-    public void createMobileTerminal(MobileTerminal terminal) throws TerminalDaoException {
+    public MobileTerminal createMobileTerminal(MobileTerminal terminal) throws TerminalDaoException {
         try {
             em.persist(terminal);
-            em.flush();
+            return terminal;
         } catch (Exception e) {
             LOG.error("[ Error when creating. ] {}", e.getMessage());
             throw new TerminalDaoException("[ Error when creating. ]" + e.getMessage());
