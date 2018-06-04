@@ -51,7 +51,6 @@ import org.hibernate.annotations.FetchMode;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.EqualsUtil;
 
-
 /**
  * The persistent class for the mobileterminal database table.
  * 
@@ -144,7 +143,8 @@ public class Channel implements Serializable {
 
 	@PrePersist
 	private void atPrePersist() {
-		setGuid(UUID.randomUUID().toString());
+		if(guid == null)
+			setGuid(UUID.randomUUID().toString());
 	}
 
 	@Override

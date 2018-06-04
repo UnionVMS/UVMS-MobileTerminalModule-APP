@@ -4,7 +4,6 @@ import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeTy
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
@@ -38,7 +37,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollableListSearch() throws ConfigDaoException {
+    public void testGetPollableListSearch() {
 
         //Given - need a string list of id's.
         String id1 = "test_id1";
@@ -115,9 +114,10 @@ public class ChannelDaoIntTest extends TransactionalTests {
         assertThat(dnidList.size(), is(0));
     }
 
-    private MobileTerminal createMobileTerminal(String connectId) throws ConfigDaoException {
+    private MobileTerminal createMobileTerminal(String connectId)  {
 
         String serialNo = UUID.randomUUID().toString();
+        String serialNo2 = UUID.randomUUID().toString();
 
         Channel channel = new Channel();
         channel.setArchived(false);
@@ -162,7 +162,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
 
         Channel pollChannel = new Channel();
         pollChannel.setArchived(false);
-        pollChannel.setGuid(serialNo);
+        pollChannel.setGuid(serialNo2);
         pollChannel.setMobileTerminal(mt);
         pollChannel.getHistories();
 

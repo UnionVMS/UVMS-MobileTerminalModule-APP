@@ -2,7 +2,6 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
@@ -114,7 +113,7 @@ public class TerminalDaoBeanIT extends TransactionalTests {
 // @formatter:off
         boolean ok = ((fetchedBySerialNo != null) &&
                 (fetchedBySerialNo.getGuid() != null) &&
-                (!fetchedBySerialNo.getGuid().equals(uuid)));
+                (fetchedBySerialNo.getGuid().equals(uuid)));
 // @formatter:on
         assertTrue(ok);
     }

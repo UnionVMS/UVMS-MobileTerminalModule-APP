@@ -112,6 +112,7 @@ public class PollProgram implements Serializable {
 
     @PrePersist
     public void atPrePersist() {
+        if(guid == null)
         setGuid(UUID.randomUUID().toString());
     }
 
