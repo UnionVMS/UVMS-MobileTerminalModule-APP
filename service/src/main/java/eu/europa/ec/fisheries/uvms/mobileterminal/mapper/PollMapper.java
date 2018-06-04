@@ -22,15 +22,11 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollChannelDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceMapperException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PollMapper {
-
-    final static Logger LOG = LoggerFactory.getLogger(PollMapper.class);
 
     public static List<PollDto> mapPolls(List<PollResponseType> pollResponses) throws MobileTerminalServiceMapperException {
         List<PollDto> dtoList = new ArrayList<>();
@@ -83,7 +79,6 @@ public class PollMapper {
         if(creator != null) {
         	dto.addValue(PollKey.USER, creator);
         }
-
         return dto;
     }
 

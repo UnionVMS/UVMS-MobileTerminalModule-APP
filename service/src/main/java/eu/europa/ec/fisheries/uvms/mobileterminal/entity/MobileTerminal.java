@@ -217,8 +217,7 @@ public class MobileTerminal implements Serializable {
 	public boolean equals(Object obj) {
 		if(obj instanceof MobileTerminal) {
 			MobileTerminal other = (MobileTerminal)obj;
-			if(!EqualsUtil.compare(guid, other.guid)) return false;
-			return true;
+			return EqualsUtil.compare(guid, other.guid);
 		}
 		return false;
 	}

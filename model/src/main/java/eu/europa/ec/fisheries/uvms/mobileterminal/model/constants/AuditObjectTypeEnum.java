@@ -12,10 +12,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.constants;
 
 public enum AuditObjectTypeEnum {
-    MOBILE_TERMINAL("Mobile Terminal"), POLL("Poll"), PROGRAM_POLL("Program poll");
+    MOBILE_TERMINAL("Mobile Terminal"),
+    POLL("Poll"),
+    PROGRAM_POLL("Program poll");
+
     private String value;
 
-    private AuditObjectTypeEnum(String value) {
+    AuditObjectTypeEnum(String value) {
         this.value = value;
     }
 

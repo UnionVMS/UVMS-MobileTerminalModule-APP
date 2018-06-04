@@ -11,9 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.entity.types;
 
-
 public enum EventCodeEnum {
-
 	CREATE(1),
 	MODIFY(2),
 	ACTIVATE(3),

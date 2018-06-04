@@ -41,6 +41,5 @@ public class PluginTimerTask implements Runnable{
         } catch (MobileTerminalException e) {
             LOG.info("Couldn't update plugins... ", e.getMessage());
         }
-
     }
 }

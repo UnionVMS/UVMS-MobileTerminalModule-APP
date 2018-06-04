@@ -33,7 +33,6 @@ import javax.validation.constraints.Size;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.EqualsUtil;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
 
-
 /**
  * The persistent class for the inmarsatc_oceanregion database table.
  * 
@@ -125,8 +124,7 @@ public class InmarsatCHistoryOceanRegion implements Serializable {
 		if(obj instanceof InmarsatCHistoryOceanRegion) {
 			InmarsatCHistoryOceanRegion other = (InmarsatCHistoryOceanRegion)obj;
 			if(!EqualsUtil.compare(code, other.code)) return false;
-			if(!EqualsUtil.compare(name, other.name)) return false;
-			return true;
+			return EqualsUtil.compare(name, other.name);
 		}
 		return false;
 	}

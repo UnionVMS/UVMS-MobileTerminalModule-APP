@@ -17,5 +17,4 @@ public class MobileTerminalModelValidationException extends MobileTerminalModelE
     public MobileTerminalModelValidationException(String message) {
         super(message);
     }
-
 }

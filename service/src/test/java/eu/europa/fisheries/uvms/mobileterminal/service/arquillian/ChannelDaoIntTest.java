@@ -47,7 +47,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
 
         MobileTerminal mobileTerminal = createMobileTerminal(id1);
         mobileTerminalDao.createMobileTerminal(mobileTerminal);
-        assertNotNull(mobileTerminal);
+        assertNotNull(mobileTerminal.getId());
 
         //When
         List<Channel> channels = channelDao.getPollableListSearch(idList);

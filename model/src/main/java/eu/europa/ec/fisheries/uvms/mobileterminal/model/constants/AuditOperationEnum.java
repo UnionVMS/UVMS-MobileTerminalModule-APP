@@ -12,17 +12,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.constants;
 
 public enum AuditOperationEnum {
-    CREATE("Create"), UPDATE("Update"), ARCHIVE("Archive"), LINKED("Linked"), UNLINKED("Unlinked"), ACTIVATE("Activate"), INACTIVATE("Inactivate"), START(
-            "Start"), STOP("Stop");
+    CREATE("Create"),
+    UPDATE("Update"),
+    ARCHIVE("Archive"),
+    LINKED("Linked"),
+    UNLINKED("Unlinked"),
+    ACTIVATE("Activate"),
+    INACTIVATE("Inactivate"),
+    START("Start"),
+    STOP("Stop");
 
     private String value;
 
-    private AuditOperationEnum(String value) {
+    AuditOperationEnum(String value) {
         this.value = value;
     }
 
     public String getValue() {
         return value;
     }
-
 }

@@ -11,7 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.entity.types;
 
-
 public enum MobileTerminalSourceEnum {
 	INTERNAL,
 	NATIONAL

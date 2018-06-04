@@ -17,13 +17,10 @@ import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
 public class MobileTerminalGenericMapper {
-    private static Logger LOG = LoggerFactory.getLogger(MobileTerminalGenericMapper.class);
 
     public static String getComChannelTypeValue(ComChannelType comchannel, String type) throws MobileTerminalModelMapperException {
         for (ComChannelAttribute comChannelAttr : comchannel.getAttributes()) {

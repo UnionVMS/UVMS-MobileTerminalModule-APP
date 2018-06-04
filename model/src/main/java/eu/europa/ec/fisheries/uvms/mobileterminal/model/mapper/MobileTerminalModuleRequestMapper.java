@@ -46,5 +46,4 @@ public class MobileTerminalModuleRequestMapper {
         request.setQuery(query);
         return JAXBMarshaller.marshallJaxBObjectToString(request);
     }
-
 }

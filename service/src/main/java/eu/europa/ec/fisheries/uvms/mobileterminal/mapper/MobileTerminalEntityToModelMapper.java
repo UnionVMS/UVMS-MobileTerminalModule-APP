@@ -37,7 +37,7 @@ public class MobileTerminalEntityToModelMapper {
         return mapToMobileTerminalType(entity, channels);
     }
 
-    public static MobileTerminalType mapToMobileTerminalType(MobileTerminal entity, Set<Channel> channels) throws MobileTerminalModelMapperException {
+    private static MobileTerminalType mapToMobileTerminalType(MobileTerminal entity, Set<Channel> channels) throws MobileTerminalModelMapperException {
         MobileTerminalType type = mapToMobileTerminalType(entity);
 
         type.getChannels().clear();
