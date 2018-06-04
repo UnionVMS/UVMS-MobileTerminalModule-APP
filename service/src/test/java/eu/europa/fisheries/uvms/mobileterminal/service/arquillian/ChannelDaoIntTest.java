@@ -2,7 +2,6 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
@@ -33,20 +32,20 @@ public class ChannelDaoIntTest extends TransactionalTests {
     private MobileTerminalPluginDaoBean mobileTerminalPluginDao;
 
     @EJB
-    private MobileTerminalDaoBean mobileTerminalDao;
+    private TerminalDaoBean mobileTerminalDao;
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollableListSearch() {
 
+    public void testGetPollableListSearch() {
         //Given - need a string list of id's.
         String id1 = "test_id1";
         String id2 = "test_id2";
         List<String> idList = Arrays.asList(id1, id2);
 
         MobileTerminal mobileTerminal = createMobileTerminal(id1);
-        MobileTerminal retrieved = mobileTerminalDao.createEntity(mobileTerminal);
-        assertNotNull(retrieved);
+        mobileTerminalDao.createMobileTerminal(mobileTerminal);
+        assertNotNull(mobileTerminal);
 
         //When
         List<Channel> channels = channelDao.getPollableListSearch(idList);
