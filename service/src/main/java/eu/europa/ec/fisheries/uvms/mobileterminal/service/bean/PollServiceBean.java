@@ -200,17 +200,6 @@ public class PollServiceBean {
         return getPollProgramRunningAndStarted();
     }
 
-
-    /***************************************************************/
-    /*                                                             */
-    /*                                                             */
-    /*                                                             */
-    /*                                                             */
-    /*                                                             */
-    /*                                                             */
-
-    /***************************************************************/
-
     private MobileTerminalType mapPollableTerminalType(MobileTerminalTypeEnum type, String guid) throws MobileTerminalModelMapperException {
         MobileTerminal terminal = terminalDao.getMobileTerminalByGuid(guid);
         return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
@@ -341,18 +330,13 @@ public class PollServiceBean {
         return false;
     }
 
-    private List<PollResponseType> createPollPrograms(Map<PollProgram, MobileTerminalType> map, String username) throws MobileTerminalModelException {
+    private List<PollResponseType> createPollPrograms(Map<PollProgram, MobileTerminalType> map, String username) {
         List<PollResponseType> responseList = new ArrayList<>();
         for (Map.Entry<PollProgram, MobileTerminalType> next : map.entrySet()) {
             PollProgram pollProgram = next.getKey();
             MobileTerminalType mobileTerminalType = next.getValue();
-            try {
-                pollProgramDao.createPollProgram(pollProgram);
-                responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, mobileTerminalType));
-            } catch (MobileTerminalModelMapperException e) {
-                LOG.error("Could not map PollProgram to PollResponseType");
-                throw e;
-            }
+            pollProgramDao.createPollProgram(pollProgram);
+            responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, mobileTerminalType));
         }
         return responseList;
     }
@@ -423,7 +407,7 @@ public class PollServiceBean {
     }
 
 
-    public List<PollResponseType> getPollProgramRunningAndStarted() throws MobileTerminalModelException {
+    public List<PollResponseType> getPollProgramRunningAndStarted() {
         List<PollProgram> pollPrograms = pollProgramDao.getPollProgramRunningAndStarted();
         return getResponseList(pollPrograms);
     }
@@ -533,6 +517,4 @@ public class PollServiceBean {
         }
         return responseList;
     }
-
-
 }

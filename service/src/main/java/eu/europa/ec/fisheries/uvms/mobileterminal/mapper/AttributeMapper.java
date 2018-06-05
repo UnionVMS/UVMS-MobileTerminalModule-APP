@@ -12,13 +12,13 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
 
 /**
  * Created by osdjup on 2016-11-16.
@@ -46,7 +46,7 @@ public class AttributeMapper {
         return attributes;
     }
 
-    public static List<ComChannelAttribute> mapAttributeStringToComChannelAttribute(String attributeString) {
+    static List<ComChannelAttribute> mapAttributeStringToComChannelAttribute(String attributeString) {
         List<ComChannelAttribute> attributeList = new ArrayList<>();
         Map<String, String> attributes = mapAttributeString(attributeString);
         for (String key : attributes.keySet()) {
@@ -59,7 +59,7 @@ public class AttributeMapper {
         return attributeList;
     }
 
-    public static List<MobileTerminalAttribute> mapAttributeStringToTerminalAttribute(String attributeString) {
+    static List<MobileTerminalAttribute> mapAttributeStringToTerminalAttribute(String attributeString) {
         List<MobileTerminalAttribute> attributeList = new ArrayList<>();
         Map<String, String> attributes = mapAttributeString(attributeString);
         for (String key : attributes.keySet()) {
@@ -68,7 +68,6 @@ public class AttributeMapper {
             attribute.setValue(attributes.get(key));
             attributeList.add(attribute);
         }
-
         return attributeList;
     }
 }

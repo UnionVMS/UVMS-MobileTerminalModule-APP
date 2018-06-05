@@ -107,7 +107,6 @@ public class ConfigServiceBean {
         }
     }
 
-
     public List<TerminalSystemType> getAllTerminalSystems()  {
         Map<MobileTerminalTypeEnum, List<MobileTerminalPlugin>> pluginsByType = getPlugins();
         List<TerminalSystemType> terminalSystemList = new ArrayList<>();
@@ -144,10 +143,8 @@ public class ConfigServiceBean {
                 typePlugins = new ArrayList<>();
                 plugins.put(mobileTerminalType, typePlugins);
             }
-
             typePlugins.add(plugin);
         }
-
         return plugins;
     }
 
@@ -305,7 +302,6 @@ public class ConfigServiceBean {
         return false;
     }
 
-
     public List<String> updatedDNIDList(String pluginName) {
         List<String> dnids = new ArrayList<>();
         List<DNIDList> dnidList = dnidListDao.getDNIDList(pluginName);
@@ -314,6 +310,4 @@ public class ConfigServiceBean {
         }
         return dnids;
     }
-
-
 }

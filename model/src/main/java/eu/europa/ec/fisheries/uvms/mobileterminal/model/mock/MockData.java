@@ -11,36 +11,23 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.mock;
 
-import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.List;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollType;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.EventCode;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalHistory;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalId;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalSource;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalStatus;
-import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-/**
- **/
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.List;
+
 public class MockData {
 
     private static Logger LOG = LoggerFactory.getLogger(MockData.class);
@@ -73,14 +60,14 @@ public class MockData {
         return dto;
     }
 
-    public static ComChannelAttribute createComChannelAttribute(String type, String value) {
+    private static ComChannelAttribute createComChannelAttribute(String type, String value) {
         ComChannelAttribute channelID = new ComChannelAttribute();
         channelID.setType(type);
         channelID.setValue(value);
         return channelID;
     }
 
-    public static ComChannelType createComChannel(Integer id) {
+    private static ComChannelType createComChannel(Integer id) {
         ComChannelType channeltype = new ComChannelType();
         channeltype.setName("VMS");
 
@@ -92,7 +79,7 @@ public class MockData {
         return channeltype;
     }
 
-    public static List<ComChannelType> createMobileTerminalChannels(Integer amount) {
+    private static List<ComChannelType> createMobileTerminalChannels(Integer amount) {
         List<ComChannelType> dtoList = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             dtoList.add(createComChannel(i));
@@ -100,7 +87,7 @@ public class MockData {
         return dtoList;
     }
 
-    public static List<MobileTerminalType> createMobileTerminalDtoList(Integer amount) {
+    private static List<MobileTerminalType> createMobileTerminalDtoList(Integer amount) {
         List<MobileTerminalType> dtoList = new ArrayList<>();
         for (int i = 0; i < amount; i++) {
             dtoList.add(createMobileTerminalDto(i));
@@ -175,7 +162,7 @@ public class MockData {
         return responseList;
     }
 
-    public static PollResponseType createProgramPollType(Integer id) {
+    private static PollResponseType createProgramPollType(Integer id) {
         PollResponseType response = new PollResponseType();
         response.setMobileTerminal(createMobileTerminalDto(id));
         response.setPollType(PollType.PROGRAM_POLL);

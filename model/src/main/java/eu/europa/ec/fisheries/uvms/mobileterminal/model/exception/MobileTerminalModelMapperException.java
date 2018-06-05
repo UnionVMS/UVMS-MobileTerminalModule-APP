@@ -17,5 +17,4 @@ public class MobileTerminalModelMapperException extends MobileTerminalModelExcep
     public MobileTerminalModelMapperException(String message) {
         super(message);
     }
-
 }

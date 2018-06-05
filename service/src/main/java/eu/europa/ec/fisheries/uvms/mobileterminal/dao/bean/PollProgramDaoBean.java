@@ -66,7 +66,6 @@ public class PollProgramDaoBean {
                     validPollPrograms.add(pollProgram);
                 }
             }
-
             return validPollPrograms;
     }
 

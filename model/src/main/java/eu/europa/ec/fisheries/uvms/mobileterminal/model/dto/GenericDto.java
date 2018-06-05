@@ -11,11 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.dto;
 
-/**
- ** @param <E>
- */
 public abstract class GenericDto<E extends Enum> {
 
     public abstract void addValue(E key, String value);
-
 }

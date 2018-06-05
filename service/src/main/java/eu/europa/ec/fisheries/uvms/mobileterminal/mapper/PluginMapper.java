@@ -177,7 +177,7 @@ public class PluginMapper {
 		return capabilityConfiguration;
 	}
 
-	public static List<? extends CapabilityOption> mapCapabilityOption(TerminalCapability capabilityValue, List<OceanRegion> oceanRegionList, List<MobileTerminalPlugin> lesList) {
+	private static List<? extends CapabilityOption> mapCapabilityOption(TerminalCapability capabilityValue, List<OceanRegion> oceanRegionList, List<MobileTerminalPlugin> lesList) {
 		switch(capabilityValue) {
 			case SUPPORT_SINGLE_OCEAN:
 				return mapOceanRegions(oceanRegionList);

@@ -33,6 +33,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToM
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalModelToEntityMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalExistsException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

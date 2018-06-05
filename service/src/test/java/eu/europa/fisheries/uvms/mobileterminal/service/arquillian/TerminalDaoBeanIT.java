@@ -19,11 +19,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
-import javax.validation.ConstraintViolationException;
 import java.util.*;
 
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 /**
  * Created by thofan on 2017-04-28.
@@ -68,7 +68,6 @@ public class TerminalDaoBeanIT extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void createMobileTerminal_WillFailWithUpdateUserConstraintViolation() throws TerminalDaoException {
 
-
         try {
             String serialNo = createSerialNumber();
             MobileTerminal mobileTerminal = createMobileTerminalHelper(serialNo);
@@ -79,7 +78,8 @@ public class TerminalDaoBeanIT extends TransactionalTests {
 
             terminalDaoBean.createMobileTerminal(mobileTerminal);
             em.flush();
-        }catch(RuntimeException e){
+            fail("Should've thrown RuntimeException");
+        } catch(RuntimeException e){
             Assert.assertTrue(true);
         }
     }

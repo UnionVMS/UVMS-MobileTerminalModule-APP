@@ -17,16 +17,12 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstan
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollBase;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PollEntityToModelMapper {
-    private static Logger LOG = LoggerFactory.getLogger(PollEntityToModelMapper.class);
 
     private static PollResponseType mapToPollResponseType(PollBase pollBase, MobileTerminalType mobileTerminalType)  {
         PollResponseType response = new PollResponseType();
@@ -39,7 +35,7 @@ public class PollEntityToModelMapper {
         return response;
     }
 
-    public static PollResponseType mapToPollResponseType(PollProgram program, MobileTerminalType mobileTerminalType) throws MobileTerminalModelMapperException {
+    public static PollResponseType mapToPollResponseType(PollProgram program, MobileTerminalType mobileTerminalType) {
         PollResponseType response = mapToPollResponseType(program.getPollBase(), mobileTerminalType);
         response.setPollType(PollType.PROGRAM_POLL);
         PollId pollId = new PollId();
@@ -61,7 +57,7 @@ public class PollEntityToModelMapper {
     }
 
     private static List<PollAttribute> getProgramPollAttributes(PollProgram program) {
-        List<PollAttribute> attributes = new ArrayList<PollAttribute>();
+        List<PollAttribute> attributes = new ArrayList<>();
         attributes.add(createPollAttribute(PollAttributeType.FREQUENCY, program.getFrequency().toString()));
         attributes.add(createPollAttribute(PollAttributeType.START_DATE, DateUtils.parseUTCDateTimeToString(program.getStartDate())));
         attributes.add(createPollAttribute(PollAttributeType.END_DATE, DateUtils.parseUTCDateTimeToString(program.getStopDate())));
@@ -79,9 +75,9 @@ public class PollEntityToModelMapper {
     }
 
     private static PollAttribute createPollAttribute(PollAttributeType key, String value) {
-        PollAttribute attrib = new PollAttribute();
-        attrib.setKey(key);
-        attrib.setValue(value);
-        return attrib;
+        PollAttribute attr = new PollAttribute();
+        attr.setKey(key);
+        attr.setValue(value);
+        return attr;
     }
 }

@@ -11,17 +11,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.util;
 
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.TimeZone;
-
-import javax.xml.datatype.DatatypeConfigurationException;
-import javax.xml.datatype.DatatypeFactory;
-import javax.xml.datatype.XMLGregorianCalendar;
-
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 import org.joda.time.format.DateTimeFormat;
@@ -29,10 +18,20 @@ import org.joda.time.format.DateTimeFormatter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.TimeZone;
+
 public class DateUtils {
     private static Logger LOG = LoggerFactory.getLogger(DateUtils.class);
-    final static String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss Z";
-    final static String DATE_FORMAT = "yyyy-MM-dd";
+    private final static String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss Z";
+    private final static String DATE_FORMAT = "yyyy-MM-dd";
     private static final String DATE_TIME_PATTERN= "yyyy-MM-dd HH:mm:ss.SSS";
     
     public static XMLGregorianCalendar getXMLGregorianCalendar(Date date) {
