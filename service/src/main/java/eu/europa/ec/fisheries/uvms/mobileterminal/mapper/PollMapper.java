@@ -92,16 +92,16 @@ public class PollMapper {
     }
 
     public static PollChannelDto mapPollChannel(MobileTerminalType mobileTerminal) throws MobileTerminalServiceMapperException {
-    	checkInputParams(mobileTerminal);
-    	
+        checkInputParams(mobileTerminal);
+
         PollChannelDto pollChannel = new PollChannelDto();
-        
-        // TODO exception handling
-        pollChannel.setComChannelId(mobileTerminal.getChannels().get(0).getGuid());
+
+        if(mobileTerminal.getChannels().get(0) != null)
+            pollChannel.setComChannelId(mobileTerminal.getChannels().get(0).getGuid());
         pollChannel.setMobileTerminalId(mobileTerminal.getMobileTerminalId().getGuid());
         pollChannel.setMobileTerminalType(mobileTerminal.getType());
         pollChannel.setConnectId(mobileTerminal.getConnectId());
-        
+
         List<AttributeDto> attributes = new ArrayList<>();
         for(MobileTerminalAttribute attr : mobileTerminal.getAttributes()) {
         	AttributeDto dto = new AttributeDto();
@@ -109,7 +109,7 @@ public class PollMapper {
         	dto.setValue(attr.getValue());
         	attributes.add(dto);
         }
-        
+
         //Only first channel
         if(mobileTerminal.getChannels().get(0) != null) {
         	for(ComChannelAttribute channel : mobileTerminal.getChannels().get(0).getAttributes()) {
@@ -119,7 +119,7 @@ public class PollMapper {
         		attributes.add(cDto);
         	}
         }
-        
+
         pollChannel.setMobileTerminalAttributes(attributes);
         return pollChannel;
     }
