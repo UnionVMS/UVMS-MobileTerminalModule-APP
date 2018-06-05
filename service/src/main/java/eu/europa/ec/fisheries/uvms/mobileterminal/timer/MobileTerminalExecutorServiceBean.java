@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PollServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalPollTimerServiceBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,10 +32,9 @@ public class MobileTerminalExecutorServiceBean {
     private ConfigServiceBean configService;
 
     @EJB
-    private PollServiceBean pollService;
+    private MobileTerminalPollTimerServiceBean timerService;
 
     private PluginTimerTask pluginTimerTask;
-    private PollTimerTask pollTimerTask;
 
     @PostConstruct
     public void initPlugins() {
@@ -65,11 +64,8 @@ public class MobileTerminalExecutorServiceBean {
     @Schedule(minute = "*/5", hour = "*", persistent = false)
     public void initPollTimer() {
         try {
-            if(pollTimerTask == null) {
-                pollTimerTask = new PollTimerTask(pollService);
-            }
             LOG.info("PollTimerTask initialized.");
-            pollTimerTask.run();
+            timerService.timerTimeout();
         } catch (Exception e) {
             LOG.error("[ Error when initializing PollTimerTask. ] {}", e.getMessage());
         }
