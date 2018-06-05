@@ -15,6 +15,7 @@ import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttribute;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollResponseType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelAttribute;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.ComChannelType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAttribute;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.AttributeDto;
@@ -92,34 +93,41 @@ public class PollMapper {
     }
 
     public static PollChannelDto mapPollChannel(MobileTerminalType mobileTerminal) throws MobileTerminalServiceMapperException {
-    	checkInputParams(mobileTerminal);
-    	
+        checkInputParams(mobileTerminal);
+
         PollChannelDto pollChannel = new PollChannelDto();
-        
-        // TODO exception handling
-        pollChannel.setComChannelId(mobileTerminal.getChannels().get(0).getGuid());
+
+        if(mobileTerminal.getChannels().get(0) != null)
+            pollChannel.setComChannelId(mobileTerminal.getChannels().get(0).getGuid());
         pollChannel.setMobileTerminalId(mobileTerminal.getMobileTerminalId().getGuid());
         pollChannel.setMobileTerminalType(mobileTerminal.getType());
         pollChannel.setConnectId(mobileTerminal.getConnectId());
-        
+
         List<AttributeDto> attributes = new ArrayList<>();
-        for(MobileTerminalAttribute attr : mobileTerminal.getAttributes()) {
-        	AttributeDto dto = new AttributeDto();
-        	dto.setType(attr.getType());
-        	dto.setValue(attr.getValue());
-        	attributes.add(dto);
+        List<MobileTerminalAttribute> attributeList = mobileTerminal.getAttributes();
+        if(!attributeList.isEmpty()) {
+            for (MobileTerminalAttribute attr : attributeList) {
+                AttributeDto dto = new AttributeDto();
+                dto.setType(attr.getType());
+                dto.setValue(attr.getValue());
+                attributes.add(dto);
+            }
         }
-        
+
         //Only first channel
-        if(mobileTerminal.getChannels().get(0) != null) {
-        	for(ComChannelAttribute channel : mobileTerminal.getChannels().get(0).getAttributes()) {
-        		AttributeDto cDto = new AttributeDto();
-        		cDto.setType(channel.getType());
-        		cDto.setValue(channel.getValue());
-        		attributes.add(cDto);
-        	}
+        ComChannelType comChannelType = mobileTerminal.getChannels().get(0);
+        if(comChannelType != null) {
+            List<ComChannelAttribute> comChannelAttributeList = comChannelType.getAttributes();
+            if(!comChannelAttributeList.isEmpty()) {
+                for (ComChannelAttribute channel : comChannelAttributeList) {
+                    AttributeDto cDto = new AttributeDto();
+                    cDto.setType(channel.getType());
+                    cDto.setValue(channel.getValue());
+                    attributes.add(cDto);
+                }
+            }
         }
-        
+
         pollChannel.setMobileTerminalAttributes(attributes);
         return pollChannel;
     }
