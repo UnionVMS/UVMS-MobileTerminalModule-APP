@@ -90,7 +90,7 @@ public class MobileTerminal implements Serializable {
 	private Set<MobileTerminalEvent> mobileTerminalEvents;
 
 	@OneToMany(mappedBy = "mobileTerminal", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@Fetch(FetchMode.SELECT)	
+	@Fetch(FetchMode.SELECT)
 	private Set<Channel> channels;
 
 	public MobileTerminal() {

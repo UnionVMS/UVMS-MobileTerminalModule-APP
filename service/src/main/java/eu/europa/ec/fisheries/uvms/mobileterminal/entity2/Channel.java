@@ -73,6 +73,7 @@ public class Channel implements Serializable {
 	private String updateUser;
 
 	@ManyToOne
+	@JoinColumn(name="mobterm_id")
 	private MobileTerminal mobileTerminal;
 
 	@Column(name="comchanname")
