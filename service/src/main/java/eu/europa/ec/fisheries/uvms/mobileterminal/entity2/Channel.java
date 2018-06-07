@@ -72,10 +72,7 @@ public class Channel implements Serializable {
 	@Column(name="updateuser")
 	private String updateUser;
 
-
-	// skall denna verkligen vara här ??????
-	@OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinColumn(name="mobterm_id")
+	@OneToMany(mappedBy="channels")
 	private MobileTerminal mobileTerminal;
 
 	@Column(name="comchanname")
