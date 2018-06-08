@@ -11,12 +11,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-import javax.jms.TextMessage;
-
+import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
+import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
+import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
 import eu.europa.ec.fisheries.uvms.commons.date.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalTypeComparator;
@@ -24,34 +22,34 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.MobileTerminalPluginD
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.MobileTerminal;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.HistoryMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToModelMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalModelToEntityMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalExistsException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
-import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
-import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.InputArgumentException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalExistsException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import javax.jms.TextMessage;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

@@ -12,7 +12,7 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AttributeMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
 

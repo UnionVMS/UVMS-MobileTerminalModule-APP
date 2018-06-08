@@ -11,15 +11,11 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
-import java.util.*;
-
-import javax.ejb.EJB;
-import javax.ejb.LocalBean;
-import javax.ejb.Stateless;
-
+import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginCapabilityType;
+import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.ChannelDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollProgramDaoBean;
@@ -27,29 +23,31 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.TerminalDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollProgram;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.*;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import eu.europa.ec.fisheries.schema.exchange.common.v1.AcknowledgeTypeType;
-import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.ejb.EJB;
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+import java.util.*;
 
 @Stateless
 @LocalBean
@@ -60,13 +58,11 @@ public class PollServiceBean {
     @EJB
     private MessageProducer messageProducer;
 
-
     @EJB
     private PluginServiceBean sendPollService;
 
     @EJB
     private MobileTerminalPollTimerServiceBean timerService;
-
 
     @EJB
     private PollDaoBean pollDao;
