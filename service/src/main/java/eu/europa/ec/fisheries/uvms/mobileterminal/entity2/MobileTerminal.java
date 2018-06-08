@@ -95,7 +95,7 @@ public class MobileTerminal implements Serializable {
 	@Fetch(FetchMode.SELECT)
 	private Set<MobileTerminalEvent> mobileTerminalEvents;
 
-	@OneToMany(mappedBy = "mobileTerminal", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "mobileTerminal", cascade = CascadeType.ALL)
 	@Fetch(FetchMode.SELECT)
 	private Set<Channel> channels;
 

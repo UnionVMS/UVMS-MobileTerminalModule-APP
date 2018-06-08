@@ -30,8 +30,6 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-
 @Entity
 @Table(name = "pollbase")
 public class PollBase implements Serializable {

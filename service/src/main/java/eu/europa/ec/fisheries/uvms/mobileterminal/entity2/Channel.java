@@ -108,11 +108,4 @@ public class Channel implements Serializable {
 	private void generateNewHistoryId() {
 		this.historyId = UUID.randomUUID();
 	}
-
-
-
-
-
-
-
 }
