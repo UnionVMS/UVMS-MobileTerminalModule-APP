@@ -197,6 +197,30 @@ public class MobileTerminal implements Serializable {
 		return channels;
 	}
 
+	public UUID getHistoryId() {
+		return historyId;
+	}
+
+	public void setHistoryId(UUID historyId) {
+		this.historyId = historyId;
+	}
+
+	public Date getUpdatetime() {
+		return updatetime;
+	}
+
+	public void setUpdatetime(Date updatetime) {
+		this.updatetime = updatetime;
+	}
+
+	public String getUpdateuser() {
+		return updateuser;
+	}
+
+	public void setUpdateuser(String updateuser) {
+		this.updateuser = updateuser;
+	}
+
 	public void setChannels(Set<Channel> channels) {
 		this.channels = channels;
 	}
