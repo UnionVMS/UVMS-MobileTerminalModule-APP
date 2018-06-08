@@ -108,4 +108,128 @@ public class Channel implements Serializable {
 	private void generateNewHistoryId() {
 		this.historyId = UUID.randomUUID();
 	}
+
+	public static long getSerialVersionUID() {
+		return serialVersionUID;
+	}
+
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
+	}
+
+	public UUID getHistoryId() {
+		return historyId;
+	}
+
+	public void setHistoryId(UUID historyId) {
+		this.historyId = historyId;
+	}
+
+	public String getGuid() {
+		return guid;
+	}
+
+	public void setGuid(String guid) {
+		this.guid = guid;
+	}
+
+	public Boolean getArchived() {
+		return archived;
+	}
+
+	public void setArchived(Boolean archived) {
+		this.archived = archived;
+	}
+
+	public Date getUpdateTime() {
+		return updateTime;
+	}
+
+	public void setUpdateTime(Date updateTime) {
+		this.updateTime = updateTime;
+	}
+
+	public String getUpdateUser() {
+		return updateUser;
+	}
+
+	public void setUpdateUser(String updateUser) {
+		this.updateUser = updateUser;
+	}
+
+	public MobileTerminal getMobileTerminal() {
+		return mobileTerminal;
+	}
+
+	public void setMobileTerminal(MobileTerminal mobileTerminal) {
+		this.mobileTerminal = mobileTerminal;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public String getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(String attributes) {
+		this.attributes = attributes;
+	}
+
+	public EventCodeEnum getEventCodeType() {
+		return eventCodeType;
+	}
+
+	public void setEventCodeType(EventCodeEnum eventCodeType) {
+		this.eventCodeType = eventCodeType;
+	}
+
+	public MobileTerminalEvent getMobileTerminalEvent() {
+		return mobileTerminalEvent;
+	}
+
+	public void setMobileTerminalEvent(MobileTerminalEvent mobileTerminalEvent) {
+		this.mobileTerminalEvent = mobileTerminalEvent;
+	}
+
+	public boolean isDefaultChannel() {
+		return defaultChannel;
+	}
+
+	public void setDefaultChannel(boolean defaultChannel) {
+		this.defaultChannel = defaultChannel;
+	}
+
+	public boolean isConfigChannel() {
+		return configChannel;
+	}
+
+	public void setConfigChannel(boolean configChannel) {
+		this.configChannel = configChannel;
+	}
+
+	public boolean isPollChannel() {
+		return pollChannel;
+	}
+
+	public void setPollChannel(boolean pollChannel) {
+		this.pollChannel = pollChannel;
+	}
 }
