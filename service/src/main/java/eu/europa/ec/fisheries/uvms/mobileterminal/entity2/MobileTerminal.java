@@ -19,6 +19,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSou
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
+import org.hibernate.envers.Audited;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
@@ -33,6 +34,7 @@ import java.util.UUID;
  * The persistent class for the mobileterminal database table.
  * 
  */
+@Audited
 @Entity
 @NamedQueries({
 	@NamedQuery(name=MobileTerminalConstants.MOBILE_TERMINAL_FIND_ALL, query = "SELECT m FROM MobileTerminal m"),
@@ -46,6 +48,10 @@ public class MobileTerminal implements Serializable {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	@Column(name="id")
 	private Long id;
+
+	@Column(unique = true, name = "historyid")
+	private UUID historyId;
+
 
 	@Size(max=36)
 	@NotNull
@@ -98,8 +104,15 @@ public class MobileTerminal implements Serializable {
 
 	@PrePersist
 	private void atPrePersist() {
-		if(guid == null)
-		setGuid(UUID.randomUUID().toString());
+		if(guid == null) {
+			setGuid(UUID.randomUUID().toString());
+		}
+		this.historyId = UUID.randomUUID();
+	}
+
+	@PreUpdate
+	private void generateNewHistoryId() {
+		this.historyId = UUID.randomUUID();
 	}
 
 	public Long getId() {

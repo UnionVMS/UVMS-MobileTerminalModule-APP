@@ -23,7 +23,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.entity2;
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
 import org.hibernate.annotations.Fetch;
