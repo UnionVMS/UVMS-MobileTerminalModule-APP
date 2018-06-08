@@ -2,7 +2,7 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean.PollDaoBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchField;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.poll.PollSearchMapper;

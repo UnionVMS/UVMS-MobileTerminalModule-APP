@@ -11,7 +11,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollKey;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollValue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;

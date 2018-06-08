@@ -13,7 +13,7 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

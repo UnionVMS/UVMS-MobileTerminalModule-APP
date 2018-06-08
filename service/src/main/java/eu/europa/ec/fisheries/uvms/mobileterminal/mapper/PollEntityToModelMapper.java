@@ -14,9 +14,9 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.mapper;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.*;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollBase;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollBase;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.util.DateUtils;
 
 import java.util.ArrayList;

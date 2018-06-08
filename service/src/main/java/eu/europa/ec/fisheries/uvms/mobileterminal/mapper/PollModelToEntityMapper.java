@@ -16,10 +16,10 @@ import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType
 import eu.europa.ec.fisheries.uvms.commons.date.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.EnumException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollBase;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollPayload;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollBase;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollPayload;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollStateEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import org.slf4j.Logger;

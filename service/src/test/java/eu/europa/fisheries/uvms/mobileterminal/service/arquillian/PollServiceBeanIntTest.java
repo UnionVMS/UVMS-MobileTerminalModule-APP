@@ -9,7 +9,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoExcepti
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollProgram;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PollServiceBean;

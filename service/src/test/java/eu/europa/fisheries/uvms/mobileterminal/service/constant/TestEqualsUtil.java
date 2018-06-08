@@ -12,7 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.fisheries.uvms.mobileterminal.service.constant;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.EqualsUtil;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.inmarsatc.InmarsatCHistoryOceanRegion;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.InmarsatCHistoryOceanRegion;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.runners.MockitoJUnitRunner;

@@ -15,14 +15,14 @@
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin</class>
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability</class>
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion</class>
-        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.inmarsatc.InmarsatCHistoryOceanRegion</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity2.InmarsatCHistoryOceanRegion</class>
         
         
         <class>eu.europa.ec.fisheries.uvms.config.service.entity.Parameter</class>
-        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll</class>
-        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollBase</class>
-        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollPayload</class>
-        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Poll</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollBase</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollPayload</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity2.PollProgram</class>
         
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>

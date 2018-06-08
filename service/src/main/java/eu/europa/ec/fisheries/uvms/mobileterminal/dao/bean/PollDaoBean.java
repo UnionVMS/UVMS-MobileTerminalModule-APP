@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.Poll;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Poll;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.PollTypeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.PollSearchKeyValue;
