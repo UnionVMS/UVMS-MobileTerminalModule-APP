@@ -32,6 +32,8 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.Channel;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.MobileTerminal;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 

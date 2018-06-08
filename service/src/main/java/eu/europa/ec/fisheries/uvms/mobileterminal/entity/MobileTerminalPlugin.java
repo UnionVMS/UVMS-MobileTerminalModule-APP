@@ -32,6 +32,7 @@ import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity2.MobileTerminal;
 
 /**
  * The persistent class for the landearthstation database table.

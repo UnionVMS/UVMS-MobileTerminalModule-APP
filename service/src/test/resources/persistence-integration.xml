@@ -14,7 +14,7 @@
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalEvent</class>
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin</class>
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPluginCapability</class>
-        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity.OceanRegion</class>
+        <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity2.OceanRegion</class>
         <class>eu.europa.ec.fisheries.uvms.mobileterminal.entity2.InmarsatCHistoryOceanRegion</class>
         
         
