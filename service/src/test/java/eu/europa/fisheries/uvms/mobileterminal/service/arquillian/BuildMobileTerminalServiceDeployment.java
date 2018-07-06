@@ -59,8 +59,6 @@ public abstract class BuildMobileTerminalServiceDeployment {
 
         testWar.addClass(TransactionalTests.class);
         testWar.addClass(TestPollHelper.class);
-        testWar.addClass(ConfigServiceBean.class);
-        testWar.addClass(ConfigServiceBean.class);
         testWar.addClass(MobileTerminalMessageException.class);
         testWar.addClass(MobileTerminalConfigHelper.class);
 //        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.ParameterService.class);

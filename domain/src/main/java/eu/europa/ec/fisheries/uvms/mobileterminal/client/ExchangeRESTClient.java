@@ -7,7 +7,6 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MediaType;
-import java.util.concurrent.TimeUnit;
 
 public class ExchangeRESTClient {
 
@@ -19,8 +18,6 @@ public class ExchangeRESTClient {
     public ExchangeRESTClient() {
 
         ClientBuilder builder = ClientBuilder.newBuilder();
-        builder.readTimeout(5, TimeUnit.SECONDS);
-        builder.connectTimeout(5, TimeUnit.SECONDS);
         client = builder.newClient();
     }
 

@@ -50,17 +50,6 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetRegisteredMobileTerminalPlugins_fail() throws MobileTerminalException {
-
-        thrown.expect(MobileTerminalException.class);
-        // thrown.expectMessage("Failed to map to exchange get service list request");
-
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "true");
-        configService.getRegisteredMobileTerminalPlugins();
-    }
-
-    @Test
-    @OperateOnDeployment("normal")
     public void testUpsertPlugins() throws MobileTerminalException {
         List<PluginService> pluginList = Collections.singletonList(createPluginService());
         List<Plugin> plugins = configService.upsertPlugins(pluginList, "TEST");
