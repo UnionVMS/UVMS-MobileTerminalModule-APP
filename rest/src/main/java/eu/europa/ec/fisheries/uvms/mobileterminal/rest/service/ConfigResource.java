@@ -14,12 +14,12 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.rest.service;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.ConfigList;
 import eu.europa.ec.fisheries.schema.mobileterminal.config.v1.TerminalSystemType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.SearchKey;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.MobileTerminalConfig;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.MobileTerminalDeviceConfig;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.dto.ResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ErrorHandler;
 import eu.europa.ec.fisheries.uvms.mobileterminal.rest.error.ResponseCode;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.rest.security.RequiresFeature;
 import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
 import org.slf4j.Logger;
@@ -48,7 +48,7 @@ public class ConfigResource {
     private final static Logger LOG = LoggerFactory.getLogger(ConfigResource.class);
 
     @EJB
-    private ConfigService configService;
+    private ConfigServiceBean configService;
     
     /**
     *

@@ -3,6 +3,7 @@ package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollMapper;
@@ -12,7 +13,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminal
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalUnmarshallException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
@@ -59,7 +59,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
 
         testWar.addClass(TransactionalTests.class);
         testWar.addClass(TestPollHelper.class);
-        testWar.addClass(ConfigService.class);
+        testWar.addClass(ConfigServiceBean.class);
         testWar.addClass(ConfigServiceBean.class);
         testWar.addClass(MobileTerminalMessageException.class);
         testWar.addClass(MobileTerminalConfigHelper.class);

@@ -11,6 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.bean;
 
+import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.*;
 import eu.europa.ec.fisheries.uvms.commons.date.DateUtils;
 import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstants;
@@ -28,6 +29,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.EventCodeEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.HistoryMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalEntityToModelMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.MobileTerminalModelToEntityMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.ServiceToPluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.search.SearchMapper;
 import org.slf4j.Logger;
@@ -51,6 +53,9 @@ public class MobileTerminalDomainModelBean  {
 
     @EJB
     private MobileTerminalPluginDao pluginDao;
+
+    @EJB
+    private ConfigServiceBean configService;
     
     public MobileTerminal getMobileTerminalEntityById(MobileTerminalId id) throws InputArgumentException, NoEntityFoundException {
     	if(id == null || id.getGuid() == null || id.getGuid().isEmpty()) throw new InputArgumentException("Non valid id");
@@ -67,7 +72,13 @@ public class MobileTerminalDomainModelBean  {
             assertTerminalNotExists(mobileTerminal);
             String serialNumber = assertTerminalHasNeededData(mobileTerminal);
 
-            MobileTerminalPlugin plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
+            MobileTerminalPlugin plugin = null;
+            try {
+                plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
+            } catch(NoEntityFoundException ex) {
+                doInitPlugins();
+                plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
+            }
 
             MobileTerminal terminal = MobileTerminalModelToEntityMapper.mapNewMobileTerminalEntity(mobileTerminal, serialNumber, plugin, username);
             terminalDao.createMobileTerminal(terminal);
@@ -78,6 +89,20 @@ public class MobileTerminalDomainModelBean  {
             LOG.error("Error in model when creating mobile terminal: {}", e.getMessage());
             throw e;
         }
+    }
+
+    private void doInitPlugins() {
+        try {
+            List<ServiceResponseType> serviceTypes = configService.getRegisteredMobileTerminalPlugins();
+            LOG.debug("get services from exchange registry");
+            if(serviceTypes != null) {
+                configService.upsertPlugins(ServiceToPluginMapper.mapToPluginList(serviceTypes), "PluginTimerBean");
+                LOG.debug("upserted plugins");
+            }
+        } catch (Throwable t) {
+            LOG.error("Couldn't update plugins... ", t);
+        }
+
     }
 
     private String assertTerminalHasNeededData(MobileTerminalType mobileTerminal) throws MobileTerminalModelException {

@@ -3,7 +3,7 @@
 
     <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
     <artifactId>mobileterminal</artifactId>
-    <version>4.0.12-SNAPSHOT</version>
+    <version>4.0.12-UVMS-SNAPSHOT</version>
     <packaging>pom</packaging>
     <description>Maven projekt-archetype for UnionVms modules</description>
 
@@ -29,6 +29,7 @@
 		<dependency>
 			<groupId>javax</groupId>
 			<artifactId>javaee-api</artifactId>
+            <version>8.0</version>
 		</dependency>
 	</dependencies>
     <dependencyManagement>

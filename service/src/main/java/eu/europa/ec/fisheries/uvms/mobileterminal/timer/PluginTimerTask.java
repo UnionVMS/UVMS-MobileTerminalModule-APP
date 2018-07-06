@@ -12,9 +12,8 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
+import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.ServiceToPluginMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,10 +21,10 @@ import java.util.List;
 
 public class PluginTimerTask implements Runnable{
 
-    private ConfigService configService;
+    private ConfigServiceBean configService;
     private final static Logger LOG = LoggerFactory.getLogger(PluginTimerTask.class);
 
-    PluginTimerTask(ConfigService configService){
+    PluginTimerTask(ConfigServiceBean configService){
         this.configService = configService;
     }
 
@@ -38,8 +37,8 @@ public class PluginTimerTask implements Runnable{
                 configService.upsertPlugins(ServiceToPluginMapper.mapToPluginList(serviceTypes), "PluginTimerBean");
                 LOG.debug("upserted plugins");
             }
-        } catch (MobileTerminalException e) {
-            LOG.info("Couldn't update plugins... ", e.getMessage());
+        } catch (Throwable t) {
+            LOG.error("Couldn't update plugins... ", t);
         }
 
     }
