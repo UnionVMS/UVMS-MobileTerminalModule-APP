@@ -1,5 +1,19 @@
 package eu.europa.fisheries.uvms.mobileterminal.service.arquillian;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.shrinkwrap.api.Archive;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.asset.EmptyAsset;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
+import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.PluginService;
 import eu.europa.ec.fisheries.uvms.config.exception.ConfigServiceException;
@@ -16,24 +30,16 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
-import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.*;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MappedPollServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalConfigHelper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.MobileTerminalServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.PollServiceBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.timer.MobileTerminalExecutorServiceBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.timer.PluginTimerTask;
+import eu.europa.ec.fisheries.uvms.mobileterminal.timer.PollTimerTask;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
-import org.eu.ingwar.tools.arquillian.extension.suite.annotations.ArquillianSuiteDeployment;
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.asset.EmptyAsset;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
-import org.jboss.shrinkwrap.resolver.api.maven.Maven;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
 
 @ArquillianSuiteDeployment
 public abstract class BuildMobileTerminalServiceDeployment {
@@ -60,7 +66,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addClass(TransactionalTests.class);
         testWar.addClass(TestPollHelper.class);
         testWar.addClass(ConfigService.class);
-        testWar.addClass(ConfigServiceBean.class);
+        testWar.addClass(ConfigServiceBeanMock.class);
         testWar.addClass(MobileTerminalMessageException.class);
         testWar.addClass(MobileTerminalConfigHelper.class);
 //        testWar.addClass(eu.europa.ec.fisheries.uvms.config.service.ParameterService.class);

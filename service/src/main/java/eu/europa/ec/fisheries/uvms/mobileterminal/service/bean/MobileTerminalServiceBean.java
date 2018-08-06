@@ -11,13 +11,13 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
+import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.jms.TextMessage;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
+import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollableQuery;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalAssignQuery;
@@ -31,8 +31,12 @@ import eu.europa.ec.fisheries.uvms.audit.model.exception.AuditModelMarshallExcep
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.MobileTerminalDomainModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
+import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.ServiceToPluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
@@ -40,6 +44,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProduc
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
+import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.InputArgumentException;
@@ -68,6 +73,12 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     @EJB
     private PollDomainModelBean pollModel;
     
+    @EJB
+    private MobileTerminalPluginDao pluginDao;
+    
+    @EJB
+    private ConfigService configService;
+    
     /**
      * {@inheritDoc}
      *
@@ -78,7 +89,8 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, MobileTerminalSource source, String username) throws MobileTerminalException {
         LOG.debug("CREATE MOBILE TERMINAL INVOKED IN SERVICE LAYER");
         mobileTerminal.setSource(source);
-        MobileTerminalType createdMobileTerminal = mobileTerminalModel.createMobileTerminal(mobileTerminal, username);
+        MobileTerminalPlugin plugin = getPlugin(mobileTerminal);
+        MobileTerminalType createdMobileTerminal = mobileTerminalModel.createMobileTerminal(mobileTerminal, username, plugin);
         boolean dnidUpdated = configModel.checkDNIDListChange(createdMobileTerminal.getPlugin().getServiceName());
         
         try {
@@ -146,7 +158,8 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
             throw new InputArgumentException("No Mobile terminal to update [ NULL ]");
         }
         data.setSource(source);
-        MobileTerminalType terminalUpserted = mobileTerminalModel.upsertMobileTerminal(data, username);
+        MobileTerminalPlugin plugin = getPlugin(data);
+        MobileTerminalType terminalUpserted = mobileTerminalModel.upsertMobileTerminal(data, username, plugin);
         
         boolean dnidUpdated = configModel.checkDNIDListChange(terminalUpserted.getPlugin().getServiceName());
         if(dnidUpdated) {
@@ -288,5 +301,31 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         response.setTotalNumberOfPages(listResponse.getTotalNumberOfPages());
         response.getMobileTerminal().addAll(listResponse.getMobileTerminalList());
         return response;
+    }
+    
+    private MobileTerminalPlugin getPlugin(MobileTerminalType mobileTerminal) {
+        MobileTerminalPlugin plugin = null;
+        try {
+            plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
+        } catch (NoEntityFoundException e) {
+            plugin = initAndGetPlugin(mobileTerminal);
+        }
+        return plugin;
+    }
+    
+    private MobileTerminalPlugin initAndGetPlugin(MobileTerminalType mobileTerminal) {
+        MobileTerminalPlugin plugin = null;
+        try {
+            List<ServiceResponseType> serviceTypes = configService.getRegisteredMobileTerminalPlugins();
+            if(serviceTypes != null) {
+                configService.upsertPlugins(ServiceToPluginMapper.mapToPluginList(serviceTypes), "PluginTimerBean");
+            }
+            plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
+        } catch (NoEntityFoundException e) {
+            return null;
+        } catch (MobileTerminalException e) {
+            LOG.info("Couldn't update plugins... ", e.getMessage());
+        }
+        return plugin;
     }
 }
