@@ -62,12 +62,10 @@ public class MobileTerminalDomainModelBean  {
         return terminalDao.getMobileTerminalBySerialNo(serialNo);
     }
     
-    public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, String username) throws MobileTerminalModelException {
+    public MobileTerminalType createMobileTerminal(MobileTerminalType mobileTerminal, String username, MobileTerminalPlugin plugin) throws MobileTerminalModelException {
         try {
             assertTerminalNotExists(mobileTerminal);
             String serialNumber = assertTerminalHasNeededData(mobileTerminal);
-
-            MobileTerminalPlugin plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
 
             MobileTerminal terminal = MobileTerminalModelToEntityMapper.mapNewMobileTerminalEntity(mobileTerminal, serialNumber, plugin, username);
             terminalDao.createMobileTerminal(terminal);
@@ -244,7 +242,7 @@ public class MobileTerminalDomainModelBean  {
         throw new MobileTerminalModelException("Terminal " + mobTermId + " is not linked to an asset with guid " + connectId);
     }
 
-    public MobileTerminalType upsertMobileTerminal(MobileTerminalType mobileTerminal,String username) throws MobileTerminalModelException {
+    public MobileTerminalType upsertMobileTerminal(MobileTerminalType mobileTerminal, String username, MobileTerminalPlugin plugin) throws MobileTerminalModelException {
 
         if (mobileTerminal == null) {
             throw new InputArgumentException("RequestQuery is null");
@@ -261,7 +259,7 @@ public class MobileTerminalDomainModelBean  {
                 throw e;
             }
         }
-        return createMobileTerminal(mobileTerminal, username);
+        return createMobileTerminal(mobileTerminal, username, plugin);
     }
 
     public MobileTerminalType setStatusMobileTerminal(MobileTerminalId id, String comment, MobileTerminalStatus status, String username) throws MobileTerminalModelException {

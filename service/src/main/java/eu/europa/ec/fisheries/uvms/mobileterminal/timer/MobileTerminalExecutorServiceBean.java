@@ -11,13 +11,10 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.timer;
 
-import javax.annotation.PostConstruct;
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.Schedule;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.enterprise.concurrent.ManagedExecutorService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
@@ -34,24 +31,9 @@ public class MobileTerminalExecutorServiceBean {
 
     @EJB
     private PollService pollService;
-
-    @Resource
-    ManagedExecutorService managedExecutorService;
     
     private PluginTimerTask pluginTimerTask;
     private PollTimerTask pollTimerTask;
-
-    @PostConstruct
-    public void initPlugins() {
-        try {
-            if(pluginTimerTask == null) {
-                pluginTimerTask = new PluginTimerTask(configService);
-            }
-            managedExecutorService.execute(pluginTimerTask);
-        } catch (Exception e) {
-            LOG.error("Error when initializing PluginTimerTask", e);
-        }
-    }
     
     @Schedule(minute = "*/5", hour = "*", persistent = false)
     public void initPluginTimer() {
