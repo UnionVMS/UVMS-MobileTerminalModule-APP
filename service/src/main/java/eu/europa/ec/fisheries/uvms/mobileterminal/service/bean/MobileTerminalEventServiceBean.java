@@ -12,29 +12,31 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalFault;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
+import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MobileTerminalProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.EventService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.enterprise.event.Observes;
 import javax.inject.Inject;
-import javax.jms.*;
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
 
 @Stateless
 public class MobileTerminalEventServiceBean implements EventService {
 
     final static Logger LOG = LoggerFactory.getLogger(MobileTerminalEventServiceBean.class);
 
-    @Resource(lookup = MessageConstants.JAVA_MESSAGE_CONNECTION_FACTORY)
-    private ConnectionFactory connectionFactory;
+    @EJB
+    private MobileTerminalProducer messageProducer;
 
     @Inject
     @ErrorEvent
@@ -42,20 +44,15 @@ public class MobileTerminalEventServiceBean implements EventService {
 
     @Override
     public void returnError(@Observes @ErrorEvent EventMessage message) {
-        try (Connection connection = connectionFactory.createConnection()) {
+        try {
+            TextMessage receivedJmsMessage = message.getJmsMessage();
             LOG.debug("Sending error message back from Mobile Terminal module to recipient om JMS Queue with correlationID: {} ",
-                    message.getJmsMessage().getJMSMessageID());
-            Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-
+                    receivedJmsMessage.getJMSMessageID());
             MobileTerminalFault request = new MobileTerminalFault();
             request.setMessage(message.getErrorMessage());
             String data = JAXBMarshaller.marshallJaxBObjectToString(request);
-
-            TextMessage response = session.createTextMessage(data);
-            response.setJMSCorrelationID(message.getJmsMessage().getJMSCorrelationID());
-            MessageProducer producer = session.createProducer(message.getJmsMessage().getJMSReplyTo());
-            producer.send(response);
-        } catch (MobileTerminalModelMapperException | JMSException ex) {
+            messageProducer.sendResponseToRequestor(receivedJmsMessage, data);
+        } catch (MobileTerminalModelMapperException | JMSException | MessageException ex) {
             LOG.error("Error when returning Error message to recipient", ex.getMessage());
         }
     }

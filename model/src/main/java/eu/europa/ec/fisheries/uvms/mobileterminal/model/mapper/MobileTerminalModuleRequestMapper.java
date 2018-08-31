@@ -40,10 +40,23 @@ public class MobileTerminalModuleRequestMapper {
         return JAXBMarshaller.marshallJaxBObjectToString(response);
     }
 
+    public static String mapToMobileTerminalListBatchResponse(List<MobileTerminalBatchListElement> mobileTerminalTypes) throws MobileTerminalModelMapperException {
+        MobileTerminalBatchListResponse response = new MobileTerminalBatchListResponse();
+        response.getResponseList().addAll(mobileTerminalTypes);
+        return JAXBMarshaller.marshallJaxBObjectToString(response);
+    }
+
     public static String createMobileTerminalListRequest(MobileTerminalListQuery query) throws MobileTerminalModelMapperException {
         MobileTerminalListRequest request = new MobileTerminalListRequest();
         request.setMethod(MobileTerminalModuleMethod.LIST_MOBILE_TERMINALS);
         request.setQuery(query);
+        return JAXBMarshaller.marshallJaxBObjectToString(request);
+    }
+
+    public static String createMobileTerminalBatchListRequest(List<MobileTerminalListQuery> queries) throws MobileTerminalModelMapperException {
+        MobileTerminalBatchListRequest request = new MobileTerminalBatchListRequest();
+        request.setMethod(MobileTerminalModuleMethod.BATCH_LIST_MOBILE_TERMINALS);
+        request.getQueryList().addAll(queries);
         return JAXBMarshaller.marshallJaxBObjectToString(request);
     }
 

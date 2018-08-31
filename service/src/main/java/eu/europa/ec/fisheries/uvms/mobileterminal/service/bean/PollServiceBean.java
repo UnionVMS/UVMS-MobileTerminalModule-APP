@@ -33,9 +33,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MobileTerminaleConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MobileTerminalProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
@@ -49,10 +49,10 @@ public class PollServiceBean implements PollService {
     private final static Logger LOG = LoggerFactory.getLogger(PollServiceBean.class);
 
     @EJB
-    private MessageProducer messageProducer;
+    private MobileTerminalProducer messageProducer;
 
     @EJB
-    private MessageConsumer messageConsumer;
+    private MobileTerminaleConsumer messageConsumer;
 
     @EJB
     private PluginService sendPollService;

@@ -18,7 +18,7 @@ import eu.europa.ec.fisheries.uvms.config.exception.ConfigMessageException;
 import eu.europa.ec.fisheries.uvms.config.message.ConfigMessageConsumer;
 import eu.europa.ec.fisheries.uvms.exchange.model.exception.ExchangeModelMarshallException;
 import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleResponseMapper;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MobileTerminaleConsumer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,9 +27,9 @@ import javax.ejb.Stateless;
 import javax.jms.*;
 
 @Stateless
-public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMessageConsumer {
+public class MobileTerminalMobileTerminaleConsumer implements MobileTerminaleConsumer, ConfigMessageConsumer {
 
-    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMessageConsumer.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMobileTerminaleConsumer.class);
 
     private ConnectionFactory connectionFactory;
 
@@ -39,7 +39,7 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
     }
 
     @Override
-    public <T> T getMessage(String correlationId, Class type) {
+    public <T> T getMessageFromOutQueue(String correlationId, Class type) {
 
         Message message = null;
     	Connection connection=null;
@@ -53,7 +53,7 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
             message.setJMSMessageID(correlationId);
 
         } catch (ExchangeModelMarshallException | JMSException   e) {
-        	LOG.warn("Problem getMessage",e);
+        	LOG.warn("Problem getMessageFromOutQueue",e);
         } finally{
         	JMSUtils.disconnectQueue(connection);
         }
@@ -71,7 +71,7 @@ public class MobileTerminalMessageConsumer implements MessageConsumer, ConfigMes
 
     @Override
     public <T> T getConfigMessage(String correlationId, Class type) throws ConfigMessageException {
-        Object message = getMessage(correlationId, type);
+        Object message = getMessageFromOutQueue(correlationId, type);
         if(message != null) {
             return (T) message;
         }

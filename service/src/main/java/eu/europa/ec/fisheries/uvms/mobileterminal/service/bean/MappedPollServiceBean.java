@@ -34,6 +34,7 @@ import java.util.List;
 
 @Stateless
 public class MappedPollServiceBean implements MappedPollService {
+
     private final static Logger LOG = LoggerFactory.getLogger(MappedPollServiceBean.class);
 
     @EJB
@@ -52,7 +53,6 @@ public class MappedPollServiceBean implements MappedPollService {
     @Override
     public List<PollDto> getRunningProgramPolls() throws MobileTerminalServiceException {
         LOG.debug("Get running program polls");
-
         List<PollResponseType> pollResponse = pollService.getRunningProgramPolls();
         return PollMapper.mapPolls(pollResponse);
     }

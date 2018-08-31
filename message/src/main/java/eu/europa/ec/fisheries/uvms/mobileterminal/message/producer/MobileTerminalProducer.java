@@ -9,13 +9,22 @@ the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the impl
 FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details. You should have received a
 copy of the GNU General Public License along with the IFDM Suite. If not, see <http://www.gnu.org/licenses/>.
  */
-package eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer;
+package eu.europa.ec.fisheries.uvms.mobileterminal.message.producer;
 
+import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
 
 import javax.ejb.Local;
+import javax.jms.TextMessage;
 
 @Local
-public interface MessageConsumer {
-    <T> T getMessage(String correlationId, Class type) throws MobileTerminalMessageException;
+public interface MobileTerminalProducer {
+
+    String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException;
+
+    String sendModuleMessage(String text, ModuleQueue queue) throws MobileTerminalMessageException;
+
+    void sendResponseToRequestor(final TextMessage message, final String text) throws MessageException;
 }

@@ -12,6 +12,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
 package eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.bean;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleBaseRequest;
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalModuleMethod;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
@@ -39,9 +40,9 @@ import javax.jms.TextMessage;
         @ActivationConfigProperty(propertyName = "destinationJndiName", propertyValue = MessageConstants.COMPONENT_EVENT_QUEUE),
         @ActivationConfigProperty(propertyName = "connectionFactoryJndiName", propertyValue = MessageConstants.CONNECTION_FACTORY)
 })
-public class MessageConsumerBean implements MessageListener {
+public class MobileTerminalMessageConsumerBean implements MessageListener {
 
-    private final static Logger LOG = LoggerFactory.getLogger(MessageConsumerBean.class);
+    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMessageConsumerBean.class);
 
     @EJB
     private GetReceivedEventBean getReceivedEventBean;
@@ -54,29 +55,30 @@ public class MessageConsumerBean implements MessageListener {
 
     @Inject
     @ErrorEvent
-    Event<EventMessage> errorEvent;
+    private Event<EventMessage> errorEvent;
 
     @Override
     public void onMessage(Message message) {
-        
         TextMessage textMessage = (TextMessage) message;
-        LOG.info("Message received in mobileterminal:{}",message);
-        
         try {
             MobileTerminalModuleBaseRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, MobileTerminalModuleBaseRequest.class);
-
-            switch (request.getMethod()) {
+            MobileTerminalModuleMethod mobTerminalMethod = request.getMethod();
+            LOG.info("Message received in mobileterminal with method : [ {} ]", mobTerminalMethod);
+            switch (mobTerminalMethod) {
                 case GET_MOBILE_TERMINAL:
                     getReceivedEventBean.get(new EventMessage(textMessage));
                     break;
                 case LIST_MOBILE_TERMINALS:
                     listReceivedEventBean.list(new EventMessage(textMessage));
                     break;
+                case BATCH_LIST_MOBILE_TERMINALS:
+                    listReceivedEventBean.listBatch(new EventMessage(textMessage));
+                    break;
                 case PING:
                     pingReceivedEventBean.ping(new EventMessage(textMessage));
                     break;
                 default:
-                    LOG.error("[ Unsupported request: {} ]", request.getMethod());
+                    LOG.error("[ Unsupported request: {} ]", mobTerminalMethod);
                     break;
             }
         } catch (NullPointerException | MobileTerminalUnmarshallException e) {

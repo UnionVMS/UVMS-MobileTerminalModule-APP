@@ -32,9 +32,9 @@ import eu.europa.ec.fisheries.uvms.exchange.model.mapper.ExchangeModuleRequestMa
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.mapper.ExchangeModuleResponseMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MobileTerminaleConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MobileTerminalProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 
@@ -44,14 +44,14 @@ public class ConfigServiceBean implements ConfigService {
     private final static Logger LOG = LoggerFactory.getLogger(ConfigServiceBean.class);
 
     @EJB
-	private	MessageProducer messageProducer;
+	private MobileTerminalProducer messageProducer;
 
 	//@EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
 	@EJB
 	private ConfigModelBean configModel;
 
     @EJB
-    private MessageConsumer messageConsumer;
+    private MobileTerminaleConsumer messageConsumer;
 
     @Override
     public List<TerminalSystemType> getTerminalSystems() throws MobileTerminalException {
@@ -78,7 +78,7 @@ public class ConfigServiceBean implements ConfigService {
 			pluginTypes.add(PluginType.SATELLITE_RECEIVER);
 			String data = ExchangeModuleRequestMapper.createGetServiceListRequest(pluginTypes);
 			String messageId = messageProducer.sendModuleMessage(data, ModuleQueue.EXCHANGE);
-			TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
+			TextMessage response = messageConsumer.getMessageFromOutQueue(messageId, TextMessage.class);
 			return ExchangeModuleResponseMapper.mapServiceListResponse(response, messageId);
 		} catch (ExchangeModelMapperException | MobileTerminalMessageException e) {
 			LOG.error("Failed to map to exchange get service list request");

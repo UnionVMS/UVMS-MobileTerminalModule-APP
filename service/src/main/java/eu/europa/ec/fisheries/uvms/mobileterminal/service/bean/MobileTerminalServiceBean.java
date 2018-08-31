@@ -39,8 +39,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMappe
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.ServiceToPluginMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MobileTerminaleConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MobileTerminalProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalDataSourceResponseMapper;
@@ -56,10 +56,10 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalServiceBean.class);
 
     @EJB
-    private MessageProducer messageProducer;
+    private MobileTerminalProducer messageProducer;
 
     @EJB
-    private MessageConsumer messageConsumer;
+    private MobileTerminaleConsumer messageConsumer;
 
     @EJB
     private PluginService pluginService;
@@ -186,7 +186,7 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         }
         String data = MobileTerminalDataSourceRequestMapper.mapGetMobileTerminal(id);
         String messageId = messageProducer.sendDataSourceMessage(data, queue);
-        TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
+        TextMessage response = messageConsumer.getMessageFromOutQueue(messageId, TextMessage.class);
         return MobileTerminalDataSourceResponseMapper.mapToMobileTerminalFromResponse(response, messageId);
     }
 
