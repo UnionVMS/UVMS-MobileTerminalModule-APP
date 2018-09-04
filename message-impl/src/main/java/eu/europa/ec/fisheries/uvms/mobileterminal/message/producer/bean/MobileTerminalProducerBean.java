@@ -34,12 +34,12 @@ import javax.jms.*;
 @Stateless
 public class MobileTerminalProducerBean extends AbstractProducer implements MobileTerminalProducer, ConfigMessageProducer {
 
+    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalProducerBean.class);
+
     private Queue responseQueue;
     private Queue auditQueue;
     private Queue exchangeQueue;
     private Queue configQueue;
-
-    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalProducerBean.class);
 
     @PostConstruct
     public void init() {

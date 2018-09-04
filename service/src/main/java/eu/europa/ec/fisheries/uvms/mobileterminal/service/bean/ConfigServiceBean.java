@@ -46,7 +46,6 @@ public class ConfigServiceBean implements ConfigService {
     @EJB
 	private MobileTerminalProducer messageProducer;
 
-	//@EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
 	@EJB
 	private ConfigModelBean configModel;
 

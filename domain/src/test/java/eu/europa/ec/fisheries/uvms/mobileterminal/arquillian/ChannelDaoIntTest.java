@@ -71,7 +71,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
 
         //Then
         assertNotNull(channels);
-        assertThat(channels.size(), is(0));
+        assertThat(channels.size(), is(1));
     }
 
     @Test
@@ -86,7 +86,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
 
         //Then
         assertNotNull(channels);
-        assertThat(channels.size(), is(0));
+        assertThat(channels.size(), is(1));
     }
 
     @Test
