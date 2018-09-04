@@ -87,20 +87,25 @@
             <name>Focus nexus repository</name>
             <url>http://nexus.focus.fish/nexus</url>
         </repository>
+		<repository>
+			<id>focus-releases</id>
+			<name>UnionVms Repository</name>
+			<url>http://nexus.focus.fish/nexus/content/repositories/releases/</url>
+		</repository>
     </repositories>
 
-    <distributionManagement>
-        <repository>
-            <id>focus-releases</id>
-            <name>UnionVms Repository</name>
-            <url>http://nexus.focus.fish/nexus/content/repositories/releases/</url>
-        </repository>
-        <snapshotRepository>
-            <id>focus-snapshots</id>
-            <name>UnionVms Snapshot Repository</name>
-            <url>http://nexus.focus.fish/nexus/content/repositories/snapshots/</url>
-        </snapshotRepository>
-    </distributionManagement>
+	<distributionManagement>
+		<repository>
+			<id>focus-releases</id>
+			<name>UnionVms Repository</name>
+			<url>http://nexus.focus.fish/nexus/content/repositories/releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>focus-snapshots</id>
+			<name>UnionVms Snapshot Repository</name>
+			<url>http://nexus.focus.fish/nexus/content/repositories/snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
 
     <scm>
         <connection>scm:git:https://github.com/UnionVMS/UVMS-MobileTerminalModule-APP.git</connection>

@@ -52,7 +52,7 @@ public class ListReceivedEventBean {
             List<MobileTerminalType> mobileTerminalTypes = mobileTerminalListResponse.getMobileTerminal();
             String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);
             messageProducer.sendResponseToRequestor(jmsMessage, response);
-            LOG.info("Response sent back to requestor : [ {} ]", jmsMessage.getJMSReplyTo());
+            LOG.info("Response sent back to requestor : [ {} ]", jmsMessage!= null ? jmsMessage.getJMSReplyTo() : "Null!!!");
         } catch (MobileTerminalException | MessageException | JMSException e) {
             errorEvent.fire(new EventMessage(jmsMessage, "Exception when trying to get list in MobileTerminal: " + e.getMessage()));
             throw new EJBException(e);
@@ -72,7 +72,7 @@ public class ListReceivedEventBean {
             }
             String response = MobileTerminalModuleRequestMapper.mapToMobileTerminalListBatchResponse(respList);
             messageProducer.sendResponseToRequestor(jmsMessage, response);
-            LOG.info("Response sent back to requestor : [ {} ]", jmsMessage.getJMSReplyTo());
+            LOG.info("Response sent back to requestor : [ {} ]", jmsMessage!= null ? jmsMessage.getJMSReplyTo() : "Null!!!");
         } catch (MobileTerminalException | MessageException |JMSException e) {
             errorEvent.fire(new EventMessage(jmsMessage, "Exception when trying to get list in MobileTerminal: " + e.getMessage()));
             // Propagate error

@@ -51,14 +51,14 @@ public class GetReceivedEventBean {
     private Event<EventMessage> errorEvent;
 
     public void get(EventMessage message) {
-        TextMessage receivedJmsMessage = message.getJmsMessage();
+        TextMessage jmsMessage = message.getJmsMessage();
         try {
             MobileTerminalType mobileTerminal = getMobileTerminal(message);
             String response = MobileTerminalModuleRequestMapper.createMobileTerminalResponse(mobileTerminal);
-            messageProducer.sendResponseToRequestor(receivedJmsMessage, response);
-            LOG.info("Response sent back to requestor : [ {} ]", receivedJmsMessage.getJMSReplyTo());
+            messageProducer.sendResponseToRequestor(jmsMessage, response);
+            LOG.info("Response sent back to requestor : [ {} ]", jmsMessage!= null ? jmsMessage.getJMSReplyTo() : "Null!!!");
         } catch (MobileTerminalModelMapperException | JMSException | MessageException e) {
-            errorEvent.fire(new EventMessage(receivedJmsMessage, "Exception when trying to get a MobileTerminal: " + e.getMessage()));
+            errorEvent.fire(new EventMessage(jmsMessage, "Exception when trying to get a MobileTerminal: " + e.getMessage()));
             // Propagate error
             throw new EJBException(e);
         }
