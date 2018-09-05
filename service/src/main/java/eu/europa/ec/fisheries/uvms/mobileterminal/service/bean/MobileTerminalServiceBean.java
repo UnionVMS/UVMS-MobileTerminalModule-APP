@@ -304,7 +304,7 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     }
     
     private MobileTerminalPlugin getPlugin(MobileTerminalType mobileTerminal) {
-        MobileTerminalPlugin plugin = null;
+        MobileTerminalPlugin plugin;
         try {
             plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
         } catch (NoEntityFoundException e) {

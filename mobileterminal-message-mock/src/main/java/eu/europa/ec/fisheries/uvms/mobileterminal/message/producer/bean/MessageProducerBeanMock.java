@@ -28,7 +28,7 @@ import javax.jms.TextMessage;
 import java.util.UUID;
 
 @Stateless
-public class MessageProducerBean extends AbstractProducer implements MobileTerminalProducer, ConfigMessageProducer {
+public class MessageProducerBeanMock extends AbstractProducer implements MobileTerminalProducer, ConfigMessageProducer {
 
     public static final String MESSAGE_PRODUCER_METHODS_FAIL = "MESSAGE_PRODUCER_METHODS_FAIL";
 
@@ -39,9 +39,6 @@ public class MessageProducerBean extends AbstractProducer implements MobileTermi
         }
     }
 
-    @PostConstruct
-    public void init() {
-    }
 
     @Override
     public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {

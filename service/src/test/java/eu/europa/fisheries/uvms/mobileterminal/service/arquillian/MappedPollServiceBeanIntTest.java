@@ -12,7 +12,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dto.PollValue;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBeanMock;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MappedPollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
 import eu.europa.fisheries.uvms.mobileterminal.service.arquillian.helper.TestPollHelper;
@@ -57,7 +57,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void createPoll() throws MobileTerminalServiceException, ConfigDaoException, TerminalDaoException {
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         PollRequestType pollRequestType = helper_createPollRequestType(PollType.MANUAL_POLL);
 
@@ -80,7 +80,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void startProgramPoll() throws MobileTerminalServiceException, PollDaoException, ConfigDaoException, TerminalDaoException {
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         // we want to be able to tamper with the dates for proper test coverage
         Date startDate = getStartDate();
@@ -107,7 +107,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void stopProgramPoll() throws MobileTerminalServiceException, PollDaoException, ConfigDaoException, TerminalDaoException {
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         // we want to be able to tamper with the dates for proper test coverage
         Date startDate = getStartDate();
@@ -137,7 +137,7 @@ public class MappedPollServiceBeanIntTest extends TransactionalTests {
     @OperateOnDeployment("normal")
     public void inactivateProgramPoll() throws MobileTerminalServiceException, PollDaoException, ConfigDaoException, TerminalDaoException {
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         // we want to be able to tamper with the dates for proper test coverage
         Date startDate = getStartDate();

@@ -9,7 +9,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBeanMock;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.ConfigService;
 import org.jboss.arquillian.container.test.api.OperateOnDeployment;
@@ -55,7 +55,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         thrown.expect(MobileTerminalException.class);
         // thrown.expectMessage("Failed to map to exchange get service list request");
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "true");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "true");
         configService.getRegisteredMobileTerminalPlugins();
     }
 

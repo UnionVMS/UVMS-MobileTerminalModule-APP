@@ -17,7 +17,7 @@
     <properties>
     	<mobile.api.check.against.version>4.0.0</mobile.api.check.against.version>
     	<docker.dev.version>3.25.0</docker.dev.version>
-		<usm4uvms.version>4.0.10</usm4uvms.version>
+		<usm4uvms.version>4.0.12</usm4uvms.version>
 		<uvms.common.version>3.0.25</uvms.common.version>
         <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
         <uvms.config.version>4.0.0</uvms.config.version>
