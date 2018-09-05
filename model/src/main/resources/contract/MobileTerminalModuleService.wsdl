@@ -16,12 +16,21 @@
                 	<xsd:enumeration value="GET_MOBILE_TERMINAL"/>
                     <xsd:enumeration value="PING"/>
                     <xsd:enumeration value="LIST_MOBILE_TERMINALS"/>
+                    <xsd:enumeration value="BATCH_LIST_MOBILE_TERMINALS"/>
                 </xsd:restriction>
             </xsd:simpleType>
 
             <xsd:complexType name="MobileTerminalModuleBaseRequest" abstract="true">
                 <xsd:sequence>
                     <xsd:element name="method" type="module:MobileTerminalModuleMethod" minOccurs="1"/>
+                </xsd:sequence>
+            </xsd:complexType>
+
+            <xsd:complexType name="MobileTerminalBatchListElement">
+                <xsd:sequence>
+                    <xsd:element name="totalNumberOfPages" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="currentPage" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+                    <xsd:element name="mobileTerminal" type="mobterm:MobileTerminalType" minOccurs="0" maxOccurs="unbounded"/>
                 </xsd:sequence>
             </xsd:complexType>
 
@@ -57,12 +66,32 @@
                 </xsd:complexType>
             </xsd:element>
 
+            <xsd:element name="MobileTerminalBatchListRequest">
+                <xsd:complexType>
+                    <xsd:complexContent>
+                        <xsd:extension base="module:MobileTerminalModuleBaseRequest">
+                            <xsd:sequence>
+                                <xsd:element name="queryList" type="mobterm:MobileTerminalListQuery" minOccurs="1" maxOccurs="unbounded"/>
+                            </xsd:sequence>
+                        </xsd:extension>
+                    </xsd:complexContent>
+                </xsd:complexType>
+            </xsd:element>
+
             <xsd:element name="MobileTerminalListResponse">
                 <xsd:complexType>
                     <xsd:sequence>
                         <xsd:element name="totalNumberOfPages" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                         <xsd:element name="currentPage" type="xsd:int" minOccurs="1" maxOccurs="1"/>
                         <xsd:element name="mobileTerminal" type="mobterm:MobileTerminalType" minOccurs="0" maxOccurs="unbounded"/>
+                    </xsd:sequence>
+                </xsd:complexType>
+            </xsd:element>
+
+            <xsd:element name="MobileTerminalBatchListResponse">
+                <xsd:complexType>
+                    <xsd:sequence>
+                        <xsd:element name="responseList" type="module:MobileTerminalBatchListElement" minOccurs="1" maxOccurs="unbounded"/>
                     </xsd:sequence>
                 </xsd:complexType>
             </xsd:element>

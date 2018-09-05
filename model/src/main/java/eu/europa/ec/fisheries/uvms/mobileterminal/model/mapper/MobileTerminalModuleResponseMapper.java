@@ -11,9 +11,7 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper;
 
-import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalResponse;
-import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.PingResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.*;
 
 import javax.jms.JMSException;
 import javax.jms.TextMessage;
@@ -29,7 +27,6 @@ import org.slf4j.LoggerFactory;
 import java.util.List;
 
 public class MobileTerminalModuleResponseMapper {
-    final static Logger LOG = LoggerFactory.getLogger(MobileTerminalModuleResponseMapper.class);
 
     private static void validateResponse(TextMessage response, String correlationId) throws MobileTerminalValidationException, JMSException {
 
@@ -77,5 +74,10 @@ public class MobileTerminalModuleResponseMapper {
         return response.getMobileTerminal();
     }
 
+    public static List<MobileTerminalBatchListElement> mapToMobileTerminalBatchListResponse(TextMessage message) throws MobileTerminalModelMapperException, JMSException, MobileTerminalUnmarshallException {
+        validateResponse(message, message.getJMSCorrelationID());
+        MobileTerminalBatchListResponse response = JAXBMarshaller.unmarshallTextMessage(message, MobileTerminalBatchListResponse.class);
+        return response.getResponseList();
+    }
 
 }

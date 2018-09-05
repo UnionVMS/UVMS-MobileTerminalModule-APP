@@ -34,9 +34,9 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.mapper.ExchangeMo
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.ConfigModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.PollToCommandRequestMapper;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.ModuleQueue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MessageConsumer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MobileTerminaleConsumer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.exception.MobileTerminalMessageException;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MessageProducer;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MobileTerminalProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PluginService;
@@ -53,10 +53,10 @@ public class PluginServiceBean implements PluginService {
     private static final String SETTING_KEY_DNID_LIST = "DNIDS";
 
     @EJB
-    private MessageProducer messageProducer;
+    private MobileTerminalProducer messageProducer;
 
     @EJB
-    private MessageConsumer messageConsumer;
+    private MobileTerminaleConsumer messageConsumer;
 
 //    @EJB(lookup = ServiceConstants.DB_ACCESS_CONFIG_MODEL)
     @EJB
@@ -69,7 +69,7 @@ public class PluginServiceBean implements PluginService {
             String pluginServiceName = poll.getMobileTerminal().getPlugin().getServiceName();
             String exchangeData = ExchangeModuleRequestMapper.createSetCommandSendPollRequest(pluginServiceName, pollType, username, null);
             String messageId = messageProducer.sendModuleMessage(exchangeData, ModuleQueue.EXCHANGE);
-            TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
+            TextMessage response = messageConsumer.getMessageFromOutQueue(messageId, TextMessage.class);
             AcknowledgeType ack = ExchangeModuleResponseMapper.mapSetCommandResponse(response, messageId);
             LOG.debug("Poll: " + poll.getPollId().getGuid() + " sent to exchange. Response: " + ack.getType());
             return ack.getType();
@@ -112,7 +112,7 @@ public class PluginServiceBean implements PluginService {
 
         String setSettingRequest = ModuleRequestMapper.toSetSettingRequest(EXCHANGE_MODULE_NAME, setting, "UVMS");
         String messageId = messageProducer.sendModuleMessage(setSettingRequest, ModuleQueue.CONFIG);
-        TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
+        TextMessage response = messageConsumer.getMessageFromOutQueue(messageId, TextMessage.class);
         LOG.info("UpdatedDNIDList sent to config module");
     }
 
@@ -120,7 +120,7 @@ public class PluginServiceBean implements PluginService {
         try {
             String request = ExchangeModuleRequestMapper.createUpdatePluginSettingRequest(pluginName, settingKey, settingValue);
             String messageId = messageProducer.sendModuleMessage(request, ModuleQueue.EXCHANGE);
-            TextMessage response = messageConsumer.getMessage(messageId, TextMessage.class);
+            TextMessage response = messageConsumer.getMessageFromOutQueue(messageId, TextMessage.class);
             LOG.info("UpdatedDNIDList sent to exchange module {} {}",pluginName,settingKey);
         } catch (ExchangeModelMarshallException | MobileTerminalMessageException e) {
             LOG.error("Failed to send updated DNID list {} {} {}",pluginName,settingKey,e);

@@ -22,7 +22,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstan
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.InputArgumentException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.DataSourceQueue;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBeanMock;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
@@ -58,7 +58,7 @@ public class MobileTerminalServiceIntTest extends TransactionalTests {
         String createdMobileTerminalId;
         String fetchedMobileTerminalGuid;
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
         String connectId = UUID.randomUUID().toString();
         MobileTerminal createdMobileTerminal = testPollHelper.createMobileTerminal(connectId);
         createdMobileTerminalId = createdMobileTerminal.getGuid();
@@ -79,7 +79,7 @@ public class MobileTerminalServiceIntTest extends TransactionalTests {
         String createdMobileTerminalId;
         String fetchedMobileTerminalGuid;
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
         String connectId = UUID.randomUUID().toString();
         MobileTerminal createdMobileTerminal = testPollHelper.createMobileTerminal(connectId);
         createdMobileTerminalId = createdMobileTerminal.getGuid();

@@ -10,7 +10,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.PollDaoException
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.CreatePollResultDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.poll.PollProgram;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBean;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.bean.MessageProducerBeanMock;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.PollService;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.exception.MobileTerminalServiceException;
@@ -46,7 +46,7 @@ public class PollServiceBeanIntTest extends TransactionalTests {
 
     @Test
     public void createPoll() throws MobileTerminalServiceException, ConfigDaoException, TerminalDaoException {
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
         PollRequestType pollRequestType = testPollHelper.createPollRequestType();
         CreatePollResultDto createPollResultDto = pollService.createPoll(pollRequestType, "TEST");
         assertNotNull(createPollResultDto);
@@ -58,7 +58,7 @@ public class PollServiceBeanIntTest extends TransactionalTests {
         thrown.expect(MobileTerminalServiceException.class);
         // thrown.expectMessage("MESSAGE_PRODUCER_METHODS_FAIL == true");
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "true");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "true");
         PollRequestType pollRequestType = testPollHelper.createPollRequestType();
         pollService.createPoll(pollRequestType, "TEST");
     }
@@ -82,7 +82,7 @@ public class PollServiceBeanIntTest extends TransactionalTests {
     @Test
     public void startProgramPoll() throws ConfigDaoException, TerminalDaoException, PollDaoException, MobileTerminalServiceException {
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         Date startDate = testPollHelper.getStartDate();
         Date latestRun = testPollHelper.getLatestRunDate();
@@ -110,7 +110,7 @@ public class PollServiceBeanIntTest extends TransactionalTests {
     @Test
     public void stopProgramPoll() throws ConfigDaoException, TerminalDaoException, PollDaoException, MobileTerminalServiceException {
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         Date startDate = testPollHelper.getStartDate();
         Date latestRun = testPollHelper.getLatestRunDate();
@@ -137,7 +137,7 @@ public class PollServiceBeanIntTest extends TransactionalTests {
 
     @Test
     public void inactivateProgramPoll() throws PollDaoException, ConfigDaoException, TerminalDaoException, MobileTerminalServiceException {
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         Date startDate = testPollHelper.getStartDate();
         Date latestRun = testPollHelper.getLatestRunDate();
@@ -165,7 +165,7 @@ public class PollServiceBeanIntTest extends TransactionalTests {
     @Test
     public void getPollProgramRunningAndStarted() throws MobileTerminalException {
 
-        System.setProperty(MessageProducerBean.MESSAGE_PRODUCER_METHODS_FAIL, "false");
+        System.setProperty(MessageProducerBeanMock.MESSAGE_PRODUCER_METHODS_FAIL, "false");
 
         Date startDate = testPollHelper.getStartDate();
         Date latestRun = testPollHelper.getLatestRunDate();

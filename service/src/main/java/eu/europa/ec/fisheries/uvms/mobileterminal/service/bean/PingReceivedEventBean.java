@@ -1,51 +1,44 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
 
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
+import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MobileTerminalProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalModelMapperException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalModuleResponseMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
+import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.jms.*;
+import javax.jms.TextMessage;
 
 @Stateless
 @LocalBean
 public class PingReceivedEventBean {
 
-    final static Logger LOG = LoggerFactory.getLogger(PingReceivedEventBean.class);
+    private static final Logger LOG = LoggerFactory.getLogger(PingReceivedEventBean.class);
 
-    @Resource(lookup = MessageConstants.JAVA_MESSAGE_CONNECTION_FACTORY)
-    private ConnectionFactory connectionFactory;
+    @EJB
+    private MobileTerminalProducer messageProducer;
 
     @Inject
     @ErrorEvent
-    Event<EventMessage> errorEvent;
+    private Event<EventMessage> errorEvent;
 
     public void ping(EventMessage message) {
+        TextMessage receivedJmsMessage = message.getJmsMessage();
         try {
-            try (Connection connection = connectionFactory.createConnection()) {
-                // In a Java EE web or EJB container, when there is an active JTA transaction in progress:
-                // Both arguments transacted and acknowledgeMode are ignored.
-                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                String pingResponse = MobileTerminalModuleResponseMapper.createPingResponse("pong");
-                TextMessage pingResponseMessage = session.createTextMessage(pingResponse);
-                pingResponseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-                pingResponseMessage.setJMSDestination(message.getJmsMessage().getJMSReplyTo());
-                javax.jms.MessageProducer producer = session.createProducer(pingResponseMessage.getJMSDestination());
-                producer.send(pingResponseMessage);
-            }
-        } catch (MobileTerminalModelMapperException | JMSException e) {
+            String pingResponse = MobileTerminalModuleResponseMapper.createPingResponse("pong");
+            messageProducer.sendResponseToRequestor(receivedJmsMessage, pingResponse);
+        } catch (MobileTerminalModelMapperException | MessageException e) {
             LOG.error("Ping message went wrong", e);
-            errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when trying to ping MobileTerminal: " + e.getMessage()));
+            errorEvent.fire(new EventMessage(receivedJmsMessage, "Exception when trying to ping MobileTerminal: " + e.getMessage()));
             // Propagate error
             throw new EJBException(e);
         }

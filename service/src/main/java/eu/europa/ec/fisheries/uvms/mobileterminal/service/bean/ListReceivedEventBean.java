@@ -1,11 +1,15 @@
 package eu.europa.ec.fisheries.uvms.mobileterminal.service.bean;
 
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalBatchListElement;
+import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalBatchListRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.module.v1.MobileTerminalListRequest;
 import eu.europa.ec.fisheries.schema.mobileterminal.source.v1.MobileTerminalListResponse;
+import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalListQuery;
 import eu.europa.ec.fisheries.schema.mobileterminal.types.v1.MobileTerminalType;
-import eu.europa.ec.fisheries.uvms.mobileterminal.message.constants.MessageConstants;
+import eu.europa.ec.fisheries.uvms.commons.message.api.MessageException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.ErrorEvent;
 import eu.europa.ec.fisheries.uvms.mobileterminal.message.event.carrier.EventMessage;
+import eu.europa.ec.fisheries.uvms.mobileterminal.message.producer.MobileTerminalProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.exception.MobileTerminalException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.JAXBMarshaller;
 import eu.europa.ec.fisheries.uvms.mobileterminal.model.mapper.MobileTerminalModuleRequestMapper;
@@ -13,14 +17,15 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.MobileTerminalService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.Resource;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.enterprise.event.Event;
 import javax.inject.Inject;
-import javax.jms.*;
+import javax.jms.JMSException;
+import javax.jms.TextMessage;
+import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -32,33 +37,44 @@ public class ListReceivedEventBean {
     @EJB
     private MobileTerminalService mobileTerminalService;
 
-    @Resource(lookup = MessageConstants.JAVA_MESSAGE_CONNECTION_FACTORY)
-    private ConnectionFactory connectionFactory;
+    @EJB
+    private MobileTerminalProducer messageProducer;
 
     @Inject
     @ErrorEvent
-    Event<EventMessage> errorEvent;
+    private Event<EventMessage> errorEvent;
 
     public void list(EventMessage message) {
-        LOG.info("List Mobile terminals:{}",message);
+        TextMessage jmsMessage = message.getJmsMessage();
         try {
-            MobileTerminalListRequest request = JAXBMarshaller.unmarshallTextMessage(message.getJmsMessage(), MobileTerminalListRequest.class);
-
+            MobileTerminalListRequest request = JAXBMarshaller.unmarshallTextMessage(jmsMessage, MobileTerminalListRequest.class);
             MobileTerminalListResponse mobileTerminalListResponse = mobileTerminalService.getMobileTerminalList(request.getQuery());
             List<MobileTerminalType> mobileTerminalTypes = mobileTerminalListResponse.getMobileTerminal();
+            String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);
+            messageProducer.sendResponseToRequestor(jmsMessage, response);
+            LOG.info("Response sent back to requestor : [ {} ]", jmsMessage!= null ? jmsMessage.getJMSReplyTo() : "Null!!!");
+        } catch (MobileTerminalException | MessageException | JMSException e) {
+            errorEvent.fire(new EventMessage(jmsMessage, "Exception when trying to get list in MobileTerminal: " + e.getMessage()));
+            throw new EJBException(e);
+        }
+    }
 
-            try (Connection connection = connectionFactory.createConnection()) {
-                // In a Java EE web or EJB container, when there is an active JTA transaction in progress:
-                // Both arguments transacted and acknowledgeMode are ignored.
-                Session session = connection.createSession(false, Session.AUTO_ACKNOWLEDGE);
-                String response = MobileTerminalModuleRequestMapper.mapGetMobileTerminalList(mobileTerminalTypes);
-                TextMessage responseMessage = session.createTextMessage(response);
-                responseMessage.setJMSCorrelationID(message.getJmsMessage().getJMSMessageID());
-                MessageProducer producer = session.createProducer(message.getJmsMessage().getJMSReplyTo());
-                producer.send(responseMessage);
+    public void listBatch(EventMessage message) {
+        TextMessage jmsMessage = message.getJmsMessage();
+        try {
+            MobileTerminalBatchListRequest batchListRequest = JAXBMarshaller.unmarshallTextMessage(jmsMessage, MobileTerminalBatchListRequest.class);
+            List<MobileTerminalBatchListElement> respList = new ArrayList<>();
+            for (MobileTerminalListQuery mobileTerminalListQuery : batchListRequest.getQueryList()) {
+                MobileTerminalListResponse mobileTerminalListResponse = mobileTerminalService.getMobileTerminalList(mobileTerminalListQuery);
+                MobileTerminalBatchListElement batchListElement = new MobileTerminalBatchListElement();
+                batchListElement.getMobileTerminal().addAll(mobileTerminalListResponse.getMobileTerminal());
+                respList.add(batchListElement);
             }
-        } catch (MobileTerminalException | JMSException e) {
-            errorEvent.fire(new EventMessage(message.getJmsMessage(), "Exception when trying to get list in MobileTerminal: " + e.getMessage()));
+            String response = MobileTerminalModuleRequestMapper.mapToMobileTerminalListBatchResponse(respList);
+            messageProducer.sendResponseToRequestor(jmsMessage, response);
+            LOG.info("Response sent back to requestor : [ {} ]", jmsMessage!= null ? jmsMessage.getJMSReplyTo() : "Null!!!");
+        } catch (MobileTerminalException | MessageException |JMSException e) {
+            errorEvent.fire(new EventMessage(jmsMessage, "Exception when trying to get list in MobileTerminal: " + e.getMessage()));
             // Propagate error
             throw new EJBException(e);
         }

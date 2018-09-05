@@ -20,8 +20,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.ConfigServiceBean
 public class ConfigServiceBeanMock extends ConfigServiceBean {
     
     @Override
-    public List<ServiceResponseType> getRegisteredMobileTerminalPlugins() throws MobileTerminalException {
-        return new ArrayList<ServiceResponseType>();
+    public List<ServiceResponseType> getRegisteredMobileTerminalPlugins() {
+        return new ArrayList<>();
     }
 
 }

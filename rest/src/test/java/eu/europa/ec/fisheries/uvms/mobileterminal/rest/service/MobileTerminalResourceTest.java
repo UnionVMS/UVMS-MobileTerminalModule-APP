@@ -38,8 +38,6 @@ import static org.junit.Assert.*;
 @RunWith(Arquillian.class)
 public class MobileTerminalResourceTest extends AbstractMTRestTest {
 
-    private static final Logger LOG = LoggerFactory.getLogger(MobileTerminalResourceTest.class);
-
     @Test
     @RunAsClient
     public void createMobileTerminalTest() {
