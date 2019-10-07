@@ -22,7 +22,6 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.message.consumer.MobileTermina
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.jms.*;
 
@@ -31,22 +30,16 @@ public class MobileTerminalMobileTerminaleConsumer implements MobileTerminaleCon
 
     private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalMobileTerminaleConsumer.class);
 
-    private ConnectionFactory connectionFactory;
-
-    @PostConstruct
-    private void init() {
-        connectionFactory = JMSUtils.lookupConnectionFactory();
-    }
-
     @Override
     public <T> T getMessageFromOutQueue(String correlationId, Class type) {
 
         Message message = null;
     	Connection connection=null;
+        Session session = null;
 
         try {
-            connection = connectionFactory.createConnection();
-            final Session session = JMSUtils.connectToQueue(connection);
+            connection = JMSUtils.getConnectionV2();
+            session = JMSUtils.createSessionAndStartConnection(connection);
             
             message = session.createTextMessage(createResponse());
             message.setJMSCorrelationID(correlationId);
@@ -55,7 +48,7 @@ public class MobileTerminalMobileTerminaleConsumer implements MobileTerminaleCon
         } catch (ExchangeModelMarshallException | JMSException   e) {
         	LOG.warn("Problem getMessageFromOutQueue",e);
         } finally{
-        	JMSUtils.disconnectQueue(connection);
+        	JMSUtils.disconnectQueue(connection, session, (MessageConsumer) null);
         }
 
         return (T) message;
