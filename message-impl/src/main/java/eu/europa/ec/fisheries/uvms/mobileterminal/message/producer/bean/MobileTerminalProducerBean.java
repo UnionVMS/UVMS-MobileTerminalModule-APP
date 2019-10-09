@@ -46,7 +46,7 @@ public class MobileTerminalProducerBean extends AbstractProducer implements Mobi
         responseQueue = JMSUtils.lookupQueue(MessageConstants.COMPONENT_RESPONSE_QUEUE);
         auditQueue = JMSUtils.lookupQueue(MessageConstants.AUDIT_MODULE_QUEUE);
         exchangeQueue = JMSUtils.lookupQueue(MessageConstants.EXCHANGE_MODULE_QUEUE);
-        configQueue = JMSUtils.lookupQueue(ConfigConstants.CONFIG_MESSAGE_IN_QUEUE);
+        configQueue = JMSUtils.lookupQueue(eu.europa.ec.fisheries.uvms.commons.message.api.MessageConstants.QUEUE_CONFIG);
     }
 
     /**
@@ -60,11 +60,10 @@ public class MobileTerminalProducerBean extends AbstractProducer implements Mobi
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRES_NEW)
     public String sendDataSourceMessage(String text, DataSourceQueue queue) throws MobileTerminalMessageException {
-        ConnectionFactory connectionFactory = JMSUtils.lookupConnectionFactory();
-        Connection connection = null;
-        try {
-            connection = connectionFactory.createConnection();
-            final Session session = JMSUtils.connectToQueue(connection);
+        try (
+                Connection connection = JMSUtils.getConnectionV2();
+                Session session = JMSUtils.createSessionAndStartConnection(connection)
+        ) {
             TextMessage message = session.createTextMessage();
             message.setJMSReplyTo(responseQueue);
             message.setText(text);
@@ -76,8 +75,6 @@ public class MobileTerminalProducerBean extends AbstractProducer implements Mobi
         } catch (Exception e) {
             LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
             throw new MobileTerminalMessageException(e.getMessage());
-        } finally {
-            JMSUtils.disconnectQueue(connection);
         }
     }
 

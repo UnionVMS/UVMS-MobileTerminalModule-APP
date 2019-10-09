@@ -17,12 +17,12 @@
     <properties>
     	<mobile.api.check.against.version>4.0.0</mobile.api.check.against.version>
     	<docker.dev.version>3.25.0</docker.dev.version>
-		<usm4uvms.version>4.0.12</usm4uvms.version>
-		<uvms.common.version>3.0.25</uvms.common.version>
-        <uvms.config.artifactId>uvms-config</uvms.config.artifactId>
-        <uvms.config.version>4.0.0</uvms.config.version>
-        <audit.model.version>4.0.4</audit.model.version>
-        <exchange.model.version>4.0.14</exchange.model.version>
+		<usm4uvms.version>4.0.15.1-SNAPSHOT</usm4uvms.version>
+		<uvms.common.version>3.4-SNAPSHOT</uvms.common.version>
+        <uvms.config.artifactId>config-library</uvms.config.artifactId>
+        <uvms.config.version>4.2-SNAPSHOT</uvms.config.version>
+        <audit.model.version>4.0.10</audit.model.version>
+        <exchange.model.version>4.0.35-SNAPSHOT</exchange.model.version>
     </properties>
 
 	<dependencies>

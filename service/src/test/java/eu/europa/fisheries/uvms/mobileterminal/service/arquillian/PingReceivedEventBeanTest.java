@@ -31,9 +31,10 @@ public class PingReceivedEventBeanTest extends TransactionalTests {
     }
 
     private EventMessage createEventMessage() {
-        ConnectionFactory connectionFactory = JMSUtils.lookupConnectionFactory();
-        try (Connection connection = connectionFactory.createConnection()) {
-            Session session = JMSUtils.connectToQueue(connection);
+        try (
+                Connection connection = JMSUtils.getConnectionV2();
+                Session session = JMSUtils.createSessionAndStartConnection(connection)
+        ) {
             TextMessage textMessage = session.createTextMessage();
             textMessage.setText("TEST_MESSAGE");
             EventMessage message = new EventMessage(textMessage, "TEST_ERROR");
