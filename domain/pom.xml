@@ -9,7 +9,7 @@
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
         <artifactId>mobileterminal</artifactId>
-        <version>4.0.14-SNAPSHOT</version>
+        <version>${uvms.mobileterminal.module.version}</version>
     </parent>
 
     <properties>
@@ -30,7 +30,7 @@
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
             <artifactId>uvms-commons-date</artifactId>
-            <version>${uvms.common.version}</version>
+            <version>${uvms.commons.version}</version>
         </dependency>
 		<dependency>
 			<groupId>fish.focus.uvms.maven</groupId>

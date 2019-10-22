@@ -4,11 +4,11 @@
     <parent>
         <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
         <artifactId>mobileterminal</artifactId>
-        <version>4.0.14-SNAPSHOT</version>
+        <version>${uvms.mobileterminal.module.version}</version>
     </parent>
     
     <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
-    <artifactId>liquibase</artifactId>
+    <artifactId>mobileterminal-liquibase</artifactId>
     <name>liquibase</name>
 
     <properties>
@@ -265,7 +265,7 @@
                         <artifactId>${project.artifactId}</artifactId>
                         <groupId>${project.groupId}</groupId>
                         <version>${project.version}</version>
-                        <file>target/liquibase.zip</file>
+                        <file>target/${project.artifactId}.zip</file>
                     </configuration>
                 </plugin>        	
         </plugins>
