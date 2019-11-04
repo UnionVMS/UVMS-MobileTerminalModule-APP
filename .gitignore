@@ -7,3 +7,4 @@ domain/application.*
 .project
 .classpath
 .settings
+.flattened-pom.xml
