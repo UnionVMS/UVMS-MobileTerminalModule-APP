@@ -8,3 +8,4 @@ domain/application.*
 .classpath
 .settings
 .flattened-pom.xml
+pom.xml.versionsBackup
