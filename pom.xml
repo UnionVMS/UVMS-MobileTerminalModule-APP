@@ -60,7 +60,7 @@
 			<dependency>
 				<groupId>fish.focus.uvms.maven</groupId>
 				<artifactId>uvms-pom-arquillian-deps</artifactId>
-				<version>1.18</version>
+				<version>1.25</version>
 				<type>pom</type>
 			</dependency>
     		<dependency>
