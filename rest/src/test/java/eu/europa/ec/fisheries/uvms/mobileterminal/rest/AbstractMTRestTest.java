@@ -16,18 +16,43 @@ import org.jboss.shrinkwrap.api.Archive;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.WebTarget;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 
 @ArquillianSuiteDeployment
 public abstract class AbstractMTRestTest {
+    
+    private static final Logger LOG = LoggerFactory.getLogger(AbstractMTRestTest.class);
+    
+    private static final String PROPERTIES_FILE = "test.properties";
+    private static final String DEFAULT_WF_HOST = "localhost";
+    private static final String DEFAULT_WF_PORT = "8080";
+
+    private Properties properties = new Properties();
 
 	protected WebTarget getWebTarget() {
+	    InputStream is = getClass().getResourceAsStream("/"+PROPERTIES_FILE);
+	        if (is != null) {
+	            try {
+	                properties.load(is);
+	            } catch (IOException e) {
+	                LOG.warn("Failed to load class-path resource:'{}'. Using default values", PROPERTIES_FILE, e);
+	            }
+	        } else {
+	                LOG.debug("Class-path resource: '{}' does not exist. Using default values", PROPERTIES_FILE);
+	        }
+	    
 		Client client = ClientBuilder.newClient();
-		return client.target("http://localhost:28080/test/rest");
+		return client.target("http://"+properties.getProperty("wildfly_host", DEFAULT_WF_HOST)+
+                        ":"+ properties.getProperty("wildfly_port", DEFAULT_WF_PORT)+"/test/rest");
 	}
 
 	@Deployment(name = "normal", order = 1)
@@ -43,6 +68,8 @@ public abstract class AbstractMTRestTest {
 
 		testWar.delete("/WEB-INF/web.xml");
 		testWar.addAsWebInfResource("mock-web.xml", "web.xml");
+
+	        testWar.addAsWebInfResource("test.properties");
 
 		return testWar;
 	}
