@@ -6,6 +6,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstan
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.Channel;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminal;
@@ -147,9 +148,15 @@ public class TestPollHelper {
         plugin.setSatelliteType("INMARSAT_C");
         plugin.setInactive(false);
 
-        MobileTerminalPlugin mobileTerminalPlugin = PluginMapper.mapModelToEntity((createPluginService()));
+        MobileTerminalPlugin mobileTerminalPlugin;
+        try {
+            mobileTerminalPlugin = mobileTerminalPluginDao.getPluginByServiceName(plugin.getServiceName());
+            mobileTerminalPluginDao.updateMobileTerminalPlugin(mobileTerminalPlugin);
+        } catch(NoEntityFoundException e)
+        {
+            mobileTerminalPlugin = PluginMapper.mapModelToEntity((createPluginService()));
         mobileTerminalPluginDao.createMobileTerminalPlugin(mobileTerminalPlugin);
-
+        }
         mobileTerminal.setPlugin(plugin);
 
         return mobileTerminal;
@@ -236,7 +243,7 @@ public class TestPollHelper {
 
     public Date getStopDate() {
         cal.set(Calendar.DAY_OF_MONTH, 28);
-        cal.set(Calendar.YEAR, 2019);
+        cal.set(Calendar.YEAR, 2050);
         return cal.getTime();
     }
 

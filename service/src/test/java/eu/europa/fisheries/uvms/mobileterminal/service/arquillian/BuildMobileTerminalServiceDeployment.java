@@ -12,6 +12,7 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollRequestType;
@@ -50,9 +51,10 @@ public abstract class BuildMobileTerminalServiceDeployment {
     public static Archive<?> createDeployment() {
 
         // Import Maven runtime dependencies
-        File[] files = Maven.configureResolver().loadPomFromFile("pom.xml")
-                .importRuntimeAndTestDependencies().resolve().withTransitivity().asFile();
-        printFiles(files);
+        File[] files = Maven.resolver().loadPomFromFile("pom.xml")
+                .importDependencies(ScopeType.COMPILE,ScopeType.RUNTIME)
+                .resolve().withTransitivity().asFile();
+        //printFiles(files);
 
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
@@ -61,6 +63,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
         testWar.addPackages(true, "eu.europa.fisheries.uvms.mobileterminal.service");
         testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.service");
         testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dto");
+        testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.message");
         //testWar.addPackages(true,"eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception");
 
         testWar.addClass(TransactionalTests.class);
@@ -101,6 +104,7 @@ public abstract class BuildMobileTerminalServiceDeployment {
 
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        testWar.addAsWebInfResource("logback-test.xml");
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
 
         testWar.addAsLibraries(files);

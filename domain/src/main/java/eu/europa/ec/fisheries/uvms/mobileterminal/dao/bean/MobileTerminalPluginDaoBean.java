@@ -13,10 +13,14 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.dao.bean;
 
 import java.util.List;
 
+import javax.ejb.EJBTransactionRolledbackException;
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceException;
 import javax.persistence.TypedQuery;
 
+import javax.validation.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -55,14 +59,23 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
 	}
 
 	@Override
-	public MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException {
+    public MobileTerminalPlugin getPluginByServiceName(String serviceName) throws TerminalDaoException {
 		try {
-            TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, MobileTerminalPlugin.class);
+            TypedQuery<MobileTerminalPlugin> query = em
+                    .createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, MobileTerminalPlugin.class);
             query.setParameter("serviceName", serviceName);
             return query.getSingleResult();
         } catch (NoResultException e) {
             LOG.error("[ Error when getting plugin by service name. ] {}", e.getMessage());
-            throw new NoEntityFoundException("No entities found when retrieving mobile terminal plugin by service name");
+            throw new NoEntityFoundException(
+                    "No entities found when retrieving mobile terminal plugin by service name");
+        } catch (NonUniqueResultException e) {
+            LOG.error("[ Error when getting plugin by service name. ] {}", e.getMessage());
+            throw new TerminalDaoException(
+                    "More than one result found when retrieving mobile terminal plugin by service name");
+        } catch (Exception e) {
+            LOG.error("[ Error when getting plugin by service name. ] {}", e.getMessage());
+            throw new TerminalDaoException("Error when retrieving mobile terminal plugin by service name");
         }
 	}
 

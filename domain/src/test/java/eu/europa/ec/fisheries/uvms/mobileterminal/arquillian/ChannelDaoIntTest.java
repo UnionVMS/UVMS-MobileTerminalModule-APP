@@ -2,9 +2,10 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.arquillian;
 
 import eu.europa.ec.fisheries.schema.mobileterminal.polltypes.v1.PollAttributeType;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.ChannelDao;
-import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.TerminalDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.ConfigDaoException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.*;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalSourceEnum;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.types.MobileTerminalTypeEnum;
@@ -36,11 +37,11 @@ public class ChannelDaoIntTest extends TransactionalTests {
     private MobileTerminalPluginDao mobileTerminalPluginDao;
 
     @EJB
-    private MobileTerminalDao mobileTerminalDao;
+    private TerminalDao mobileTerminalDao;
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollableListSearch() throws ConfigDaoException {
+    public void testGetPollableListSearch() throws ConfigDaoException, TerminalDaoException {
 
         //Given - need a string list of id's.
         String id1 = "test_id1";
@@ -48,7 +49,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
         List<String> idList = Arrays.asList(id1, id2);
 
         MobileTerminal mobileTerminal = createMobileTerminal(id1);
-        MobileTerminal retrieved = (MobileTerminal) mobileTerminalDao.createEntity(mobileTerminal);
+        MobileTerminal retrieved =  mobileTerminalDao.getMobileTerminalByGuid(mobileTerminal.getGuid());
         assertNotNull(retrieved);
 
         //When
@@ -61,32 +62,49 @@ public class ChannelDaoIntTest extends TransactionalTests {
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollableListSearch_emptyList() {
+    public void testGetPollableListSearch_emptyList() throws ConfigDaoException, TerminalDaoException {
 
-        //Given - empty id list
+        //Given - empty id
+        // will find all. when some test data is present this test would fail
+        // to verify it we get the size, add one, check the size again
         List<String> emptyList = new ArrayList<>();
+        List<Channel> channels_before = channelDao.getPollableListSearch(emptyList);
+      
+        
+        String id1 = "test_id3";
+        MobileTerminal mobileTerminal = createMobileTerminal(id1);
+        MobileTerminal retrieved =  mobileTerminalDao.getMobileTerminalByGuid(mobileTerminal.getGuid());
+        assertNotNull(retrieved);
 
         //When
         List<Channel> channels = channelDao.getPollableListSearch(emptyList);
 
         //Then
         assertNotNull(channels);
-        assertThat(channels.size(), is(0));
+        assertThat(channels.size(), is(channels_before.size()+1));
     }
 
     @Test
     @OperateOnDeployment("normal")
-    public void testGetPollableListSearch_NULL() {
+    public void testGetPollableListSearch_NULL() throws ConfigDaoException, TerminalDaoException {
 
         //Given - null
+        // will find all. when some test data is present this test would fail
+        // to verify it we get the size, add one, check the size again
         List<String> nullAsList = null;
+        List<Channel> channels_before = channelDao.getPollableListSearch(nullAsList);
+        
+        String id1 = "test_id4";
+        MobileTerminal mobileTerminal = createMobileTerminal(id1);
+        MobileTerminal retrieved =  mobileTerminalDao.getMobileTerminalByGuid(mobileTerminal.getGuid());
+        assertNotNull(retrieved);
 
         //When
         List<Channel> channels = channelDao.getPollableListSearch(nullAsList);
 
         //Then
         assertNotNull(channels);
-        assertThat(channels.size(), is(0));
+        assertThat(channels.size(), is(channels_before.size()+1));
     }
 
     @Test
@@ -117,7 +135,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
         assertThat(dnidList.size(), is(0));
     }
 
-    private MobileTerminal createMobileTerminal(String connectId) throws ConfigDaoException {
+    private MobileTerminal createMobileTerminal(String connectId) throws ConfigDaoException, TerminalDaoException {
 
         String serialNo = UUID.randomUUID().toString();
 
@@ -177,6 +195,7 @@ public class ChannelDaoIntTest extends TransactionalTests {
         Set<Channel> channels = new HashSet<>();
         channels.add(channel);
         mt.getChannels().addAll(channels);
+        mobileTerminalDao.createMobileTerminal(mt);
 
         return mt;
     }
