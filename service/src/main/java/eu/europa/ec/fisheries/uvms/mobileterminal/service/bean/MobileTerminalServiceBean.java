@@ -33,6 +33,7 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.bean.MobileTerminalDomainModel
 import eu.europa.ec.fisheries.uvms.mobileterminal.bean.PollDomainModelBean;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.MobileTerminalPluginDao;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.NoEntityFoundException;
+import eu.europa.ec.fisheries.uvms.mobileterminal.dao.exception.TerminalDaoException;
 import eu.europa.ec.fisheries.uvms.mobileterminal.dto.ListResponseDto;
 import eu.europa.ec.fisheries.uvms.mobileterminal.entity.MobileTerminalPlugin;
 import eu.europa.ec.fisheries.uvms.mobileterminal.mapper.AuditModuleRequestMapper;
@@ -304,11 +305,13 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
     }
     
     private MobileTerminalPlugin getPlugin(MobileTerminalType mobileTerminal) {
-        MobileTerminalPlugin plugin;
+        MobileTerminalPlugin plugin = null;
         try {
             plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
         } catch (NoEntityFoundException e) {
             plugin = initAndGetPlugin(mobileTerminal);
+        }catch (TerminalDaoException e) {
+            LOG.info("Couldn't get plugin ", e.getMessage());
         }
         return plugin;
     }

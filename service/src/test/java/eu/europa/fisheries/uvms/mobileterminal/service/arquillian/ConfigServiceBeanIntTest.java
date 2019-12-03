@@ -62,7 +62,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testUpsertPlugins() throws MobileTerminalException {
-        List<PluginService> pluginList = Collections.singletonList(createPluginService());
+        List<PluginService> pluginList = Collections.singletonList(createPluginService(""));
         List<Plugin> plugins = configService.upsertPlugins(pluginList, "TEST");
         assertNotNull(plugins);
         assertTrue(pluginsContains(pluginList, "TEST_SERVICE"));
@@ -71,12 +71,14 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
     @Test
     @OperateOnDeployment("normal")
     public void testUpsertPluginsUpdate() throws MobileTerminalException {
-        List<PluginService> pluginList = Collections.singletonList(createPluginService());
+        int initial_count = filterPLugins(mobileTerminalPluginDao.getPluginList(),"SERVICENAME").size();
+
+        List<PluginService> pluginList = Collections.singletonList(createPluginService("SERVICENAME"));
         List<Plugin> plugins = configService.upsertPlugins(pluginList, "TEST");
         assertNotNull(plugins);
-        assertTrue(pluginsContains(pluginList, "TEST_SERVICE"));
+        assertTrue(pluginsContains(pluginList, "SERVICENAME"));
         assertEquals(1, pluginList.size());
-        assertEquals(4, plugins.size());
+        assertEquals(initial_count+1, plugins.size());
 
         for(PluginService ps : pluginList) {
             ps.setLabelName("NEW_IRIDIUM_TEST_SERVICE");
@@ -97,7 +99,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         // thrown.expectMessage("No service name");
 
         List<PluginService> pluginList = new ArrayList<>();
-        PluginService pluginService = createPluginService();
+        PluginService pluginService = createPluginService("BADSERVICENAME");
         pluginService.setServiceName("");
         pluginList.add(pluginService);
 
@@ -112,7 +114,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         // thrown.expectMessage("No plugin name");
 
         List<PluginService> pluginList = new ArrayList<>();
-        PluginService pluginService = createPluginService();
+        PluginService pluginService = createPluginService("BADNAMETEST");
         pluginService.setLabelName("");
         pluginList.add(pluginService);
 
@@ -127,7 +129,7 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         // thrown.expectMessage("No satellite type");
 
         List<PluginService> pluginList = new ArrayList<>();
-        PluginService pluginService = createPluginService();
+        PluginService pluginService = createPluginService("BadSAT");
         pluginService.setSatelliteType("");
         pluginList.add(pluginService);
 
@@ -151,12 +153,13 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
         assertTrue(terminalSystemsContains(rs, MobileTerminalTypeEnum.INMARSAT_C.toString()));
     }
 
-    private PluginService createPluginService() {
+    private PluginService createPluginService(String serviceName) {
+        if (serviceName == null || serviceName.isEmpty()) serviceName="TEST_SERVICE";
         PluginService pluginService = new PluginService();
         pluginService.setInactive(false);
         pluginService.setLabelName("IRIDIUM_TEST_SERVICE");
         pluginService.setSatelliteType("IRIDIUM");
-        pluginService.setServiceName("TEST_SERVICE");
+        pluginService.setServiceName(serviceName);
         return pluginService;
     }
 
@@ -176,6 +179,17 @@ public class ConfigServiceBeanIntTest extends TransactionalTests {
             }
         }
         return false;
+    }
+
+    private List<MobileTerminalPlugin> filterPLugins(List<MobileTerminalPlugin> pluginList, String serviceName) {
+        List<MobileTerminalPlugin> responseList = new ArrayList<>();
+        for(MobileTerminalPlugin plugin : pluginList) {
+
+                if(plugin.getPluginServiceName() == serviceName || serviceName == null || serviceName.isEmpty()) {
+                    responseList.add(plugin);
+                }
+        }
+        return responseList;
     }
 
     private boolean pluginsContains(List<PluginService> pluginList, String name) {

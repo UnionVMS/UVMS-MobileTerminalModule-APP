@@ -119,7 +119,7 @@ public class MobileTerminalPluginDaoTest {
 	}
 	
 	@Test
-	public void testGetPluginByServiceName() throws NoEntityFoundException {
+	public void testGetPluginByServiceName() throws TerminalDaoException {
 		String serviceClassName = "ServiceClassName";
 		when(plugin.getName()).thenReturn(serviceClassName);
 		when(em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, MobileTerminalPlugin.class)).thenReturn(query);
@@ -132,7 +132,7 @@ public class MobileTerminalPluginDaoTest {
 	}
 	
 	@Test(expected=NoEntityFoundException.class)
-	public void testGetPluginByServiceNameException() throws NoEntityFoundException {
+	public void testGetPluginByServiceNameException() throws TerminalDaoException {
 		String serviceClassName = "ServiceClassName";
 		when(em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, MobileTerminalPlugin.class)).thenReturn(query);
 		when(query.getSingleResult()).thenThrow(new NoResultException());

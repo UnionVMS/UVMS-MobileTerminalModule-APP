@@ -72,7 +72,7 @@ public class PollDaoBeanIntTest extends TransactionalTests {
     public void testCreatePoll_WithNull() throws PollDaoException {
 
         thrown.expect(PollDaoException.class);
-        thrown.expectMessage("[ create poll ] attempt to create create event with null entity");
+        thrown.expectMessage("[ create poll ] attempt to create event with null entity");
 
         pollDao.createPoll(null);
         em.flush();

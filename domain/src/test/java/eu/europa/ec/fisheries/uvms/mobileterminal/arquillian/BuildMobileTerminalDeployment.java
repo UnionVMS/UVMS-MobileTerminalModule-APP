@@ -13,6 +13,12 @@ import org.jboss.shrinkwrap.api.ShrinkWrap;
 import org.jboss.shrinkwrap.api.asset.EmptyAsset;
 import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.jboss.shrinkwrap.resolver.api.maven.Maven;
+import org.jboss.shrinkwrap.resolver.api.maven.ScopeType;
+import org.jboss.shrinkwrap.resolver.api.maven.strategy.AcceptScopesStrategy;
+import org.jboss.shrinkwrap.resolver.api.maven.strategy.CombinedStrategy;
+import org.jboss.shrinkwrap.resolver.api.maven.strategy.NonTransitiveStrategy;
+import org.jboss.shrinkwrap.resolver.api.maven.strategy.RejectDependenciesStrategy;
+import org.jboss.shrinkwrap.resolver.api.maven.strategy.TransitiveStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,15 +47,13 @@ public abstract class BuildMobileTerminalDeployment {
 
         // Import Maven runtime dependencies
         File[] files = Maven.resolver().loadPomFromFile("pom.xml")
-                .importCompileAndRuntimeDependencies().importTestDependencies()
-                .resolve()
-                .withTransitivity().asFile();
-        printFiles(files);
+                .importDependencies(ScopeType.COMPILE,ScopeType.RUNTIME)
+                .resolve().withTransitivity().asFile();
+        //printFiles(files);
 
         // Embedding war package which contains the test class is needed
         // So that Arquillian can invoke test class through its servlet test runner
         WebArchive testWar = ShrinkWrap.create(WebArchive.class, "test.war");
-        testWar.addAsLibraries(files);
         
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.constant");
         testWar.addPackages(true, "eu.europa.ec.fisheries.uvms.mobileterminal.entity");
@@ -86,6 +90,7 @@ public abstract class BuildMobileTerminalDeployment {
         testWar.addAsResource("persistence-integration.xml", "META-INF/persistence.xml");
         // Empty beans for EE6 CDI
         testWar.addAsWebInfResource(EmptyAsset.INSTANCE, "beans.xml");
+        testWar.addAsLibraries(files);
 
         return testWar;
     }

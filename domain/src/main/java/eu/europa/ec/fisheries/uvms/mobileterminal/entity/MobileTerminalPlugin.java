@@ -40,7 +40,8 @@ import eu.europa.ec.fisheries.uvms.mobileterminal.constant.MobileTerminalConstan
 @Entity
 @Table(name = "plugin")
 @NamedQueries({
-	@NamedQuery(name = MobileTerminalConstants.PLUGIN_FIND_ALL, query = "SELECT p FROM MobileTerminalPlugin p WHERE p.pluginInactive = false"),
+	@NamedQuery(name = MobileTerminalConstants.PLUGIN_FIND_ALL, query = "SELECT p FROM MobileTerminalPlugin p"),
+	@NamedQuery(name = MobileTerminalConstants.PLUGIN_FIND_ALL_ACTIVE, query = "SELECT p FROM MobileTerminalPlugin p WHERE p.pluginInactive = false"),
 	@NamedQuery(name = MobileTerminalConstants.PLUGIN_FIND_BY_SERVICE_NAME, query = "SELECT p FROM MobileTerminalPlugin p WHERE p.pluginServiceName = :serviceName")
 })
 public class MobileTerminalPlugin implements Serializable {

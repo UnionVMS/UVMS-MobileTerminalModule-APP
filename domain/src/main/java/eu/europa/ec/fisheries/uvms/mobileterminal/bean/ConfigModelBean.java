@@ -156,7 +156,7 @@ public class ConfigModelBean  {
 			}
 		}
 		
-		responseList.addAll(inactivatePlugins(map));
+		inactivatePlugins(map);
 		
 		return responseList;
 	}

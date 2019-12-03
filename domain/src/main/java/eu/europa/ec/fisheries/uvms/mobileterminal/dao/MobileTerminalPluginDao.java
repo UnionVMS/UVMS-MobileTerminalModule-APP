@@ -26,7 +26,7 @@ public interface MobileTerminalPluginDao {
 
 	MobileTerminalPlugin createMobileTerminalPlugin(MobileTerminalPlugin plugin) throws TerminalDaoException;
 
-	MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException;
+	MobileTerminalPlugin getPluginByServiceName(String serviceName) throws NoEntityFoundException, TerminalDaoException;
 
 	MobileTerminalPlugin updateMobileTerminalPlugin(MobileTerminalPlugin entity) throws TerminalDaoException;
 }
