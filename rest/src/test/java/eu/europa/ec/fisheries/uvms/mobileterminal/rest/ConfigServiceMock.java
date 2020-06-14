@@ -12,13 +12,13 @@ package eu.europa.ec.fisheries.uvms.mobileterminal.rest;
 
 import java.util.Arrays;
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
 import eu.europa.ec.fisheries.schema.config.types.v1.PullSettingsStatus;
 import eu.europa.ec.fisheries.schema.config.types.v1.SettingType;
-import eu.europa.ec.fisheries.uvms.commons.message.impl.AbstractProducer;
 import eu.europa.ec.fisheries.uvms.config.model.mapper.ModuleResponseMapper;
 
 @MessageDriven(mappedName = "jms/queue/UVMSConfigEvent", activationConfig = {
@@ -26,7 +26,9 @@ import eu.europa.ec.fisheries.uvms.config.model.mapper.ModuleResponseMapper;
         @ActivationConfigProperty(propertyName = "destinationType", propertyValue = "javax.jms.Queue"), 
         @ActivationConfigProperty(propertyName = "destination", propertyValue = "UVMSConfigEvent")})
 public class ConfigServiceMock implements MessageListener {
-    
+
+    @EJB
+    private MobileTerminalModuleMockProducer mobileTerminalModuleMockProducer;
     
     @Override
     public void onMessage(Message message) {
@@ -36,15 +38,10 @@ public class ConfigServiceMock implements MessageListener {
             mockSetting.setValue("Value");
             mockSetting.setDescription("From ConfigServiceMock.java");
             String response = ModuleResponseMapper.toPullSettingsResponse(Arrays.asList(mockSetting), PullSettingsStatus.OK);
-            
-            new AbstractProducer() {
-                @Override
-                public String getDestinationName() {
-                    return "jms/queue/UVMSMobileTerminal";
-                }
-            }.sendResponseMessageToSender((TextMessage) message, response);
-            
+
+            mobileTerminalModuleMockProducer.sendResponseMessageToSender((TextMessage) message, response);
         } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 }

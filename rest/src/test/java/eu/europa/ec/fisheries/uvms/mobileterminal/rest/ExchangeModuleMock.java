@@ -15,10 +15,10 @@ import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityListType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.CapabilityTypeType;
 import eu.europa.ec.fisheries.schema.exchange.service.v1.ServiceResponseType;
-import eu.europa.ec.fisheries.uvms.commons.message.impl.AbstractProducer;
 import eu.europa.ec.fisheries.uvms.mobileterminal.service.bean.mapper.ExchangeModuleResponseMapper;
 
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -31,6 +31,9 @@ import java.util.List;
                 propertyName = "destinationType", propertyValue = "javax.jms.Queue"), @ActivationConfigProperty(
                         propertyName = "destination", propertyValue = "UVMSExchangeEvent")})
 public class ExchangeModuleMock implements MessageListener {
+
+    @EJB
+    private MobileTerminalModuleMockProducer mobileTerminalModuleMockProducer;
 
     @Override
     public void onMessage(Message message) {
@@ -50,14 +53,9 @@ public class ExchangeModuleMock implements MessageListener {
             serviceResponse.add(serviceResponseType);
             String response = ExchangeModuleResponseMapper.mapServiceListResponse(serviceResponse);
 
-            new AbstractProducer() {
-                @Override
-                public String getDestinationName() {
-                    return "jms/queue/UVMSMobileTerminal";
-                }
-            }.sendResponseMessageToSender((TextMessage) message, response);
+            mobileTerminalModuleMockProducer.sendResponseMessageToSender((TextMessage) message, response);
         } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
-
 }
