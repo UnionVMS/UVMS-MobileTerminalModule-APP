@@ -10,7 +10,6 @@ copy of the GNU General Public License along with the IFDM Suite. If not, see <h
  */
 package eu.europa.ec.fisheries.uvms.mobileterminal.rest;
 
-import eu.europa.ec.fisheries.uvms.commons.message.impl.AbstractProducer;
 import eu.europa.ec.fisheries.uvms.rest.security.UnionVMSFeature;
 import eu.europa.ec.fisheries.uvms.user.model.mapper.UserModuleResponseMapper;
 import eu.europa.ec.fisheries.wsdl.user.types.*;
@@ -18,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.ActivationConfigProperty;
+import javax.ejb.EJB;
 import javax.ejb.MessageDriven;
 import javax.jms.Message;
 import javax.jms.MessageListener;
@@ -31,20 +31,15 @@ public class UserModuleMock implements MessageListener {
 
     private final static Logger LOG = LoggerFactory.getLogger(UserModuleMock.class);
 
+    @EJB
+    private MobileTerminalModuleMockProducer mobileTerminalModuleMockProducer;
+
     @Override
     public void onMessage(Message message) {
         try {
             UserContext userContext = getMobileTerminalUserContext();
-            String responseString;
-            responseString = UserModuleResponseMapper.mapToGetUserContextResponse(userContext);
-
-            new AbstractProducer() {
-                @Override
-                public String getDestinationName() {
-                    return "jms/queue/UVMSMobileTerminal";
-                }
-            }.sendResponseMessageToSender((TextMessage) message, responseString);
-
+            String responseString = UserModuleResponseMapper.mapToGetUserContextResponse(userContext);
+            mobileTerminalModuleMockProducer.sendResponseMessageToSender((TextMessage) message, responseString);
         } catch (Exception e) {
             LOG.error("UserModuleMock Error", e);
         }
