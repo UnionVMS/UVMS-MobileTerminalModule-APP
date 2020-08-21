@@ -42,8 +42,7 @@ public class PollDaoBean extends Dao implements PollDao {
         try {
             em.persist(poll);
         } catch (EntityExistsException | IllegalArgumentException e) {
-            LOG.error("[ Error when creating poll. ] {}", e.getMessage());
-            throw new PollDaoException("[ create poll ] " + e.getMessage());
+            throw new PollDaoException("Error when creating poll ",e);
         }
     }
 
@@ -54,8 +53,7 @@ public class PollDaoBean extends Dao implements PollDao {
             query.setParameter("pollId", pollId);
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting poll. ] {}", e.getMessage());
-            throw new PollDaoException("No Poll entity found with TrackId " + pollId);
+            throw new PollDaoException("No Poll entity found with TrackId " + pollId,e);
         }
     }
 

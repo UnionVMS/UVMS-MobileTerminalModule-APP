@@ -81,8 +81,7 @@ public class ExchangeModuleResponseMapper {
 			GetServiceListResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, GetServiceListResponse.class);
 			return unmarshalledResponse.getService();
 		} catch(JMSException | ExchangeValidationException e) {
-			LOG.error("[ Error when mapping response to service types ]");
-			throw new ExchangeModelMapperException("[ Error when mapping response to service types ] " + e.getMessage());
+			throw new ExchangeModelMapperException("Error when mapping response to service types " , e);
 		}
 	}
 
@@ -93,8 +92,7 @@ public class ExchangeModuleResponseMapper {
 			return unmarshalledResponse.getResponse();
 			//TODO handle ExchangeValidationException - extract fault...
 		} catch(JMSException | ExchangeModelMarshallException e) {
-			LOG.error("[ Error when mapping response to service types ]");
-			throw new ExchangeModelMapperException("[ Error when mapping response to service types ] " + e.getMessage());
+			throw new ExchangeModelMapperException("Error when mapping response to service types " , e);
 		}
 	}
 
@@ -118,7 +116,7 @@ public class ExchangeModuleResponseMapper {
 			//TODO use fault
 			throw new ExchangeValidationException(fault.getCode() + " - " + fault.getMessage());
 		} catch (ExchangeModelMarshallException e) {
-			//everything went well
+			LOG.warn("Could not unmarashll response: " + response,e);
 		}
 	}
 }

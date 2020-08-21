@@ -86,6 +86,7 @@ public class GetReceivedEventBean {
                 service.upsertMobileTerminal(mobTerm, MobileTerminalSource.NATIONAL, dataSource.name());
             }
         } catch (MobileTerminalException ex) {
+            LOG.warn("MobileTerminal is null, will retrieve from datasource");
             mobTerm = null;
         }
         if (mobTerm == null) {
@@ -109,8 +110,7 @@ public class GetReceivedEventBean {
             }
             return DataSourceQueue.INTERNAL;
         } catch (ConfigServiceException ex) {
-            LOG.error("[ Error when deciding data flow. ] {}", ex.getMessage());
-            throw new MobileTerminalServiceException(ex.getMessage());
+            throw new MobileTerminalServiceException(ex.getMessage(),ex);
         }
     }
 }

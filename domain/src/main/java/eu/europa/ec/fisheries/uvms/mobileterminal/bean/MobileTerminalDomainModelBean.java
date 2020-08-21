@@ -71,10 +71,7 @@ public class MobileTerminalDomainModelBean  {
             terminalDao.createMobileTerminal(terminal);
             return MobileTerminalEntityToModelMapper.mapToMobileTerminalType(terminal);
         } catch (TerminalDaoException e) {
-            throw new MobileTerminalModelException("Error when persisting terminal " + mobileTerminal.getMobileTerminalId());
-        } catch (MobileTerminalModelException e) {
-            LOG.error("Error in model when creating mobile terminal: {}", e.getMessage());
-            throw e;
+            throw new MobileTerminalModelException("Error when persisting terminal " + mobileTerminal.getMobileTerminalId(),e);
         }
     }
 
@@ -103,7 +100,7 @@ public class MobileTerminalDomainModelBean  {
         	MobileTerminal terminal = getMobileTerminalEntityById(mobileTerminal.getMobileTerminalId());
             throw new MobileTerminalModelException("Mobile terminal already exists in database for id: " + mobileTerminal.getMobileTerminalId());
         } catch (InputArgumentException | NoEntityFoundException e) {
-            //Terminal does not exist, ok to create a new one
+            LOG.info("Terminal does not exist, ok to create a new one",e);
         }
         try {
             for (MobileTerminalAttribute attribute : mobileTerminal.getAttributes()) {
@@ -115,7 +112,7 @@ public class MobileTerminalDomainModelBean  {
                 }
             }
         } catch (InputArgumentException | NoEntityFoundException e) {
-            //Terminal does not exist, ok to create a new one
+            LOG.info("Terminal does not exist, ok to create a new one",e);
         }
     }
 
@@ -254,7 +251,7 @@ public class MobileTerminalDomainModelBean  {
         try {
             return updateMobileTerminal(mobileTerminal, "Upserted by external module", username);
         } catch (NumberFormatException | MobileTerminalModelException e) {
-            LOG.error("[ Error when upserting mobile terminal: Mobile terminal update failed trying to insert. ] {} {}", e.getMessage(), e.getStackTrace());
+            LOG.error("Error when upserting mobile terminal: Mobile terminal update failed trying to insert. ", e);
             if (e instanceof MobileTerminalExistsException) {
                 throw e;
             }

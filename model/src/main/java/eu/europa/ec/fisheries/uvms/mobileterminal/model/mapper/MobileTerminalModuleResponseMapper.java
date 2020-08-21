@@ -28,6 +28,8 @@ import java.util.List;
 
 public class MobileTerminalModuleResponseMapper {
 
+    private static Logger LOG = LoggerFactory.getLogger(MobileTerminalModuleResponseMapper.class);
+
     private static void validateResponse(TextMessage response, String correlationId) throws MobileTerminalValidationException, JMSException {
 
         if (response == null) {
@@ -46,7 +48,7 @@ public class MobileTerminalModuleResponseMapper {
             MobileTerminalFault fault = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalFault.class);
             throw new MobileTerminalValidationException(fault.getCode() + " : " + fault.getMessage());
         } catch (MobileTerminalUnmarshallException e) {
-            //everything is well
+            LOG.warn("Could not unmarshall message: " + response,e);
         }
     }
 

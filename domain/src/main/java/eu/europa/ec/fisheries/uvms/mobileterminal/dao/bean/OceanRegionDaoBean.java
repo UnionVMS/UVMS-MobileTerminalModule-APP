@@ -37,8 +37,7 @@ public class OceanRegionDaoBean extends Dao implements OceanRegionDao {
             TypedQuery<OceanRegion> query = em.createNamedQuery(MobileTerminalConstants.OCEAN_REGIONS, OceanRegion.class);
             return query.getResultList();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting ocean regions. ] {}", e.getMessage());
-            throw new ConfigDaoException("No entities found when retrieving ocean regions");
+            throw new ConfigDaoException("No entities found when retrieving ocean regions",e);
         }
 	}
 }

@@ -80,8 +80,7 @@ public class ConfigServiceBean implements ConfigService {
 			TextMessage response = messageConsumer.getMessageFromOutQueue(messageId, TextMessage.class);
 			return ExchangeModuleResponseMapper.mapServiceListResponse(response, messageId);
 		} catch (ExchangeModelMapperException | MobileTerminalMessageException e) {
-			LOG.error("Failed to map to exchange get service list request");
-			throw new MobileTerminalException("Failed to map to exchange get service list request");
+			throw new MobileTerminalException("Failed to map to exchange get service list request",e);
 		}
 	}
 }

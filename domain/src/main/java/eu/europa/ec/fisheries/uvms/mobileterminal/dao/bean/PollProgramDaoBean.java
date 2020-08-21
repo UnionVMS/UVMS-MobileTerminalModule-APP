@@ -38,8 +38,7 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
         try {
             em.persist(pollProgram);
         } catch (EntityExistsException | IllegalArgumentException e) {
-            LOG.error("[ Error when creating poll program. ] {}", e.getMessage());
-            throw new PollDaoException("[ create poll program ] " + e.getMessage());
+            throw new PollDaoException("Error when creating poll program ", e);
         }
     }
 
@@ -54,8 +53,7 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
             em.flush();
             return pollProgram;
         } catch (EntityExistsException | IllegalArgumentException e) {
-            LOG.error("[ Error when updating poll program. ] {}", e.getMessage());
-            throw new PollDaoException("[ update poll program ] " + e.getMessage());
+            throw new PollDaoException("Error when updating poll program " , e);
         }
     }
 
@@ -66,8 +64,7 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
             query.setParameter("currentDate", DateUtils.getUTCNow());
             return query.getResultList();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting poll program alive. ] {}", e.getMessage());
-            throw new PollDaoException("No entities found when retrieving getPollProgramAlive");
+            throw new PollDaoException("No entities found when retrieving getPollProgramAlive",e);
         }
     }
 
@@ -95,8 +92,7 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
 
             return validPollPrograms;
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting poll program running and started. ] {}", e.getMessage());
-            throw new PollDaoException("No entities found when retrieving getPollProgramRunningAndStarted");
+            throw new PollDaoException("No entities found when retrieving getPollProgramRunningAndStarted",e);
         }
     }
 
@@ -107,8 +103,7 @@ public class PollProgramDaoBean extends Dao implements PollProgramDao {
             query.setParameter("guid", guid);
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting poll program by id. ] {}", e.getMessage());
-            throw new PollDaoException("No entity found getting by id");
+            throw new PollDaoException("No entity found getting by id",e);
         }
     }
 }

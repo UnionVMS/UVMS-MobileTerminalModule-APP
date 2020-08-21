@@ -85,14 +85,14 @@ public class PollServiceBean implements PollService {
                             break;
                     }
                 } catch (MobileTerminalServiceException e) {
-                    LOG.error(e.getMessage());
+                    LOG.error(e.getMessage(),e);
                 }
 
                 try {
                     String auditData = AuditModuleRequestMapper.mapAuditLogPollCreated(createdPoll.getPollType(), createdPoll.getPollId().getGuid(), createdPoll.getComment(), username);
                     messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
                 } catch (AuditModelMarshallException e) {
-                    LOG.error("Failed to send audit log message! Poll with guid {} was created", createdPoll.getPollId().getGuid());
+                    LOG.error("Failed to send audit log message! Poll with guid " + createdPoll.getPollId().getGuid()+ " was created",e);
                 }
             }
 
@@ -106,8 +106,7 @@ public class PollServiceBean implements PollService {
             result.setUnsentPoll(!unsentPolls.isEmpty());
             return result;
         } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
-        	LOG.error("Failed to create poll",e);
-            throw new MobileTerminalServiceException(e.getMessage());
+            throw new MobileTerminalServiceException("Failed to create poll",e);
         }
     }
 
@@ -117,7 +116,7 @@ public class PollServiceBean implements PollService {
         try {
             return pollModel.getPollProgramList();
         } catch (MobileTerminalModelException e) {
-            throw new MobileTerminalServiceException(e.getMessage());
+            throw new MobileTerminalServiceException(e.getMessage(),e);
         }
     }
 
@@ -132,12 +131,12 @@ public class PollServiceBean implements PollService {
                 String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStarted(startedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
             } catch (AuditModelMarshallException e) {
-                LOG.error("Failed to send audit log message! Poll with guid {} was started", startedPoll.getPollId().getGuid());
+                LOG.error("Failed to send audit log message! Poll with guid " + startedPoll.getPollId().getGuid() + " was started",e);
             }
 
             return startedPoll;
         } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
-            throw new MobileTerminalServiceException(e.getMessage());
+            throw new MobileTerminalServiceException(e.getMessage(),e);
         }
     }
 
@@ -152,12 +151,12 @@ public class PollServiceBean implements PollService {
                 String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollStopped(stoppedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
             } catch (AuditModelMarshallException e) {
-                LOG.error("Failed to send audit log message! Poll with guid {} was stopped", stoppedPoll.getPollId().getGuid());
+                LOG.error("Failed to send audit log message! Poll with guid " + stoppedPoll.getPollId().getGuid() + "  was stopped ",e);
             }
 
             return stoppedPoll;
         } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
-            throw new MobileTerminalServiceException(e.getMessage());
+            throw new MobileTerminalServiceException(e.getMessage(),e);
         }
     }
 
@@ -172,12 +171,12 @@ public class PollServiceBean implements PollService {
                 String auditData = AuditModuleRequestMapper.mapAuditLogProgramPollInactivated(inactivatedPoll.getPollId().getGuid(), username);
                 messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
             } catch (AuditModelMarshallException e) {
-                LOG.error("Failed to send audit log message! Poll with guid {} was inactivated", inactivatedPoll.getPollId().getGuid());
+                LOG.error("Failed to send audit log message! Poll with guid " + inactivatedPoll.getPollId().getGuid() +" was inactivated",e);
             }
 
             return inactivatedPoll;
         } catch (MobileTerminalModelException | MobileTerminalMessageException e) {
-            throw new MobileTerminalServiceException(e.getMessage());
+            throw new MobileTerminalServiceException(e.getMessage(),e);
         }
     }
 
@@ -187,7 +186,7 @@ public class PollServiceBean implements PollService {
         try {
             return pollModel.getPollList(query);
         } catch (MobileTerminalModelException e) {
-            throw new MobileTerminalServiceException(e.getMessage());
+            throw new MobileTerminalServiceException(e.getMessage(),e);
         }
     }
 

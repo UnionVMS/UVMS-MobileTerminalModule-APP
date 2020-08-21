@@ -19,4 +19,8 @@ public class PollDaoException extends MobileTerminalModelException {
 	public PollDaoException(String message) {
 		super(message);
 	}
+
+	public PollDaoException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }

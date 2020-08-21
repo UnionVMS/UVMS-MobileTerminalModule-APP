@@ -38,7 +38,7 @@ public class MobileTerminalConsumerBean extends AbstractConsumer implements Mobi
         try {
             return getMessage(correlationId, type, TIMEOUT);
         } catch (MessageException e) {
-            throw new MobileTerminalMessageException(e.getMessage());
+            throw new MobileTerminalMessageException(e.getMessage(),e);
         }
     }
 
@@ -48,8 +48,7 @@ public class MobileTerminalConsumerBean extends AbstractConsumer implements Mobi
             return getMessageFromOutQueue(correlationId, type);
         }
         catch (MobileTerminalMessageException e) {
-            LOG.error("[ Error when getting config message. ] {}", e.getMessage());
-            throw new ConfigMessageException(e.getMessage());
+            throw new ConfigMessageException("Error when getting config message",e);
         }
     }
 

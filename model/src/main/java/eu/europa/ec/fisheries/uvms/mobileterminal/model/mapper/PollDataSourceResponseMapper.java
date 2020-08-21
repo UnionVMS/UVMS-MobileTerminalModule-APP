@@ -62,7 +62,7 @@ public class PollDataSourceResponseMapper {
             MobileTerminalFault fault = JAXBMarshaller.unmarshallTextMessage(response, MobileTerminalFault.class);
             throw new MobileTerminalValidationException(fault.getCode() + " : " + fault.getMessage());
         } catch (MobileTerminalUnmarshallException e) {
-            // everything is well
+            LOG.warn("Could not unmarshall message: " + response,e);
         }
     }
 
@@ -72,8 +72,7 @@ public class PollDataSourceResponseMapper {
             CreatePollResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, CreatePollResponse.class);
             return unmarshalledResponse.getPollList();
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
-            LOG.error("[ Error when unmarshalling poll create responses. ] {}", e.getMessage());
-            throw new MobileTerminalModelMapperException(e.getMessage());
+            throw new MobileTerminalModelMapperException("Error when unmarshalling poll create responses.",e);
         }
     }
 
@@ -83,8 +82,7 @@ public class PollDataSourceResponseMapper {
             PollListResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, PollListResponse.class);
             return unmarshalledResponse.getPollList();
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
-            LOG.error("[ Error when unmarshalling poll list responses. ] {}", e.getMessage());
-            throw new MobileTerminalModelMapperException(e.getMessage());
+            throw new MobileTerminalModelMapperException("Error when unmarshalling poll list responses",e);
         }
     }
 
@@ -93,8 +91,7 @@ public class PollDataSourceResponseMapper {
             validateResponse(response, messageId);
             return JAXBMarshaller.unmarshallTextMessage(response, PollListResponse.class);
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
-            LOG.error("[ Error when unmarshalling poll list responses. ] {}", e.getMessage());
-            throw new MobileTerminalModelMapperException(e.getMessage());
+            throw new MobileTerminalModelMapperException("Error when unmarshalling poll list responses.",e);
         }
 	}
     
@@ -104,8 +101,7 @@ public class PollDataSourceResponseMapper {
             SinglePollResponse unmarshalledResponse = JAXBMarshaller.unmarshallTextMessage(response, SinglePollResponse.class);
             return unmarshalledResponse.getPoll();
         } catch (MobileTerminalUnmarshallException | MobileTerminalValidationException | JMSException e) {
-            LOG.error("[ Error when unmarshalling single poll responses. ] {}", e.getMessage());
-            throw new MobileTerminalModelMapperException(e.getMessage());
+            throw new MobileTerminalModelMapperException("Error when unmarshalling single poll responses",e);
         }
     }
 }

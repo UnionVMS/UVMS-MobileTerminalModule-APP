@@ -67,7 +67,7 @@ public class ConfigResource {
            List<TerminalSystemType> list = configService.getTerminalSystems();
            return new ResponseDto<>(MobileTerminalConfig.mapConfigTransponders(list), ResponseCode.OK);
        } catch (Exception ex) {
-           LOG.error("[ Error when getting configTransponders ] {}", ex.getStackTrace());
+           LOG.error("Error when getting configTransponders", ex);
            return ErrorHandler.getFault(ex);
        }
    }
@@ -88,7 +88,7 @@ public class ConfigResource {
        try {
            return new ResponseDto<>(SearchKey.values(), ResponseCode.OK);
        } catch (Exception ex) {
-           LOG.error("[ Error when getting config search fields ] {}", ex.getStackTrace());
+           LOG.error("Error when getting config search fields", ex);
            return ErrorHandler.getFault(ex);
        }
    }
@@ -100,6 +100,7 @@ public class ConfigResource {
         	List<ConfigList> config = configService.getConfig();
             return new ResponseDto<>(MobileTerminalConfig.mapConfigList(config), ResponseCode.OK);
         } catch (Exception ex) {
+            LOG.error("Error when getting config", ex);
             return ErrorHandler.getFault(ex);
         }
     }

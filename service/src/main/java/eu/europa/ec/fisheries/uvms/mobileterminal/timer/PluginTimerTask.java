@@ -39,7 +39,7 @@ public class PluginTimerTask implements Runnable{
                 LOG.debug("upserted plugins");
             }
         } catch (MobileTerminalException e) {
-            LOG.info("Couldn't update plugins... ", e.getMessage());
+            LOG.info("Couldn't update plugins... ", e);
         }
 
     }

@@ -65,8 +65,7 @@ public class JAXBMarshaller {
             LOG.debug("StringWriter time: {}", (System.currentTimeMillis() - before));
             return marshalled;
         } catch (JAXBException e) {
-            LOG.error("[ Error when marshalling data. ] {}", e.getMessage());
-            throw new MobileTerminalModelMapperException("Error when marshalling " + data.getClass().getName() + " to String");
+            throw new MobileTerminalModelMapperException("Error when marshalling " + data.getClass().getName() + " to String",e);
         }
     }
 
@@ -99,7 +98,7 @@ public class JAXBMarshaller {
             LOG.debug("Unmarshalling time: {}", (System.currentTimeMillis() - before));
             return object;
         } catch (JMSException | JAXBException e) {
-            throw new MobileTerminalUnmarshallException("Error when unmarshalling response in ResponseMapper: " + e.getMessage());
+            throw new MobileTerminalUnmarshallException("Error when unmarshalling response in ResponseMapper: " , e);
         }
     }
 

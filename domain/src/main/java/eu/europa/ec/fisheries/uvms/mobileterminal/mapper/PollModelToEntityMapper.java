@@ -74,7 +74,7 @@ public class PollModelToEntityMapper {
                     LOG.debug("ProgramPoll with attr [ " + attr.getKey() + " ] is non valid to map");
                 }
             } catch (UnsupportedOperationException | IllegalArgumentException e) {
-                throw new MobileTerminalModelMapperException("Poll attribute [ " + attr.getKey() + " ] could not be parsed");
+                throw new MobileTerminalModelMapperException("Poll attribute " + attr.getKey() + "  could not be parsed",e);
             }
         }
         return poll;
@@ -100,7 +100,7 @@ public class PollModelToEntityMapper {
         try {
         	poll.setPollType(EnumMapper.getPollTypeFromModel(requestType.getPollType()));
         } catch (EnumException e) {
-        	throw new MobileTerminalModelMapperException("Couldn't map type of poll " + e.getMessage());
+        	throw new MobileTerminalModelMapperException("Couldn't map type of poll " , e);
         }
 
         poll.setUpdatedBy(username);
@@ -137,7 +137,7 @@ public class PollModelToEntityMapper {
                     break;
         		}
         	} catch (UnsupportedOperationException | IllegalArgumentException e) {
-        		throw new MobileTerminalModelMapperException("Poll attribute [ " + attr.getKey() + " ] could not be parsed");
+        		throw new MobileTerminalModelMapperException("Poll attribute  " + attr.getKey() + "  could not be parsed",e);
         	}
         }
         payload.setPoll(poll);
@@ -165,7 +165,7 @@ public class PollModelToEntityMapper {
                     break;
         		}
         	} catch (UnsupportedOperationException | IllegalArgumentException e) {
-        		throw new MobileTerminalModelMapperException("Poll attribute [ " + attr.getKey() + " ] could not be parsed");
+        		throw new MobileTerminalModelMapperException("Poll attribute  " + attr.getKey() + "  could not be parsed",e);
         	}
         }
         payload.setPoll(poll);

@@ -12,19 +12,26 @@
 
 package eu.europa.ec.fisheries.uvms.mobileterminal.search;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * Created by osdjup on 2016-11-18.
  */
 public enum MobileTerminalSearchAttributes {
+
     SERIAL_NUMBER,
     SATELLITE_NUMBER,
     CONNECT_ID;
+
+    private final static Logger LOG = LoggerFactory.getLogger(MobileTerminalSearchAttributes.class);
 
     public static boolean isAttribute(String attribute) {
         try {
             MobileTerminalSearchAttributes.valueOf(attribute);
             return true;
         } catch (IllegalArgumentException e) {
+            LOG.warn("Could not map "+ attribute + " to MobileTerminalSearchAttributes enum",e);
             return false;
         }
     }

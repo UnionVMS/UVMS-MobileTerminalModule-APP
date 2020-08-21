@@ -20,4 +20,8 @@ public class TerminalDaoException extends MobileTerminalModelException {
     public TerminalDaoException(String message) {
         super(message);
     }
+
+    public TerminalDaoException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

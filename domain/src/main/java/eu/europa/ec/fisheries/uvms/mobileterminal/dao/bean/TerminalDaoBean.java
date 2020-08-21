@@ -39,8 +39,7 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
             query.setParameter("guid", guid);
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting terminal by GUID. ] {}", e.getMessage());
-            throw new NoEntityFoundException("No entity found with guid " + guid);
+            throw new NoEntityFoundException("No entity found with guid " + guid,e);
         }
 	}
 
@@ -51,8 +50,7 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
             query.setParameter("serialNo", serialNo);
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting terminal by GUID. ] {}", e.getMessage());
-            throw new NoEntityFoundException("No entity found with serial no " + serialNo);
+            throw new NoEntityFoundException("No entity found with serial no " + serialNo,e);
         }
     }
 
@@ -62,8 +60,7 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
             em.persist(terminal);
             em.flush();
         } catch (Exception e) {
-            LOG.error("[ Error when creating. ] {}", e.getMessage());
-            throw new TerminalDaoException("[ Error when creating. ]" + e.getMessage());
+            throw new TerminalDaoException("Error when creating." , e);
         }
     }
 
@@ -77,8 +74,7 @@ public class TerminalDaoBean extends Dao implements TerminalDao {
             em.merge(terminal);
             em.flush();
         } catch (Exception e) {
-            LOG.error("[ Error when updating. ] {}", e.getMessage());
-            throw new TerminalDaoException("[ Error when updating. ]");
+            throw new TerminalDaoException("Error when updating.",e);
         }
     }
 

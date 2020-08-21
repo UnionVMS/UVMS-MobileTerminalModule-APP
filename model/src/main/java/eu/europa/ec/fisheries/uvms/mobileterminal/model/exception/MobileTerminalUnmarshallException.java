@@ -17,4 +17,8 @@ public class MobileTerminalUnmarshallException extends MobileTerminalModelExcept
 	public MobileTerminalUnmarshallException(String message) {
 		super(message);
 	}
+
+	public MobileTerminalUnmarshallException(String message, Throwable cause) {
+		super(message, cause);
+	}
 }
