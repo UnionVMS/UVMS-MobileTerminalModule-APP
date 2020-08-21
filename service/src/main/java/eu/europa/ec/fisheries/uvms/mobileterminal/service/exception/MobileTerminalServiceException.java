@@ -19,4 +19,8 @@ public class MobileTerminalServiceException extends MobileTerminalException {
     public MobileTerminalServiceException(String message) {
         super(message);
     }
+
+    public MobileTerminalServiceException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

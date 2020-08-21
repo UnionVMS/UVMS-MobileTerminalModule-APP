@@ -18,4 +18,8 @@ public class MobileTerminalModelMapperException extends MobileTerminalModelExcep
         super(message);
     }
 
+    public MobileTerminalModelMapperException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

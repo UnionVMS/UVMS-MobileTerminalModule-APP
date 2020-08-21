@@ -42,7 +42,7 @@ public class DateUtils {
             try {
                 return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
             } catch (DatatypeConfigurationException e) {
-                LOG.error("[ Error when creating calendar instance. ] {} {}", e.getMessage(), e.getStackTrace());
+                LOG.error("Error when creating calendar instance. ",e);
             }
         }
         return null;
@@ -124,9 +124,9 @@ public class DateUtils {
                 calendar.setTime(theDate);
                 return DatatypeFactory.newInstance().newXMLGregorianCalendar(calendar);
             } catch (DatatypeConfigurationException e) {
-                LOG.error("[ Error when getting XML Gregorian calendar. ] ", e);
+                LOG.error("Error when getting XML Gregorian calendar. ", e);
             } catch (ParseException e) {
-                LOG.error("Could not parse dateTimeInUTC: "+dateTimeInUTC.toString()+ " with pattern: " + DATE_TIME_PATTERN);
+                LOG.error("Could not parse dateTimeInUTC: "+dateTimeInUTC.toString()+ " with pattern: " + DATE_TIME_PATTERN,e);
             }
         }
         return null;

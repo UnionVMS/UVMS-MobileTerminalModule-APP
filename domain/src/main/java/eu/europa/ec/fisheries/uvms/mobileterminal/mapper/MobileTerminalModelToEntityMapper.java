@@ -44,8 +44,7 @@ public class MobileTerminalModelToEntityMapper {
         try {
             entity.setSource(getSourceTypeFromModel(model.getSource()));
         } catch (EnumException e) {
-            LOG.error("[ Error when getting terminal source enum from source.] ", e.getMessage());
-            throw new MobileTerminalModelMapperException(e.getMessage());
+            throw new MobileTerminalModelMapperException("Error when getting terminal source enum from source",e);
         }
 
         MobileTerminalTypeEnum type = MobileTerminalTypeEnum.getType(model.getType());
@@ -61,8 +60,7 @@ public class MobileTerminalModelToEntityMapper {
             try {
                 mapChannels(entity, model, username);
             } catch (EnumException e) {
-                LOG.error("[ Error when mapping channel field types ]");
-                throw new MobileTerminalModelMapperException(e.getMessage());
+                throw new MobileTerminalModelMapperException("Error when mapping channel field types",e);
             }
         }
         entity.setUpdateTime(DateUtils.getNowDateUTC());

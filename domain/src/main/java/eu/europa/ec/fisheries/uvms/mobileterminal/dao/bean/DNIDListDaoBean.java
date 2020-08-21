@@ -35,8 +35,7 @@ public class DNIDListDaoBean extends Dao implements DNIDListDao {
             TypedQuery<DNIDList> query = em.createNamedQuery(MobileTerminalConstants.DNID_LIST, DNIDList.class);
             return query.getResultList();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting dnid list. ] {}", e.getMessage());
-            throw new ConfigDaoException("No entities found when retrieving dnid list");
+            throw new ConfigDaoException("No entities found when retrieving dnid list",e);
         }
 	}
 
@@ -47,8 +46,7 @@ public class DNIDListDaoBean extends Dao implements DNIDListDao {
             query.setParameter("pluginName", pluginName);
 			return query.getResultList();
 		} catch (NoResultException e) {
-            LOG.error("[ Error when getting dnid list by plugin. ] {}", e.getMessage());
-            throw new ConfigDaoException("No entities found when retrieving dnid list by plugin");
+            throw new ConfigDaoException("No entities found when retrieving dnid list by plugin",e);
         }
 	}
 
@@ -66,8 +64,7 @@ public class DNIDListDaoBean extends Dao implements DNIDListDao {
             em.persist(entity);
             return entity;
         } catch (Exception e) {
-            LOG.error("[ Error when creating dnid list entity. ]", e.getMessage());
-            throw new ConfigDaoException("[ dnid list entity ] " + e.getMessage());
+            throw new ConfigDaoException("dnid list entity " ,e);
         }
 	}
 }

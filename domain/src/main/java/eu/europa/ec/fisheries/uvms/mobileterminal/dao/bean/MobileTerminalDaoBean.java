@@ -20,8 +20,7 @@ public class MobileTerminalDaoBean extends Dao implements MobileTerminalDao<Mobi
             em.persist(entity);
             return entity;
         } catch (Exception e) {
-            LOG.error("[ Error when creating MobileTerminal: " + entity + " ] " + e.getMessage());
-            throw new ConfigDaoException("[ Error when creating MobileTerminal: " + entity + " ] ");
+            throw new ConfigDaoException("Error when creating MobileTerminal: " + entity ,e);
         }
     }
 

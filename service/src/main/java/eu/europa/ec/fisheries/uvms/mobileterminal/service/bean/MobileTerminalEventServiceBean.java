@@ -53,7 +53,7 @@ public class MobileTerminalEventServiceBean implements EventService {
             String data = JAXBMarshaller.marshallJaxBObjectToString(request);
             messageProducer.sendResponseToRequestor(receivedJmsMessage, data);
         } catch (MobileTerminalModelMapperException | JMSException | MessageException ex) {
-            LOG.error("Error when returning Error message to recipient", ex.getMessage());
+            LOG.error("Error when returning Error message to recipient", ex);
         }
     }
 }

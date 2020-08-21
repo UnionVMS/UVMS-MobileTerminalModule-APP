@@ -62,7 +62,7 @@ public class PollResource {
             CreatePollResultDto createPollResultDto = pollService.createPoll(createPoll, request.getRemoteUser());
             return new ResponseDto<>(createPollResultDto, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when creating poll {}] {}",createPoll, ex.getStackTrace());
+            LOG.error("Error when creating poll " + createPoll, ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -82,7 +82,7 @@ public class PollResource {
             List<PollDto> polls = pollService.getRunningProgramPolls();
             return new ResponseDto<>(polls, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when getting running program polls ] {}", (Object) ex.getStackTrace());
+            LOG.error("Error when getting running program polls ", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -102,7 +102,7 @@ public class PollResource {
             PollDto poll = pollService.startProgramPoll(pollId, request.getRemoteUser());
             return new ResponseDto<>(poll, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when starting program poll {}] {}", pollId, ex.getStackTrace());
+            LOG.error("Error when starting program poll " + pollId, ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -123,7 +123,7 @@ public class PollResource {
             PollDto poll = pollService.stopProgramPoll(pollId, request.getRemoteUser());
             return new ResponseDto<>(poll, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when stopping program poll {} ] {}",pollId, ex.getStackTrace());
+            LOG.error("Error when stopping program poll " + pollId, ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -143,7 +143,7 @@ public class PollResource {
             PollDto poll = pollService.inactivateProgramPoll(pollId, request.getRemoteUser());
             return new ResponseDto<>(poll, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when inactivating program poll {}] {}",pollId, ex.getStackTrace());
+            LOG.error(" Error when inactivating program poll " + pollId, ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -164,7 +164,7 @@ public class PollResource {
         	PollChannelListDto pollChannelList = pollService.getPollBySearchQuery(query);
             return new ResponseDto<>(pollChannelList, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when getting poll by search criteria {}] {}",query, ex.getStackTrace());
+            LOG.error("Error when getting poll by search criteria " + query, ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -184,7 +184,7 @@ public class PollResource {
             PollChannelListDto pollChannelList = pollService.getPollableChannels(query);
             return new ResponseDto<>(pollChannelList, ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when getting poll by search criteria {}] {}", query, ex.getStackTrace());
+            LOG.error("Error when getting poll by search criteria " + query, ex);
             return ErrorHandler.getFault(ex);
         }
     }

@@ -121,6 +121,7 @@ public class ConfigModelBean  {
 				return entity;
 			}
 		} catch (NoEntityFoundException e) {
+			LOG.error("Entity not found",e);
 			return null;
 		}
 	}
@@ -152,7 +153,7 @@ public class ConfigModelBean  {
 				map.put(plugin.getServiceName(), plugin);
 				responseList.add(PluginMapper.mapEntityToModel(entity));
 			} catch (TerminalDaoException e) {
-				throw new MobileTerminalModelException("Couldn't persist plugin " + e.getMessage());
+				throw new MobileTerminalModelException("Couldn't persist plugin " , e);
 			}
 		}
 		
@@ -203,7 +204,7 @@ public class ConfigModelBean  {
 				return true;
 			}
 		} catch (ConfigDaoException e) {
-			LOG.error("Couldn't use DNID List {} {}",pluginName,e);
+			LOG.error("Couldn't use DNID List " + pluginName,e);
 		}
 		return false;
 	}

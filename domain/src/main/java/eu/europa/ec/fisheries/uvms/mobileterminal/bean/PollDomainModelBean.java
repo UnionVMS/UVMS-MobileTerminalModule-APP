@@ -202,11 +202,7 @@ public class PollDomainModelBean  {
                 pollProgramDao.createPollProgram(pollProgram);
                 responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, mobileTerminalType));
             } catch (PollDaoException e) {
-                LOG.error("[ Could not persist PollProgram ]");
-                throw new MobileTerminalModelException("Could not persist PollProgam");
-            } catch (MobileTerminalModelMapperException e) {
-                LOG.error("Could not map PollProgram to PollResponseType");
-                throw e;
+                throw new MobileTerminalModelException("Could not persist PollProgam",e);
             }
         }
         return responseList;
@@ -221,11 +217,7 @@ public class PollDomainModelBean  {
                 pollDao.createPoll(poll);
                 responseList.add(PollEntityToModelMapper.mapToPollResponseType(poll, mobileTerminalType, pollType));
             } catch (PollDaoException e) {
-                LOG.error("[ Could not persist Poll ]");
-                throw new MobileTerminalModelException("Could not persist Poll");
-            } catch (MobileTerminalModelMapperException e) {
-                LOG.error("Could not map Poll to PollResponseType");
-                throw e;
+                throw new MobileTerminalModelException("Could not persist Poll",e);
             }
         }
         return responseList;
@@ -265,7 +257,7 @@ public class PollDomainModelBean  {
         		PollResponseType pollType = PollEntityToModelMapper.mapToPollResponseType(poll, mobileTerminalType, EnumMapper.getPollModelFromType(poll.getPollType()));
         		pollResponseList.add(pollType);
         	} catch (EnumException e) {
-        		LOG.error("[ Poll " + poll.getGuid() + "  couldn't map type ]");
+        		LOG.error("Poll " + poll.getGuid() + "  couldn't map type ",e);
         	}
         }
 
@@ -318,11 +310,9 @@ public class PollDomainModelBean  {
 
             return PollEntityToModelMapper.mapToPollResponseType(program, terminalType);
         } catch (EnumException e) {
-            LOG.error("[ Error when setting poll program status. ] {}", e.getMessage());
-            throw new MobileTerminalModelException(e.getMessage());
+            throw new MobileTerminalModelException("Error when setting poll program status",e);
         } catch (NoEntityFoundException e) {
-        	LOG.error("[ Unvalid mobile terminal connected to poll program ]");
-        	throw new MobileTerminalModelException("[ Unvalid mobile terminal connected to poll program ]");
+        	throw new MobileTerminalModelException("Unvalid mobile terminal connected to poll program ",e);
         }
     }
 
@@ -390,8 +380,7 @@ public class PollDomainModelBean  {
                 MobileTerminalType terminalType = mapPollableTerminalType(terminal.getMobileTerminalType(), terminal.getGuid());
                 responseList.add(PollEntityToModelMapper.mapToPollResponseType(pollProgram, terminalType));
             } catch (NoEntityFoundException e) {
-                LOG.error("[ Unvalid mobile terminal connected to poll program " + pollProgram.getGuid() + " ]");
-                throw new MobileTerminalModelException("[ Unvalid mobile terminal connected to poll program " + pollProgram.getGuid() + " ]");
+                throw new MobileTerminalModelException("Unvalid mobile terminal connected to poll program " + pollProgram.getGuid(),e);
             }
         }
         return responseList;

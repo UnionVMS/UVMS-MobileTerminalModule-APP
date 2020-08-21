@@ -74,8 +74,7 @@ public class PluginServiceBean implements PluginService {
             LOG.debug("Poll: " + poll.getPollId().getGuid() + " sent to exchange. Response: " + ack.getType());
             return ack.getType();
         } catch (ExchangeModelMapperException | MobileTerminalMessageException | MobileTerminalModelMapperException e) {
-            LOG.error("Failed to send poll command! Poll with guid {} was created", poll.getPollId().getGuid());
-            throw new MobileTerminalServiceException("Failed to send poll command. Poll with guid " + poll.getPollId().getGuid() + " was not sent");
+            throw new MobileTerminalServiceException("Failed to send poll command. Poll with guid " + poll.getPollId().getGuid() + " was not sent",e);
         }
     }
 
@@ -94,11 +93,11 @@ public class PluginServiceBean implements PluginService {
             try {
                 sendUpdatedDNIDListToConfig(pluginName, settingKey, settingValue);
             } catch (ModelMarshallException | MobileTerminalMessageException e) {
-                LOG.debug("Couldn't send to config module. Sending to exchange module.");
+                LOG.debug("Couldn't send to config module. Sending to exchange module.",e);
                 sendUpdatedDNIDListToExchange(pluginName, SETTING_KEY_DNID_LIST, settingValue);
             }
         } catch (MobileTerminalModelException ex) {
-            LOG.error("Couldn't get updated DNID List");
+            LOG.error("Couldn't get updated DNID List",ex);
         }
     }
 
@@ -123,7 +122,7 @@ public class PluginServiceBean implements PluginService {
             TextMessage response = messageConsumer.getMessageFromOutQueue(messageId, TextMessage.class);
             LOG.info("UpdatedDNIDList sent to exchange module {} {}",pluginName,settingKey);
         } catch (ExchangeModelMarshallException | MobileTerminalMessageException e) {
-            LOG.error("Failed to send updated DNID list {} {} {}",pluginName,settingKey,e);
+            LOG.error("Failed to send updated DNID list " + pluginName +settingKey,e);
         }
     }
 }

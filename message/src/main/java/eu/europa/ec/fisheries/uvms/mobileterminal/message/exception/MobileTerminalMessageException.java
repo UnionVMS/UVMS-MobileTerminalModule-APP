@@ -22,4 +22,8 @@ public class MobileTerminalMessageException extends MobileTerminalException {
         super(message);
     }
 
+    public MobileTerminalMessageException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
 }

@@ -65,7 +65,7 @@ public class MobileTerminalEntityToModelMapper {
         try {
             model.setSource(mapToMobileTerminalSource(entity.getSource()));
         } catch (EnumException e) {
-            LOG.error("[ Error when setting mobile terminal source. ] {}", e.getMessage());
+            LOG.error("Error when setting mobile terminal source.", e);
         }
 
         model.setConnectId(currentEvent.getConnectId());

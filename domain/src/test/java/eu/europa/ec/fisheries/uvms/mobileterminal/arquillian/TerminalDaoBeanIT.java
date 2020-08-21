@@ -281,7 +281,7 @@ public class TerminalDaoBeanIT extends TransactionalTests {
             mt.setArchived(false);
             mt.setInactivated(false);
         } catch (ConfigDaoException e) {
-            LOG.error("There was an error while retrieving pluginList: {}", e.getMessage());
+            LOG.error("There was an error while retrieving pluginList: {}", e);
         }
         return mt;
     }

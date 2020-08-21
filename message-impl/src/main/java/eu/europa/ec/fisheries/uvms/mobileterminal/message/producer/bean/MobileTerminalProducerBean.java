@@ -73,8 +73,7 @@ public class MobileTerminalProducerBean extends AbstractProducer implements Mobi
             }
             return message.getJMSMessageID();
         } catch (Exception e) {
-            LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
-            throw new MobileTerminalMessageException(e.getMessage());
+            throw new MobileTerminalMessageException("Error when sending data source message",e);
         }
     }
 
@@ -84,8 +83,7 @@ public class MobileTerminalProducerBean extends AbstractProducer implements Mobi
         try {
             return sendMessageToSpecificQueue(text, getQueueFromModuleQueue(queue), responseQueue, 0);
         } catch (Exception e) {
-            LOG.error("[ Error when sending data source message. ] {}", e.getMessage());
-            throw new MobileTerminalMessageException(e.getMessage());
+            throw new MobileTerminalMessageException("Error when sending data source message.",e);
         }
     }
 
@@ -100,8 +98,7 @@ public class MobileTerminalProducerBean extends AbstractProducer implements Mobi
         try {
             return sendModuleMessage(text, ModuleQueue.CONFIG);
         } catch (MobileTerminalMessageException e) {
-            LOG.error("[ Error when sending config message. ] {}", e.getMessage());
-            throw new ConfigMessageException(e.getMessage());
+            throw new ConfigMessageException("Error when sending config message",e);
         }
     }
 

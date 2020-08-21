@@ -59,7 +59,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.createMobileTerminal(mobileterminal, MobileTerminalSource.INTERNAL, request.getRemoteUser()), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when creating mobile terminal ] {}", ex.getStackTrace());
+            LOG.error("Error when creating mobile terminal", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -80,7 +80,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.getMobileTerminalById(mobileterminalId), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when creating mobile terminal ] {}", ex.getStackTrace());
+            LOG.error("Error when creating mobile terminal", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -102,7 +102,7 @@ public class MobileTerminalResource {
             return new ResponseDto<>(mobileTerminalService.updateMobileTerminal(mobileterminal, comment, MobileTerminalSource.INTERNAL, request.getRemoteUser()),
                     ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when updating mobile terminal ] {}", ex.getStackTrace());
+            LOG.error("Error when updating mobile terminal", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -123,7 +123,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.getMobileTerminalList(query), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when getting mobile terminal list ] {}", ex.getStackTrace());
+            LOG.error("Error when getting mobile terminal list", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -146,7 +146,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.assignMobileTerminal(query, comment, request.getRemoteUser()), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when assigning mobile terminal ] {}", ex.getStackTrace());
+            LOG.error("Error when assigning mobile terminal", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -168,7 +168,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.unAssignMobileTerminal(query, comment, request.getRemoteUser()), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when unassigning mobile terminal ] {}", ex.getStackTrace());
+            LOG.error("Error when unassigning mobile terminal", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -189,7 +189,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.ACTIVE, request.getRemoteUser()), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when activating mobile terminal ] {}", ex.getStackTrace());
+            LOG.error("Error when activating mobile terminal", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -210,7 +210,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.INACTIVE, request.getRemoteUser()), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when inactivating mobile terminal ] {}", ex.getStackTrace());
+            LOG.error("Error when inactivating mobile terminal", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -231,7 +231,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.setStatusMobileTerminal(terminalId, comment, MobileTerminalStatus.ARCHIVE, request.getRemoteUser()), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when removing mobile terminal ] {}", ex.getStackTrace());
+            LOG.error("Error when removing mobile terminal", ex);
             return ErrorHandler.getFault(ex);
         }
     }
@@ -253,7 +253,7 @@ public class MobileTerminalResource {
         try {
             return new ResponseDto<>(mobileTerminalService.getMobileTerminalHistoryList(guid), ResponseCode.OK);
         } catch (Exception ex) {
-            LOG.error("[ Error when getting mobile terminal history by terminalId ] {}", ex.getStackTrace());
+            LOG.error("Error when getting mobile terminal history by terminalId", ex);
             return ErrorHandler.getFault(ex);
         }
     }

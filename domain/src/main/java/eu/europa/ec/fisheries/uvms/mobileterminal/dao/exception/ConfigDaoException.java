@@ -20,4 +20,8 @@ public class ConfigDaoException extends MobileTerminalModelException {
     public ConfigDaoException(String message) {
         super(message);
     }
+
+    public ConfigDaoException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }

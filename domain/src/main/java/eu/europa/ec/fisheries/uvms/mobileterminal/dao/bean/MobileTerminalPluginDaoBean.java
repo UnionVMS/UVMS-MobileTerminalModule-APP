@@ -43,8 +43,7 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
             TypedQuery<MobileTerminalPlugin> query = em.createNamedQuery(MobileTerminalConstants.PLUGIN_FIND_ALL, MobileTerminalPlugin.class);
             return query.getResultList();
         } catch (Exception e) {
-            LOG.error("[ Error when getting plugin list. ] " + e.getMessage());
-            throw new ConfigDaoException("No entities found when retrieving all plugins");
+            throw new ConfigDaoException("No entities found when retrieving all plugins",e);
         }
 	}
 	
@@ -54,7 +53,7 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
 			em.persist(plugin);
 			return plugin;
 		} catch (Exception e) {
-			throw new TerminalDaoException("[ create mobile terminal plugin ] ");
+			throw new TerminalDaoException("create mobile terminal plugin ",e);
 		}
 	}
 
@@ -66,16 +65,12 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
             query.setParameter("serviceName", serviceName);
             return query.getSingleResult();
         } catch (NoResultException e) {
-            LOG.error("[ Error when getting plugin by service name. ] {}", e.getMessage());
-            throw new NoEntityFoundException(
-                    "No entities found when retrieving mobile terminal plugin by service name");
+            throw new NoEntityFoundException("No entities found when retrieving mobile terminal plugin by service name",e);
         } catch (NonUniqueResultException e) {
-            LOG.error("[ Error when getting plugin by service name. ] {}", e.getMessage());
             throw new TerminalDaoException(
-                    "More than one result found when retrieving mobile terminal plugin by service name");
+                    "More than one result found when retrieving mobile terminal plugin by service name",e);
         } catch (Exception e) {
-            LOG.error("[ Error when getting plugin by service name. ] {}", e.getMessage());
-            throw new TerminalDaoException("Error when retrieving mobile terminal plugin by service name");
+            throw new TerminalDaoException("Error when retrieving mobile terminal plugin by service name",e);
         }
 	}
 
@@ -90,7 +85,7 @@ public class MobileTerminalPluginDaoBean extends Dao implements MobileTerminalPl
 			em.flush();
 			return entity;
 		} catch (Exception e) {
-			throw new TerminalDaoException(" [ Error occurred while trying to update MobileTerminalPlugin ] ");
+			throw new TerminalDaoException(" Error occurred while trying to update MobileTerminalPlugin ",e);
 		}
 	}
 }

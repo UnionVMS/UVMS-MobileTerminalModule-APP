@@ -98,8 +98,8 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
             String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalCreated(createdMobileTerminal.getMobileTerminalId().getGuid(), username);
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
         } catch (AuditModelMarshallException e) {
-            LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was created", createdMobileTerminal.getMobileTerminalId()
-                    .getGuid());
+            LOG.error("Failed to send audit log message! Mobile Terminal with guid " + createdMobileTerminal.getMobileTerminalId()
+                    .getGuid() + " was created", e);
         }
         if(dnidUpdated) {
         	pluginService.processUpdatedDNIDList(createdMobileTerminal.getPlugin().getServiceName());
@@ -207,8 +207,8 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
             String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUpdated(terminalUpdate.getMobileTerminalId().getGuid(), comment, username);
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
         } catch (AuditModelMarshallException e) {
-            LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was updated", terminalUpdate.getMobileTerminalId()
-                    .getGuid());
+            LOG.error("Failed to send audit log message! Mobile Terminal with guid "+terminalUpdate.getMobileTerminalId()
+                    .getGuid()+" was updated", e);
         }
         
         boolean dnidUpdated = configModel.checkDNIDListChange(terminalUpdate.getPlugin().getServiceName());
@@ -227,8 +227,8 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
             String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalAssigned(terminalAssign.getMobileTerminalId().getGuid(), comment, username);
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
         } catch (AuditModelMarshallException e) {
-            LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was assigned", terminalAssign.getMobileTerminalId()
-                    .getGuid());
+            LOG.error("Failed to send audit log message! Mobile Terminal with guid "  +terminalAssign.getMobileTerminalId()
+                    .getGuid()+" was assigned", e);
         }
 
         return terminalAssign;
@@ -242,8 +242,8 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
             String auditData = AuditModuleRequestMapper.mapAuditLogMobileTerminalUnassigned(terminalUnAssign.getMobileTerminalId().getGuid(), comment, username);
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
         } catch (AuditModelMarshallException e) {
-            LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was unassigned", terminalUnAssign.getMobileTerminalId()
-                    .getGuid());
+            LOG.error("Failed to send audit log message! Mobile Terminal with guid "+terminalUnAssign.getMobileTerminalId()
+                    .getGuid()+" was unassigned", e);
         }
 
         return terminalUnAssign;
@@ -272,8 +272,8 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
             }
             messageProducer.sendModuleMessage(auditData, ModuleQueue.AUDIT);
         } catch (AuditModelMarshallException e) {
-            LOG.error("Failed to send audit log message! Mobile Terminal with guid {} was set to status {}", terminalStatus
-                    .getMobileTerminalId().getGuid(), status);
+            LOG.error("Failed to send audit log message! Mobile Terminal with guid "+terminalStatus
+                    .getMobileTerminalId().getGuid()+" was set to status "+ status,e);
         }
 
         boolean dnidUpdated = configModel.checkDNIDListChange(terminalStatus.getPlugin().getServiceName());
@@ -309,9 +309,10 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
         try {
             plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
         } catch (NoEntityFoundException e) {
+            LOG.info("No entity found initializing.. ", e);
             plugin = initAndGetPlugin(mobileTerminal);
         }catch (TerminalDaoException e) {
-            LOG.info("Couldn't get plugin ", e.getMessage());
+            LOG.info("Couldn't get plugin ", e);
         }
         return plugin;
     }
@@ -325,9 +326,10 @@ public class MobileTerminalServiceBean implements MobileTerminalService {
             }
             plugin = pluginDao.getPluginByServiceName(mobileTerminal.getPlugin().getServiceName());
         } catch (NoEntityFoundException e) {
+            LOG.info("No entity found ", e);
             return null;
         } catch (MobileTerminalException e) {
-            LOG.info("Couldn't update plugins... ", e.getMessage());
+            LOG.info("Couldn't update plugins... ", e);
         }
         return plugin;
     }
