@@ -31,7 +31,7 @@ public class MobileTerminalConfigHelper implements ConfigHelper {
     @Inject
     private PropertiesBean propertiesBean;
 
-    @PersistenceContext(unitName = ServiceConstants.MOBILE_TERMINAL_CONFIG_NAME)
+    @PersistenceContext(unitName = ServiceConstants.MOBILE_TERMINAL_CONFIG_PU_NAME)
     protected EntityManager em;
 
     @Override
