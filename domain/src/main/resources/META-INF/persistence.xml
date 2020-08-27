@@ -4,11 +4,12 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence">
     <persistence-unit name="mobileTerminalPU" transaction-type="JTA">
         <jta-data-source>jdbc/uvms_mobterm</jta-data-source>
+        <class>eu.europa.ec.fisheries.uvms.config.service.entity.Parameter</class>
+        <shared-cache-mode>ALL</shared-cache-mode>
         <properties>
             <property name="hibernate.dialect" value="${hibernate.dialect}"/>
             <property name="hibernate.cache.use_second_level_cache" value="true"/>
             <property name="hibernate.generate_statistics" value="true"/>
         </properties>
-        <shared-cache-mode>ALL</shared-cache-mode>
     </persistence-unit>
 </persistence>
