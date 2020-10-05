@@ -65,11 +65,7 @@
             	</exclusion>
             </exclusions>   
         </dependency>		
-        <dependency>
-			<groupId>fish.focus.uvms.maven</groupId>
-			<artifactId>uvms-pom-monitoring-deps</artifactId>
-			<type>pom</type>
-		</dependency>
+
 		<dependency>
 			<groupId>fish.focus.uvms.maven</groupId>
 			<artifactId>uvms-pom-arquillian-deps</artifactId>
