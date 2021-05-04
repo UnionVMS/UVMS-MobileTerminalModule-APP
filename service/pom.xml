@@ -28,18 +28,6 @@
             <version>${project.parent.version}</version>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>mobileterminal-message-mock</artifactId>
-            <version>${project.parent.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>${project.groupId}</groupId>
-                    <artifactId>mobileterminal-message-impl</artifactId>
-                </exclusion>
-            </exclusions>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.audit</groupId>
             <artifactId>audit-model</artifactId>
             <version>${audit.model.version}</version>
@@ -73,11 +61,34 @@
                 </exclusion>
             </exclusions>
         </dependency>
-
+        <dependency>
+            <groupId>eu.europa.ec.fisheries.uvms</groupId>
+            <artifactId>config-library</artifactId>
+            <version>${uvms.config.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
+            <artifactId>uvms-commons-message</artifactId>
+            <version>${uvms.commons.version}</version>
+            <scope>provided</scope>
+        </dependency>
         <dependency>
             <groupId>fish.focus.uvms.maven</groupId>
             <artifactId>uvms-pom-arquillian-deps</artifactId>
             <type>pom</type>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mobileterminal-message-mock</artifactId>
+            <version>${project.parent.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>${project.groupId}</groupId>
+                    <artifactId>mobileterminal-message-impl</artifactId>
+                </exclusion>
+            </exclusions>
             <scope>test</scope>
         </dependency>
     </dependencies>
