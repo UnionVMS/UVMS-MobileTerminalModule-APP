@@ -23,6 +23,10 @@
                     <modules>
                         <ejbModule>
                             <groupId>${project.groupId}</groupId>
+                            <artifactId>mobileterminal-dbaccess-domain</artifactId>
+                        </ejbModule>
+                        <ejbModule>
+                            <groupId>${project.groupId}</groupId>
                             <artifactId>mobileterminal-message</artifactId>
                         </ejbModule>
                         <ejbModule>
@@ -39,18 +43,36 @@
                         </jarModule>
                         <webModule>
                             <groupId>${project.groupId}</groupId>
-                            <context-root>${context.root}${project.parent.artifactId}</context-root>
                             <artifactId>mobileterminal-rest</artifactId>
+                            <context-root>${context.root}${project.parent.artifactId}</context-root>
                         </webModule>
+                        <jarModule>
+                            <groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
+                            <artifactId>uvms-commons-message</artifactId>
+                            <includeInApplicationXml>true</includeInApplicationXml>
+                            <bundleDir>/</bundleDir>
+                        </jarModule>
+                        <jarModule>
+                            <groupId>eu.europa.ec.fisheries.uvms</groupId>
+                            <artifactId>config-library</artifactId>
+                            <includeInApplicationXml>true</includeInApplicationXml>
+                            <bundleDir>/</bundleDir>
+                        </jarModule>
                     </modules>
                     <skinnyWars>true</skinnyWars>
-                    <defaultLibBundleDir>APP-INF/lib</defaultLibBundleDir>
+                    <defaultLibBundleDir>lib</defaultLibBundleDir>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 
     <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>mobileterminal-dbaccess-domain</artifactId>
+            <version>${project.version}</version>
+            <type>ejb</type>
+        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>mobileterminal-message</artifactId>
@@ -85,6 +107,11 @@
             <groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
             <artifactId>uvms-commons-message</artifactId>
 			<version>${uvms.commons.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>eu.europa.ec.fisheries.uvms</groupId>
+            <artifactId>config-library</artifactId>
+            <version>${uvms.config.version}</version>
         </dependency>
 		<dependency>
 			<groupId>fish.focus.uvms.maven</groupId>

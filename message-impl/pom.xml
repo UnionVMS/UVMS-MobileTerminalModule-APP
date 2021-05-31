@@ -25,18 +25,21 @@
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms</groupId>
-            <artifactId>${uvms.config.artifactId}</artifactId>
+            <artifactId>config-library</artifactId>
             <version>${uvms.config.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.commons</groupId>
             <artifactId>uvms-commons-message</artifactId>
             <version>${uvms.commons.version}</version>
+            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.mobileterminal</groupId>
             <artifactId>mobileterminal-service</artifactId>
             <version>${uvms.mobileterminal.module.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
