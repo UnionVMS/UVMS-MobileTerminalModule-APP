@@ -59,10 +59,6 @@ public class MobileTerminalMessageConsumerBean implements MessageListener {
 
     @Override
     public void onMessage(Message message) {
-        //handleMobileTerminalMessages(message);
-    }
-
-    public void handleMobileTerminalMessages(Message message) {
         TextMessage textMessage = (TextMessage) message;
         try {
             MobileTerminalModuleBaseRequest request = JAXBMarshaller.unmarshallTextMessage(textMessage, MobileTerminalModuleBaseRequest.class);
