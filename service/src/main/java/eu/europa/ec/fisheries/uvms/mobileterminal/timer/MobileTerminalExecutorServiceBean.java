@@ -35,7 +35,7 @@ public class MobileTerminalExecutorServiceBean {
     private PluginTimerTask pluginTimerTask;
     private PollTimerTask pollTimerTask;
     
-    @Schedule(minute = "*/5", hour = "*", persistent = false)
+    //@Schedule(minute = "*/5", hour = "*", persistent = false)
     public void initPluginTimer() {
         try {
             if(pluginTimerTask == null) {
@@ -48,7 +48,7 @@ public class MobileTerminalExecutorServiceBean {
         }
     }
 
-    @Schedule(minute = "*/5", hour = "*", persistent = false)
+    //@Schedule(minute = "*/5", hour = "*", persistent = false)
     public void initPollTimer() {
         try {
             if(pollTimerTask == null) {
