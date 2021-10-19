@@ -24,49 +24,6 @@
         </application.error.logfile>
     </properties>
 
-    <profiles>
-        <profile>
-            <id>logging-default</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <build>
-                <resources>
-                    <resource>
-                        <filtering>true</filtering>
-                        <directory>src/main/logging/default</directory>
-                        <targetPath>${project.build.outputDirectory}</targetPath>
-                        <includes>
-                            <include>logback.xml</include>
-                        </includes>
-                    </resource>
-                </resources>
-            </build>
-        </profile>
-        <profile>
-            <id>logging-cloud</id>
-            <build>
-                <resources>
-                    <resource>
-                        <filtering>true</filtering>
-                        <directory>src/main/logging/cloud</directory>
-                        <targetPath>${project.build.outputDirectory}</targetPath>
-                        <includes>
-                            <include>logback.xml</include>
-                        </includes>
-                    </resource>
-                </resources>
-            </build>
-            <dependencies>
-                <dependency>
-                    <groupId>com.j256.cloudwatchlogbackappender</groupId>
-                    <artifactId>cloudwatchlogbackappender</artifactId>
-                    <version>2.0</version>
-                </dependency>
-            </dependencies>
-        </profile>
-    </profiles>
-
     <dependencies>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -78,12 +35,6 @@
             <artifactId>audit-model</artifactId>
             <version>${audit.model.version}</version>
             <type>jar</type>
-            <exclusions>
-                <exclusion>
-                    <groupId>ch.qos.logback</groupId>
-                    <artifactId>logback-classic</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>eu.europa.ec.fisheries.uvms.exchange</groupId>
