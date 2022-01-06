@@ -56,12 +56,6 @@
       </dependency>
       <dependency>
         <groupId>fish.focus.uvms.maven</groupId>
-        <artifactId>uvms-pom-logging-deps</artifactId>
-        <version>1.21</version>
-        <type>pom</type>
-      </dependency>
-      <dependency>
-        <groupId>fish.focus.uvms.maven</groupId>
         <artifactId>uvms-pom-test-deps</artifactId>
         <version>1.21</version>
         <type>pom</type>
@@ -71,21 +65,6 @@
         <artifactId>uvms-pom-arquillian-deps</artifactId>
         <version>1.25</version>
         <type>pom</type>
-      </dependency>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-core</artifactId>
-        <version>1.2.3</version>
-      </dependency>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>1.2.3</version>
-      </dependency>
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-api</artifactId>
-        <version>1.7.25</version>
       </dependency>
       <!-- lock guava version to 20.0 (18.0 prevents arquillian test from running -->
         <dependency>
@@ -195,9 +174,8 @@
         <profile>
             <id>enforce-jdk-version</id>
             <activation>
-                <!-- To disable profile, define property -Dfocus-pom.enforce.jdk.version.disabled=true -->
                 <property>
-                    <name>!focus-pom.enforce.jdk.version.disabled</name>
+                    <name>focus-pom.enforce.jdk.version.enabled</name>
                 </property>
             </activation>
             <build>
